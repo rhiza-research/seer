@@ -106,6 +106,18 @@ def get_synth_costs(years):
         all_costs[year] = costs
     return all_costs
 
+def get_synth_caps(zones, generators, means):
+    cap_df = pd.DataFrame(index=zones, columns=generators)
+    for gen in generators:
+        mu = means.loc[gen, 0]
+        cap_df.loc[:, gen] = np.random.uniform(0.9*mu, 1.1*mu, size=len(zones))
+    return cap_df
+
+def get_synth_load(zones, mean):
+    load_df = pd.DataFrame(index=zones, columns=["load (MW)"])
+    load_df.loc[:, "load (MW)"] = np.random.uniform(0.9*mean, 1.1*mean, size=len(zones))
+    return load_df
+
 def synth_cost_dfs(years):
     """
     Generate realistic capital cost ($/MW-year) and marginal cost ($/MWh)
@@ -177,17 +189,44 @@ def set_obj_weights(model, years, year_step=1):
 
 def add_buses(model, nzones):
     for i in range(nzones):
-        model.add("Bus", str(i))
+        model.add("Bus", str(i), carrier="AC")
+
+def add_gen_current(model, p_max_pu, marg_cost, p_nom, name=""):
+    for bus in model.buses.index:
+        model.add("Generator", 
+                  str(bus) + "-" + name + " existing",
+                  bus=bus,
+                  marginal_cost=marg_cost,
+                  p_max_pu=p_max_pu,
+                  p_nom_extendable=False,
+                  p_nom=p_nom.loc[int(bus)])
+
+def add_load_shed(model, maxload, load_ts, voll=2000):
+    for bus in model.buses.index:
+        model.add("Generator",
+                  "Load shedding - " + str(bus),
+                  bus=bus,
+                  marginal_cost=voll,
+                  p_nom=maxload.loc[int(bus)][0],   # SCALAR capacity
+                  p_nom_extendable=False)
         
-def add_build(model, year, p_max_pu,
+def add_gen_options(model, year, p_max_pu,
                  cap_cost, marg_cost,
                  name=""):
     for bus in model.buses.index:
-        model.add("Generator", str(bus) + "-" + name + str(year),
+        # Generators must be uniquely named 
+        model.add("Generator",
+                  str(bus) + "-" + name + str(year),
                   bus=bus,
                   build_year=year,
                   marginal_cost=marg_cost,
                   capital_cost=cap_cost,
                   p_max_pu=p_max_pu,
                   p_nom_extendable=True)
-                  
+
+def add_load(model, starting_load, load_pu):
+    for bus in model.buses.index:
+        model.add("Load",
+                  "load - " + str(bus),
+                  bus=bus,
+                  p_set = starting_load.loc[int(bus)][0]*load_pu)
