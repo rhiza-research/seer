@@ -244,18 +244,25 @@ def create_model_from_data(input_data, voll=2000):
     # Add current generation & build options
     for z in model.buses.index:
         for source in sources:
-            p_max_pu = None
+            # current generation
+            name_exist = source + " - " + str(z) + "_exist"
+            p_max_pu = 1
             if is_re(source):
-                p_max_pu = input_data["re_ts"][source]
-            # current generator
-            model.add("Generator", source + " - " + str(z) + "_exist", bus = z, 
+                p_max_pu = pd.Series(input_data["re_ts"][source].values, index=model.snapshots,
+                                     name = name_exist)
+            model.add("Generator", name_exist, bus = z, 
                       marginal_cost = input_data["generation costs"].loc[(source, "marginal"), years[0]],
                       p_max_pu = p_max_pu,
                       p_nom_extendable = False,
                       p_nom = input_data["source capacities"].loc[(z, source), "capacity"])
+
             # build options for every year
             for year in years:
-                model.add("Generator", source + " - " + str(z) + "_" + str(year), bus = z,
+                # new generation
+                name_new = source + " - " + str(z) + "_" + str(year)
+                if is_re(source):
+                    p_max_pu.name = name_new
+                model.add("Generator", name_new, bus = z,
                           build_year = year,
                           marginal_cost = input_data["generation costs"].loc[(source, "marginal"), year],
                           capital_cost = input_data["generation costs"].loc[(source, "capital"), year],
