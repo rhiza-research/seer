@@ -213,7 +213,7 @@ def synth_re_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"
 def set_obj_weights(model, years, year_step=1):
     model.investment_period_weightings["years"] = year_step
 
-    r = 0.01
+    r = 0.08
     T = 0
     for period, nyears in model.investment_period_weightings.years.items():
         discounts = [(1 / (1 + r) ** t) for t in range(T, T + nyears)]
@@ -223,7 +223,7 @@ def set_obj_weights(model, years, year_step=1):
 def is_re(source):
     return source in ["solar", "wind", "hydro"]
 
-def create_model_from_data(input_data, voll=2000):
+def create_model_from_data(input_data, voll=2000, modular_expansion=False):
     model = pypsa.Network()
     model.add("Carrier", "AC")
 
@@ -262,11 +262,16 @@ def create_model_from_data(input_data, voll=2000):
                 name_new = source + " - " + str(z) + "_" + str(year)
                 if is_re(source):
                     p_max_pu.name = name_new
+                if modular_expansion:
+                    p_nom_mod = typical_capacity[source]
+                else:
+                    p_nom_mod = 0
                 model.add("Generator", name_new, bus = z,
                           build_year = year,
                           marginal_cost = input_data["generation costs"].loc[(source, "marginal"), year],
                           capital_cost = input_data["generation costs"].loc[(source, "capital"), year],
                           p_max_pu = p_max_pu,
+                          p_nom_mod = p_nom_mod,
                           p_nom_extendable = True)
 
     # Add load shedding generators
