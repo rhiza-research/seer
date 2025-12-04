@@ -4,11 +4,134 @@ import numpy as np
 import pypsa
 from pypsa.common import annuity
 
+"""
+Some global constants that we use to generate simple but somewhat
+realistic data
+"""
+
+# List of generation types considered (these names should be used consistently)
+sources = ["gas", "wind", "solar", "coal", "nuclear"]
+# Typical scale of single generator (in MW)
+typical_capacity = {
+    "gas" : 600, # single CCGT unit
+    "solar" : 100, # standard utility scale
+    "wind" : 100, # standard utility scale
+    "coal" : 600, # single unit
+    "nuclear" : 1000,
+    "hydro" : 500
+}
+
+# capital and marginal costs
+# capital - $/MWh, marginal - $/MWh-year
+init_costs = pd.DataFrame(index=sources, columns=["capital", "marginal"],
+                             data = np.array([[81_000, 70],
+                                              [102_000, 5],
+                                              [136_000, 5],
+                                              [280_000, 110],
+                                              [525_000, 15]]))
+
+cost_changes = pd.DataFrame(index=sources, columns=["capital", "marginal"],
+                             data = np.array([[0.01, 0.02],
+                                              [-0.05, -0.03],
+                                              [-0.01, -0.01],
+                                              [0, 0],
+                                              [0, 0]]))
+
+mixes = pd.DataFrame(index=sources, columns=["india", "us", "france"])
+mixes.loc[:, "india"] = [0.04, 0.09, 0.06, 0.78, 0.03]
+mixes.loc[:, "us"] = [0.46, 0.08, 0.11, 0.16, 0.19]
+mixes.loc[:, "france"] = [0.04, 0.06, 0.1, 0, 0.8]
+
+# per capita energy consumption (kWh) by country income group
+pcc = {
+    "lic" : 300,
+    "mic" : 2500,
+    "hic" : 8000,
+}
+
+# typical load factor
+lf = 0.5
+
 ## Functions to get realistic toy data
 
+def synth_data(start_year, nzones=1, nyears=1, year_step=1, rez="1h",
+               population=3e6, income_class="mic", mix="india", excess_cap=1.5):
+    """
+    Inputs
+    ------
+    start_year [int] - Starting year, eg 2025
+    nyears [int] - Number of years
+    year_step [int] - Delta between modelled years.
+    """
+    input_data = {}
+    
+    end_year = start_year + nyears*year_step
+    years = [y for y in range(start_year, end_year, year_step)]
+    input_data["years"] = years
+
+    zones = [str(z) for z in range(nzones)]
+    input_data["zones"] = zones
+
+    # Generate a random fraction of population in each zone
+    prop = np.random.rand(nzones)
+    prop = prop / np.sum(prop)
+
+    # Get peak load per zone
+    energy = population * pcc[income_class] # annual consumption in kWh
+    power_avg = energy / 8760
+    peak = power_avg / lf / 1e3 # peak power in MW
+    peak_zonal = pd.DataFrame(index=zones, columns=["peak power"], data=peak * prop)
+    input_data["zonal load"] = peak_zonal
+
+    # Get starting capacity (MW) of each generator type in each zone
+    source_capacities = pd.DataFrame(index=pd.MultiIndex.from_product([zones, sources], names=["zone", "source"]),
+                                     columns=["capacity", "counts"])
+    for source in sources:
+        for zone in zones:
+            source_capacities.loc[(zone, source), "capacity"] = peak_zonal.loc[zone, "peak power"] * excess_cap * mixes.loc[source, mix]
+            # For interest (currently this is not used), get typical generator counts
+            source_capacities.loc[(zone, source), "counts"] = source_capacities.loc[(zone, source), "capacity"] / typical_capacity[source]
+    input_data["source capacities"] = source_capacities
+
+    # Generate the temporal snapshots that define the modeling periods
+    snapshots = pd.DatetimeIndex([])
+    for year in years:
+        period = pd.date_range(
+            start=f"{year}-01-01 00:00",
+            end=f"{year}-12-31 23:00",
+            freq=rez,
+        )
+        snapshots = snapshots.append(period)
+    snapshots =  pd.MultiIndex.from_arrays([snapshots.year, snapshots])
+    input_data["snapshots"] = snapshots
+
+    # Generate synthetic load & re supply profiles - use pypsa data.
+    load_ts = synth_load_ts(str(start_year), str(end_year), freq=rez)
+    re_ts = synth_re_ts(str(start_year), str(end_year), freq=rez)
+    # the ts indices must match snapshots
+    load_ts.index = snapshots
+    re_ts.index = snapshots
+
+    input_data["load_ts"] = load_ts
+    input_data["re_ts"] = re_ts
+
+    # Get capital and marginal costs by year
+    dy = np.array(years) - years[0]
+    cost_type = ["capital", "marginal"]
+    costs = pd.DataFrame(index = pd.MultiIndex.from_product([sources, cost_type], names=["source", "cost type"]),
+                         columns=years)
+    for s in sources:
+        for c in cost_type:
+            c0 = init_costs.loc[s, c]
+            p = cost_changes.loc[s, c]
+            costs.loc[(s, c)] = c0*((1+p)**dy)
+    input_data["generation costs"] = costs
+
+    return input_data
+
+
 # Load time series at resolution freq based on PyPSA open data
-def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h",
-                     annual_peak_mw=30):
+def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"):
     """
     Load the load time series provided by pypsa, and extend 
     over an entire modeling period of interest at given frequency.
@@ -38,17 +161,6 @@ def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="
     df = pd.merge(df, pypsa_data, on=["doy", "hour"], how="left")
     # We may need to fill some nan values (eg leap year)
     df = df.apply(lambda col: col.fillna(col.groupby(df["hour"]).transform('mean')))
-    
-    # Now, rescale load to specified value
-    if type(annual_peak_mw) in [int, float]:
-        df["load_mw"] = annual_peak_mw * df["load_pu"]
-    elif pd.api.types.is_list_like(annual_peak_mw):
-        # assume annual_peak_mw has time indices and "peak_mw" column
-        annual_peak_mw.columns = ["peak_mw"]
-        annual_peak_mw["year"] = annual_peak_mw.index.year
-        df = pd.merge(df, annual_peak_mw, on="year", how="left")
-        df["peak_mw"] = df["peak_mw"].ffill()
-        df["load_mw"] = df["load_pu"] * df["peak_mw"]
 
     # drop working columns
     df= df.drop(["doy", "hour", "year"], axis=1)
@@ -86,95 +198,8 @@ def synth_re_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"
     # drop working columns
     df= df.drop(["doy", "hour"], axis=1)
     df.index = times
+    df.columns = ["solar", "wind"]
     return df
-
-# Get cost data from the pypsa data repository
-def get_synth_costs(years):
-    gen = ["CCGT", "onwind", "solar"]
-    data_years = [2020, 2025, 2030, 2035, 2040, 2045, 2050]
-    all_costs = {}
-    for year in years:
-        data_year = data_years[np.argmin(np.abs(data_years-year))]
-        url = f"https://raw.githubusercontent.com/PyPSA/technology-data/master/outputs/costs_{data_year}.csv"
-        costs = pd.read_csv(url, index_col=[0, 1])
-        costs.loc[costs.unit.str.contains("/kW"), "value"] *= 1e3
-        costs = costs.value.unstack().fillna({"discount rate": 0.07, "lifetime": 20, "FOM": 0})
-        costs["marginal_cost"] = costs["VOM"] + costs["fuel"] / costs["efficiency"]
-        a = costs.apply(lambda x: annuity(x["discount rate"], x["lifetime"]), axis=1)
-        costs["capital_cost"] = (a + costs["FOM"] / 100) * costs["investment"]
-        costs = costs.loc[gen, ["marginal_cost", "capital_cost"]]
-        all_costs[year] = costs
-    return all_costs
-
-def get_synth_caps(zones, generators, means):
-    cap_df = pd.DataFrame(index=zones, columns=generators)
-    for gen in generators:
-        mu = means.loc[gen, 0]
-        cap_df.loc[:, gen] = np.random.uniform(0.9*mu, 1.1*mu, size=len(zones))
-    return cap_df
-
-def get_synth_load(zones, mean):
-    load_df = pd.DataFrame(index=zones, columns=["load (MW)"])
-    load_df.loc[:, "load (MW)"] = np.random.uniform(0.9*mean, 1.1*mean, size=len(zones))
-    return load_df
-
-def synth_cost_dfs(years):
-    """
-    Generate realistic capital cost ($/MW-year) and marginal cost ($/MWh)
-    for Gas, Solar, and Onshore Wind using simple trend formulas.
-    """
-
-    years_arr = np.array(years)
-    year0 = years_arr[0]
-
-    # --- Marginal cost ($/MWh) ---
-    params_mc = {
-        "gas":   (50, 0.01),   # $50/MWh rising 1% per year
-        "pv": (3,  0.00),   # stable low VOM
-        "wind":  (6,  0.005),  # slight increase over time
-    }
-
-    # --- Capital cost ($/MW-year) ---
-    params_capex = {
-        "gas":   (200_000, 0.005),   # slow decline
-        "pv": (120_000, 0.03),    # faster decline
-        "wind":  (230_000, 0.015),   # moderate decline
-    }
-
-    # Trend formulas
-    def decline(start, rate, years, year0):
-        return start * (1 - rate) ** (years - year0)
-
-    def growth(start, rate, years, year0):
-        return start * (1 + rate) ** (years - year0)
-
-    df_capex = pd.DataFrame({"Year": years})
-    for col, (start, rate) in params_capex.items():
-        df_capex[col] = decline(start, rate, years_arr, year0)
-
-    df_mc = pd.DataFrame({"Year": years})
-    for col, (start, rate) in params_mc.items():
-        df_mc[col] = growth(start, rate, years_arr, year0)
-
-    df_capex = df_capex.set_index("Year")
-    df_mc = df_mc.set_index("Year")
-    return df_capex, df_mc
-    
-
-# Set snapshots for the model given years and resolution within each year
-def set_snapshots(model, years, resolution):
-    snapshots = pd.DatetimeIndex([])
-    for year in years:
-        period = pd.date_range(
-            start=f"{year}-01-01 00:00",
-            end=f"{year}-12-31 23:00",
-            freq=f"{resolution}h",
-        )
-        snapshots = snapshots.append(period)
-    
-    snapshots =  pd.MultiIndex.from_arrays([snapshots.year, snapshots])
-    model.snapshots = snapshots
-    model.years = years
 
 # copied from pypsa docs
 def set_obj_weights(model, years, year_step=1):
@@ -187,46 +212,58 @@ def set_obj_weights(model, years, year_step=1):
         model.investment_period_weightings.at[period, "objective"] = sum(discounts)
         T += nyears
 
-def add_buses(model, nzones):
-    for i in range(nzones):
-        model.add("Bus", str(i), carrier="AC")
+def is_re(source):
+    return source in ["solar", "wind", "hydro"]
 
-def add_gen_current(model, p_max_pu, marg_cost, p_nom, name=""):
-    for bus in model.buses.index:
-        model.add("Generator", 
-                  str(bus) + "-" + name + " existing",
-                  bus=bus,
-                  marginal_cost=marg_cost,
-                  p_max_pu=p_max_pu,
-                  p_nom_extendable=False,
-                  p_nom=p_nom.loc[int(bus)])
+def create_model_from_data(input_data, voll=2000):
+    model = pypsa.Network()
+    model.add("Carrier", "AC")
 
-def add_load_shed(model, maxload, load_ts, voll=2000):
-    for bus in model.buses.index:
-        model.add("Generator",
-                  "Load shedding - " + str(bus),
-                  bus=bus,
-                  marginal_cost=voll,
-                  p_nom=maxload.loc[int(bus)][0],   # SCALAR capacity
-                  p_nom_extendable=False)
-        
-def add_gen_options(model, year, p_max_pu,
-                 cap_cost, marg_cost,
-                 name=""):
-    for bus in model.buses.index:
-        # Generators must be uniquely named 
-        model.add("Generator",
-                  str(bus) + "-" + name + str(year),
-                  bus=bus,
-                  build_year=year,
-                  marginal_cost=marg_cost,
-                  capital_cost=cap_cost,
-                  p_max_pu=p_max_pu,
-                  p_nom_extendable=True)
+    model.snapshots = input_data["snapshots"]
 
-def add_load(model, starting_load, load_pu):
-    for bus in model.buses.index:
-        model.add("Load",
-                  "load - " + str(bus),
-                  bus=bus,
-                  p_set = starting_load.loc[int(bus)][0]*load_pu)
+    years = input_data["years"]
+    model.years = years
+
+    year_step = 1
+    if len(years) > 1:
+        year_step = np.diff(np.array(years))[0]
+    set_obj_weights(model, years, year_step=year_step)
+
+    # Add buses
+    for z in input_data["zones"]:
+        model.add("Bus", z, carrier="AC")
+
+    # Add current generation & build options
+    for z in model.buses.index:
+        for source in sources:
+            p_max_pu = None
+            if is_re(source):
+                p_max_pu = input_data["re_ts"][source]
+            # current generator
+            model.add("Generator", str(z) + " - " + source + "_exist", bus = z, 
+                      marginal_cost = input_data["generation costs"].loc[(source, "marginal"), years[0]],
+                      p_max_pu = p_max_pu,
+                      p_nom_extendable = False,
+                      p_nom = input_data["source capacities"].loc[(z, source), "capacity"])
+            # build options for every year
+            for year in years:
+                model.add("Generator", str(z) + " - " + source + "_" + str(year), bus = z,
+                          marginal_cost = input_data["generation costs"].loc[(source, "marginal"), year],
+                          capital_cost = input_data["generation costs"].loc[(source, "capital"), year],
+                          p_max_pu = p_max_pu,
+                          p_nom_extendable = True)
+
+    # Add load shedding generators
+    for z in model.buses.index:
+        model.add("Generator", "load shedding - " + z, bus = z,
+                  marginal_cost = voll,
+                  p_nom = input_data["zonal load"].loc[z, "peak power"],
+                  p_nom_extendable = False)
+
+    # Add load
+    for z in model.buses.index:
+        model.add("Load","load - " + z, bus = z,
+                  p_set = input_data["load_ts"]["load_pu"] * input_data["zonal load"].loc[z, "peak power"])
+
+    return model
+
