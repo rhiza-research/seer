@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 import pypsa
 from pypsa.common import annuity
@@ -55,7 +56,7 @@ lf = 0.5
 ## Functions to get realistic toy data
 
 def synth_data(start_year, nzones=1, nyears=1, year_step=1, rez="1h",
-               population=3e6, income_class="mic", mix="india", excess_cap=1.5):
+               population=3e6, income_class="mic", mix="india", excess_cap=1.5, load_growth=0.1):
     """
     Inputs
     ------
@@ -76,7 +77,7 @@ def synth_data(start_year, nzones=1, nyears=1, year_step=1, rez="1h",
     prop = np.random.rand(nzones)
     prop = prop / np.sum(prop)
 
-    # Get peak load per zone
+    # Get peak load per zone in starting year
     energy = population * pcc[income_class] # annual consumption in kWh
     power_avg = energy / 8760
     peak = power_avg / lf / 1e3 # peak power in MW
@@ -111,6 +112,13 @@ def synth_data(start_year, nzones=1, nyears=1, year_step=1, rez="1h",
     # the ts indices must match snapshots
     load_ts.index = snapshots
     re_ts.index = snapshots
+
+    # Add load growth to the load time series
+    y = np.array(years)
+    growth = pd.DataFrame(index=years, columns=["growth factor"], data=(1+load_growth)**(y-y[0]))
+    load_ts = load_ts.join(growth, on=load_ts.index.get_level_values(0))
+    load_ts["load_pu"] = load_ts["load_pu"] * load_ts["growth factor"]
+    load_ts = load_ts.drop(["key_0", "growth factor"], axis=1)
 
     input_data["load_ts"] = load_ts
     input_data["re_ts"] = re_ts
@@ -240,14 +248,15 @@ def create_model_from_data(input_data, voll=2000):
             if is_re(source):
                 p_max_pu = input_data["re_ts"][source]
             # current generator
-            model.add("Generator", str(z) + " - " + source + "_exist", bus = z, 
+            model.add("Generator", source + " - " + str(z) + "_exist", bus = z, 
                       marginal_cost = input_data["generation costs"].loc[(source, "marginal"), years[0]],
                       p_max_pu = p_max_pu,
                       p_nom_extendable = False,
                       p_nom = input_data["source capacities"].loc[(z, source), "capacity"])
             # build options for every year
             for year in years:
-                model.add("Generator", str(z) + " - " + source + "_" + str(year), bus = z,
+                model.add("Generator", source + " - " + str(z) + "_" + str(year), bus = z,
+                          build_year = year,
                           marginal_cost = input_data["generation costs"].loc[(source, "marginal"), year],
                           capital_cost = input_data["generation costs"].loc[(source, "capital"), year],
                           p_max_pu = p_max_pu,
@@ -266,4 +275,13 @@ def create_model_from_data(input_data, voll=2000):
                   p_set = input_data["load_ts"]["load_pu"] * input_data["zonal load"].loc[z, "peak power"])
 
     return model
+
+def viz_model(model):
+    new_gens = model.generators[model.generators.build_year > 0]
+    new_gens["source"] = new_gens.index.str.split("-").str[0].str.strip()
+    new_gens = new_gens[["source", "build_year", "p_nom_opt"]].groupby(["source", "build_year"]).sum()
+    df_unstacked = new_gens["p_nom_opt"].unstack("build_year")
+    df_unstacked.plot.bar(figsize=(10,5))
+    plt.show()
+
 
