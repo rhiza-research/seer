@@ -225,6 +225,9 @@ def is_re(source):
 
 def create_model_from_data(input_data, voll=2000, modular_expansion=False):
     model = pypsa.Network()
+    # add the carriers to the model
+    for source in sources:
+        model.add("Carrier", source)
     model.add("Carrier", "AC")
 
     model.snapshots = input_data["snapshots"]
@@ -251,6 +254,7 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
                 p_max_pu = pd.Series(input_data["re_ts"][source].values, index=model.snapshots,
                                      name = name_exist)
             model.add("Generator", name_exist, bus = z, 
+                      carrier = source,
                       marginal_cost = input_data["generation costs"].loc[(source, "marginal"), years[0]],
                       p_max_pu = p_max_pu,
                       p_nom_extendable = False,
@@ -267,6 +271,7 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
                 else:
                     p_nom_mod = 0
                 model.add("Generator", name_new, bus = z,
+                          carrier = source,
                           build_year = year,
                           marginal_cost = input_data["generation costs"].loc[(source, "marginal"), year],
                           capital_cost = input_data["generation costs"].loc[(source, "capital"), year],
