@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+import os
 import pypsa
 from pypsa.common import annuity
 
@@ -157,8 +157,12 @@ def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="
     df["year"] = df.index.year
 
     # Get the pypsa data
-    url = "https://tubcloud.tu-berlin.de/s/9toBssWEdaLgHzq/download/time-series.csv"
-    pypsa_data = pd.read_csv(url, index_col=0, parse_dates=True)[["load_mw"]]
+    # Look for time-series.csv in data/ otherwise use url
+    if os.path.exists("data/time-series.csv"):
+        pypsa_data = pd.read_csv("data/time-series.csv", index_col=0, parse_dates=True)[["load_mw"]]
+    else:
+        url = "https://tubcloud.tu-berlin.de/s/9toBssWEdaLgHzq/download/time-series.csv"
+        pypsa_data = pd.read_csv(url, index_col=0, parse_dates=True)[["load_mw"]]
     pypsa_data["doy"] = pypsa_data.index.dayofyear
     pypsa_data["hour"] = pypsa_data.index.hour
     # we need to make the pypsa load p.u. rather than mw
@@ -193,8 +197,12 @@ def synth_re_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"
     df["hour"] = df.index.hour
 
     # Get the pypsa data
-    url = "https://tubcloud.tu-berlin.de/s/9toBssWEdaLgHzq/download/time-series.csv"
-    pypsa_data = pd.read_csv(url, index_col=0, parse_dates=True)[["pv_pu", "wind_pu"]]
+    if os.path.exists("data/time-series.csv"):
+        pypsa_data = pd.read_csv("data/time-series.csv", index_col=0, parse_dates=True)[["pv_pu", "wind_pu"]]
+    else:
+        url = "https://tubcloud.tu-berlin.de/s/9toBssWEdaLgHzq/download/time-series.csv"
+        pypsa_data = pd.read_csv(url, index_col=0, parse_dates=True)[["pv_pu", "wind_pu"]]
+
     pypsa_data["doy"] = pypsa_data.index.dayofyear
     pypsa_data["hour"] = pypsa_data.index.hour
 
