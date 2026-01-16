@@ -25,6 +25,7 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
     for source in input_data["sources"]:
         model.add("Carrier", source)
     model.add("Carrier", "AC")
+    model.add("Carrier", "battery")
 
     model.snapshots = input_data["snapshots"]
 
@@ -75,6 +76,35 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
                           p_nom_mod = p_nom_mod,
                           p_nom_extendable = True)
 
+    # Add storage
+    for z in model.buses.index:
+        name_exist = "battery - " + z + "_exist"
+        # existing storage
+        model.add("StorageUnit", name_exist, bus = z,
+                  carrier = "battery",
+                  max_hours = 6,
+                  marginal_cost = 0,
+                  capital_cost = 0,
+                  efficiency_store = 1, efficiency_dispatch = 1,
+                  cyclic_state_of_charge = True,
+                  p_nom = 200,
+                  p_nom_extendable = False)
+
+        for year in years:
+            name_new = "battery - " + z + "_" + str(year)
+            # new storage
+            model.add("StorageUnit", name_new, bus = z,
+                    carrier = "battery",
+                    max_hours = 6,
+                    marginal_cost = 0,
+                    capital_cost = 0,
+                    efficiency_store = 1, efficiency_dispatch = 1,
+                    cyclic_state_of_charge = True,
+                    build_year = year,
+                    p_nom_extendable = True)
+    # Limit battery deployment
+    
+    model.
     # Add load shedding generators
     for z in model.buses.index:
         model.add("Generator", "load shedding - " + z, bus = z,

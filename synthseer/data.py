@@ -7,7 +7,7 @@ realistic data
 """
 
 # List of generation types considered (these names should be used consistently)
-sources = ["gas", "wind", "solar", "coal", "nuclear", "battery"]
+sources = ["gas", "wind", "solar", "coal", "nuclear"]
 # Typical scale of single generator (in MW)
 typical_capacity = {
     "gas" : 600, # single CCGT unit
@@ -27,7 +27,6 @@ init_costs = pd.DataFrame(index=sources, columns=["capital", "marginal"],
                                               [136_000, 5],
                                               [280_000, 110],
                                               [525_000, 15],
-                                              [120_000, 10],
                                               ]))
 
 cost_changes = pd.DataFrame(index=sources, columns=["capital", "marginal"],
@@ -35,13 +34,12 @@ cost_changes = pd.DataFrame(index=sources, columns=["capital", "marginal"],
                                               [-0.05, -0.03],
                                               [-0.01, -0.01],
                                               [0, 0],
-                                              [0, 0],
-                                              [-0.05, -0.03]]))
+                                              [0, 0]]))
 
 mixes = pd.DataFrame(index=sources, columns=["india", "us", "france"])
-mixes.loc[:, "india"] = [0.04, 0.09, 0.06, 0.78, 0.03, 0.01]
-mixes.loc[:, "us"] = [0.46, 0.08, 0.11, 0.16, 0.19, 0.01]
-mixes.loc[:, "france"] = [0.04, 0.06, 0.1, 0, 0.8, 0.01]
+mixes.loc[:, "india"] = [0.04, 0.09, 0.06, 0.78, 0.03]
+mixes.loc[:, "us"] = [0.46, 0.08, 0.11, 0.16, 0.19]
+mixes.loc[:, "france"] = [0.04, 0.06, 0.1, 0, 0.8]
 
 # per capita energy consumption (kWh) by country income group
 pcc = {
