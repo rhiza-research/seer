@@ -75,7 +75,7 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
                           p_max_pu = p_max_pu,
                           p_nom_mod = p_nom_mod,
                           p_nom_extendable = True)
-
+    """
     # Add storage
     for z in model.buses.index:
         name_exist = "battery - " + z + "_exist"
@@ -96,15 +96,15 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
             model.add("StorageUnit", name_new, bus = z,
                     carrier = "battery",
                     max_hours = 6,
-                    marginal_cost = 0,
-                    capital_cost = 0,
+                    marginal_cost = 1000,
+                    capital_cost = 1000,
                     efficiency_store = 1, efficiency_dispatch = 1,
                     cyclic_state_of_charge = True,
                     build_year = year,
-                    p_nom_extendable = True)
-    # Limit battery deployment
-    
-    model.
+                    p_nom_extendable = True,
+                    p_nom_max = 5*input_data["typical_capacity"]["battery"])
+    """
+
     # Add load shedding generators
     for z in model.buses.index:
         model.add("Generator", "load shedding - " + z, bus = z,

@@ -22,7 +22,7 @@ typical_capacity = {
 # capital and marginal costs
 # capital - $/MWh, marginal - $/MWh-year
 init_costs = pd.DataFrame(index=sources, columns=["capital", "marginal"],
-                             data = np.array([[81_000, 70],
+                             data = np.array([[81_00000, 70],
                                               [102_000, 5],
                                               [136_000, 5],
                                               [280_000, 110],

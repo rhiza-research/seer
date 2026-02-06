@@ -10,10 +10,12 @@ def viz_model(model):
     df_unstacked = new_gens["p_nom_opt"].unstack("build_year")
     df_unstacked.plot.bar(ax=axs[0])
 
+    """
     new_storage = model.storage_units[model.storage_units.build_year > 0]
     new_storage["storage"] = new_storage.index.str.split("-").str[0].str.strip()
     new_storage = new_storage[["storage", "build_year", "p_nom_opt"]].groupby(["storage", "build_year"]).sum()
     df_unstacked = new_storage["p_nom_opt"].unstack("build_year")
     df_unstacked.plot.bar(ax=axs[1])
+    """
 
     plt.show()
