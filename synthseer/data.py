@@ -7,7 +7,7 @@ realistic data
 """
 
 # List of generation types considered (these names should be used consistently)
-sources = ["gas", "wind", "solar", "coal", "nuclear"]
+sources = ["gas", "solar", "wind", "coal", "nuclear", "hydro"]
 # Typical scale of single generator (in MW)
 typical_capacity = {
     "gas" : 600, # single CCGT unit
@@ -19,27 +19,57 @@ typical_capacity = {
     "battery" : 200 # reasonably large utility scale battery
 }
 
-# capital and marginal costs
-# capital - $/MWh, marginal - $/MWh-year
-init_costs = pd.DataFrame(index=sources, columns=["capital", "marginal"],
-                             data = np.array([[81_00000, 70],
-                                              [102_000, 5],
-                                              [136_000, 5],
-                                              [280_000, 110],
-                                              [525_000, 15],
-                                              ]))
+# PyPSA units:
+# capital  -> EUR/MW/year (annualized)
+# marginal -> EUR/MWh
 
-cost_changes = pd.DataFrame(index=sources, columns=["capital", "marginal"],
-                             data = np.array([[0.01, 0.02],
-                                              [-0.05, -0.03],
-                                              [-0.01, -0.01],
-                                              [0, 0],
-                                              [0, 0]]))
+init_costs = pd.DataFrame(
+    index=sources,
+    columns=["capital", "marginal"],
+    data=np.array([
+        [85_000, 70],    # gas (CCGT + fuel + CO2)
+        [4_000, 2],     # solar PV
+        [65_000, 3],     # onshore wind
+        [120_000, 100],  # coal (penalized by CO2)
+        [180_000, 10],   # nuclear
+        [90_000, 5],     # hydro
+    ])
+)
+
+cost_changes = pd.DataFrame(
+    index=sources,
+    columns=["capital", "marginal"],
+    data=np.array([
+        [0.01, 0.02],    # gas
+        [-0.06, -0.01],  # solar learning
+        [-0.04, -0.01],  # wind learning
+        [0.01, 0.02],    # coal worsening
+        [0.00, 0.00],    # nuclear flat
+        [0.00, 0.00],    # hydro flat
+    ])
+)
+
+storage_init_costs = pd.DataFrame(
+    index=["battery"],
+    columns=["capital", "marginal"],
+    data=np.array([
+        [35_000, 0.5],   # battery (power capacity)
+    ])
+)
+
+storage_cost_changes = pd.DataFrame(
+    index=["battery"],
+    columns=["capital", "marginal"],
+    data=np.array([
+        [-0.08, -0.02],
+    ])
+)
+
 
 mixes = pd.DataFrame(index=sources, columns=["india", "us", "france"])
-mixes.loc[:, "india"] = [0.04, 0.09, 0.06, 0.78, 0.03]
-mixes.loc[:, "us"] = [0.46, 0.08, 0.11, 0.16, 0.19]
-mixes.loc[:, "france"] = [0.04, 0.06, 0.1, 0, 0.8]
+mixes.loc[:, "india"] = [0.04, 0.09, 0.06, 0.78, 0.03, 0]
+mixes.loc[:, "us"] = [0.46, 0.08, 0.11, 0.16, 0.19, 0]
+mixes.loc[:, "france"] = [0.04, 0.06, 0.1, 0, 0.8, 0]
 
 # per capita energy consumption (kWh) by country income group
 pcc = {
@@ -108,7 +138,8 @@ def synth_data(start_year, nzones=1, nyears=1, year_step=1, rez="1h",
 
     # Generate synthetic load & re supply profiles - use pypsa data.
     load_ts = synth_load_ts(str(start_year), str(end_year), freq=rez)
-    re_ts = synth_re_ts(str(start_year), str(end_year), freq=rez)
+    re_ts = synth_re_ts(str(start_year), str(end_year), freq=rez, use_local=True)
+    import pdb; pdb.set_trace()
     # the ts indices must match snapshots
     load_ts.index = snapshots
     re_ts.index = snapshots
@@ -135,12 +166,21 @@ def synth_data(start_year, nzones=1, nyears=1, year_step=1, rez="1h",
             costs.loc[(s, c)] = c0*((1+p)**dy)
     input_data["generation costs"] = costs
 
+    # Get storage capital and marginal costs by year
+    storage_costs = pd.DataFrame(index = pd.MultiIndex.from_product([["battery"], cost_type], names=["source", "cost type"]),
+                                 columns=years)
+    for c in cost_type:
+        c0 = storage_init_costs.loc["battery", c]
+        p = storage_cost_changes.loc["battery", c]
+        storage_costs.loc[("battery", c)] = c0*((1+p)**dy)
+    input_data["storage costs"] = storage_costs
+
     return input_data
 
 # Functions to generate synthetic data
 
 # Load time series at resolution freq based on PyPSA open data
-def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"):
+def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h", use_local=True):
     """
     Load the load time series provided by pypsa, and extend 
     over an entire modeling period of interest at given frequency.
@@ -159,7 +199,7 @@ def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="
 
     # Get the pypsa data
     # Look for time-series.csv in data/ otherwise use url
-    if os.path.exists("data/time-series.csv"):
+    if use_local and os.path.exists("data/time-series.csv"):
         pypsa_data = pd.read_csv("data/time-series.csv", index_col=0, parse_dates=True)[["load_mw"]]
     else:
         url = "https://tubcloud.tu-berlin.de/s/9toBssWEdaLgHzq/download/time-series.csv"
@@ -181,7 +221,7 @@ def synth_load_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="
     return df
 
 # Renewable output time series at resolution freq based on PyPSA open data
-def synth_re_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"):
+def synth_re_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h", use_local=True):
     """
     Load the RE time series provided by pypsa, and extend 
     over an entire modeling period of interest. 
@@ -198,11 +238,14 @@ def synth_re_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"
     df["hour"] = df.index.hour
 
     # Get the pypsa data
-    if os.path.exists("data/time-series.csv"):
+    if use_local and os.path.exists("data/time-series.csv"):
         pypsa_data = pd.read_csv("data/time-series.csv", index_col=0, parse_dates=True)[["pv_pu", "wind_pu"]]
     else:
         url = "https://tubcloud.tu-berlin.de/s/9toBssWEdaLgHzq/download/time-series.csv"
         pypsa_data = pd.read_csv(url, index_col=0, parse_dates=True)[["pv_pu", "wind_pu"]]
+    import pdb; pdb.set_trace()
+    # average pypsa data to freq
+    pypsa_data = pypsa_data.resample(freq).mean()
 
     pypsa_data["doy"] = pypsa_data.index.dayofyear
     pypsa_data["hour"] = pypsa_data.index.hour

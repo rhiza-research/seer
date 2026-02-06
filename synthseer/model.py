@@ -17,7 +17,7 @@ def set_obj_weights(model, years, year_step=1):
         start_at += nyears
 
 def is_re(source):
-    return source in ["solar", "wind", "hydro"]
+    return source in ["solar", "wind"]
 
 def create_model_from_data(input_data, voll=2000, modular_expansion=False):
     model = pypsa.Network()
@@ -62,7 +62,8 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
                 # new generation
                 name_new = source + " - " + str(z) + "_" + str(year)
                 if is_re(source):
-                    p_max_pu.name = name_new
+                    p_max_pu = pd.Series(input_data["re_ts"][source].values, index=model.snapshots,
+                                         name = name_new)
                 if modular_expansion:
                     p_nom_mod = input_data["typical_capacity"][source]
                 else:
@@ -75,7 +76,7 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
                           p_max_pu = p_max_pu,
                           p_nom_mod = p_nom_mod,
                           p_nom_extendable = True)
-    """
+    
     # Add storage
     for z in model.buses.index:
         name_exist = "battery - " + z + "_exist"
@@ -83,11 +84,11 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
         model.add("StorageUnit", name_exist, bus = z,
                   carrier = "battery",
                   max_hours = 6,
-                  marginal_cost = 0,
-                  capital_cost = 0,
+                  marginal_cost = input_data["storage costs"].loc[("battery", "marginal"), years[0]],
+                  capital_cost = input_data["storage costs"].loc[("battery", "capital"), years[0]],
                   efficiency_store = 1, efficiency_dispatch = 1,
                   cyclic_state_of_charge = True,
-                  p_nom = 200,
+                  p_nom = input_data["typical_capacity"]["battery"],
                   p_nom_extendable = False)
 
         for year in years:
@@ -96,14 +97,15 @@ def create_model_from_data(input_data, voll=2000, modular_expansion=False):
             model.add("StorageUnit", name_new, bus = z,
                     carrier = "battery",
                     max_hours = 6,
-                    marginal_cost = 1000,
-                    capital_cost = 1000,
+                    marginal_cost = input_data["storage costs"].loc[("battery", "marginal"), year],
+                    capital_cost = input_data["storage costs"].loc[("battery", "capital"), year],
                     efficiency_store = 1, efficiency_dispatch = 1,
                     cyclic_state_of_charge = True,
                     build_year = year,
-                    p_nom_extendable = True,
-                    p_nom_max = 5*input_data["typical_capacity"]["battery"])
-    """
+                    p_nom_extendable = True)
+
+    # limit battery deployment
+        
 
     # Add load shedding generators
     for z in model.buses.index:
