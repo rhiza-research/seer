@@ -1,0 +1,337 @@
+plant,scenario,season,value
+Kotu G5,,m1,0.5
+Kotu G5,,m2,0.5
+Kotu G5,,m3,0.5
+Kotu G5,,m4,0.5
+Kotu G5,,m5,0.5
+Kotu G5,,m6,0.5
+Kotu G5,,m7,0.5
+Kotu G5,,m8,0.5
+Kotu G5,,m9,0.5
+Kotu G5,,m10,0.5
+Kotu G5,,m11,0.5
+Kotu G5,,m12,0.5
+Kotu G6,,m1,0.5
+Kotu G6,,m2,0.5
+Kotu G6,,m3,0.5
+Kotu G6,,m4,0.5
+Kotu G6,,m5,0.5
+Kotu G6,,m6,0.5
+Kotu G6,,m7,0.5
+Kotu G6,,m8,0.5
+Kotu G6,,m9,0.5
+Kotu G6,,m10,0.5
+Kotu G6,,m11,0.5
+Kotu G6,,m12,0.5
+Kotu G7,,m1,0.5
+Kotu G7,,m2,0.5
+Kotu G7,,m3,0.5
+Kotu G7,,m4,0.5
+Kotu G7,,m5,0.5
+Kotu G7,,m6,0.5
+Kotu G7,,m7,0.5
+Kotu G7,,m8,0.5
+Kotu G7,,m9,0.5
+Kotu G7,,m10,0.5
+Kotu G7,,m11,0.5
+Kotu G7,,m12,0.5
+Kotu G8,,m1,0.5
+Kotu G8,,m2,0.5
+Kotu G8,,m3,0.5
+Kotu G8,,m4,0.5
+Kotu G8,,m5,0.5
+Kotu G8,,m6,0.5
+Kotu G8,,m7,0.5
+Kotu G8,,m8,0.5
+Kotu G8,,m9,0.5
+Kotu G8,,m10,0.5
+Kotu G8,,m11,0.5
+Kotu G8,,m12,0.5
+Brikama G1,,m1,0.5
+Brikama G1,,m2,0.5
+Brikama G1,,m3,0.5
+Brikama G1,,m4,0.5
+Brikama G1,,m5,0.5
+Brikama G1,,m6,0.5
+Brikama G1,,m7,0.5
+Brikama G1,,m8,0.5
+Brikama G1,,m9,0.5
+Brikama G1,,m10,0.5
+Brikama G1,,m11,0.5
+Brikama G1,,m12,0.5
+Brikama G3,,m1,0.5
+Brikama G3,,m2,0.5
+Brikama G3,,m3,0.5
+Brikama G3,,m4,0.5
+Brikama G3,,m5,0.5
+Brikama G3,,m6,0.5
+Brikama G3,,m7,0.5
+Brikama G3,,m8,0.5
+Brikama G3,,m9,0.5
+Brikama G3,,m10,0.5
+Brikama G3,,m11,0.5
+Brikama G3,,m12,0.5
+Brikama G4,,m1,0.5
+Brikama G4,,m2,0.5
+Brikama G4,,m3,0.5
+Brikama G4,,m4,0.5
+Brikama G4,,m5,0.5
+Brikama G4,,m6,0.5
+Brikama G4,,m7,0.5
+Brikama G4,,m8,0.5
+Brikama G4,,m9,0.5
+Brikama G4,,m10,0.5
+Brikama G4,,m11,0.5
+Brikama G4,,m12,0.5
+Brikama G6,,m1,0.5
+Brikama G6,,m2,0.5
+Brikama G6,,m3,0.5
+Brikama G6,,m4,0.5
+Brikama G6,,m5,0.5
+Brikama G6,,m6,0.5
+Brikama G6,,m7,0.5
+Brikama G6,,m8,0.5
+Brikama G6,,m9,0.5
+Brikama G6,,m10,0.5
+Brikama G6,,m11,0.5
+Brikama G6,,m12,0.5
+Brikama G7,,m1,0.5
+Brikama G7,,m2,0.5
+Brikama G7,,m3,0.5
+Brikama G7,,m4,0.5
+Brikama G7,,m5,0.5
+Brikama G7,,m6,0.5
+Brikama G7,,m7,0.5
+Brikama G7,,m8,0.5
+Brikama G7,,m9,0.5
+Brikama G7,,m10,0.5
+Brikama G7,,m11,0.5
+Brikama G7,,m12,0.5
+Brikama II,,m1,0.5
+Brikama II,,m2,0.5
+Brikama II,,m3,0.5
+Brikama II,,m4,0.5
+Brikama II,,m5,0.5
+Brikama II,,m6,0.5
+Brikama II,,m7,0.5
+Brikama II,,m8,0.5
+Brikama II,,m9,0.5
+Brikama II,,m10,0.5
+Brikama II,,m11,0.5
+Brikama II,,m12,0.5
+Brikama III G1,,m1,0.5
+Brikama III G1,,m2,0.5
+Brikama III G1,,m3,0.5
+Brikama III G1,,m4,0.5
+Brikama III G1,,m5,0.5
+Brikama III G1,,m6,0.5
+Brikama III G1,,m7,0.5
+Brikama III G1,,m8,0.5
+Brikama III G1,,m9,0.5
+Brikama III G1,,m10,0.5
+Brikama III G1,,m11,0.5
+Brikama III G1,,m12,0.5
+Brikama III G2,,m1,0.5
+Brikama III G2,,m2,0.5
+Brikama III G2,,m3,0.5
+Brikama III G2,,m4,0.5
+Brikama III G2,,m5,0.5
+Brikama III G2,,m6,0.5
+Brikama III G2,,m7,0.5
+Brikama III G2,,m8,0.5
+Brikama III G2,,m9,0.5
+Brikama III G2,,m10,0.5
+Brikama III G2,,m11,0.5
+Brikama III G2,,m12,0.5
+Karpower 1,,m1,0.5
+Karpower 1,,m2,0.5
+Karpower 1,,m3,0.5
+Karpower 1,,m4,0.5
+Karpower 1,,m5,0.5
+Karpower 1,,m6,0.5
+Karpower 1,,m7,0.5
+Karpower 1,,m8,0.5
+Karpower 1,,m9,0.5
+Karpower 1,,m10,0.5
+Karpower 1,,m11,0.5
+Karpower 1,,m12,0.5
+Karpower 2,,m1,0.5
+Karpower 2,,m2,0.5
+Karpower 2,,m3,0.5
+Karpower 2,,m4,0.5
+Karpower 2,,m5,0.5
+Karpower 2,,m6,0.5
+Karpower 2,,m7,0.5
+Karpower 2,,m8,0.5
+Karpower 2,,m9,0.5
+Karpower 2,,m10,0.5
+Karpower 2,,m11,0.5
+Karpower 2,,m12,0.5
+Jambur PV,,m1,1.0
+Jambur PV,,m2,1.0
+Jambur PV,,m3,1.0
+Jambur PV,,m4,1.0
+Jambur PV,,m5,1.0
+Jambur PV,,m6,1.0
+Jambur PV,,m7,1.0
+Jambur PV,,m8,1.0
+Jambur PV,,m9,1.0
+Jambur PV,,m10,1.0
+Jambur PV,,m11,1.0
+Jambur PV,,m12,1.0
+Jambur BESS,,m1,1.0
+Jambur BESS,,m2,1.0
+Jambur BESS,,m3,1.0
+Jambur BESS,,m4,1.0
+Jambur BESS,,m5,1.0
+Jambur BESS,,m6,1.0
+Jambur BESS,,m7,1.0
+Jambur BESS,,m8,1.0
+Jambur BESS,,m9,1.0
+Jambur BESS,,m10,1.0
+Jambur BESS,,m11,1.0
+Jambur BESS,,m12,1.0
+Import Guinea,,m1,0.45
+Import Guinea,,m2,0.45
+Import Guinea,,m3,0.45
+Import Guinea,,m4,0.45
+Import Guinea,,m5,1.0
+Import Guinea,,m6,1.0
+Import Guinea,,m7,1.0
+Import Guinea,,m8,1.0
+Import Guinea,,m9,1.0
+Import Guinea,,m10,1.0
+Import Guinea,,m11,0.45
+Import Guinea,,m12,0.45
+Import Senegal,,m1,1.0
+Import Senegal,,m2,1.0
+Import Senegal,,m3,1.0
+Import Senegal,,m4,1.0
+Import Senegal,,m5,1.0
+Import Senegal,,m6,1.0
+Import Senegal,,m7,1.0
+Import Senegal,,m8,1.0
+Import Senegal,,m9,1.0
+Import Senegal,,m10,1.0
+Import Senegal,,m11,1.0
+Import Senegal,,m12,1.0
+Import Senegal MV,,m1,1.0
+Import Senegal MV,,m2,1.0
+Import Senegal MV,,m3,1.0
+Import Senegal MV,,m4,1.0
+Import Senegal MV,,m5,1.0
+Import Senegal MV,,m6,1.0
+Import Senegal MV,,m7,1.0
+Import Senegal MV,,m8,1.0
+Import Senegal MV,,m9,1.0
+Import Senegal MV,,m10,1.0
+Import Senegal MV,,m11,1.0
+Import Senegal MV,,m12,1.0
+New ICE,,m1,0.5
+New ICE,,m2,0.5
+New ICE,,m3,0.5
+New ICE,,m4,0.5
+New ICE,,m5,0.5
+New ICE,,m6,0.5
+New ICE,,m7,0.5
+New ICE,,m8,0.5
+New ICE,,m9,0.5
+New ICE,,m10,0.5
+New ICE,,m11,0.5
+New ICE,,m12,0.5
+New CCGT,,m1,0.85
+New CCGT,,m2,0.85
+New CCGT,,m3,0.85
+New CCGT,,m4,0.85
+New CCGT,,m5,0.85
+New CCGT,,m6,0.85
+New CCGT,,m7,0.85
+New CCGT,,m8,0.85
+New CCGT,,m9,0.85
+New CCGT,,m10,0.85
+New CCGT,,m11,0.85
+New CCGT,,m12,0.85
+New Solar,,m1,1.0
+New Solar,,m2,1.0
+New Solar,,m3,1.0
+New Solar,,m4,1.0
+New Solar,,m5,1.0
+New Solar,,m6,1.0
+New Solar,,m7,1.0
+New Solar,,m8,1.0
+New Solar,,m9,1.0
+New Solar,,m10,1.0
+New Solar,,m11,1.0
+New Solar,,m12,1.0
+New BESS,,m1,1.0
+New BESS,,m2,1.0
+New BESS,,m3,1.0
+New BESS,,m4,1.0
+New BESS,,m5,1.0
+New BESS,,m6,1.0
+New BESS,,m7,1.0
+New BESS,,m8,1.0
+New BESS,,m9,1.0
+New BESS,,m10,1.0
+New BESS,,m11,1.0
+New BESS,,m12,1.0
+New CCGT Senegal,,m1,0.85
+New CCGT Senegal,,m2,0.85
+New CCGT Senegal,,m3,0.85
+New CCGT Senegal,,m4,0.85
+New CCGT Senegal,,m5,0.85
+New CCGT Senegal,,m6,0.85
+New CCGT Senegal,,m7,0.85
+New CCGT Senegal,,m8,0.85
+New CCGT Senegal,,m9,0.85
+New CCGT Senegal,,m10,0.85
+New CCGT Senegal,,m11,0.85
+New CCGT Senegal,,m12,0.85
+New CCGT Cote d'Ivoire,,m1,0.85
+New CCGT Cote d'Ivoire,,m2,0.85
+New CCGT Cote d'Ivoire,,m3,0.85
+New CCGT Cote d'Ivoire,,m4,0.85
+New CCGT Cote d'Ivoire,,m5,0.85
+New CCGT Cote d'Ivoire,,m6,0.85
+New CCGT Cote d'Ivoire,,m7,0.85
+New CCGT Cote d'Ivoire,,m8,0.85
+New CCGT Cote d'Ivoire,,m9,0.85
+New CCGT Cote d'Ivoire,,m10,0.85
+New CCGT Cote d'Ivoire,,m11,0.85
+New CCGT Cote d'Ivoire,,m12,0.85
+New OMVG Import,,m1,1.0
+New OMVG Import,,m2,1.0
+New OMVG Import,,m3,1.0
+New OMVG Import,,m4,1.0
+New OMVG Import,,m5,1.0
+New OMVG Import,,m6,1.0
+New OMVG Import,,m7,1.0
+New OMVG Import,,m8,1.0
+New OMVG Import,,m9,1.0
+New OMVG Import,,m10,1.0
+New OMVG Import,,m11,1.0
+New OMVG Import,,m12,1.0
+Solar Project,,m1,1.0
+Solar Project,,m2,1.0
+Solar Project,,m3,1.0
+Solar Project,,m4,1.0
+Solar Project,,m5,1.0
+Solar Project,,m6,1.0
+Solar Project,,m7,1.0
+Solar Project,,m8,1.0
+Solar Project,,m9,1.0
+Solar Project,,m10,1.0
+Solar Project,,m11,1.0
+Solar Project,,m12,1.0
+BESS Project,,m1,1.0
+BESS Project,,m2,1.0
+BESS Project,,m3,1.0
+BESS Project,,m4,1.0
+BESS Project,,m5,1.0
+BESS Project,,m6,1.0
+BESS Project,,m7,1.0
+BESS Project,,m8,1.0
+BESS Project,,m9,1.0
+BESS Project,,m10,1.0
+BESS Project,,m11,1.0
+BESS Project,,m12,1.0

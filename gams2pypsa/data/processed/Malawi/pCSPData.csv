@@ -1,0 +1,227 @@
+zone,tech,parameters,value
+BotswanaSolarCSP_REN_BWA,STORAGE,Capacity,5000000.0
+BotswanaSolarCSP_REN_BWA,STORAGE,Capex,70.0
+BotswanaSolarCSP_REN_BWA,STORAGE,Life,30.0
+BotswanaSolarCSP_REN_BWA,STORAGE,FixedOM,200.0
+BotswanaSolarCSP_REN_BWA,STORAGE,Availability,1.0
+BotswanaSolarCSP_REN_BWA,STORAGE,Efficiency,0.9
+BotswanaSolarCSP_REN_BWA,Thermal Field,Capacity,50000.0
+BotswanaSolarCSP_REN_BWA,Thermal Field,Capex,1.2
+BotswanaSolarCSP_REN_BWA,Thermal Field,Life,30.0
+BotswanaSolarCSP_REN_BWA,Thermal Field,FixedOM,800.0
+BotswanaSolarCSP_REN_BWA,Thermal Field,Availability,0.9
+BotswanaSolarCSP_REN_BWA,Thermal Field,Efficiency,0.9
+ZPCSolarCSP_TH_ZWE,STORAGE,Capacity,5000000.0
+ZPCSolarCSP_TH_ZWE,STORAGE,Capex,70.0
+ZPCSolarCSP_TH_ZWE,STORAGE,Life,30.0
+ZPCSolarCSP_TH_ZWE,STORAGE,FixedOM,200.0
+ZPCSolarCSP_TH_ZWE,STORAGE,Availability,1.0
+ZPCSolarCSP_TH_ZWE,STORAGE,Efficiency,0.9
+ZPCSolarCSP_TH_ZWE,Thermal Field,Capacity,50000.0
+ZPCSolarCSP_TH_ZWE,Thermal Field,Capex,1.2
+ZPCSolarCSP_TH_ZWE,Thermal Field,Life,30.0
+ZPCSolarCSP_TH_ZWE,Thermal Field,FixedOM,800.0
+ZPCSolarCSP_TH_ZWE,Thermal Field,Availability,0.9
+ZPCSolarCSP_TH_ZWE,Thermal Field,Efficiency,0.9
+SACSP_REN_ZAF,STORAGE,Capacity,1500.0
+SACSP_REN_ZAF,STORAGE,Capex,70.0
+SACSP_REN_ZAF,STORAGE,Life,30.0
+SACSP_REN_ZAF,STORAGE,FixedOM,200.0
+SACSP_REN_ZAF,STORAGE,Availability,1.0
+SACSP_REN_ZAF,STORAGE,Efficiency,0.9
+SACSP_REN_ZAF,Thermal Field,Capacity,300.0
+SACSP_REN_ZAF,Thermal Field,Capex,1.2
+SACSP_REN_ZAF,Thermal Field,Life,30.0
+SACSP_REN_ZAF,Thermal Field,FixedOM,800.0
+SACSP_REN_ZAF,Thermal Field,Availability,0.9
+SACSP_REN_ZAF,Thermal Field,Efficiency,0.9
+ExistingCSP(CSP)_REN_ZAF,STORAGE,Capacity,4000.0
+ExistingCSP(CSP)_REN_ZAF,STORAGE,Life,30.0
+ExistingCSP(CSP)_REN_ZAF,STORAGE,FixedOM,200.0
+ExistingCSP(CSP)_REN_ZAF,STORAGE,Availability,1.0
+ExistingCSP(CSP)_REN_ZAF,STORAGE,Efficiency,0.9
+ExistingCSP(CSP)_REN_ZAF,Thermal Field,Capacity,800.0
+ExistingCSP(CSP)_REN_ZAF,Thermal Field,Life,30.0
+ExistingCSP(CSP)_REN_ZAF,Thermal Field,FixedOM,800.0
+ExistingCSP(CSP)_REN_ZAF,Thermal Field,Availability,0.9
+ExistingCSP(CSP)_REN_ZAF,Thermal Field,Efficiency,0.9
+New_CSP_ZAF,STORAGE,Capacity,5000000.0
+New_CSP_ZAF,STORAGE,Capex,60.0
+New_CSP_ZAF,STORAGE,Life,30.0
+New_CSP_ZAF,STORAGE,FixedOM,200.0
+New_CSP_ZAF,STORAGE,Availability,1.0
+New_CSP_ZAF,STORAGE,Efficiency,0.9
+New_CSP_ZAF,Thermal Field,Capacity,50000.0
+New_CSP_ZAF,Thermal Field,Capex,0.9
+New_CSP_ZAF,Thermal Field,Life,30.0
+New_CSP_ZAF,Thermal Field,FixedOM,800.0
+New_CSP_ZAF,Thermal Field,Availability,0.9
+New_CSP_ZAF,Thermal Field,Efficiency,0.9
+New_CSP_LSO,STORAGE,Capacity,5000000.0
+New_CSP_LSO,STORAGE,Capex,60.0
+New_CSP_LSO,STORAGE,Life,30.0
+New_CSP_LSO,STORAGE,FixedOM,200.0
+New_CSP_LSO,STORAGE,Availability,1.0
+New_CSP_LSO,STORAGE,Efficiency,0.9
+New_CSP_LSO,Thermal Field,Capacity,50000.0
+New_CSP_LSO,Thermal Field,Capex,0.9
+New_CSP_LSO,Thermal Field,Life,30.0
+New_CSP_LSO,Thermal Field,FixedOM,800.0
+New_CSP_LSO,Thermal Field,Availability,0.9
+New_CSP_LSO,Thermal Field,Efficiency,0.9
+New_CSP_SWZ,STORAGE,Capacity,5000000.0
+New_CSP_SWZ,STORAGE,Capex,60.0
+New_CSP_SWZ,STORAGE,Life,30.0
+New_CSP_SWZ,STORAGE,FixedOM,200.0
+New_CSP_SWZ,STORAGE,Availability,1.0
+New_CSP_SWZ,STORAGE,Efficiency,0.9
+New_CSP_SWZ,Thermal Field,Capacity,50000.0
+New_CSP_SWZ,Thermal Field,Capex,0.9
+New_CSP_SWZ,Thermal Field,Life,30.0
+New_CSP_SWZ,Thermal Field,FixedOM,800.0
+New_CSP_SWZ,Thermal Field,Availability,0.9
+New_CSP_SWZ,Thermal Field,Efficiency,0.9
+New_CSP_BWA,STORAGE,Capacity,5000000.0
+New_CSP_BWA,STORAGE,Capex,60.0
+New_CSP_BWA,STORAGE,Life,30.0
+New_CSP_BWA,STORAGE,FixedOM,200.0
+New_CSP_BWA,STORAGE,Availability,1.0
+New_CSP_BWA,STORAGE,Efficiency,0.9
+New_CSP_BWA,Thermal Field,Capacity,50000.0
+New_CSP_BWA,Thermal Field,Capex,0.9
+New_CSP_BWA,Thermal Field,Life,30.0
+New_CSP_BWA,Thermal Field,FixedOM,800.0
+New_CSP_BWA,Thermal Field,Availability,0.9
+New_CSP_BWA,Thermal Field,Efficiency,0.9
+New_CSP_NAM,STORAGE,Capacity,5000000.0
+New_CSP_NAM,STORAGE,Capex,60.0
+New_CSP_NAM,STORAGE,Life,30.0
+New_CSP_NAM,STORAGE,FixedOM,200.0
+New_CSP_NAM,STORAGE,Availability,1.0
+New_CSP_NAM,STORAGE,Efficiency,0.9
+New_CSP_NAM,Thermal Field,Capacity,50000.0
+New_CSP_NAM,Thermal Field,Capex,0.9
+New_CSP_NAM,Thermal Field,Life,30.0
+New_CSP_NAM,Thermal Field,FixedOM,800.0
+New_CSP_NAM,Thermal Field,Availability,0.9
+New_CSP_NAM,Thermal Field,Efficiency,0.9
+New_CSP_ZMB,STORAGE,Capacity,5000000.0
+New_CSP_ZMB,STORAGE,Capex,60.0
+New_CSP_ZMB,STORAGE,Life,30.0
+New_CSP_ZMB,STORAGE,FixedOM,200.0
+New_CSP_ZMB,STORAGE,Availability,1.0
+New_CSP_ZMB,STORAGE,Efficiency,0.9
+New_CSP_ZMB,Thermal Field,Capacity,50000.0
+New_CSP_ZMB,Thermal Field,Capex,0.9
+New_CSP_ZMB,Thermal Field,Life,30.0
+New_CSP_ZMB,Thermal Field,FixedOM,800.0
+New_CSP_ZMB,Thermal Field,Availability,0.9
+New_CSP_ZMB,Thermal Field,Efficiency,0.9
+New_CSP_AGO,STORAGE,Capacity,5000000.0
+New_CSP_AGO,STORAGE,Capex,60.0
+New_CSP_AGO,STORAGE,Life,30.0
+New_CSP_AGO,STORAGE,FixedOM,200.0
+New_CSP_AGO,STORAGE,Availability,1.0
+New_CSP_AGO,STORAGE,Efficiency,0.9
+New_CSP_AGO,Thermal Field,Capacity,50000.0
+New_CSP_AGO,Thermal Field,Capex,0.9
+New_CSP_AGO,Thermal Field,Life,30.0
+New_CSP_AGO,Thermal Field,FixedOM,800.0
+New_CSP_AGO,Thermal Field,Availability,0.9
+New_CSP_AGO,Thermal Field,Efficiency,0.9
+New_CSP_TZA,STORAGE,Capacity,5000000.0
+New_CSP_TZA,STORAGE,Capex,60.0
+New_CSP_TZA,STORAGE,Life,30.0
+New_CSP_TZA,STORAGE,FixedOM,200.0
+New_CSP_TZA,STORAGE,Availability,1.0
+New_CSP_TZA,STORAGE,Efficiency,0.9
+New_CSP_TZA,Thermal Field,Capacity,50000.0
+New_CSP_TZA,Thermal Field,Capex,0.9
+New_CSP_TZA,Thermal Field,Life,30.0
+New_CSP_TZA,Thermal Field,FixedOM,800.0
+New_CSP_TZA,Thermal Field,Availability,0.9
+New_CSP_TZA,Thermal Field,Efficiency,0.9
+CommittedCSP1_NAM,STORAGE,Capacity,318.0
+CommittedCSP1_NAM,STORAGE,Capex,60.0
+CommittedCSP1_NAM,STORAGE,Life,30.0
+CommittedCSP1_NAM,STORAGE,FixedOM,200.0
+CommittedCSP1_NAM,STORAGE,Availability,1.0
+CommittedCSP1_NAM,STORAGE,Efficiency,0.9
+CommittedCSP1_NAM,Thermal Field,Capacity,100.0
+CommittedCSP1_NAM,Thermal Field,Capex,0.9
+CommittedCSP1_NAM,Thermal Field,Life,30.0
+CommittedCSP1_NAM,Thermal Field,FixedOM,800.0
+CommittedCSP1_NAM,Thermal Field,Availability,0.9
+CommittedCSP1_NAM,Thermal Field,Efficiency,0.9
+New_CSP_ZAF_2024,STORAGE,Capacity,400.0
+New_CSP_ZAF_2024,STORAGE,Capex,60.0
+New_CSP_ZAF_2024,STORAGE,Life,30.0
+New_CSP_ZAF_2024,STORAGE,FixedOM,200.0
+New_CSP_ZAF_2024,STORAGE,Availability,1.0
+New_CSP_ZAF_2024,STORAGE,Efficiency,0.9
+New_CSP_ZAF_2024,Thermal Field,Capacity,100.0
+New_CSP_ZAF_2024,Thermal Field,Capex,0.9
+New_CSP_ZAF_2024,Thermal Field,Life,30.0
+New_CSP_ZAF_2024,Thermal Field,FixedOM,800.0
+New_CSP_ZAF_2024,Thermal Field,Availability,0.9
+New_CSP_ZAF_2024,Thermal Field,Efficiency,0.9
+New_CSP_MWI,STORAGE,Capacity,5000000.0
+New_CSP_MWI,STORAGE,Capex,60.0
+New_CSP_MWI,STORAGE,Life,30.0
+New_CSP_MWI,STORAGE,FixedOM,200.0
+New_CSP_MWI,STORAGE,Availability,1.0
+New_CSP_MWI,STORAGE,Efficiency,0.9
+New_CSP_MWI,Thermal Field,Capacity,50000.0
+New_CSP_MWI,Thermal Field,Capex,0.9
+New_CSP_MWI,Thermal Field,Life,30.0
+New_CSP_MWI,Thermal Field,FixedOM,800.0
+New_CSP_MWI,Thermal Field,Availability,0.9
+New_CSP_MWI,Thermal Field,Efficiency,0.9
+New_CSP_BWA_2,STORAGE,Capacity,5000000.0
+New_CSP_BWA_2,STORAGE,Capex,55.0
+New_CSP_BWA_2,STORAGE,Life,30.0
+New_CSP_BWA_2,STORAGE,FixedOM,200.0
+New_CSP_BWA_2,STORAGE,Availability,1.0
+New_CSP_BWA_2,STORAGE,Efficiency,0.9
+New_CSP_BWA_2,Thermal Field,Capacity,50000.0
+New_CSP_BWA_2,Thermal Field,Capex,0.8
+New_CSP_BWA_2,Thermal Field,Life,30.0
+New_CSP_BWA_2,Thermal Field,FixedOM,800.0
+New_CSP_BWA_2,Thermal Field,Availability,0.9
+New_CSP_BWA_2,Thermal Field,Efficiency,0.9
+New_CSP_NAM_2,STORAGE,Capacity,5000000.0
+New_CSP_NAM_2,STORAGE,Capex,55.0
+New_CSP_NAM_2,STORAGE,Life,30.0
+New_CSP_NAM_2,STORAGE,FixedOM,200.0
+New_CSP_NAM_2,STORAGE,Availability,1.0
+New_CSP_NAM_2,STORAGE,Efficiency,0.9
+New_CSP_NAM_2,Thermal Field,Capacity,50000.0
+New_CSP_NAM_2,Thermal Field,Capex,0.8
+New_CSP_NAM_2,Thermal Field,Life,30.0
+New_CSP_NAM_2,Thermal Field,FixedOM,800.0
+New_CSP_NAM_2,Thermal Field,Availability,0.9
+New_CSP_NAM_2,Thermal Field,Efficiency,0.9
+Committed_CSP1-1_BWA,STORAGE,Capacity,431.0
+Committed_CSP1-1_BWA,STORAGE,Capex,60.0
+Committed_CSP1-1_BWA,STORAGE,Life,30.0
+Committed_CSP1-1_BWA,STORAGE,FixedOM,200.0
+Committed_CSP1-1_BWA,STORAGE,Availability,1.0
+Committed_CSP1-1_BWA,STORAGE,Efficiency,0.9
+Committed_CSP1-1_BWA,Thermal Field,Capacity,200.0
+Committed_CSP1-1_BWA,Thermal Field,Capex,0.9
+Committed_CSP1-1_BWA,Thermal Field,Life,30.0
+Committed_CSP1-1_BWA,Thermal Field,FixedOM,800.0
+Committed_CSP1-1_BWA,Thermal Field,Availability,0.9
+Committed_CSP1-1_BWA,Thermal Field,Efficiency,0.9
+Committed_CSP1-2_BWA,STORAGE,Capacity,219.0
+Committed_CSP1-2_BWA,STORAGE,Capex,60.0
+Committed_CSP1-2_BWA,STORAGE,Life,30.0
+Committed_CSP1-2_BWA,STORAGE,FixedOM,200.0
+Committed_CSP1-2_BWA,STORAGE,Availability,1.0
+Committed_CSP1-2_BWA,STORAGE,Efficiency,0.9
+Committed_CSP1-2_BWA,Thermal Field,Capacity,100.0
+Committed_CSP1-2_BWA,Thermal Field,Capex,0.9
+Committed_CSP1-2_BWA,Thermal Field,Life,30.0
+Committed_CSP1-2_BWA,Thermal Field,FixedOM,800.0
+Committed_CSP1-2_BWA,Thermal Field,Availability,0.9
+Committed_CSP1-2_BWA,Thermal Field,Efficiency,0.9

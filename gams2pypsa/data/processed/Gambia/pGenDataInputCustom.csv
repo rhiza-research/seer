@@ -1,0 +1,388 @@
+generator,zone,tech,fuel,parameters,value
+Kotu G5,Gambia,ICE,HFO,Capacity,12.2
+Kotu G5,Gambia,ICE,HFO,Capex,1.019
+Kotu G5,Gambia,ICE,HFO,FOMperMW,18500.0
+Kotu G5,Gambia,ICE,HFO,MinLimitShare,0.6
+Kotu G5,Gambia,ICE,HFO,RampDnRate,1.0
+Kotu G5,Gambia,ICE,HFO,RampUpRate,1.0
+Kotu G5,Gambia,ICE,HFO,ResLimShare,0.15
+Kotu G5,Gambia,ICE,HFO,RetrYr,2024.0
+Kotu G5,Gambia,ICE,HFO,StYr,2018.0
+Kotu G5,Gambia,ICE,HFO,UnitSize,12.2
+Kotu G5,Gambia,ICE,HFO,Life,30.0
+Kotu G5,Gambia,ICE,HFO,HeatRate,9.0
+Kotu G5,Gambia,ICE,HFO,VOM,4.4
+Kotu G5,Gambia,ICE,HFO,Status,1.0
+Kotu G6,Gambia,ICE,HFO,Capacity,6.4
+Kotu G6,Gambia,ICE,HFO,Capex,1.019
+Kotu G6,Gambia,ICE,HFO,FOMperMW,18500.0
+Kotu G6,Gambia,ICE,HFO,MinLimitShare,0.6
+Kotu G6,Gambia,ICE,HFO,RampDnRate,1.0
+Kotu G6,Gambia,ICE,HFO,RampUpRate,1.0
+Kotu G6,Gambia,ICE,HFO,ResLimShare,0.15
+Kotu G6,Gambia,ICE,HFO,RetrYr,2024.0
+Kotu G6,Gambia,ICE,HFO,StYr,1989.0
+Kotu G6,Gambia,ICE,HFO,UnitSize,6.4
+Kotu G6,Gambia,ICE,HFO,Life,30.0
+Kotu G6,Gambia,ICE,HFO,HeatRate,9.0
+Kotu G6,Gambia,ICE,HFO,VOM,4.4
+Kotu G6,Gambia,ICE,HFO,Status,1.0
+Kotu G7,Gambia,ICE,HFO,Capacity,6.4
+Kotu G7,Gambia,ICE,HFO,Capex,1.019
+Kotu G7,Gambia,ICE,HFO,FOMperMW,18500.0
+Kotu G7,Gambia,ICE,HFO,MinLimitShare,0.6
+Kotu G7,Gambia,ICE,HFO,RampDnRate,1.0
+Kotu G7,Gambia,ICE,HFO,RampUpRate,1.0
+Kotu G7,Gambia,ICE,HFO,ResLimShare,0.15
+Kotu G7,Gambia,ICE,HFO,RetrYr,2024.0
+Kotu G7,Gambia,ICE,HFO,StYr,2001.0
+Kotu G7,Gambia,ICE,HFO,UnitSize,6.4
+Kotu G7,Gambia,ICE,HFO,Life,30.0
+Kotu G7,Gambia,ICE,HFO,HeatRate,9.0
+Kotu G7,Gambia,ICE,HFO,VOM,4.4
+Kotu G7,Gambia,ICE,HFO,Status,1.0
+Kotu G8,Gambia,ICE,HFO,Capacity,6.4
+Kotu G8,Gambia,ICE,HFO,Capex,1.019
+Kotu G8,Gambia,ICE,HFO,FOMperMW,18500.0
+Kotu G8,Gambia,ICE,HFO,MinLimitShare,0.6
+Kotu G8,Gambia,ICE,HFO,RampDnRate,1.0
+Kotu G8,Gambia,ICE,HFO,RampUpRate,1.0
+Kotu G8,Gambia,ICE,HFO,ResLimShare,0.15
+Kotu G8,Gambia,ICE,HFO,RetrYr,2024.0
+Kotu G8,Gambia,ICE,HFO,StYr,2018.0
+Kotu G8,Gambia,ICE,HFO,UnitSize,6.4
+Kotu G8,Gambia,ICE,HFO,Life,30.0
+Kotu G8,Gambia,ICE,HFO,HeatRate,9.0
+Kotu G8,Gambia,ICE,HFO,VOM,4.4
+Kotu G8,Gambia,ICE,HFO,Status,1.0
+Brikama G1,Gambia,ICE,LFO,Capacity,6.4
+Brikama G1,Gambia,ICE,LFO,Capex,1.019
+Brikama G1,Gambia,ICE,LFO,FOMperMW,18500.0
+Brikama G1,Gambia,ICE,LFO,MinLimitShare,0.6
+Brikama G1,Gambia,ICE,LFO,RampDnRate,1.0
+Brikama G1,Gambia,ICE,LFO,RampUpRate,1.0
+Brikama G1,Gambia,ICE,LFO,ResLimShare,0.15
+Brikama G1,Gambia,ICE,LFO,RetrYr,2030.0
+Brikama G1,Gambia,ICE,LFO,StYr,2006.0
+Brikama G1,Gambia,ICE,LFO,UnitSize,6.4
+Brikama G1,Gambia,ICE,LFO,Life,30.0
+Brikama G1,Gambia,ICE,LFO,HeatRate,9.0
+Brikama G1,Gambia,ICE,LFO,VOM,4.4
+Brikama G1,Gambia,ICE,LFO,Status,1.0
+Brikama G3,Gambia,ICE,HFO,Capacity,6.4
+Brikama G3,Gambia,ICE,HFO,Capex,1.019
+Brikama G3,Gambia,ICE,HFO,FOMperMW,18500.0
+Brikama G3,Gambia,ICE,HFO,MinLimitShare,0.6
+Brikama G3,Gambia,ICE,HFO,RampDnRate,1.0
+Brikama G3,Gambia,ICE,HFO,RampUpRate,1.0
+Brikama G3,Gambia,ICE,HFO,ResLimShare,0.15
+Brikama G3,Gambia,ICE,HFO,RetrYr,2024.0
+Brikama G3,Gambia,ICE,HFO,StYr,2006.0
+Brikama G3,Gambia,ICE,HFO,UnitSize,6.4
+Brikama G3,Gambia,ICE,HFO,Life,30.0
+Brikama G3,Gambia,ICE,HFO,HeatRate,9.0
+Brikama G3,Gambia,ICE,HFO,VOM,4.4
+Brikama G3,Gambia,ICE,HFO,Status,1.0
+Brikama G4,Gambia,ICE,HFO,Capacity,6.4
+Brikama G4,Gambia,ICE,HFO,Capex,1.019
+Brikama G4,Gambia,ICE,HFO,FOMperMW,18500.0
+Brikama G4,Gambia,ICE,HFO,MinLimitShare,0.6
+Brikama G4,Gambia,ICE,HFO,RampDnRate,1.0
+Brikama G4,Gambia,ICE,HFO,RampUpRate,1.0
+Brikama G4,Gambia,ICE,HFO,ResLimShare,0.15
+Brikama G4,Gambia,ICE,HFO,RetrYr,2024.0
+Brikama G4,Gambia,ICE,HFO,StYr,2006.0
+Brikama G4,Gambia,ICE,HFO,UnitSize,6.4
+Brikama G4,Gambia,ICE,HFO,Life,30.0
+Brikama G4,Gambia,ICE,HFO,HeatRate,9.0
+Brikama G4,Gambia,ICE,HFO,VOM,4.4
+Brikama G4,Gambia,ICE,HFO,Status,1.0
+Brikama G6,Gambia,ICE,HFO,Capacity,6.4
+Brikama G6,Gambia,ICE,HFO,Capex,1.019
+Brikama G6,Gambia,ICE,HFO,FOMperMW,18500.0
+Brikama G6,Gambia,ICE,HFO,MinLimitShare,0.6
+Brikama G6,Gambia,ICE,HFO,RampDnRate,1.0
+Brikama G6,Gambia,ICE,HFO,RampUpRate,1.0
+Brikama G6,Gambia,ICE,HFO,ResLimShare,0.15
+Brikama G6,Gambia,ICE,HFO,RetrYr,2024.0
+Brikama G6,Gambia,ICE,HFO,StYr,2013.0
+Brikama G6,Gambia,ICE,HFO,UnitSize,6.4
+Brikama G6,Gambia,ICE,HFO,Life,30.0
+Brikama G6,Gambia,ICE,HFO,HeatRate,9.0
+Brikama G6,Gambia,ICE,HFO,VOM,4.4
+Brikama G6,Gambia,ICE,HFO,Status,1.0
+Brikama G7,Gambia,ICE,HFO,Capacity,6.4
+Brikama G7,Gambia,ICE,HFO,Capex,1.019
+Brikama G7,Gambia,ICE,HFO,FOMperMW,18500.0
+Brikama G7,Gambia,ICE,HFO,MinLimitShare,0.6
+Brikama G7,Gambia,ICE,HFO,RampDnRate,1.0
+Brikama G7,Gambia,ICE,HFO,RampUpRate,1.0
+Brikama G7,Gambia,ICE,HFO,ResLimShare,0.15
+Brikama G7,Gambia,ICE,HFO,RetrYr,2024.0
+Brikama G7,Gambia,ICE,HFO,StYr,2018.0
+Brikama G7,Gambia,ICE,HFO,UnitSize,6.4
+Brikama G7,Gambia,ICE,HFO,Life,30.0
+Brikama G7,Gambia,ICE,HFO,HeatRate,9.0
+Brikama G7,Gambia,ICE,HFO,VOM,4.4
+Brikama G7,Gambia,ICE,HFO,Status,1.0
+Brikama II,Gambia,ICE,HFO,Capacity,8.9
+Brikama II,Gambia,ICE,HFO,Capex,1.019
+Brikama II,Gambia,ICE,HFO,FOMperMW,18500.0
+Brikama II,Gambia,ICE,HFO,MinLimitShare,0.6
+Brikama II,Gambia,ICE,HFO,RampDnRate,1.0
+Brikama II,Gambia,ICE,HFO,RampUpRate,1.0
+Brikama II,Gambia,ICE,HFO,ResLimShare,0.15
+Brikama II,Gambia,ICE,HFO,RetrYr,2038.0
+Brikama II,Gambia,ICE,HFO,StYr,2018.0
+Brikama II,Gambia,ICE,HFO,UnitSize,8.9
+Brikama II,Gambia,ICE,HFO,Life,30.0
+Brikama II,Gambia,ICE,HFO,HeatRate,9.0
+Brikama II,Gambia,ICE,HFO,VOM,4.4
+Brikama II,Gambia,ICE,HFO,Status,1.0
+Brikama III G1,Gambia,ICE,HFO,Capacity,9.4
+Brikama III G1,Gambia,ICE,HFO,Capex,1.019
+Brikama III G1,Gambia,ICE,HFO,FOMperMW,18500.0
+Brikama III G1,Gambia,ICE,HFO,MinLimitShare,0.6
+Brikama III G1,Gambia,ICE,HFO,RampDnRate,1.0
+Brikama III G1,Gambia,ICE,HFO,RampUpRate,1.0
+Brikama III G1,Gambia,ICE,HFO,ResLimShare,0.15
+Brikama III G1,Gambia,ICE,HFO,RetrYr,2041.0
+Brikama III G1,Gambia,ICE,HFO,StYr,2021.0
+Brikama III G1,Gambia,ICE,HFO,UnitSize,9.4
+Brikama III G1,Gambia,ICE,HFO,Life,30.0
+Brikama III G1,Gambia,ICE,HFO,HeatRate,9.0
+Brikama III G1,Gambia,ICE,HFO,VOM,4.4
+Brikama III G1,Gambia,ICE,HFO,Status,1.0
+Brikama III G2,Gambia,ICE,HFO,Capacity,9.4
+Brikama III G2,Gambia,ICE,HFO,Capex,1.019
+Brikama III G2,Gambia,ICE,HFO,FOMperMW,18500.0
+Brikama III G2,Gambia,ICE,HFO,MinLimitShare,0.6
+Brikama III G2,Gambia,ICE,HFO,RampDnRate,1.0
+Brikama III G2,Gambia,ICE,HFO,RampUpRate,1.0
+Brikama III G2,Gambia,ICE,HFO,ResLimShare,0.15
+Brikama III G2,Gambia,ICE,HFO,RetrYr,2041.0
+Brikama III G2,Gambia,ICE,HFO,StYr,2021.0
+Brikama III G2,Gambia,ICE,HFO,UnitSize,9.4
+Brikama III G2,Gambia,ICE,HFO,Life,30.0
+Brikama III G2,Gambia,ICE,HFO,HeatRate,9.0
+Brikama III G2,Gambia,ICE,HFO,VOM,4.4
+Brikama III G2,Gambia,ICE,HFO,Status,1.0
+Karpower 1,Gambia,ICE,HFO,Capacity,18.9
+Karpower 1,Gambia,ICE,HFO,MinLimitShare,0.6
+Karpower 1,Gambia,ICE,HFO,RampDnRate,1.0
+Karpower 1,Gambia,ICE,HFO,RampUpRate,1.0
+Karpower 1,Gambia,ICE,HFO,ResLimShare,0.15
+Karpower 1,Gambia,ICE,HFO,RetrYr,2050.0
+Karpower 1,Gambia,ICE,HFO,StYr,2018.0
+Karpower 1,Gambia,ICE,HFO,UnitSize,18.9
+Karpower 1,Gambia,ICE,HFO,Life,30.0
+Karpower 1,Gambia,ICE,HFO,HeatRate,9.0
+Karpower 1,Gambia,ICE,HFO,VOM,60.0
+Karpower 1,Gambia,ICE,HFO,Status,1.0
+Karpower 2,Gambia,ICE,HFO,Capacity,18.9
+Karpower 2,Gambia,ICE,HFO,MinLimitShare,0.6
+Karpower 2,Gambia,ICE,HFO,RampDnRate,1.0
+Karpower 2,Gambia,ICE,HFO,RampUpRate,1.0
+Karpower 2,Gambia,ICE,HFO,ResLimShare,0.15
+Karpower 2,Gambia,ICE,HFO,RetrYr,2050.0
+Karpower 2,Gambia,ICE,HFO,StYr,2018.0
+Karpower 2,Gambia,ICE,HFO,UnitSize,18.9
+Karpower 2,Gambia,ICE,HFO,Life,30.0
+Karpower 2,Gambia,ICE,HFO,HeatRate,9.0
+Karpower 2,Gambia,ICE,HFO,VOM,60.0
+Karpower 2,Gambia,ICE,HFO,Status,1.0
+Farafenni,Gambia,ICE,HFO,Capacity,4.8
+Farafenni,Gambia,ICE,HFO,Capex,1.019
+Farafenni,Gambia,ICE,HFO,FOMperMW,18500.0
+Farafenni,Gambia,ICE,HFO,MinLimitShare,0.6
+Farafenni,Gambia,ICE,HFO,RampDnRate,1.0
+Farafenni,Gambia,ICE,HFO,RampUpRate,1.0
+Farafenni,Gambia,ICE,HFO,ResLimShare,0.15
+Farafenni,Gambia,ICE,HFO,RetrYr,2038.0
+Farafenni,Gambia,ICE,HFO,StYr,2018.0
+Farafenni,Gambia,ICE,HFO,UnitSize,4.8
+Farafenni,Gambia,ICE,HFO,Life,30.0
+Farafenni,Gambia,ICE,HFO,HeatRate,9.0
+Farafenni,Gambia,ICE,HFO,VOM,4.4
+Farafenni,Gambia,ICE,HFO,Status,1.0
+Basse,Gambia,ICE,HFO,Capacity,5.4
+Basse,Gambia,ICE,HFO,Capex,1.019
+Basse,Gambia,ICE,HFO,FOMperMW,18500.0
+Basse,Gambia,ICE,HFO,MinLimitShare,0.6
+Basse,Gambia,ICE,HFO,RampDnRate,1.0
+Basse,Gambia,ICE,HFO,RampUpRate,1.0
+Basse,Gambia,ICE,HFO,ResLimShare,0.15
+Basse,Gambia,ICE,HFO,RetrYr,2036.0
+Basse,Gambia,ICE,HFO,StYr,2016.0
+Basse,Gambia,ICE,HFO,UnitSize,5.4
+Basse,Gambia,ICE,HFO,Life,30.0
+Basse,Gambia,ICE,HFO,HeatRate,9.0
+Basse,Gambia,ICE,HFO,VOM,4.4
+Basse,Gambia,ICE,HFO,Status,1.0
+Jambur PV,Gambia,PV,Solar,Capacity,23.0
+Jambur PV,Gambia,PV,Solar,Capex,0.8
+Jambur PV,Gambia,PV,Solar,FOMperMW,15000.0
+Jambur PV,Gambia,PV,Solar,RampDnRate,1.0
+Jambur PV,Gambia,PV,Solar,RampUpRate,1.0
+Jambur PV,Gambia,PV,Solar,RetrYr,2047.0
+Jambur PV,Gambia,PV,Solar,StYr,2024.0
+Jambur PV,Gambia,PV,Solar,UnitSize,1.0
+Jambur PV,Gambia,PV,Solar,Life,25.0
+Jambur PV,Gambia,PV,Solar,Status,1.0
+Jambur PV,Gambia,PV,Solar,RETech,1.0
+Jambur BESS,Gambia,Storage,Battery,Capacity,2.0
+Jambur BESS,Gambia,Storage,Battery,Capex,0.25
+Jambur BESS,Gambia,Storage,Battery,FOMperMW,40000.0
+Jambur BESS,Gambia,Storage,Battery,RampDnRate,1.0
+Jambur BESS,Gambia,Storage,Battery,RampUpRate,1.0
+Jambur BESS,Gambia,Storage,Battery,ResLimShare,1.0
+Jambur BESS,Gambia,Storage,Battery,RetrYr,2037.0
+Jambur BESS,Gambia,Storage,Battery,StYr,2024.0
+Jambur BESS,Gambia,Storage,Battery,UnitSize,1.0
+Jambur BESS,Gambia,Storage,Battery,Life,15.0
+Jambur BESS,Gambia,Storage,Battery,Status,1.0
+Import Guinea,Gambia,ImportTransmission,Import,Capacity,32.0
+Import Guinea,Gambia,ImportTransmission,Import,RampDnRate,1.0
+Import Guinea,Gambia,ImportTransmission,Import,RampUpRate,1.0
+Import Guinea,Gambia,ImportTransmission,Import,ResLimShare,0.1
+Import Guinea,Gambia,ImportTransmission,Import,RetrYr,2050.0
+Import Guinea,Gambia,ImportTransmission,Import,StYr,2024.0
+Import Guinea,Gambia,ImportTransmission,Import,UnitSize,1.0
+Import Guinea,Gambia,ImportTransmission,Import,VOM,110.0
+Import Guinea,Gambia,ImportTransmission,Import,Status,1.0
+Import Senegal,Gambia,ImportTransmission,Import,Capacity,40.0
+Import Senegal,Gambia,ImportTransmission,Import,RampDnRate,1.0
+Import Senegal,Gambia,ImportTransmission,Import,RampUpRate,1.0
+Import Senegal,Gambia,ImportTransmission,Import,ResLimShare,0.1
+Import Senegal,Gambia,ImportTransmission,Import,RetrYr,2050.0
+Import Senegal,Gambia,ImportTransmission,Import,StYr,2010.0
+Import Senegal,Gambia,ImportTransmission,Import,UnitSize,1.0
+Import Senegal,Gambia,ImportTransmission,Import,VOM,150.0
+Import Senegal,Gambia,ImportTransmission,Import,Status,1.0
+Import Senegal MV,Gambia,ImportTransmission,Import,Capacity,5.0
+Import Senegal MV,Gambia,ImportTransmission,Import,RampDnRate,1.0
+Import Senegal MV,Gambia,ImportTransmission,Import,RampUpRate,1.0
+Import Senegal MV,Gambia,ImportTransmission,Import,ResLimShare,0.1
+Import Senegal MV,Gambia,ImportTransmission,Import,RetrYr,2050.0
+Import Senegal MV,Gambia,ImportTransmission,Import,StYr,2010.0
+Import Senegal MV,Gambia,ImportTransmission,Import,UnitSize,1.0
+Import Senegal MV,Gambia,ImportTransmission,Import,VOM,220.0
+Import Senegal MV,Gambia,ImportTransmission,Import,Status,1.0
+New ICE,Gambia,ICE,HFO,BuildLimitperYear,5.0
+New ICE,Gambia,ICE,HFO,Capacity,1000.0
+New ICE,Gambia,ICE,HFO,Capex,1.019
+New ICE,Gambia,ICE,HFO,FOMperMW,18500.0
+New ICE,Gambia,ICE,HFO,MinLimitShare,0.4
+New ICE,Gambia,ICE,HFO,RampDnRate,1.0
+New ICE,Gambia,ICE,HFO,RampUpRate,1.0
+New ICE,Gambia,ICE,HFO,ResLimShare,0.15
+New ICE,Gambia,ICE,HFO,RetrYr,2050.0
+New ICE,Gambia,ICE,HFO,StYr,2030.0
+New ICE,Gambia,ICE,HFO,UnitSize,5.0
+New ICE,Gambia,ICE,HFO,Life,30.0
+New ICE,Gambia,ICE,HFO,HeatRate,7.36
+New ICE,Gambia,ICE,HFO,VOM,6.5
+New ICE,Gambia,ICE,HFO,Status,3.0
+New CCGT,Gambia,CCGT,Gas,BuildLimitperYear,50.0
+New CCGT,Gambia,CCGT,Gas,Capacity,1000.0
+New CCGT,Gambia,CCGT,Gas,Capex,1.484
+New CCGT,Gambia,CCGT,Gas,FOMperMW,37100.0
+New CCGT,Gambia,CCGT,Gas,MinLimitShare,0.2
+New CCGT,Gambia,CCGT,Gas,RampDnRate,1.0
+New CCGT,Gambia,CCGT,Gas,RampUpRate,1.0
+New CCGT,Gambia,CCGT,Gas,ResLimShare,0.15
+New CCGT,Gambia,CCGT,Gas,RetrYr,2050.0
+New CCGT,Gambia,CCGT,Gas,StYr,2030.0
+New CCGT,Gambia,CCGT,Gas,UnitSize,50.0
+New CCGT,Gambia,CCGT,Gas,Life,30.0
+New CCGT,Gambia,CCGT,Gas,HeatRate,6.4
+New CCGT,Gambia,CCGT,Gas,VOM,6.51
+New CCGT,Gambia,CCGT,Gas,Status,3.0
+New Solar,Gambia,PV,Solar,BuildLimitperYear,5000.0
+New Solar,Gambia,PV,Solar,Capacity,5000.0
+New Solar,Gambia,PV,Solar,Capex,0.98
+New Solar,Gambia,PV,Solar,FOMperMW,27300.0
+New Solar,Gambia,PV,Solar,RampDnRate,1.0
+New Solar,Gambia,PV,Solar,RampUpRate,1.0
+New Solar,Gambia,PV,Solar,RetrYr,2050.0
+New Solar,Gambia,PV,Solar,StYr,2030.0
+New Solar,Gambia,PV,Solar,UnitSize,5.0
+New Solar,Gambia,PV,Solar,Life,25.0
+New Solar,Gambia,PV,Solar,Status,3.0
+New Solar,Gambia,PV,Solar,RETech,1.0
+New BESS,Gambia,Storage,Battery,BuildLimitperYear,1000.0
+New BESS,Gambia,Storage,Battery,Capacity,1000.0
+New BESS,Gambia,Storage,Battery,Capex,0.25
+New BESS,Gambia,Storage,Battery,FOMperMW,40000.0
+New BESS,Gambia,Storage,Battery,RampDnRate,1.0
+New BESS,Gambia,Storage,Battery,RampUpRate,1.0
+New BESS,Gambia,Storage,Battery,ResLimShare,1.0
+New BESS,Gambia,Storage,Battery,RetrYr,2050.0
+New BESS,Gambia,Storage,Battery,StYr,2030.0
+New BESS,Gambia,Storage,Battery,UnitSize,1.0
+New BESS,Gambia,Storage,Battery,Life,15.0
+New BESS,Gambia,Storage,Battery,Status,3.0
+New CCGT Senegal,Gambia,CCGT,Gas,BuildLimitperYear,50.0
+New CCGT Senegal,Gambia,CCGT,Gas,Capacity,400.0
+New CCGT Senegal,Gambia,CCGT,Gas,Capex,0.866
+New CCGT Senegal,Gambia,CCGT,Gas,FOMperMW,6200.0
+New CCGT Senegal,Gambia,CCGT,Gas,MinLimitShare,0.2
+New CCGT Senegal,Gambia,CCGT,Gas,RampDnRate,1.0
+New CCGT Senegal,Gambia,CCGT,Gas,RampUpRate,1.0
+New CCGT Senegal,Gambia,CCGT,Gas,ResLimShare,0.15
+New CCGT Senegal,Gambia,CCGT,Gas,RetrYr,2050.0
+New CCGT Senegal,Gambia,CCGT,Gas,StYr,2035.0
+New CCGT Senegal,Gambia,CCGT,Gas,UnitSize,50.0
+New CCGT Senegal,Gambia,CCGT,Gas,Life,30.0
+New CCGT Senegal,Gambia,CCGT,Gas,HeatRate,6.4
+New CCGT Senegal,Gambia,CCGT,Gas,VOM,5.51
+New CCGT Senegal,Gambia,CCGT,Gas,Status,3.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,BuildLimitperYear,50.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,Capacity,400.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,Capex,0.866
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,FOMperMW,6200.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,MinLimitShare,0.2
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,RampDnRate,1.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,RampUpRate,1.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,ResLimShare,0.15
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,RetrYr,2050.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,StYr,2035.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,UnitSize,50.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,Life,30.0
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,HeatRate,6.4
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,VOM,5.51
+New CCGT Cote d'Ivoire,Gambia,CCGT,Gas,Status,3.0
+New OMVG Import,Gambia,ImportTransmission,Import,BuildLimitperYear,10.0
+New OMVG Import,Gambia,ImportTransmission,Import,Capacity,10.0
+New OMVG Import,Gambia,ImportTransmission,Import,RampDnRate,1.0
+New OMVG Import,Gambia,ImportTransmission,Import,RampUpRate,1.0
+New OMVG Import,Gambia,ImportTransmission,Import,ResLimShare,0.1
+New OMVG Import,Gambia,ImportTransmission,Import,RetrYr,2050.0
+New OMVG Import,Gambia,ImportTransmission,Import,StYr,2028.0
+New OMVG Import,Gambia,ImportTransmission,Import,UnitSize,10.0
+New OMVG Import,Gambia,ImportTransmission,Import,VOM,150.0
+New OMVG Import,Gambia,ImportTransmission,Import,Status,3.0
+Solar Project,Gambia,PV,Solar,BuildLimitperYear,50.0
+Solar Project,Gambia,PV,Solar,Capacity,50.0
+Solar Project,Gambia,PV,Solar,Capex,0.98
+Solar Project,Gambia,PV,Solar,FOMperMW,27300.0
+Solar Project,Gambia,PV,Solar,RampDnRate,1.0
+Solar Project,Gambia,PV,Solar,RampUpRate,1.0
+Solar Project,Gambia,PV,Solar,RetrYr,2048.0
+Solar Project,Gambia,PV,Solar,StYr,2028.0
+Solar Project,Gambia,PV,Solar,UnitSize,50.0
+Solar Project,Gambia,PV,Solar,Life,25.0
+Solar Project,Gambia,PV,Solar,Status,2.0
+Solar Project,Gambia,PV,Solar,RETech,1.0
+BESS Project,Gambia,Storage,Battery,BuildLimitperYear,10.0
+BESS Project,Gambia,Storage,Battery,Capacity,10.0
+BESS Project,Gambia,Storage,Battery,Capex,0.25
+BESS Project,Gambia,Storage,Battery,FOMperMW,40000.0
+BESS Project,Gambia,Storage,Battery,RampDnRate,1.0
+BESS Project,Gambia,Storage,Battery,RampUpRate,1.0
+BESS Project,Gambia,Storage,Battery,ResLimShare,1.0
+BESS Project,Gambia,Storage,Battery,RetrYr,2043.0
+BESS Project,Gambia,Storage,Battery,StYr,2028.0
+BESS Project,Gambia,Storage,Battery,UnitSize,10.0
+BESS Project,Gambia,Storage,Battery,Life,15.0
+BESS Project,Gambia,Storage,Battery,Status,2.0

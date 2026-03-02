@@ -1,0 +1,16 @@
+plant,year,parameters,value
+Lavumisa_Battery,,Capacity,1.0
+Lavumisa_Battery,,Life,15.0
+Lavumisa_Battery,,Efficiency,0.9
+BESS_PV1,,Capacity,50.0
+BESS_PV1,,Capex,300.0
+BESS_PV1,,Life,15.0
+BESS_PV1,,Efficiency,0.9
+BESS_PV2,,Capacity,50.0
+BESS_PV2,,Capex,300.0
+BESS_PV2,,Life,15.0
+BESS_PV2,,Efficiency,0.9
+Battery_Generic,,Capacity,10000.0
+Battery_Generic,,Capex,300.0
+Battery_Generic,,Life,15.0
+Battery_Generic,,Efficiency,0.9

@@ -1,0 +1,5 @@
+plant,year,parameters,value
+BESS,,Life,15.0
+BESS,,Efficiency,0.85
+BESS,,Capacity,10000.0
+BESS,,Capex,250.0
