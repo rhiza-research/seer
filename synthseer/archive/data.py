@@ -139,7 +139,6 @@ def synth_data(start_year, nzones=1, nyears=1, year_step=1, rez="1h",
     # Generate synthetic load & re supply profiles - use pypsa data.
     load_ts = synth_load_ts(str(start_year), str(end_year), freq=rez)
     re_ts = synth_re_ts(str(start_year), str(end_year), freq=rez, use_local=True)
-    import pdb; pdb.set_trace()
     # the ts indices must match snapshots
     load_ts.index = snapshots
     re_ts.index = snapshots
@@ -243,7 +242,6 @@ def synth_re_ts(start="2025-01-01 00:00:00", end="2030-01-01 00:00:00", freq="h"
     else:
         url = "https://tubcloud.tu-berlin.de/s/9toBssWEdaLgHzq/download/time-series.csv"
         pypsa_data = pd.read_csv(url, index_col=0, parse_dates=True)[["pv_pu", "wind_pu"]]
-    import pdb; pdb.set_trace()
     # average pypsa data to freq
     pypsa_data = pypsa_data.resample(freq).mean()
 
