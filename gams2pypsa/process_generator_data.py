@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 
 def process_generator_data(data_path="data/Gambia/"):
-    import pdb; pdb.set_trace()
     input_data = load_input_data(data_path)
     all_generators = input_data["all_generators"]
     default_gen_params = input_data["default_gen_params"]
@@ -11,32 +10,47 @@ def process_generator_data(data_path="data/Gambia/"):
     custom_gen_capex = input_data["custom_gen_capex"]
     fuel_prices = input_data["fuel_prices"]
 
-    # ----------------------------
-    # 1️⃣ Build generator constants
-    # ----------------------------
-    # Merge default parameters into generators (by tech/fuel)
-    gens = all_generators.merge(default_gen_params, on=["zone", "tech", "fuel"], how="left")
-    # Merge custom parameters (by generator name) to override defaults
-    gens = gens.merge(
-        custom_gen_params[["generator", "parameters", "value"]],
-        on=["generator", "parameters"],
-        how="left",
-        suffixes=("_default", "_custom")
-    )
-    # Use custom if exists
-    gens["value_final"] = gens["value_custom"].combine_first(gens["value_default"])
-    # Pivot so each parameter is a column
-    generator_constants = gens.pivot_table(
-        index=["generator", "zone", "tech", "fuel"],
-        columns="parameters",
-        values="value_final"
-    ).reset_index()
+    """Setup generator constants.
+    Use generator list, default parameters, and custom parameters to fill in a single dataframe of generator constants.
+    """
+    param_list = [
+        "Capacity", "Capex", "FOMperMW", "MinLimitShare", "Overloadfactor",
+        "RampDnRate", "RampUpRate", "ReserveCost", "ResLimShare", "Life",
+        "HeatRate", "VOM", "RETech", "RetrYr", "StYr", "UnitSize",
+        "BuildLimitperYear"
+    ]
+    # Initialize generator_constants dataframe
+    generator_constants = pd.DataFrame(columns=["generator", "zone", "tech", "fuel"] + param_list)
+    generator_constants[["generator", "zone", "tech", "fuel"]] = all_generators[["generator", "zone", "tech", "fuel"]]
+    import pdb; pdb.set_trace()
+
+    # Fill in parameters from defaults first
+    for idx, gen in generator_constants.iterrows():
+        for param in param_list:
+            # find default row for this zone/tech/fuel/parameter
+            mask = (
+                (default_gen_params["zone"] == gen.zone) &
+                (default_gen_params["tech"] == gen.tech) &
+                (default_gen_params["fuel"] == gen.fuel) &
+                (default_gen_params["parameters"] == param)
+            )
+            if mask.any():
+                generator_constants.loc[idx, param] = default_gen_params.loc[mask, "value"].values[0]
+            # override with custom parameters where available
+            mask = (
+                (custom_gen_params["generator"] == gen.generator) &
+                (custom_gen_params["parameters"] == param)
+            )
+            if mask.any():
+                generator_constants.loc[idx, param] = custom_gen_params.loc[mask, "value"].values[0]
+    
     
     # Create standard columns PyPSA expects
-    generator_constants["expandable"] = generator_constants.get("UnitSize", 0) > 0
-    generator_constants["annual_build_limit"] = generator_constants.get("UnitSize", pd.NA).where(generator_constants["expandable"], pd.NA)
-    # Rename ramp rates and heat rate to PyPSA conventions
+    # this is a build option if buildlimitperyear is not nan
+    generator_constants["expandable"] = generator_constants["BuildLimitperYear"].notna()
+    # rename columns to PyPSA conventions
     generator_constants.rename(columns={
+        "BuildLimitperYear": "annual_build_limit",
         "RampUpRate": "ramp_up_rate",
         "RampDnRate": "ramp_down_rate",
         "HeatRate": "heat_rate",
@@ -44,45 +58,58 @@ def process_generator_data(data_path="data/Gambia/"):
         "RetrYr": "retirement_year",
         "UnitSize": "unit_size"
     }, inplace=True)
-    # Select relevant columns
-    generator_constants = generator_constants[
-        ["generator", "zone", "tech", "fuel", "expandable", "annual_build_limit",
-         "ramp_up_rate", "ramp_down_rate", "heat_rate", "start_year", "retirement_year", "unit_size"]
-    ]
 
-    # ----------------------------
-    # 2️⃣ Build generator costs
-    # ----------------------------
+
+    """Setup generator costs.
+    Use generator constants, default capex trajectories, and custom capex trajectories to fill in a single dataframe of generator costs.
+    """
+    # setup cost dataframe
     years = sorted(default_gen_capex["year"].unique())
-    cost_rows = []
+    rows = []
 
     for _, gen in generator_constants.iterrows():
-        # CAPEX trajectory
-        # start with default by tech/fuel
-        df_capex = default_gen_capex[
-            (default_gen_capex["zone"] == gen.zone) &
-            (default_gen_capex["tech"] == gen.tech) &
-            (default_gen_capex["fuel"] == gen.fuel)
-        ][["year", "value"]].set_index("year")
-        # override with custom trajectories if exist
-        df_custom = custom_gen_capex[custom_gen_capex["plant"] == gen.generator][["year", "value"]].set_index("year")
-        capex = df_capex["value"].combine_first(df_custom["value"])
-        # add row
-        cost_rows.append(pd.DataFrame([capex.values], index=["capex"], columns=years, dtype=float).assign(generator=gen.generator))
 
-        # Marginal cost from fuel price × heat rate
+        # capex
+        row_capex = {"generator": gen.generator, "cost_type": "capex"}
+
+        # get capex trajectory - custom if it exists, otherwise default
+        if gen.generator in custom_gen_capex["plant"].values:
+            capex_traj = custom_gen_capex[
+                custom_gen_capex["plant"] == gen.generator
+            ][["year", "value"]].set_index("year")
+        else:
+            capex_traj = default_gen_capex[
+                (default_gen_capex["zone"] == gen.zone) &
+                (default_gen_capex["tech"] == gen.tech) &
+                (default_gen_capex["fuel"] == gen.fuel)
+            ][["year", "value"]].set_index("year")
+
+        capex_traj = gen.Capex * capex_traj["value"]
+
+        for y in years:
+            row_capex[y] = capex_traj.get(y, pd.NA)
+
+        rows.append(row_capex)
+
+        # marginal cost
         if pd.notna(gen.heat_rate):
-            fuel_price = fuel_prices[fuel_prices["fuel"] == gen.fuel][["year", "value"]].set_index("year")
+            row_mc = {"generator": gen.generator, "cost_type": "marginal_cost"}
+
+            fuel_price = fuel_prices[
+                fuel_prices["fuel"] == gen.fuel
+            ][["year", "value"]].set_index("year")
+
             mc = fuel_price["value"] * gen.heat_rate
-            cost_rows.append(pd.DataFrame([mc.values], index=["marginal_cost"], columns=years, dtype=float).assign(generator=gen.generator))
 
-    generator_cost = pd.concat(cost_rows).reset_index().rename(columns={"index": "cost_type"})
+            for y in years:
+                row_mc[y] = mc.get(y, pd.NA)
 
-    return generator_constants, generator_cost
+            rows.append(row_mc)
+
+    generator_cost = pd.DataFrame(rows, columns=["generator", "cost_type"] + years)
 
     import pdb; pdb.set_trace()
-
-    return all_generators, default_gen_params, custom_gen_params, default_gen_capex, custom_gen_capex, fuel_prices
+    return generator_constants, generator_cost
 
 
 def load_input_data(data_path):
