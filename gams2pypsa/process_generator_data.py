@@ -22,7 +22,6 @@ def process_generator_data(data_path="data/Gambia/"):
     # Initialize generator_constants dataframe
     generator_constants = pd.DataFrame(columns=["generator", "zone", "tech", "fuel"] + param_list)
     generator_constants[["generator", "zone", "tech", "fuel"]] = all_generators[["generator", "zone", "tech", "fuel"]]
-    import pdb; pdb.set_trace()
 
     # Fill in parameters from defaults first
     for idx, gen in generator_constants.iterrows():
@@ -107,8 +106,6 @@ def process_generator_data(data_path="data/Gambia/"):
             rows.append(row_mc)
 
     generator_cost = pd.DataFrame(rows, columns=["generator", "cost_type"] + years)
-
-    import pdb; pdb.set_trace()
     return generator_constants, generator_cost
 
 
@@ -133,3 +130,10 @@ def load_input_data(data_path):
         "fuel_prices": fuel_prices,
     }
 
+
+if __name__ == "__main__":
+    data_path = "gams2pypsa/data/processed/Gambia/"
+    generator_constants, generator_cost = process_generator_data(data_path)
+    # save to csvs
+    generator_constants.to_csv(data_path + "generator_constants.csv", index=False)
+    generator_cost.to_csv(data_path + "generator_costs.csv", index=False)
