@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import calendar
 import warnings
-from synthseer.build_model.build_generators import build_existing_generators, create_generator_build_options
+from synthseer.build_model.build_generators import build_generators
 
 """Global variables. 
 TODO: can be moved to a config csv. 
@@ -59,8 +59,7 @@ def build_model(start_year=2025, end_year=2051, year_step=1, time_resolution="1h
 
     """GENERATION: Set up existing generation and build options.
     """
-    build_existing_generators(model, input_data["existing_generator_df"], input_data["pnom_pu_df"])
-    create_generator_build_options(model, input_data["generator_df"], input_data["pnom_pu_df"])
+    build_generators(model, input_data["generator_constants"], input_data["generator_costs"])
 
     """STORAGE: Set up existing storage and build options.
     """
@@ -117,6 +116,9 @@ def load_input_data(data_path):
     # demand 
     demandforecast_df = pd.read_csv(data_path + "demandforecast.csv")
     demandprofile_df = pd.read_csv(data_path + "demandprofile.csv")
+    # generator data
+    generator_constants_df = pd.read_csv(data_path + "generator_constants.csv")
+    generator_costs_df = pd.read_csv(data_path + "generator_costs.csv")
     """
     existing_generator_df = pd.read_csv(data_path + "existing_generators.csv")
     generator_df = pd.read_csv(data_path + "generators.csv")
@@ -131,6 +133,8 @@ def load_input_data(data_path):
         "years": years_df,
         "demandforecast": demandforecast_df,
         "demandprofile": demandprofile_df,
+        "generator_constants": generator_constants_df,
+        "generator_costs": generator_costs_df,
     }
 
 

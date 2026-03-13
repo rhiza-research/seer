@@ -61,6 +61,7 @@ def process_generator_data(data_path="data/Gambia/"):
 
     """Setup generator costs.
     Use generator constants, default capex trajectories, and custom capex trajectories to fill in a single dataframe of generator costs.
+    Result has two rows per generator (capex and marginal cost) and years as columns.
     """
     # setup cost dataframe
     years = sorted(default_gen_capex["year"].unique())
