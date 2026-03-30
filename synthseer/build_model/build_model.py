@@ -60,8 +60,8 @@ def build_model(start_year=2025, end_year=2051, year_step=1, time_resolution="1h
     """RENEWABLES: Prepare renewable profiles for use in generator setup.
     """
     re_profiles = input_data["renewable_profiles"]
-    # try to match renewable profiles to snapshots
-    re_profiles = re_profiles.reindex(model.snapshots.get_level_values(0)).fillna(method="ffill")
+    # renewable profiles must match the model snapshots index
+    re_profiles = prepare_renewable_profiles(model, re_profiles)
 
     """GENERATION: Set up existing generation and build options.
     """
@@ -84,6 +84,32 @@ def get_year_steps(years):
     warnings.warn(f"Year step is {steps}")
     return steps
 
+
+def prepare_renewable_profiles(model, re_profiles):
+    # try to match renewable profiles to snapshots
+    times = model.snapshots.get_level_values(1)
+    dft = pd.DataFrame({'year': [dt.year for dt in times],
+                        'month': [dt.month for dt in times], 
+                        'day': [dt.day for dt in times], 
+                        'hour': [dt.hour for dt in times]})
+    # increment hours to be 1 indexed
+    dft["hour"] = dft["hour"] + 1
+    # determine tech and zones
+    zone_tech = re_profiles[["zone", "tech"]].drop_duplicates()
+    for zone, tech in zone_tech.itertuples(index=False):
+        profile = re_profiles[(re_profiles["zone"] == zone) & (re_profiles["tech"] == tech)]
+        dft = dft.merge(profile[["month", "day", "hour", "value"]], on=["month", "day", "hour"], how="left")
+        # make value into a multi-indexed column
+        dft = dft.rename(columns={"value": f"{zone}_{tech}"})
+    # fill leap day
+    dft = fill_missing_times(dft)
+    # set the index to the model multi-index
+    dft.index = model.snapshots
+    # drop the year, month, day, hour columns
+    dft = dft.drop(columns=["year", "month", "day", "hour"])
+    # turn value columns into a multilevel column
+    dft.columns = dft.columns.str.split("_", expand=True)
+    return dft
 
 def set_demand(model, demandforecast, demandprofile):
     # for each zone in demand_forecast, get demand profile, multiply by demand forecast for each year, and set as load
@@ -112,6 +138,22 @@ def add_leap_day(profile, year):
     # give new indices
     extra.index = range(len(s), len(s) + 24)
     return pd.concat([s, extra])
+
+def fill_missing_times(profile):
+    # fill leap day with the values of the previous day
+    # identify value columns (everything except time keys)
+
+    value_cols = profile.columns.difference(["year", "month", "day", "hour"])
+    def fill_nearest(g):
+        return g.interpolate(method="nearest", limit_direction="both")
+
+    profile[value_cols] = (
+        profile
+        .sort_values(["year", "hour", "month", "day"])
+        .groupby(["year", "hour"], group_keys=False)[value_cols]
+        .apply(fill_nearest)
+    )
+    return profile
 
 
 def load_input_data(data_path):

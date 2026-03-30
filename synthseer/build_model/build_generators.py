@@ -3,7 +3,7 @@ import pandas
 
 from synthseer.build_model.time_utils import get_valid_years, annual_to_snapshots
 
-def build_generators(model, gen_constants, gen_costs, modular_expansion=False):
+def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expansion=False):
     ngen = len(gen_constants)
     if ngen == 0:
         return
@@ -21,7 +21,7 @@ def build_generators(model, gen_constants, gen_costs, modular_expansion=False):
             mc = gen_costs.loc[(name, "marginal_cost"), :]
             unit_capacity = gen.unit_size if modular_expansion else None
             # get the renewable profile for the generator type if required.
-            p_max_pu = get_renewable_profile(model, carrier) if is_renewable(carrier) else 1
+            p_max_pu = re_profiles.loc[(year, slice(None)), (zone, carrier)] if is_renewable(gen_type) else 1
             for year in get_valid_years(model, y0, y1):
                 model.add("Generator", name + "_" + str(year), bus = zone,
                           carrier = carrier,
@@ -45,7 +45,7 @@ def build_generators(model, gen_constants, gen_costs, modular_expansion=False):
             # TODO: do we need to add capex for existing generators?
             # capex = gen_costs.loc[(name, "capex"), :]
             mc = annual_to_snapshots(model, gen_costs.loc[(name, "marginal_cost"), :])
-            p_max_pu = get_renewable_profile(model, carrier) if is_renewable(carrier) else 1
+            p_max_pu = re_profiles.loc[(years[0], slice(None)), (zone, carrier)] if is_renewable(gen_type) else 1
             
             model.add("Generator", name, bus = zone,
                         carrier = carrier,
@@ -61,4 +61,5 @@ def build_generators(model, gen_constants, gen_costs, modular_expansion=False):
                         ramp_up_rate = gen.ramp_up_rate, ramp_down_rate = gen.ramp_down_rate)
 
 def is_renewable(carrier):
-    return carrier in ["solar", "wind", "PV"]
+    return carrier in ["PV", "wind"]
+
