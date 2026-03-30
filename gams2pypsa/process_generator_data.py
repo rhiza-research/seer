@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 
 def process_generator_data(data_path="data/Gambia/"):
+    """Combines disparate generator data sources into two output dataframes:
+    generator_constants: a dataframe of generator constants (parameters, build limits, etc.)
+    generator_costs: a dataframe of generator costs (capex and marginal cost)
+    """
     input_data = load_input_data(data_path)
     all_generators = input_data["all_generators"]
     default_gen_params = input_data["default_gen_params"]

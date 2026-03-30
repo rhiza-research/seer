@@ -57,9 +57,15 @@ def build_model(start_year=2025, end_year=2051, year_step=1, time_resolution="1h
     demandprofile = input_data["demandprofile"]
     set_demand(model, demandforecast, demandprofile)
 
+    """RENEWABLES: Prepare renewable profiles for use in generator setup.
+    """
+    re_profiles = input_data["renewable_profiles"]
+    # try to match renewable profiles to snapshots
+    re_profiles = re_profiles.reindex(model.snapshots.get_level_values(0)).fillna(method="ffill")
+
     """GENERATION: Set up existing generation and build options.
     """
-    build_generators(model, input_data["generator_constants"], input_data["generator_costs"])
+    build_generators(model, input_data["generator_constants"], input_data["generator_costs"], re_profiles)
 
     """STORAGE: Set up existing storage and build options.
     """
@@ -116,23 +122,18 @@ def load_input_data(data_path):
     # demand 
     demandforecast_df = pd.read_csv(data_path + "demandforecast.csv")
     demandprofile_df = pd.read_csv(data_path + "demandprofile.csv")
+    # renewable profiles
+    renewable_profiles_df = pd.read_csv(data_path + "renewable_profiles.csv")
     # generator data
     generator_constants_df = pd.read_csv(data_path + "generator_constants.csv")
     generator_costs_df = pd.read_csv(data_path + "generator_costs.csv")
-    """
-    existing_generator_df = pd.read_csv(data_path + "existing_generators.csv")
-    generator_df = pd.read_csv(data_path + "generators.csv")
-    pnom_pu_df = pd.read_csv(data_path + "pnom_pu.csv")
-    existing_storage_df = pd.read_csv(data_path + "existing_storage.csv")
-    storage_df = pd.read_csv(data_path + "storage.csv")
-    existing_load_df = pd.read_csv(data_path + "existing_load.csv")
-    load_df = pd.read_csv(data_path + "load.csv")
-    """
+    
     return {
         "zones": zones_df,
         "years": years_df,
         "demandforecast": demandforecast_df,
         "demandprofile": demandprofile_df,
+        "renewable_profiles": renewable_profiles_df,
         "generator_constants": generator_constants_df,
         "generator_costs": generator_costs_df,
     }
