@@ -61,6 +61,8 @@ def process_generator_data(data_path="data/Gambia/"):
         "RetrYr": "retirement_year",
         "UnitSize": "unit_size"
     }, inplace=True)
+    # change all capital leters to lowercase in column names
+    generator_constants.columns = generator_constants.columns.str.lower()
 
 
     """Setup generator costs.

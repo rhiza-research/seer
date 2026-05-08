@@ -32,14 +32,14 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             mc = gen_costs.loc[(name, "marginal_cost"), :]
             unit_capacity = gen.unit_size if modular_expansion else None
             # get the renewable profile for the generator type if required.
-            p_max_pu = re_profiles.loc[(year, slice(None)), (zone, carrier)] if is_renewable(gen_type) else 1
+            p_max_pu = re_profiles.loc[(year, slice(None)), (zone, gen_type)] if is_renewable(gen_type) else 1
             for year in get_valid_years(model, y0, y1):
-                model.add("Generator", name + "_" + str(year), bus = zone,
+                gen_year_name = name + "_" + str(year)
+                model.add("Generator", gen_year_name, bus = zone,
                           carrier = carrier,
                           build_year = year,
                           lifetime = gen.life,
                           # power limits
-                          p_max_pu = p_max_pu,
                           p_nom_extendable = True,
                           p_nom_mod = unit_capacity,
                           p_nom_max = gen.annual_build_limit,
@@ -47,30 +47,39 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
                           marginal_cost = mc[year], capital_cost = capex[year],
                           # ramping limits
                           ramp_up_rate = gen.ramp_up_rate, ramp_down_rate = gen.ramp_down_rate)
+                # time series parameters must be added through the generators_t dataframe
+                model.generators_t.p_max_pu[gen_year_name] = p_max_pu
 
         else:  
             """Existing generator. Create a single generator for the entire lifetime.
             """
             y0, y1 = gen.start_year, gen.retirement_year
             years = get_valid_years(model, y0, y1)
+            if len(years) == 0:
+                warnings.warn(f"No valid years found for generator {name}.")
+                continue
+            
             # TODO: do we need to add capex for existing generators?
             # capex = gen_costs.loc[(name, "capex"), :]
-            import pdb; pdb.set_trace()
             mc = annual_to_snapshots(model, gen_costs.loc[(name, "marginal_cost"), :])
-            p_max_pu = re_profiles.loc[(years[0], slice(None)), (zone, carrier)] if is_renewable(gen_type) else 1
+
+            if is_renewable(gen_type):
+                p_max_pu = re_profiles.loc[slice(None), (zone, gen_type)]
+            else:
+                p_max_pu = 1
             
             model.add("Generator", name, bus = zone,
                         carrier = carrier,
                         build_year = years[0],
                         lifetime = gen.life,
                         # power limits
-                        p_max_pu = p_max_pu,
                         p_nom = gen.capacity,
                         p_nom_extendable = False,
-                        # costs
-                        marginal_cost = mc,
                         # ramping limits
                         ramp_up_rate = gen.ramp_up_rate, ramp_down_rate = gen.ramp_down_rate)
+            # time series parameters must be added through the generators_t dataframe
+            model.generators_t.p_max_pu[name] = p_max_pu
+            model.generators_t.marginal_cost[name] = mc
 
 def is_renewable(carrier):
     return carrier in ["PV", "wind"]

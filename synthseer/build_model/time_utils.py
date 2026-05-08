@@ -12,5 +12,9 @@ def get_valid_years(model, start_year=2025, end_year=2051):
 
 def annual_to_snapshots(model, annual_series):
     snapshots = model.snapshots
-    annual_series = annual_series.reindex(snapshots.get_level_values(0)).fillna(method="ffill")
-    return annual_series
+    # create a dataframe with snapshots as the index and year column
+    df = pd.DataFrame(index=snapshots)
+    df["marginal_cost"] = df.index.get_level_values(0).map(annual_series)
+    # fill missing values with the previous value
+    df = df.ffill()
+    return df
