@@ -28,13 +28,21 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             In the PyPSA framework, we need to create a build option for each year.
             """ 
             y0, y1 = gen.start_year, gen.retirement_year
+            valid_years = get_valid_years(model, y0, y1)
             capex = gen_costs.loc[(name, "capex"), :]
-            mc = gen_costs.loc[(name, "marginal_cost"), :]
+            # fill missing marginal costs with 0
+            mc = gen_costs.loc[(name, "marginal_cost"), :].fillna(0)
             unit_capacity = gen.unit_size if modular_expansion else None
-            # get the renewable profile for the generator type if required.
-            p_max_pu = re_profiles.loc[(year, slice(None)), (zone, gen_type)] if is_renewable(gen_type) else 1
-            for year in get_valid_years(model, y0, y1):
+
+            for year in valid_years:
                 gen_year_name = name + "_" + str(year)
+                # get the renewable profile for the generator type if required.
+                p_max_pu = mask_renewable_profile(
+                    re_profiles[(zone, gen_type)],
+                    valid_years,
+                    year,
+                    gen.life
+                ) if is_renewable(gen_type) else 1
                 model.add("Generator", gen_year_name, bus = zone,
                           carrier = carrier,
                           build_year = year,
@@ -61,7 +69,7 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             
             # TODO: do we need to add capex for existing generators?
             # capex = gen_costs.loc[(name, "capex"), :]
-            mc = annual_to_snapshots(model, gen_costs.loc[(name, "marginal_cost"), :])
+            mc = annual_to_snapshots(model, gen_costs.loc[(name, "marginal_cost"), :]).fillna(0)
 
             if is_renewable(gen_type):
                 p_max_pu = re_profiles.loc[slice(None), (zone, gen_type)]
@@ -83,4 +91,13 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
 
 def is_renewable(carrier):
     return carrier in ["PV", "wind"]
+
+# TODO: check that this makes sense
+def mask_renewable_profile(profile, valid_years, build_year, lifetime, default=0.0):
+    active_years = set(range(int(build_year), int(build_year) + int(lifetime)))
+    valid_years = set(valid_years)
+
+    years = profile.index.get_level_values(0)
+    allowed_years = active_years & valid_years
+    return profile.where(years.isin(allowed_years), default)
 

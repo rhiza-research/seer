@@ -5,13 +5,14 @@ import pandas as pd
 import calendar
 import warnings
 from synthseer.build_model.build_generators import build_generators
+from synthseer.build_model.build_storage import build_storage
 
 """Global variables. 
 TODO: can be moved to a config csv. 
 """
 discount_rate = 0.08
 
-def build_model(start_year=2025, end_year=2051, year_step=1, time_resolution="1h", data_path = "synthseer/data/Gambia/"):
+def build_model(time_resolution="1h", data_path = "synthseer/data/Gambia/"):
 
     input_data = load_input_data(data_path)
 
@@ -69,8 +70,7 @@ def build_model(start_year=2025, end_year=2051, year_step=1, time_resolution="1h
 
     """STORAGE: Set up existing storage and build options.
     """
-    build_existing_storage(model, input_data["existing_storage_df"])
-    create_storage_build_options(model, input_data["storage_df"], input_data["pnom_pu_df"])
+    build_storage(model, input_data["storage_constants"], input_data["storage_costs"])
 
     return model
 
@@ -147,6 +147,7 @@ def fill_missing_times(profile):
     def fill_nearest(g):
         return g.interpolate(method="nearest", limit_direction="both")
 
+
     profile[value_cols] = (
         profile
         .sort_values(["year", "hour", "month", "day"])
@@ -169,7 +170,10 @@ def load_input_data(data_path):
     # generator data
     generator_constants_df = pd.read_csv(data_path + "generator_constants.csv")
     generator_costs_df = pd.read_csv(data_path + "generator_costs.csv")
-    
+    # storage data
+    storage_constants_df = pd.read_csv(data_path + "storage_constants.csv")
+    storage_costs_df = pd.read_csv(data_path + "storage_costs.csv")
+
     return {
         "zones": zones_df,
         "years": years_df,
@@ -178,6 +182,8 @@ def load_input_data(data_path):
         "renewable_profiles": renewable_profiles_df,
         "generator_constants": generator_constants_df,
         "generator_costs": generator_costs_df,
+        "storage_constants": storage_constants_df,
+        "storage_costs": storage_costs_df,
     }
 
 
