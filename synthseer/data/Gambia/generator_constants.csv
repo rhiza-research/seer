@@ -1,4 +1,4 @@
-generator,zone,tech,fuel,Capacity,Capex,FOMperMW,MinLimitShare,Overloadfactor,ramp_down_rate,ramp_up_rate,ReserveCost,ResLimShare,Life,heat_rate,VOM,RETech,retirement_year,start_year,unit_size,annual_build_limit,expandable
+generator,zone,tech,fuel,capacity,capex,FOMperMW,MinLimitShare,Overloadfactor,ramp_down_rate,ramp_up_rate,ReserveCost,ResLimShare,life,heat_rate,VOM,RETech,retirement_year,start_year,unit_size,annual_build_limit,expandable
 Kotu G5,Gambia,ICE,HFO,12.2,1.019,18500.0,0.6,-0.0,1.0,1.0,-0.0,0.15,30.0,9.0,4.4,-0.0,2024.0,2018.0,12.2,,False
 Kotu G6,Gambia,ICE,HFO,6.4,1.019,18500.0,0.6,-0.0,1.0,1.0,-0.0,0.15,30.0,9.0,4.4,-0.0,2024.0,1989.0,6.4,,False
 Kotu G7,Gambia,ICE,HFO,6.4,1.019,18500.0,0.6,-0.0,1.0,1.0,-0.0,0.15,30.0,9.0,4.4,-0.0,2024.0,2001.0,6.4,,False
