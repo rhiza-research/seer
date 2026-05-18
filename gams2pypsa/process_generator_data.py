@@ -90,7 +90,7 @@ def process_generator_data(data_path="data/Gambia/"):
                 (default_gen_capex["fuel"] == gen.fuel)
             ][["year", "value"]].set_index("year")
 
-        capex_traj = gen.Capex * capex_traj["value"]
+        capex_traj = gen.capex * capex_traj["value"]
 
         for y in years:
             row_capex[y] = capex_traj.get(y, pd.NA)

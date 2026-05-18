@@ -5,6 +5,8 @@ import warnings
 from synthseer.build_model.time_utils import get_valid_years, annual_to_snapshots
 
 def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expansion=False):
+    # carrier set to be returned after processing
+    carriers = set()
     # convert simple csv inputs into multi-index dataframes to ease processing
     # index gen_constants by generator
     gen_constants = gen_constants.set_index("generator")
@@ -17,11 +19,12 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
     ngen = len(gen_constants)
     if ngen == 0:
         warnings.warn("No generators found in the model.")
-        return
+        return carriers
     
     for i in range(ngen):
         gen = gen_constants.iloc[i]
         name, zone, carrier, expandable, gen_type = gen.name, gen.zone, gen.fuel, gen.expandable, gen.tech
+        carriers.add(carrier)
 
         if expandable:
             """Build option.
@@ -88,6 +91,7 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             # time series parameters must be added through the generators_t dataframe
             model.generators_t.p_max_pu[name] = p_max_pu
             model.generators_t.marginal_cost[name] = mc
+    return carriers
 
 def is_renewable(carrier):
     return carrier in ["PV", "wind"]

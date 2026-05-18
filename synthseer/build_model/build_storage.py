@@ -3,6 +3,8 @@ import warnings
 from synthseer.build_model.time_utils import get_valid_years
 
 def build_storage(model, storage_constants, storage_costs, modular_expansion=False):
+    # carrier set to be returned after processing
+    carriers = set("battery")
     # convert csv inputs into indexed dataframes
     storage_constants = storage_constants.set_index("storage")
     storage_costs = storage_costs.set_index(["storage", "cost_type"])
@@ -12,7 +14,7 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
 
     if nstorage == 0:
         warnings.warn("No storage units found in the model.")
-        return
+        return carriers
 
     for i in range(nstorage):
         sto = storage_constants.iloc[i]
@@ -74,3 +76,4 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
                 efficiency_store=sto.efficiency,
                 efficiency_dispatch=sto.efficiency,
             )
+    return carriers

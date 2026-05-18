@@ -66,11 +66,17 @@ def build_model(time_resolution="1h", data_path = "synthseer/data/Gambia/"):
 
     """GENERATION: Set up existing generation and build options.
     """
-    build_generators(model, input_data["generator_constants"], input_data["generator_costs"], re_profiles)
+    gen_carriers = build_generators(model, input_data["generator_constants"], input_data["generator_costs"], re_profiles)
 
     """STORAGE: Set up existing storage and build options.
     """
-    build_storage(model, input_data["storage_constants"], input_data["storage_costs"])
+    sto_carriers = build_storage(model, input_data["storage_constants"], input_data["storage_costs"])
+
+    """DEFINE CARRIERS: Define carriers in the model.
+    """
+    carriers = gen_carriers | sto_carriers
+    for carrier in carriers:
+        model.add("Carrier", carrier)
 
     return model
 
