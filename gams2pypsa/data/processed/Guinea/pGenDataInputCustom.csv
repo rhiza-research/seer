@@ -1,738 +1,738 @@
-generator,zone,tech,fuel,parameters,value
-Fello Sounga,,,,Life,50.0
-Fello Sounga,,,,Capacity,63.0
-Fello Sounga,,,,Capex,3.413
-Fello Sounga,,,,StYr,2030.0
-Fello Sounga,,,,RetrYr,2080.0
-Fello Sounga,,,,Zone,5.0
-Fello Sounga,,,,RampUpRate,1.0
-Fello Sounga,,,,RampDnRate,1.0
-Fello Sounga,,,,ResLimShare,0.1
-Fello Sounga,,,,FOMperMW,68260.0
-Fello Sounga,,,,BuildLimitperYear,63.0
-Fello Sounga,,,,MaxTotalBuild,63.0
-Fello Sounga,,,,Type,4.0
-Fello Sounga,,,,fuel1,3.0
-Fello Sounga,,,,Status,3.0
-Fello Sounga,,,,UnitSize,63.0
-Fello Sounga,,,,RE_Flag,1.0
-Fello Sounga,,,,CapacityCredit,1.0
-Farankonedou,,,,Life,50.0
-Farankonedou,,,,Capacity,40.0
-Farankonedou,,,,Capex,3.611
-Farankonedou,,,,StYr,2030.0
-Farankonedou,,,,RetrYr,2080.0
-Farankonedou,,,,Zone,5.0
-Farankonedou,,,,RampUpRate,1.0
-Farankonedou,,,,RampDnRate,1.0
-Farankonedou,,,,ResLimShare,0.1
-Farankonedou,,,,FOMperMW,72220.0
-Farankonedou,,,,BuildLimitperYear,40.0
-Farankonedou,,,,MaxTotalBuild,40.0
-Farankonedou,,,,Type,4.0
-Farankonedou,,,,fuel1,3.0
-Farankonedou,,,,Status,3.0
-Farankonedou,,,,UnitSize,40.0
-Farankonedou,,,,RE_Flag,1.0
-Farankonedou,,,,CapacityCredit,1.0
-Baneah,,,,Capacity,5.0
-Baneah,,,,Capex,2.5
-Baneah,,,,StYr,1989.0
-Baneah,,,,RetrYr,2060.0
-Baneah,,,,Zone,5.0
-Baneah,,,,RampUpRate,1.0
-Baneah,,,,RampDnRate,1.0
-Baneah,,,,ResLimShare,0.1
-Baneah,,,,FOMperMW,20000.0
-Baneah,,,,BuildLimitperYear,5.0
-Baneah,,,,MaxTotalBuild,5.0
-Baneah,,,,Type,4.0
-Baneah,,,,fuel1,3.0
-Baneah,,,,Status,1.0
-Baneah,,,,UnitSize,5.0
-Baneah,,,,RE_Flag,1.0
-Baneah,,,,CapacityCredit,1.0
-Poudalde,,,,Life,50.0
-Poudalde,,,,Capacity,90.0
-Poudalde,,,,Capex,3.433
-Poudalde,,,,StYr,2030.0
-Poudalde,,,,RetrYr,2080.0
-Poudalde,,,,Zone,5.0
-Poudalde,,,,RampUpRate,1.0
-Poudalde,,,,RampDnRate,1.0
-Poudalde,,,,ResLimShare,0.1
-Poudalde,,,,FOMperMW,68660.0
-Poudalde,,,,BuildLimitperYear,90.0
-Poudalde,,,,MaxTotalBuild,90.0
-Poudalde,,,,Type,4.0
-Poudalde,,,,fuel1,3.0
-Poudalde,,,,Status,3.0
-Poudalde,,,,UnitSize,90.0
-Poudalde,,,,RE_Flag,1.0
-Poudalde,,,,CapacityCredit,1.0
-Nzebela,,,,Life,50.0
-Nzebela,,,,Capacity,45.0
-Nzebela,,,,Capex,3.444
-Nzebela,,,,StYr,2030.0
-Nzebela,,,,RetrYr,2080.0
-Nzebela,,,,Zone,5.0
-Nzebela,,,,RampUpRate,1.0
-Nzebela,,,,RampDnRate,1.0
-Nzebela,,,,ResLimShare,0.1
-Nzebela,,,,FOMperMW,68880.0
-Nzebela,,,,BuildLimitperYear,45.0
-Nzebela,,,,MaxTotalBuild,45.0
-Nzebela,,,,Type,4.0
-Nzebela,,,,fuel1,3.0
-Nzebela,,,,Status,3.0
-Nzebela,,,,UnitSize,45.0
-Nzebela,,,,RE_Flag,1.0
-Nzebela,,,,CapacityCredit,1.0
-Tiopo,,,,Life,50.0
-Tiopo,,,,Capacity,105.0
-Tiopo,,,,Capex,3.381
-Tiopo,,,,StYr,2030.0
-Tiopo,,,,RetrYr,2080.0
-Tiopo,,,,Zone,5.0
-Tiopo,,,,RampUpRate,1.0
-Tiopo,,,,RampDnRate,1.0
-Tiopo,,,,ResLimShare,0.1
-Tiopo,,,,FOMperMW,67620.0
-Tiopo,,,,BuildLimitperYear,105.0
-Tiopo,,,,MaxTotalBuild,105.0
-Tiopo,,,,Type,4.0
-Tiopo,,,,fuel1,3.0
-Tiopo,,,,Status,3.0
-Tiopo,,,,UnitSize,105.0
-Tiopo,,,,RE_Flag,1.0
-Tiopo,,,,CapacityCredit,1.0
-Niagara,,,,Life,50.0
-Niagara,,,,Capacity,55.0
-Niagara,,,,Capex,3.364
-Niagara,,,,StYr,2030.0
-Niagara,,,,RetrYr,2080.0
-Niagara,,,,Zone,5.0
-Niagara,,,,RampUpRate,1.0
-Niagara,,,,RampDnRate,1.0
-Niagara,,,,ResLimShare,0.1
-Niagara,,,,FOMperMW,67280.0
-Niagara,,,,BuildLimitperYear,77.0
-Niagara,,,,MaxTotalBuild,77.0
-Niagara,,,,Type,4.0
-Niagara,,,,fuel1,3.0
-Niagara,,,,Status,3.0
-Niagara,,,,UnitSize,77.0
-Niagara,,,,RE_Flag,1.0
-Niagara,,,,CapacityCredit,1.0
-Digan,,,,Life,50.0
-Digan,,,,Capacity,62.0
-Digan,,,,Capex,3.28
-Digan,,,,StYr,2030.0
-Digan,,,,RetrYr,2080.0
-Digan,,,,Zone,5.0
-Digan,,,,RampUpRate,1.0
-Digan,,,,RampDnRate,1.0
-Digan,,,,ResLimShare,0.1
-Digan,,,,FOMperMW,65600.0
-Digan,,,,BuildLimitperYear,62.0
-Digan,,,,MaxTotalBuild,62.0
-Digan,,,,Type,4.0
-Digan,,,,fuel1,3.0
-Digan,,,,Status,3.0
-Digan,,,,UnitSize,62.0
-Digan,,,,RE_Flag,1.0
-Digan,,,,CapacityCredit,1.0
-Bonkon-Diaria,,,,Life,50.0
-Bonkon-Diaria,,,,Capacity,183.0
-Bonkon-Diaria,,,,Capex,3.126
-Bonkon-Diaria,,,,StYr,2030.0
-Bonkon-Diaria,,,,RetrYr,2080.0
-Bonkon-Diaria,,,,Zone,5.0
-Bonkon-Diaria,,,,RampUpRate,1.0
-Bonkon-Diaria,,,,RampDnRate,1.0
-Bonkon-Diaria,,,,ResLimShare,0.1
-Bonkon-Diaria,,,,FOMperMW,62520.0
-Bonkon-Diaria,,,,BuildLimitperYear,183.0
-Bonkon-Diaria,,,,MaxTotalBuild,183.0
-Bonkon-Diaria,,,,Type,4.0
-Bonkon-Diaria,,,,fuel1,3.0
-Bonkon-Diaria,,,,Status,3.0
-Bonkon-Diaria,,,,UnitSize,183.0
-Bonkon-Diaria,,,,RE_Flag,1.0
-Bonkon-Diaria,,,,CapacityCredit,1.0
-Grand Chutes,,,,Capacity,28.0
-Grand Chutes,,,,Capex,2.5
-Grand Chutes,,,,StYr,1954.0
-Grand Chutes,,,,RetrYr,2060.0
-Grand Chutes,,,,Zone,5.0
-Grand Chutes,,,,RampUpRate,1.0
-Grand Chutes,,,,RampDnRate,1.0
-Grand Chutes,,,,ResLimShare,0.1
-Grand Chutes,,,,FOMperMW,20000.0
-Grand Chutes,,,,BuildLimitperYear,28.0
-Grand Chutes,,,,MaxTotalBuild,28.0
-Grand Chutes,,,,Type,4.0
-Grand Chutes,,,,fuel1,3.0
-Grand Chutes,,,,Status,1.0
-Grand Chutes,,,,UnitSize,28.0
-Grand Chutes,,,,RE_Flag,1.0
-Grand Chutes,,,,CapacityCredit,1.0
-Diallol,,,,Life,50.0
-Diallol,,,,Capacity,101.0
-Diallol,,,,Capex,3.3
-Diallol,,,,StYr,2030.0
-Diallol,,,,RetrYr,2080.0
-Diallol,,,,Zone,5.0
-Diallol,,,,RampUpRate,1.0
-Diallol,,,,RampDnRate,1.0
-Diallol,,,,ResLimShare,0.1
-Diallol,,,,FOMperMW,66000.0
-Diallol,,,,BuildLimitperYear,101.0
-Diallol,,,,MaxTotalBuild,101.0
-Diallol,,,,Type,4.0
-Diallol,,,,fuel1,3.0
-Diallol,,,,Status,3.0
-Diallol,,,,UnitSize,101.0
-Diallol,,,,RE_Flag,1.0
-Diallol,,,,CapacityCredit,1.0
-Amaria,,,,Life,50.0
-Amaria,,,,Capacity,300.0
-Amaria,,,,Capex,3.553
-Amaria,,,,StYr,2030.0
-Amaria,,,,RetrYr,2080.0
-Amaria,,,,Zone,5.0
-Amaria,,,,RampUpRate,1.0
-Amaria,,,,RampDnRate,1.0
-Amaria,,,,ResLimShare,0.1
-Amaria,,,,FOMperMW,71060.0
-Amaria,,,,BuildLimitperYear,300.0
-Amaria,,,,MaxTotalBuild,300.0
-Amaria,,,,Type,4.0
-Amaria,,,,fuel1,3.0
-Amaria,,,,Status,1.0
-Amaria,,,,UnitSize,300.0
-Amaria,,,,RE_Flag,1.0
-Amaria,,,,CapacityCredit,1.0
-Fetore,,,,Life,50.0
-Fetore,,,,Capacity,96.0
-Fetore,,,,Capex,3.065
-Fetore,,,,StYr,2030.0
-Fetore,,,,RetrYr,2080.0
-Fetore,,,,Zone,5.0
-Fetore,,,,RampUpRate,1.0
-Fetore,,,,RampDnRate,1.0
-Fetore,,,,ResLimShare,0.1
-Fetore,,,,FOMperMW,61300.0
-Fetore,,,,BuildLimitperYear,96.0
-Fetore,,,,MaxTotalBuild,96.0
-Fetore,,,,Type,4.0
-Fetore,,,,fuel1,3.0
-Fetore,,,,Status,3.0
-Fetore,,,,UnitSize,96.0
-Fetore,,,,RE_Flag,1.0
-Fetore,,,,CapacityCredit,1.0
-Kaleta,,,,Capacity,240.0
-Kaleta,,,,Capex,2.192
-Kaleta,,,,StYr,2015.0
-Kaleta,,,,RetrYr,2085.0
-Kaleta,,,,Zone,5.0
-Kaleta,,,,RampUpRate,1.0
-Kaleta,,,,RampDnRate,1.0
-Kaleta,,,,ResLimShare,0.1
-Kaleta,,,,FOMperMW,43840.0
-Kaleta,,,,BuildLimitperYear,240.0
-Kaleta,,,,MaxTotalBuild,240.0
-Kaleta,,,,Type,4.0
-Kaleta,,,,fuel1,3.0
-Kaleta,,,,Status,1.0
-Kaleta,,,,UnitSize,240.0
-Kaleta,,,,RE_Flag,1.0
-Kaleta,,,,CapacityCredit,1.0
-Koukoutamba,,,,Life,50.0
-Koukoutamba,,,,Capacity,294.0
-Koukoutamba,,,,Capex,3.401
-Koukoutamba,,,,StYr,2030.0
-Koukoutamba,,,,RetrYr,2080.0
-Koukoutamba,,,,Zone,5.0
-Koukoutamba,,,,RampUpRate,1.0
-Koukoutamba,,,,RampDnRate,1.0
-Koukoutamba,,,,ResLimShare,0.1
-Koukoutamba,,,,FOMperMW,68020.0
-Koukoutamba,,,,BuildLimitperYear,280.0
-Koukoutamba,,,,MaxTotalBuild,280.0
-Koukoutamba,,,,Type,4.0
-Koukoutamba,,,,fuel1,3.0
-Koukoutamba,,,,Status,1.0
-Koukoutamba,,,,UnitSize,280.0
-Koukoutamba,,,,RE_Flag,1.0
-Koukoutamba,,,,CapacityCredit,1.0
-Donkea,,,,Capacity,15.0
-Donkea,,,,Capex,2.5
-Donkea,,,,StYr,1970.0
-Donkea,,,,RetrYr,2060.0
-Donkea,,,,Zone,5.0
-Donkea,,,,RampUpRate,1.0
-Donkea,,,,RampDnRate,1.0
-Donkea,,,,ResLimShare,0.1
-Donkea,,,,FOMperMW,20000.0
-Donkea,,,,BuildLimitperYear,15.0
-Donkea,,,,MaxTotalBuild,15.0
-Donkea,,,,Type,4.0
-Donkea,,,,fuel1,3.0
-Donkea,,,,Status,1.0
-Donkea,,,,UnitSize,15.0
-Donkea,,,,RE_Flag,1.0
-Donkea,,,,CapacityCredit,1.0
-Fomi,,,,Life,50.0
-Fomi,,,,Capacity,90.0
-Fomi,,,,Capex,3.567
-Fomi,,,,StYr,2030.0
-Fomi,,,,RetrYr,2080.0
-Fomi,,,,Zone,5.0
-Fomi,,,,RampUpRate,1.0
-Fomi,,,,RampDnRate,1.0
-Fomi,,,,ResLimShare,0.1
-Fomi,,,,FOMperMW,71340.0
-Fomi,,,,BuildLimitperYear,90.0
-Fomi,,,,MaxTotalBuild,90.0
-Fomi,,,,Type,4.0
-Fomi,,,,fuel1,3.0
-Fomi,,,,Status,1.0
-Fomi,,,,UnitSize,90.0
-Fomi,,,,RE_Flag,1.0
-Fomi,,,,CapacityCredit,1.0
-Garafiri,,,,Capacity,75.0
-Garafiri,,,,Capex,2.5
-Garafiri,,,,StYr,1999.0
-Garafiri,,,,RetrYr,2069.0
-Garafiri,,,,Zone,5.0
-Garafiri,,,,RampUpRate,1.0
-Garafiri,,,,RampDnRate,1.0
-Garafiri,,,,ResLimShare,0.1
-Garafiri,,,,FOMperMW,20000.0
-Garafiri,,,,BuildLimitperYear,75.0
-Garafiri,,,,MaxTotalBuild,75.0
-Garafiri,,,,Type,4.0
-Garafiri,,,,fuel1,3.0
-Garafiri,,,,Status,1.0
-Garafiri,,,,UnitSize,75.0
-Garafiri,,,,RE_Flag,1.0
-Garafiri,,,,CapacityCredit,1.0
-Guozoguezia,,,,Life,50.0
-Guozoguezia,,,,Capacity,81.0
-Guozoguezia,,,,Capex,3.481
-Guozoguezia,,,,StYr,2030.0
-Guozoguezia,,,,RetrYr,2080.0
-Guozoguezia,,,,Zone,5.0
-Guozoguezia,,,,RampUpRate,1.0
-Guozoguezia,,,,RampDnRate,1.0
-Guozoguezia,,,,ResLimShare,0.1
-Guozoguezia,,,,FOMperMW,69620.0
-Guozoguezia,,,,BuildLimitperYear,81.0
-Guozoguezia,,,,MaxTotalBuild,81.0
-Guozoguezia,,,,Type,4.0
-Guozoguezia,,,,fuel1,3.0
-Guozoguezia,,,,Status,3.0
-Guozoguezia,,,,UnitSize,81.0
-Guozoguezia,,,,RE_Flag,1.0
-Guozoguezia,,,,CapacityCredit,1.0
-Hakkunde-Mitti,,,,Life,50.0
-Hakkunde-Mitti,,,,Capacity,62.0
-Hakkunde-Mitti,,,,Capex,2.977
-Hakkunde-Mitti,,,,StYr,2030.0
-Hakkunde-Mitti,,,,RetrYr,2080.0
-Hakkunde-Mitti,,,,Zone,5.0
-Hakkunde-Mitti,,,,RampUpRate,1.0
-Hakkunde-Mitti,,,,RampDnRate,1.0
-Hakkunde-Mitti,,,,ResLimShare,0.1
-Hakkunde-Mitti,,,,FOMperMW,59540.0
-Hakkunde-Mitti,,,,BuildLimitperYear,62.0
-Hakkunde-Mitti,,,,MaxTotalBuild,62.0
-Hakkunde-Mitti,,,,Type,4.0
-Hakkunde-Mitti,,,,fuel1,3.0
-Hakkunde-Mitti,,,,Status,3.0
-Hakkunde-Mitti,,,,UnitSize,62.0
-Hakkunde-Mitti,,,,RE_Flag,1.0
-Hakkunde-Mitti,,,,CapacityCredit,1.0
-Korafindi,,,,Life,50.0
-Korafindi,,,,Capacity,135.0
-Korafindi,,,,Capex,3.406
-Korafindi,,,,StYr,2030.0
-Korafindi,,,,RetrYr,2080.0
-Korafindi,,,,Zone,5.0
-Korafindi,,,,RampUpRate,1.0
-Korafindi,,,,RampDnRate,1.0
-Korafindi,,,,ResLimShare,0.1
-Korafindi,,,,FOMperMW,68120.0
-Korafindi,,,,BuildLimitperYear,135.0
-Korafindi,,,,MaxTotalBuild,135.0
-Korafindi,,,,Type,4.0
-Korafindi,,,,fuel1,3.0
-Korafindi,,,,Status,3.0
-Korafindi,,,,UnitSize,135.0
-Korafindi,,,,RE_Flag,1.0
-Korafindi,,,,CapacityCredit,1.0
-Souapiti,,,,Life,50.0
-Souapiti,,,,Capacity,475.0
-Souapiti,,,,Capex,3.416
-Souapiti,,,,StYr,2021.0
-Souapiti,,,,RetrYr,2091.0
-Souapiti,,,,Zone,5.0
-Souapiti,,,,RampUpRate,1.0
-Souapiti,,,,RampDnRate,1.0
-Souapiti,,,,ResLimShare,0.1
-Souapiti,,,,FOMperMW,68320.0
-Souapiti,,,,BuildLimitperYear,475.0
-Souapiti,,,,MaxTotalBuild,475.0
-Souapiti,,,,Type,4.0
-Souapiti,,,,fuel1,3.0
-Souapiti,,,,Status,1.0
-Souapiti,,,,UnitSize,475.0
-Souapiti,,,,RE_Flag,1.0
-Souapiti,,,,CapacityCredit,1.0
-Kogebedou,,,,Life,50.0
-Kogebedou,,,,Capacity,82.0
-Kogebedou,,,,Capex,3.409
-Kogebedou,,,,StYr,2030.0
-Kogebedou,,,,RetrYr,2080.0
-Kogebedou,,,,Zone,5.0
-Kogebedou,,,,RampUpRate,1.0
-Kogebedou,,,,RampDnRate,1.0
-Kogebedou,,,,ResLimShare,0.1
-Kogebedou,,,,FOMperMW,68180.0
-Kogebedou,,,,BuildLimitperYear,82.0
-Kogebedou,,,,MaxTotalBuild,82.0
-Kogebedou,,,,Type,4.0
-Kogebedou,,,,fuel1,3.0
-Kogebedou,,,,Status,3.0
-Kogebedou,,,,UnitSize,82.0
-Kogebedou,,,,RE_Flag,1.0
-Kogebedou,,,,CapacityCredit,1.0
-Diareguela,,,,Life,50.0
-Diareguela,,,,Capacity,77.0
-Diareguela,,,,Capex,3.542
-Diareguela,,,,StYr,2030.0
-Diareguela,,,,RetrYr,2080.0
-Diareguela,,,,Zone,5.0
-Diareguela,,,,RampUpRate,1.0
-Diareguela,,,,RampDnRate,1.0
-Diareguela,,,,ResLimShare,0.1
-Diareguela,,,,FOMperMW,70840.0
-Diareguela,,,,BuildLimitperYear,77.0
-Diareguela,,,,MaxTotalBuild,77.0
-Diareguela,,,,Type,4.0
-Diareguela,,,,fuel1,3.0
-Diareguela,,,,Status,3.0
-Diareguela,,,,UnitSize,77.0
-Diareguela,,,,RE_Flag,1.0
-Diareguela,,,,CapacityCredit,1.0
-Kouravel,,,,Life,50.0
-Kouravel,,,,Capacity,100.0
-Kouravel,,,,Capex,3.141
-Kouravel,,,,StYr,2030.0
-Kouravel,,,,RetrYr,2080.0
-Kouravel,,,,Zone,5.0
-Kouravel,,,,RampUpRate,1.0
-Kouravel,,,,RampDnRate,1.0
-Kouravel,,,,ResLimShare,0.1
-Kouravel,,,,FOMperMW,62820.0
-Kouravel,,,,BuildLimitperYear,100.0
-Kouravel,,,,MaxTotalBuild,100.0
-Kouravel,,,,Type,4.0
-Kouravel,,,,fuel1,3.0
-Kouravel,,,,Status,3.0
-Kouravel,,,,UnitSize,100.0
-Kouravel,,,,RE_Flag,1.0
-Kouravel,,,,CapacityCredit,1.0
-Kassa,,,,Life,50.0
-Kassa,,,,Capacity,124.0
-Kassa,,,,Capex,3.319
-Kassa,,,,StYr,2030.0
-Kassa,,,,RetrYr,2080.0
-Kassa,,,,Zone,5.0
-Kassa,,,,RampUpRate,1.0
-Kassa,,,,RampDnRate,1.0
-Kassa,,,,ResLimShare,0.1
-Kassa,,,,FOMperMW,66380.0
-Kassa,,,,BuildLimitperYear,124.0
-Kassa,,,,MaxTotalBuild,124.0
-Kassa,,,,Type,4.0
-Kassa,,,,fuel1,3.0
-Kassa,,,,Status,3.0
-Kassa,,,,UnitSize,124.0
-Kassa,,,,RE_Flag,1.0
-Kassa,,,,CapacityCredit,1.0
-Morisanako,,,,Life,50.0
-Morisanako,,,,Capacity,96.0
-Morisanako,,,,Capex,3.62
-Morisanako,,,,StYr,2030.0
-Morisanako,,,,RetrYr,2080.0
-Morisanako,,,,Zone,5.0
-Morisanako,,,,RampUpRate,1.0
-Morisanako,,,,RampDnRate,1.0
-Morisanako,,,,ResLimShare,0.1
-Morisanako,,,,FOMperMW,72400.0
-Morisanako,,,,BuildLimitperYear,96.0
-Morisanako,,,,MaxTotalBuild,96.0
-Morisanako,,,,Type,4.0
-Morisanako,,,,fuel1,3.0
-Morisanako,,,,Status,3.0
-Morisanako,,,,UnitSize,96.0
-Morisanako,,,,RE_Flag,1.0
-Morisanako,,,,CapacityCredit,1.0
-Grand Kinkon,,,,Life,50.0
-Grand Kinkon,,,,Capacity,215.0
-Grand Kinkon,,,,Capex,3.017
-Grand Kinkon,,,,StYr,2030.0
-Grand Kinkon,,,,RetrYr,2080.0
-Grand Kinkon,,,,Zone,5.0
-Grand Kinkon,,,,RampUpRate,1.0
-Grand Kinkon,,,,RampDnRate,1.0
-Grand Kinkon,,,,ResLimShare,0.1
-Grand Kinkon,,,,FOMperMW,60340.0
-Grand Kinkon,,,,BuildLimitperYear,215.0
-Grand Kinkon,,,,MaxTotalBuild,215.0
-Grand Kinkon,,,,Type,4.0
-Grand Kinkon,,,,fuel1,3.0
-Grand Kinkon,,,,Status,3.0
-Grand Kinkon,,,,UnitSize,215.0
-Grand Kinkon,,,,RE_Flag,1.0
-Grand Kinkon,,,,CapacityCredit,1.0
-Boureya,,,,Life,50.0
-Boureya,,,,Capacity,161.0
-Boureya,,,,Capex,2.89
-Boureya,,,,StYr,2030.0
-Boureya,,,,RetrYr,2080.0
-Boureya,,,,Zone,5.0
-Boureya,,,,RampUpRate,1.0
-Boureya,,,,RampDnRate,1.0
-Boureya,,,,ResLimShare,0.1
-Boureya,,,,FOMperMW,57800.0
-Boureya,,,,BuildLimitperYear,157.0
-Boureya,,,,MaxTotalBuild,157.0
-Boureya,,,,Type,4.0
-Boureya,,,,fuel1,3.0
-Boureya,,,,Status,3.0
-Boureya,,,,UnitSize,157.0
-Boureya,,,,RE_Flag,1.0
-Boureya,,,,CapacityCredit,1.0
-DIESEL_HFO,,,,Life,30.0
-DIESEL_HFO,,,,VOM,7.0
-DIESEL_HFO,,,,Capex,1.5
-DIESEL_HFO,,,,StYr,2030.0
-DIESEL_HFO,,,,RetrYr,2050.0
-DIESEL_HFO,,,,Zone,5.0
-DIESEL_HFO,,,,MinLimitShare,0.3
-DIESEL_HFO,,,,HeatRate,9.7
-DIESEL_HFO,,,,RampUpRate,0.85
-DIESEL_HFO,,,,RampDnRate,0.9
-DIESEL_HFO,,,,ResLimShare,0.2
-DIESEL_HFO,,,,FOMperMW,15000.0
-DIESEL_HFO,,,,BuildLimitperYear,200.0
-DIESEL_HFO,,,,MaxTotalBuild,1000.0
-DIESEL_HFO,,,,Type,10.0
-DIESEL_HFO,,,,fuel1,7.0
-DIESEL_HFO,,,,Status,3.0
-DIESEL_HFO,,,,HeatRate2,9.0
-DIESEL_HFO,,,,UnitSize,200.0
-DIESEL_HFO,,,,CapacityCredit,1.0
-New_HFO,,,,Life,30.0
-New_HFO,,,,VOM,100.0
-New_HFO,,,,Capacity,1000.0
-New_HFO,,,,Capex,2.6
-New_HFO,,,,StYr,2030.0
-New_HFO,,,,RetrYr,2050.0
-New_HFO,,,,Zone,5.0
-New_HFO,,,,MinLimitShare,0.3
-New_HFO,,,,HeatRate,9.7
-New_HFO,,,,RampUpRate,0.85
-New_HFO,,,,RampDnRate,0.9
-New_HFO,,,,ResLimShare,0.2
-New_HFO,,,,FOMperMW,26000.0
-New_HFO,,,,BuildLimitperYear,200.0
-New_HFO,,,,MaxTotalBuild,1000.0
-New_HFO,,,,Type,1.0
-New_HFO,,,,fuel1,7.0
-New_HFO,,,,Status,3.0
-New_HFO,,,,HeatRate2,9.0
-New_HFO,,,,UnitSize,200.0
-New_HFO,,,,CapacityCredit,1.0
-PV,,,,Life,25.0
-PV,,,,Capacity,30000.0
-PV,,,,Capex,1.0
-PV,,,,StYr,2030.0
-PV,,,,RetrYr,2051.0
-PV,,,,Zone,5.0
-PV,,,,RampUpRate,1.0
-PV,,,,RampDnRate,1.0
-PV,,,,FOMperMW,12000.0
-PV,,,,BuildLimitperYear,1000.0
-PV,,,,MaxTotalBuild,30000.0
-PV,,,,Type,6.0
-PV,,,,fuel1,4.0
-PV,,,,Status,3.0
-PV,,,,VRETech,1.0
-PV,,,,RE_Flag,1.0
-PV,,,,CapacityCredit,1.0
-Karpowership_IPP,,,,VOM,250.0
-Karpowership_IPP,,,,Capacity,115.0
-Karpowership_IPP,,,,StYr,2021.0
-Karpowership_IPP,,,,RetrYr,2050.0
-Karpowership_IPP,,,,Zone,5.0
-Karpowership_IPP,,,,MinLimitShare,0.85
-Karpowership_IPP,,,,HeatRate,9.575795629
-Karpowership_IPP,,,,RampUpRate,1.0
-Karpowership_IPP,,,,RampDnRate,1.0
-Karpowership_IPP,,,,ResLimShare,0.2
-Karpowership_IPP,,,,BuildLimitperYear,115.0
-Karpowership_IPP,,,,MaxTotalBuild,115.0
-Karpowership_IPP,,,,Type,10.0
-Karpowership_IPP,,,,fuel1,7.0
-Karpowership_IPP,,,,Status,1.0
-Karpowership_IPP,,,,HeatRate2,9.575795629
-Karpowership_IPP,,,,UnitSize,115.0
-Karpowership_IPP,,,,CapacityCredit,1.0
-Kipe_IPP,,,,VOM,50.0
-Kipe_IPP,,,,Capacity,50.0
-Kipe_IPP,,,,StYr,2016.0
-Kipe_IPP,,,,RetrYr,2066.0
-Kipe_IPP,,,,Zone,5.0
-Kipe_IPP,,,,MinLimitShare,0.5
-Kipe_IPP,,,,HeatRate,9.575795629
-Kipe_IPP,,,,RampUpRate,1.0
-Kipe_IPP,,,,RampDnRate,1.0
-Kipe_IPP,,,,ResLimShare,0.2
-Kipe_IPP,,,,BuildLimitperYear,50.0
-Kipe_IPP,,,,MaxTotalBuild,50.0
-Kipe_IPP,,,,Type,10.0
-Kipe_IPP,,,,fuel1,7.0
-Kipe_IPP,,,,Status,1.0
-Kipe_IPP,,,,HeatRate2,9.575795629
-Kipe_IPP,,,,UnitSize,50.0
-Kipe_IPP,,,,CapacityCredit,1.0
-GDE_IPP,,,,VOM,280.0
-GDE_IPP,,,,Capacity,40.0
-GDE_IPP,,,,StYr,2015.0
-GDE_IPP,,,,RetrYr,2065.0
-GDE_IPP,,,,Zone,5.0
-GDE_IPP,,,,MinLimitShare,0.5
-GDE_IPP,,,,HeatRate,10.5881489
-GDE_IPP,,,,RampUpRate,1.0
-GDE_IPP,,,,RampDnRate,1.0
-GDE_IPP,,,,ResLimShare,0.2
-GDE_IPP,,,,BuildLimitperYear,42.5
-GDE_IPP,,,,MaxTotalBuild,42.5
-GDE_IPP,,,,Type,10.0
-GDE_IPP,,,,fuel1,7.0
-GDE_IPP,,,,Status,1.0
-GDE_IPP,,,,HeatRate2,10.6
-GDE_IPP,,,,UnitSize,42.5
-GDE_IPP,,,,CapacityCredit,1.0
-Kaloum5,,,,VOM,7.0
-Kaloum5,,,,Capacity,30.0
-Kaloum5,,,,Capex,2.6
-Kaloum5,,,,StYr,2005.0
-Kaloum5,,,,RetrYr,2055.0
-Kaloum5,,,,Zone,5.0
-Kaloum5,,,,MinLimitShare,0.06
-Kaloum5,,,,HeatRate,9.575795629
-Kaloum5,,,,RampUpRate,1.0
-Kaloum5,,,,RampDnRate,1.0
-Kaloum5,,,,ResLimShare,0.2
-Kaloum5,,,,FOMperMW,17000.0
-Kaloum5,,,,BuildLimitperYear,30.0
-Kaloum5,,,,MaxTotalBuild,30.0
-Kaloum5,,,,Type,10.0
-Kaloum5,,,,fuel1,7.0
-Kaloum5,,,,Status,1.0
-Kaloum5,,,,HeatRate2,9.575795629
-Kaloum5,,,,UnitSize,30.0
-Kaloum5,,,,CapacityCredit,1.0
-Kaloum3_IPP,,,,VOM,100.0
-Kaloum3_IPP,,,,Capacity,24.0
-Kaloum3_IPP,,,,StYr,1997.0
-Kaloum3_IPP,,,,RetrYr,2047.0
-Kaloum3_IPP,,,,Zone,5.0
-Kaloum3_IPP,,,,MinLimitShare,0.06
-Kaloum3_IPP,,,,HeatRate,9.575795629
-Kaloum3_IPP,,,,RampUpRate,1.0
-Kaloum3_IPP,,,,RampDnRate,1.0
-Kaloum3_IPP,,,,ResLimShare,0.2
-Kaloum3_IPP,,,,BuildLimitperYear,24.0
-Kaloum3_IPP,,,,MaxTotalBuild,24.0
-Kaloum3_IPP,,,,Type,10.0
-Kaloum3_IPP,,,,fuel1,7.0
-Kaloum3_IPP,,,,Status,1.0
-Kaloum3_IPP,,,,HeatRate2,9.575795629
-Kaloum3_IPP,,,,UnitSize,24.0
-Kaloum3_IPP,,,,CapacityCredit,1.0
-Kaloum1_IPP,,,,VOM,50.0
-Kaloum1_IPP,,,,Capacity,22.0
-Kaloum1_IPP,,,,StYr,2015.0
-Kaloum1_IPP,,,,RetrYr,2065.0
-Kaloum1_IPP,,,,Zone,5.0
-Kaloum1_IPP,,,,MinLimitShare,0.5
-Kaloum1_IPP,,,,HeatRate,9.575795629
-Kaloum1_IPP,,,,RampUpRate,1.0
-Kaloum1_IPP,,,,RampDnRate,1.0
-Kaloum1_IPP,,,,ResLimShare,0.2
-Kaloum1_IPP,,,,BuildLimitperYear,22.0
-Kaloum1_IPP,,,,MaxTotalBuild,22.0
-Kaloum1_IPP,,,,Type,10.0
-Kaloum1_IPP,,,,fuel1,7.0
-Kaloum1_IPP,,,,Status,1.0
-Kaloum1_IPP,,,,HeatRate2,9.575795629
-Kaloum1_IPP,,,,UnitSize,22.0
-Kaloum1_IPP,,,,CapacityCredit,1.0
-Kaloum2_IPP,,,,VOM,50.0
-Kaloum2_IPP,,,,Capacity,22.0
-Kaloum2_IPP,,,,StYr,2016.0
-Kaloum2_IPP,,,,RetrYr,2066.0
-Kaloum2_IPP,,,,Zone,5.0
-Kaloum2_IPP,,,,MinLimitShare,0.5
-Kaloum2_IPP,,,,HeatRate,9.575795629
-Kaloum2_IPP,,,,RampUpRate,1.0
-Kaloum2_IPP,,,,RampDnRate,1.0
-Kaloum2_IPP,,,,ResLimShare,0.2
-Kaloum2_IPP,,,,BuildLimitperYear,22.0
-Kaloum2_IPP,,,,MaxTotalBuild,22.0
-Kaloum2_IPP,,,,Type,10.0
-Kaloum2_IPP,,,,fuel1,7.0
-Kaloum2_IPP,,,,Status,1.0
-Kaloum2_IPP,,,,HeatRate2,9.575795629
-Kaloum2_IPP,,,,UnitSize,22.0
-Kaloum2_IPP,,,,CapacityCredit,1.0
-Te_IPP,,,,VOM,100.0
-Te_IPP,,,,Capacity,50.0
-Te_IPP,,,,StYr,2020.0
-Te_IPP,,,,RetrYr,2050.0
-Te_IPP,,,,Zone,5.0
-Te_IPP,,,,MinLimitShare,0.5
-Te_IPP,,,,HeatRate,10.5881489
-Te_IPP,,,,RampUpRate,1.0
-Te_IPP,,,,RampDnRate,1.0
-Te_IPP,,,,ResLimShare,0.2
-Te_IPP,,,,BuildLimitperYear,50.0
-Te_IPP,,,,MaxTotalBuild,50.0
-Te_IPP,,,,Type,10.0
-Te_IPP,,,,fuel1,7.0
-Te_IPP,,,,Status,1.0
-Te_IPP,,,,HeatRate2,9.0
-Te_IPP,,,,UnitSize,50.0
-Te_IPP,,,,CapacityCredit,1.0
-BESS,,,,Life,20.0
-BESS,,,,Capacity,30000.0
-BESS,,,,Capex,0.3
-BESS,,,,StYr,2030.0
-BESS,,,,RetrYr,2050.0
-BESS,,,,Zone,5.0
-BESS,,,,RampUpRate,1.0
-BESS,,,,RampDnRate,1.0
-BESS,,,,ResLimShare,1.0
-BESS,,,,FOMperMW,13874.0
-BESS,,,,BuildLimitperYear,1000.0
-BESS,,,,MaxTotalBuild,30000.0
-BESS,,,,Type,17.0
-BESS,,,,fuel1,10.0
-BESS,,,,Status,3.0
-BESS,,,,CapacityCredit,1.0
+zone,tech,fuel,parameters,value
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,63.0
+Guinea,STO HY,Hydro,Capex,3.413
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,68260.0
+Guinea,STO HY,Hydro,BuildLimitperYear,63.0
+Guinea,STO HY,Hydro,MaxTotalBuild,63.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,63.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,40.0
+Guinea,STO HY,Hydro,Capex,3.611
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,72220.0
+Guinea,STO HY,Hydro,BuildLimitperYear,40.0
+Guinea,STO HY,Hydro,MaxTotalBuild,40.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,40.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Capacity,5.0
+Guinea,STO HY,Hydro,Capex,2.5
+Guinea,STO HY,Hydro,StYr,1989.0
+Guinea,STO HY,Hydro,RetrYr,2060.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,20000.0
+Guinea,STO HY,Hydro,BuildLimitperYear,5.0
+Guinea,STO HY,Hydro,MaxTotalBuild,5.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,5.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,90.0
+Guinea,STO HY,Hydro,Capex,3.433
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,68660.0
+Guinea,STO HY,Hydro,BuildLimitperYear,90.0
+Guinea,STO HY,Hydro,MaxTotalBuild,90.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,90.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,45.0
+Guinea,STO HY,Hydro,Capex,3.444
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,68880.0
+Guinea,STO HY,Hydro,BuildLimitperYear,45.0
+Guinea,STO HY,Hydro,MaxTotalBuild,45.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,45.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,105.0
+Guinea,STO HY,Hydro,Capex,3.381
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,67620.0
+Guinea,STO HY,Hydro,BuildLimitperYear,105.0
+Guinea,STO HY,Hydro,MaxTotalBuild,105.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,105.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,55.0
+Guinea,STO HY,Hydro,Capex,3.364
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,67280.0
+Guinea,STO HY,Hydro,BuildLimitperYear,77.0
+Guinea,STO HY,Hydro,MaxTotalBuild,77.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,77.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,62.0
+Guinea,STO HY,Hydro,Capex,3.28
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,65600.0
+Guinea,STO HY,Hydro,BuildLimitperYear,62.0
+Guinea,STO HY,Hydro,MaxTotalBuild,62.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,62.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,183.0
+Guinea,STO HY,Hydro,Capex,3.126
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,62520.0
+Guinea,STO HY,Hydro,BuildLimitperYear,183.0
+Guinea,STO HY,Hydro,MaxTotalBuild,183.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,183.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Capacity,28.0
+Guinea,STO HY,Hydro,Capex,2.5
+Guinea,STO HY,Hydro,StYr,1954.0
+Guinea,STO HY,Hydro,RetrYr,2060.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,20000.0
+Guinea,STO HY,Hydro,BuildLimitperYear,28.0
+Guinea,STO HY,Hydro,MaxTotalBuild,28.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,28.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,101.0
+Guinea,STO HY,Hydro,Capex,3.3
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,66000.0
+Guinea,STO HY,Hydro,BuildLimitperYear,101.0
+Guinea,STO HY,Hydro,MaxTotalBuild,101.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,101.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,300.0
+Guinea,STO HY,Hydro,Capex,3.553
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,71060.0
+Guinea,STO HY,Hydro,BuildLimitperYear,300.0
+Guinea,STO HY,Hydro,MaxTotalBuild,300.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,300.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,96.0
+Guinea,STO HY,Hydro,Capex,3.065
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,61300.0
+Guinea,STO HY,Hydro,BuildLimitperYear,96.0
+Guinea,STO HY,Hydro,MaxTotalBuild,96.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,96.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Capacity,240.0
+Guinea,STO HY,Hydro,Capex,2.192
+Guinea,STO HY,Hydro,StYr,2015.0
+Guinea,STO HY,Hydro,RetrYr,2085.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,43840.0
+Guinea,STO HY,Hydro,BuildLimitperYear,240.0
+Guinea,STO HY,Hydro,MaxTotalBuild,240.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,240.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,294.0
+Guinea,STO HY,Hydro,Capex,3.401
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,68020.0
+Guinea,STO HY,Hydro,BuildLimitperYear,280.0
+Guinea,STO HY,Hydro,MaxTotalBuild,280.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,280.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Capacity,15.0
+Guinea,STO HY,Hydro,Capex,2.5
+Guinea,STO HY,Hydro,StYr,1970.0
+Guinea,STO HY,Hydro,RetrYr,2060.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,20000.0
+Guinea,STO HY,Hydro,BuildLimitperYear,15.0
+Guinea,STO HY,Hydro,MaxTotalBuild,15.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,15.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,90.0
+Guinea,STO HY,Hydro,Capex,3.567
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,71340.0
+Guinea,STO HY,Hydro,BuildLimitperYear,90.0
+Guinea,STO HY,Hydro,MaxTotalBuild,90.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,90.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Capacity,75.0
+Guinea,STO HY,Hydro,Capex,2.5
+Guinea,STO HY,Hydro,StYr,1999.0
+Guinea,STO HY,Hydro,RetrYr,2069.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,20000.0
+Guinea,STO HY,Hydro,BuildLimitperYear,75.0
+Guinea,STO HY,Hydro,MaxTotalBuild,75.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,75.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,81.0
+Guinea,STO HY,Hydro,Capex,3.481
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,69620.0
+Guinea,STO HY,Hydro,BuildLimitperYear,81.0
+Guinea,STO HY,Hydro,MaxTotalBuild,81.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,81.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,62.0
+Guinea,STO HY,Hydro,Capex,2.977
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,59540.0
+Guinea,STO HY,Hydro,BuildLimitperYear,62.0
+Guinea,STO HY,Hydro,MaxTotalBuild,62.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,62.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,135.0
+Guinea,STO HY,Hydro,Capex,3.406
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,68120.0
+Guinea,STO HY,Hydro,BuildLimitperYear,135.0
+Guinea,STO HY,Hydro,MaxTotalBuild,135.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,135.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,475.0
+Guinea,STO HY,Hydro,Capex,3.416
+Guinea,STO HY,Hydro,StYr,2021.0
+Guinea,STO HY,Hydro,RetrYr,2091.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,68320.0
+Guinea,STO HY,Hydro,BuildLimitperYear,475.0
+Guinea,STO HY,Hydro,MaxTotalBuild,475.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,1.0
+Guinea,STO HY,Hydro,UnitSize,475.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,82.0
+Guinea,STO HY,Hydro,Capex,3.409
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,68180.0
+Guinea,STO HY,Hydro,BuildLimitperYear,82.0
+Guinea,STO HY,Hydro,MaxTotalBuild,82.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,82.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,77.0
+Guinea,STO HY,Hydro,Capex,3.542
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,70840.0
+Guinea,STO HY,Hydro,BuildLimitperYear,77.0
+Guinea,STO HY,Hydro,MaxTotalBuild,77.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,77.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,100.0
+Guinea,STO HY,Hydro,Capex,3.141
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,62820.0
+Guinea,STO HY,Hydro,BuildLimitperYear,100.0
+Guinea,STO HY,Hydro,MaxTotalBuild,100.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,100.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,124.0
+Guinea,STO HY,Hydro,Capex,3.319
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,66380.0
+Guinea,STO HY,Hydro,BuildLimitperYear,124.0
+Guinea,STO HY,Hydro,MaxTotalBuild,124.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,124.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,96.0
+Guinea,STO HY,Hydro,Capex,3.62
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,72400.0
+Guinea,STO HY,Hydro,BuildLimitperYear,96.0
+Guinea,STO HY,Hydro,MaxTotalBuild,96.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,96.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,215.0
+Guinea,STO HY,Hydro,Capex,3.017
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,60340.0
+Guinea,STO HY,Hydro,BuildLimitperYear,215.0
+Guinea,STO HY,Hydro,MaxTotalBuild,215.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,215.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,STO HY,Hydro,Life,50.0
+Guinea,STO HY,Hydro,Capacity,161.0
+Guinea,STO HY,Hydro,Capex,2.89
+Guinea,STO HY,Hydro,StYr,2030.0
+Guinea,STO HY,Hydro,RetrYr,2080.0
+Guinea,STO HY,Hydro,Zone,5.0
+Guinea,STO HY,Hydro,RampUpRate,1.0
+Guinea,STO HY,Hydro,RampDnRate,1.0
+Guinea,STO HY,Hydro,ResLimShare,0.1
+Guinea,STO HY,Hydro,FOMperMW,57800.0
+Guinea,STO HY,Hydro,BuildLimitperYear,157.0
+Guinea,STO HY,Hydro,MaxTotalBuild,157.0
+Guinea,STO HY,Hydro,Type,4.0
+Guinea,STO HY,Hydro,fuel1,3.0
+Guinea,STO HY,Hydro,Status,3.0
+Guinea,STO HY,Hydro,UnitSize,157.0
+Guinea,STO HY,Hydro,RE_Flag,1.0
+Guinea,STO HY,Hydro,CapacityCredit,1.0
+Guinea,ICE,HFO,Life,30.0
+Guinea,ICE,HFO,VOM,7.0
+Guinea,ICE,HFO,Capex,1.5
+Guinea,ICE,HFO,StYr,2030.0
+Guinea,ICE,HFO,RetrYr,2050.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.3
+Guinea,ICE,HFO,HeatRate,9.7
+Guinea,ICE,HFO,RampUpRate,0.85
+Guinea,ICE,HFO,RampDnRate,0.9
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,FOMperMW,15000.0
+Guinea,ICE,HFO,BuildLimitperYear,200.0
+Guinea,ICE,HFO,MaxTotalBuild,1000.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,3.0
+Guinea,ICE,HFO,HeatRate2,9.0
+Guinea,ICE,HFO,UnitSize,200.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,Life,30.0
+Guinea,ICE,HFO,VOM,100.0
+Guinea,ICE,HFO,Capacity,1000.0
+Guinea,ICE,HFO,Capex,2.6
+Guinea,ICE,HFO,StYr,2030.0
+Guinea,ICE,HFO,RetrYr,2050.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.3
+Guinea,ICE,HFO,HeatRate,9.7
+Guinea,ICE,HFO,RampUpRate,0.85
+Guinea,ICE,HFO,RampDnRate,0.9
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,FOMperMW,26000.0
+Guinea,ICE,HFO,BuildLimitperYear,200.0
+Guinea,ICE,HFO,MaxTotalBuild,1000.0
+Guinea,ICE,HFO,Type,1.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,3.0
+Guinea,ICE,HFO,HeatRate2,9.0
+Guinea,ICE,HFO,UnitSize,200.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,PV,Solar,Life,25.0
+Guinea,PV,Solar,Capacity,30000.0
+Guinea,PV,Solar,Capex,1.0
+Guinea,PV,Solar,StYr,2030.0
+Guinea,PV,Solar,RetrYr,2051.0
+Guinea,PV,Solar,Zone,5.0
+Guinea,PV,Solar,RampUpRate,1.0
+Guinea,PV,Solar,RampDnRate,1.0
+Guinea,PV,Solar,FOMperMW,12000.0
+Guinea,PV,Solar,BuildLimitperYear,1000.0
+Guinea,PV,Solar,MaxTotalBuild,30000.0
+Guinea,PV,Solar,Type,6.0
+Guinea,PV,Solar,fuel1,4.0
+Guinea,PV,Solar,Status,3.0
+Guinea,PV,Solar,VRETech,1.0
+Guinea,PV,Solar,RE_Flag,1.0
+Guinea,PV,Solar,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,250.0
+Guinea,ICE,HFO,Capacity,115.0
+Guinea,ICE,HFO,StYr,2021.0
+Guinea,ICE,HFO,RetrYr,2050.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.85
+Guinea,ICE,HFO,HeatRate,9.575795629
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,BuildLimitperYear,115.0
+Guinea,ICE,HFO,MaxTotalBuild,115.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,9.575795629
+Guinea,ICE,HFO,UnitSize,115.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,50.0
+Guinea,ICE,HFO,Capacity,50.0
+Guinea,ICE,HFO,StYr,2016.0
+Guinea,ICE,HFO,RetrYr,2066.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.5
+Guinea,ICE,HFO,HeatRate,9.575795629
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,BuildLimitperYear,50.0
+Guinea,ICE,HFO,MaxTotalBuild,50.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,9.575795629
+Guinea,ICE,HFO,UnitSize,50.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,280.0
+Guinea,ICE,HFO,Capacity,40.0
+Guinea,ICE,HFO,StYr,2015.0
+Guinea,ICE,HFO,RetrYr,2065.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.5
+Guinea,ICE,HFO,HeatRate,10.5881489
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,BuildLimitperYear,42.5
+Guinea,ICE,HFO,MaxTotalBuild,42.5
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,10.6
+Guinea,ICE,HFO,UnitSize,42.5
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,7.0
+Guinea,ICE,HFO,Capacity,30.0
+Guinea,ICE,HFO,Capex,2.6
+Guinea,ICE,HFO,StYr,2005.0
+Guinea,ICE,HFO,RetrYr,2055.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.06
+Guinea,ICE,HFO,HeatRate,9.575795629
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,FOMperMW,17000.0
+Guinea,ICE,HFO,BuildLimitperYear,30.0
+Guinea,ICE,HFO,MaxTotalBuild,30.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,9.575795629
+Guinea,ICE,HFO,UnitSize,30.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,100.0
+Guinea,ICE,HFO,Capacity,24.0
+Guinea,ICE,HFO,StYr,1997.0
+Guinea,ICE,HFO,RetrYr,2047.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.06
+Guinea,ICE,HFO,HeatRate,9.575795629
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,BuildLimitperYear,24.0
+Guinea,ICE,HFO,MaxTotalBuild,24.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,9.575795629
+Guinea,ICE,HFO,UnitSize,24.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,50.0
+Guinea,ICE,HFO,Capacity,22.0
+Guinea,ICE,HFO,StYr,2015.0
+Guinea,ICE,HFO,RetrYr,2065.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.5
+Guinea,ICE,HFO,HeatRate,9.575795629
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,BuildLimitperYear,22.0
+Guinea,ICE,HFO,MaxTotalBuild,22.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,9.575795629
+Guinea,ICE,HFO,UnitSize,22.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,50.0
+Guinea,ICE,HFO,Capacity,22.0
+Guinea,ICE,HFO,StYr,2016.0
+Guinea,ICE,HFO,RetrYr,2066.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.5
+Guinea,ICE,HFO,HeatRate,9.575795629
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,BuildLimitperYear,22.0
+Guinea,ICE,HFO,MaxTotalBuild,22.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,9.575795629
+Guinea,ICE,HFO,UnitSize,22.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,ICE,HFO,VOM,100.0
+Guinea,ICE,HFO,Capacity,50.0
+Guinea,ICE,HFO,StYr,2020.0
+Guinea,ICE,HFO,RetrYr,2050.0
+Guinea,ICE,HFO,Zone,5.0
+Guinea,ICE,HFO,MinLimitShare,0.5
+Guinea,ICE,HFO,HeatRate,10.5881489
+Guinea,ICE,HFO,RampUpRate,1.0
+Guinea,ICE,HFO,RampDnRate,1.0
+Guinea,ICE,HFO,ResLimShare,0.2
+Guinea,ICE,HFO,BuildLimitperYear,50.0
+Guinea,ICE,HFO,MaxTotalBuild,50.0
+Guinea,ICE,HFO,Type,10.0
+Guinea,ICE,HFO,fuel1,7.0
+Guinea,ICE,HFO,Status,1.0
+Guinea,ICE,HFO,HeatRate2,9.0
+Guinea,ICE,HFO,UnitSize,50.0
+Guinea,ICE,HFO,CapacityCredit,1.0
+Guinea,STORAGE,Battery,Life,20.0
+Guinea,STORAGE,Battery,Capacity,30000.0
+Guinea,STORAGE,Battery,Capex,0.3
+Guinea,STORAGE,Battery,StYr,2030.0
+Guinea,STORAGE,Battery,RetrYr,2050.0
+Guinea,STORAGE,Battery,Zone,5.0
+Guinea,STORAGE,Battery,RampUpRate,1.0
+Guinea,STORAGE,Battery,RampDnRate,1.0
+Guinea,STORAGE,Battery,ResLimShare,1.0
+Guinea,STORAGE,Battery,FOMperMW,13874.0
+Guinea,STORAGE,Battery,BuildLimitperYear,1000.0
+Guinea,STORAGE,Battery,MaxTotalBuild,30000.0
+Guinea,STORAGE,Battery,Type,17.0
+Guinea,STORAGE,Battery,fuel1,10.0
+Guinea,STORAGE,Battery,Status,3.0
+Guinea,STORAGE,Battery,CapacityCredit,1.0
