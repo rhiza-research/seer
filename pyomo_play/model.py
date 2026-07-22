@@ -57,7 +57,12 @@ def seer_model():
             for gen in model.generators
             for year in model.years
         )
-        return opex + capex
+        lost_load_cost = sum(
+            model.lost_load_penalty * model.lost_load[zone, year, hour]
+            for zone in model.zones
+            for year, hour in model.times
+        )
+        return opex + capex + lost_load_cost
 
     model.objective = pyo.Objective(
         rule=objective_rule,
@@ -66,13 +71,13 @@ def seer_model():
 
     """Constraints"""
 
-    # 1. supply equals demand, summed across all generators in a zone
+    # 1. supply plus lost load equals demand, summed across all generators in a zone
     def supply_equals_demand_rule(model, zone, year, hour):
         return sum(
             model.generation_output[gen, year, hour]
             for gen in model.generators
             if model.generator_zone[gen] == zone
-        ) == model.demand[zone, year, hour]
+        ) + model.lost_load[zone, year, hour] == model.demand[zone, year, hour]
 
     model.supply_equals_demand = pyo.Constraint(
         model.zones,

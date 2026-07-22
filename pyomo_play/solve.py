@@ -122,6 +122,9 @@ def solve():
 def print_summary(instance):
     print(f"Total system cost: ${pyo.value(instance.objective):,.0f}\n")
 
+    total_lost_load = sum(pyo.value(instance.lost_load[zone, year, hour]) for zone, year, hour in instance.lost_load)
+    print(f"Total lost load: {total_lost_load:,.1f} MWh\n")
+
     print("Capacity added (MW):")
     for gen in instance.generators:
         for year in instance.years:
