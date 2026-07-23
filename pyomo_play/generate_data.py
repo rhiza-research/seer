@@ -198,18 +198,24 @@ def generate_storage_costs():
     pass
 
 
-def main():
+# base pattern for per-zone peak demand, cycled out to however many zones are requested
+ZONE_PEAK_DEMAND_MW_PATTERN = [500.0, 300.0]
+
+
+def generate_all_data(n_zones, years, zone_peak_demand_mw=None):
+    """Generate every seer-schema input CSV for a given problem scale (number of zones, years).
+
+    zone_peak_demand_mw, if given, must have exactly one entry per zone; otherwise it's derived
+    by cycling ZONE_PEAK_DEMAND_MW_PATTERN out to n_zones.
+    """
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    # ---- problem size: adjust these to scale the model ----
     COUNTRY_NAME = "Seerland"  # all zones belong to this single synthetic country
 
-    YEARS = [2025, 2030, 2035]
+    ZONES = [f"zone_{i}" for i in range(n_zones)]
 
-    N_ZONES = 2
-    ZONES = [f"zone_{i}" for i in range(N_ZONES)]
-
-    # ---- load level: one entry per zone, in ZONES order (MW peak demand in the first year) ----
-    ZONE_PEAK_DEMAND_MW = [500.0, 300.0]
+    if zone_peak_demand_mw is None:
+        pattern = ZONE_PEAK_DEMAND_MW_PATTERN
+        zone_peak_demand_mw = [pattern[i % len(pattern)] for i in range(n_zones)]
 
     GENERATOR_TYPES = ["gas", "coal", "PV"]
     # ---- generator constants, one set of parameters per generator type ----
@@ -223,23 +229,28 @@ def main():
 
     # ---- starting generation mix: existing capacity is sized off each zone's own peak load ----
     STARTING_MIX_RATIO = {"gas": 0.5, "coal": 0.3, "PV": 0.2}  # shares of starting capacity by tech; must sum to 1
-    STARTING_RESERVE_MARGIN = 0.9 # existing capacity = max load over the horizon * this margin
+    STARTING_RESERVE_MARGIN = 0.9  # existing capacity = max load over the horizon * this margin
 
-    generate_years(YEARS)
+    generate_years(years)
     generate_zones(ZONES, COUNTRY_NAME)
 
-    demandforecast_df = generate_demandforecast(YEARS, ZONES, ZONE_PEAK_DEMAND_MW)
+    demandforecast_df = generate_demandforecast(years, ZONES, zone_peak_demand_mw)
     max_load = demandforecast_df.groupby("zone")["value"].max().to_dict()
     existing_capacity = compute_starting_capacity(
         ZONES, GENERATOR_TYPES, max_load, STARTING_MIX_RATIO, STARTING_RESERVE_MARGIN
     )
 
-    generate_generator_constants(YEARS, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS, existing_capacity)
-    generate_generator_costs(YEARS, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS)
+    generate_generator_constants(years, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS, existing_capacity)
+    generate_generator_costs(years, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS)
     generate_demandprofile(ZONES)
     generate_renewable_profiles(ZONES)
     generate_storage_constants()
     generate_storage_costs()
+
+
+def main():
+    # ---- problem size: adjust these to scale the model ----
+    generate_all_data(n_zones=1, years=[2025, 2030, 2035], zone_peak_demand_mw=[500.0])
 
 
 if __name__ == "__main__":

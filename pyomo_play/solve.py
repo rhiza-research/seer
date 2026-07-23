@@ -117,10 +117,15 @@ def load_data():
     }
 
 
-def solve(discrete_additions=False):
+def build_instance(discrete_additions=False):
+    """Build a concrete model instance from the CSVs currently in input_data/."""
     model = seer_base_model(discrete_additions=discrete_additions)
-    instance = model.create_instance(load_data())
+    return model.create_instance(load_data())
 
+
+def solve(instance):
+    """Solve a model instance in place (Pyomo fills in variable values on the instance itself).
+    Returns (results, solve_time)."""
     solver = pyo.SolverFactory(SOLVER_NAME)
 
     start_time = time.perf_counter()
@@ -130,7 +135,7 @@ def solve(discrete_additions=False):
     if results.solver.termination_condition != pyo.TerminationCondition.optimal:
         raise RuntimeError(f"Solve did not reach optimality: {results.solver.termination_condition}")
 
-    return instance, results, solve_time
+    return results, solve_time
 
 
 def print_summary(instance):
@@ -195,15 +200,17 @@ def aggregate_generators(df, instance, by=("tech",)):
 
 if __name__ == "__main__":
     # non integer additions
-    instance, results, solve_time = solve(discrete_additions=False)
+    instance = build_instance(discrete_additions=False)
+    results, solve_time = solve(instance)
     print(f"Solve time: {solve_time:.2f}s\n")
     print_summary(instance)
     rez = build_results_dataframes(instance)
 
     breakpoint()
 
-    # non integer additions
-    instance, results, solve_time = solve(discrete_additions=True)
+    # integer additions
+    instance = build_instance(discrete_additions=True)
+    results, solve_time = solve(instance)
     print(f"Solve time: {solve_time:.2f}s\n")
     print_summary(instance)
 
