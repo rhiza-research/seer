@@ -70,6 +70,7 @@ def load_data():
     generator_retirement_year = constants.loc[existing_generators, "retirement_year"].to_dict()
     # only meaningful (and only loaded) for new-build generators
     generator_annual_build_limit = constants.loc[new_generators, "annual_build_limit"].to_dict()
+    generator_unit_size = constants.loc[new_generators, "unit_size"].to_dict()
 
     # dispatchable generators have a capacity factor of 1.0 every hour; renewables are derated by their zone/tech profile
     generator_capacity_factor = {
@@ -107,6 +108,7 @@ def load_data():
             "generator_start_year": generator_start_year,
             "generator_retirement_year": generator_retirement_year,
             "generator_annual_build_limit": generator_annual_build_limit,
+            "generator_unit_size": generator_unit_size,
             "generator_capex_cost": generator_capex_cost,
             "generator_marginal_cost": generator_marginal_cost,
             "generator_capacity_factor": generator_capacity_factor,
@@ -115,8 +117,8 @@ def load_data():
     }
 
 
-def solve():
-    model = seer_base_model()
+def solve(discrete_additions=False):
+    model = seer_base_model(discrete_additions=discrete_additions)
     instance = model.create_instance(load_data())
 
     solver = pyo.SolverFactory(SOLVER_NAME)
@@ -152,9 +154,19 @@ def print_summary(instance):
 
 
 if __name__ == "__main__":
-    instance, results, solve_time = solve()
+    # non integer additions
+    instance, results, solve_time = solve(discrete_additions=False)
     print(f"Solve time: {solve_time:.2f}s\n")
     print_summary(instance)
+
+    breakpoint()
+    
+    # non integer additions
+    instance, results, solve_time = solve(discrete_additions=True)
+    print(f"Solve time: {solve_time:.2f}s\n")
+    print_summary(instance)
+
+    breakpoint()
 
     fig, (demand_ax, generation_ax) = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
     plot_demand(demand_ax, instance)

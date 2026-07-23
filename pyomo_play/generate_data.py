@@ -1,8 +1,7 @@
-"""Generate synthetic input CSVs for the seer capacity expansion model.
-
-Follows the seer schema (see synthseer/data/<region> for the reference
-layout): one CSV per input file, each produced by its own generate_*
-function below.
+"""Generate synthetic input data for pyomo seer model. 
+The data is generated following the seer schema and is then used to
+instantiate a pyomo model in the solve.py file. Data generation is structured
+to enable easy scaling of the model for solver performance testing.
 """
 
 from pathlib import Path
@@ -189,17 +188,20 @@ def generate_storage_costs():
 def main():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     # ---- problem size: adjust these to scale the model ----
+    COUNTRY_NAME = "Seerland"  # all zones belong to this single synthetic country
+
     YEARS = [2025, 2030, 2035]
+
     N_ZONES = 2
     ZONES = [f"zone_{i}" for i in range(N_ZONES)]
+
     GENERATOR_TYPES = ["gas", "coal", "PV"]
-    COUNTRY_NAME = "Seerland"  # all zones belong to this single synthetic country
     # ---- generator constants, one set of parameters per generator type ----
     GENERATOR_TYPE_PARAMS = {
         #           ramp_down  ramp_up  life(yr)  RETech  existing_MW  new_unit_MW  annual_build_limit_MW  capex($M/MW)  capex_escalation  marginal_cost($/MWh)  marginal_cost_escalation
-        "gas":  {"ramp_down_rate": 1.0, "ramp_up_rate": 1.0, "life": 30.0, "RETech": False, "existing_capacity": 100.0, "new_unit_size": 50.0, "annual_build_limit": 50.0, "capex": 0.80, "capex_escalation": 0.005, "marginal_cost": 45.0, "marginal_cost_escalation": 0.01},
-        "coal": {"ramp_down_rate": 0.5, "ramp_up_rate": 0.5, "life": 40.0, "RETech": False, "existing_capacity": 80.0, "new_unit_size": 100.0, "annual_build_limit": 50.0, "capex": 2.00, "capex_escalation": 0.005, "marginal_cost": 35.0, "marginal_cost_escalation": 0.01},
-        "PV":   {"ramp_down_rate": 1.0, "ramp_up_rate": 1.0, "life": 25.0, "RETech": True, "existing_capacity": 20.0, "new_unit_size": 20.0, "annual_build_limit": 20.0, "capex": 0.90, "capex_escalation": -0.03, "marginal_cost": 3.0, "marginal_cost_escalation": 0.0},
+        "gas":  {"ramp_down_rate": 1.0, "ramp_up_rate": 1.0, "life": 30.0, "RETech": False, "existing_capacity": 200.0, "new_unit_size": 25.0, "annual_build_limit": 100.0, "capex": 0.80, "capex_escalation": 0.005, "marginal_cost": 45.0, "marginal_cost_escalation": 0.01},
+        "coal": {"ramp_down_rate": 0.5, "ramp_up_rate": 0.5, "life": 40.0, "RETech": False, "existing_capacity": 100.0, "new_unit_size": 50.0, "annual_build_limit": 150.0, "capex": 2.00, "capex_escalation": 0.005, "marginal_cost": 35.0, "marginal_cost_escalation": 0.01},
+        "PV":   {"ramp_down_rate": 1.0, "ramp_up_rate": 1.0, "life": 25.0, "RETech": True, "existing_capacity": 20.0, "new_unit_size": 10.0, "annual_build_limit": 50.0, "capex": 0.90, "capex_escalation": -0.03, "marginal_cost": 3.0, "marginal_cost_escalation": 0.0},
     }
 
     generate_years(YEARS)

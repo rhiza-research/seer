@@ -1,6 +1,6 @@
 import pyomo.environ as pyo
 
-def seer_base_model():
+def seer_base_model(discrete_additions=False):
     # define a capacity planning model
     model = pyo.AbstractModel()
 
@@ -25,8 +25,9 @@ def seer_base_model():
     model.generator_capacity = pyo.Param(model.existing_generators, within=pyo.NonNegativeReals)
     model.generator_start_year = pyo.Param(model.existing_generators, within=pyo.Reals)
     model.generator_retirement_year = pyo.Param(model.existing_generators, within=pyo.Reals)
-    # new build generators have an annual build limit
+    # new build generators have an annual build limit and a discrete capacity increment
     model.generator_annual_build_limit = pyo.Param(model.new_generators, within=pyo.NonNegativeReals)
+    model.generator_unit_size = pyo.Param(model.new_generators, within=pyo.PositiveReals)
 
     # costs
     model.generator_marginal_cost = pyo.Param(model.generators, model.years, within=pyo.NonNegativeReals)
@@ -44,7 +45,17 @@ def seer_base_model():
     """Variables"""
     model.generation_output = pyo.Var(model.generators, model.times, within=pyo.NonNegativeReals)
     # capacity added in a given year (persists into all subsequent years); only new-build generators can add capacity
-    model.generation_added_capacity = pyo.Var(model.new_generators, model.years, within=pyo.NonNegativeReals)
+    if discrete_additions:
+        # additions must come in whole unit_size increments: units is the decision variable,
+        # generation_added_capacity is just units * unit_size, used everywhere else unchanged
+        model.generation_added_units = pyo.Var(model.new_generators, model.years, within=pyo.NonNegativeIntegers)
+
+        def added_capacity_rule(model, gen, year):
+            return model.generation_added_units[gen, year] * model.generator_unit_size[gen]
+
+        model.generation_added_capacity = pyo.Expression(model.new_generators, model.years, rule=added_capacity_rule)
+    else:
+        model.generation_added_capacity = pyo.Var(model.new_generators, model.years, within=pyo.NonNegativeReals)
     model.total_capacity = pyo.Var(model.generators, model.years, within=pyo.NonNegativeReals)
     # unserved demand; keeps the model feasible even when capacity/build limits can't otherwise meet demand
     model.lost_load = pyo.Var(model.zones, model.times, within=pyo.NonNegativeReals)
