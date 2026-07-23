@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -119,12 +120,15 @@ def solve():
     instance = model.create_instance(load_data())
 
     solver = pyo.SolverFactory(SOLVER_NAME)
+
+    start_time = time.perf_counter()
     results = solver.solve(instance, tee=False)
+    solve_time = time.perf_counter() - start_time
 
     if results.solver.termination_condition != pyo.TerminationCondition.optimal:
         raise RuntimeError(f"Solve did not reach optimality: {results.solver.termination_condition}")
 
-    return instance, results
+    return instance, results, solve_time
 
 
 def print_summary(instance):
@@ -148,14 +152,14 @@ def print_summary(instance):
 
 
 if __name__ == "__main__":
-    instance, results = solve()
+    instance, results, solve_time = solve()
+    print(f"Solve time: {solve_time:.2f}s\n")
     print_summary(instance)
 
     fig, (demand_ax, generation_ax) = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
     plot_demand(demand_ax, instance)
     plot_generation(generation_ax, instance)
     fig.tight_layout()
-    import pdb; pdb.set_trace()
 
     output_path = INPUT_DIR.parent / "plot.png"
     fig.savefig(output_path, dpi=150)
