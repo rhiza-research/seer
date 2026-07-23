@@ -153,14 +153,55 @@ def print_summary(instance):
             print(f"  {gen:<24} {year}: {total:8.1f} MW")
 
 
+def build_results_dataframes(instance):
+    """Return solved-instance outputs as a dict of DataFrames:
+    - capacity_df: index=years, columns=generators, values=total capacity (MW)
+    - generation_df: index=(year, hour), columns=generators, values=output (MW)
+    """
+    years = list(instance.years)
+    hours = list(instance.hours)
+
+    total_capacity = instance.total_capacity.extract_values()
+    capacity_df = pd.DataFrame(
+        [(gen, year, value) for (gen, year), value in total_capacity.items()],
+        columns=["generator", "year", "value"],
+    ).pivot(index="year", columns="generator", values="value").reindex(years)
+    capacity_df.columns.name = None
+
+    generation_output = instance.generation_output.extract_values()
+    generation_df = pd.DataFrame(
+        [(gen, year, hour, value) for (gen, year, hour), value in generation_output.items()],
+        columns=["generator", "year", "hour", "value"],
+    ).pivot(index=["year", "hour"], columns="generator", values="value").reindex(
+        pd.MultiIndex.from_product([years, hours], names=["year", "hour"])
+    )
+    generation_df.columns.name = None
+
+    return {"capacity_df": capacity_df, "generation_df": generation_df}
+
+
+def aggregate_generators(df, instance, by=("tech",)):
+    """Aggregate a capacity_df/generation_df (columns = individual generators, as returned by
+    build_results_dataframes) by generator zone and/or tech. `by` may be ("zone",), ("tech",),
+    or ("zone", "tech")."""
+    attrs = {
+        "zone": instance.generator_zone.extract_values(),
+        "tech": instance.generator_tech.extract_values(),
+    }
+    group_keys = [pd.Series({gen: attrs[attr][gen] for gen in df.columns}, name=attr) for attr in by]
+
+    return df.T.groupby(group_keys).sum().T
+
+
 if __name__ == "__main__":
     # non integer additions
     instance, results, solve_time = solve(discrete_additions=False)
     print(f"Solve time: {solve_time:.2f}s\n")
     print_summary(instance)
+    rez = build_results_dataframes(instance)
 
     breakpoint()
-    
+
     # non integer additions
     instance, results, solve_time = solve(discrete_additions=True)
     print(f"Solve time: {solve_time:.2f}s\n")
