@@ -1,9 +1,11 @@
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import pyomo.environ as pyo
 
 from model import seer_model
+from plot import plot_demand, plot_generation
 
 INPUT_DIR = Path(__file__).parent / "input_data"
 SOLVER_NAME = "appsi_highs"  # swap for "cbc" / "glpk" / "gurobi" if not installed
@@ -93,6 +95,7 @@ def load_data():
             "hours": {None: hours},
             "generators": {None: generators},
             "generator_zone": generator_zone,
+            "generator_tech": generator_tech,
             "generator_expandable": generator_expandable,
             "generator_capacity": generator_capacity,
             "generator_start_year": generator_start_year,
@@ -142,3 +145,13 @@ def print_summary(instance):
 if __name__ == "__main__":
     instance, results = solve()
     print_summary(instance)
+
+    fig, (demand_ax, generation_ax) = plt.subplots(2, 1, figsize=(14, 8), sharex=True)
+    plot_demand(demand_ax, instance)
+    plot_generation(generation_ax, instance)
+    fig.tight_layout()
+    import pdb; pdb.set_trace()
+
+    output_path = INPUT_DIR.parent / "plot.png"
+    fig.savefig(output_path, dpi=150)
+    print(f"Saved plot to {output_path}")

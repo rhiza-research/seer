@@ -9,5 +9,6 @@ dependencies = [
     "numpy",
     "matplotlib",
     "pypsa",
-    "jupyterlab"
+    "jupyterlab", 
+    "pyomo",
 ]

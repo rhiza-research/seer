@@ -16,6 +16,7 @@ def seer_model():
     """Parameters"""
     # GENERATOR ATTRIBUTES
     model.generator_zone = pyo.Param(model.generators, within=pyo.Any)
+    model.generator_tech = pyo.Param(model.generators, within=pyo.Any)
     model.generator_expandable = pyo.Param(model.generators, within=pyo.Boolean)
     # nominal capacity: fixed capacity for existing generators, reference unit size for new-build ones (unused directly)
     model.generator_capacity = pyo.Param(model.generators, within=pyo.NonNegativeReals)
