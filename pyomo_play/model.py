@@ -1,53 +1,57 @@
 import pyomo.environ as pyo
 
-def seer_model():
+def seer_base_model():
     # define a capacity planning model
     model = pyo.AbstractModel()
 
     """Indices"""
+    # spatial
     model.zones = pyo.Set()
+    # temporal
     model.years = pyo.Set(ordered=True)
     model.hours = pyo.Set(ordered=True)
-    # time points are years and hours
     model.times = model.years * model.hours
-    # individual generators (each tied to one zone; existing units and new-build options are separate entries)
-    model.generators = pyo.Set()
+    # generators - existing and new build generators together comprise all generators
+    model.existing_generators = pyo.Set()
+    model.new_generators = pyo.Set()
+    model.generators = model.existing_generators | model.new_generators
 
     """Parameters"""
-    # GENERATOR ATTRIBUTES
+    # generator attributes
     model.generator_zone = pyo.Param(model.generators, within=pyo.Any)
     model.generator_tech = pyo.Param(model.generators, within=pyo.Any)
-    model.generator_expandable = pyo.Param(model.generators, within=pyo.Boolean)
-    # nominal capacity: fixed capacity for existing generators, reference unit size for new-build ones (unused directly)
-    model.generator_capacity = pyo.Param(model.generators, within=pyo.NonNegativeReals)
-    # only meaningful for non-expandable (existing) generators, gates when they're available
-    model.generator_start_year = pyo.Param(model.generators, within=pyo.Reals)
-    model.generator_retirement_year = pyo.Param(model.generators, within=pyo.Reals)
-    # only meaningful for expandable (new-build) generators, caps capacity added in a single year
-    model.generator_annual_build_limit = pyo.Param(model.generators, within=pyo.NonNegativeReals)
 
-    # COSTS
-    model.generator_capex_cost = pyo.Param(model.generators, model.years, within=pyo.NonNegativeReals)
+    # existing generators have a fixed capacity, between start and retirement year
+    model.generator_capacity = pyo.Param(model.existing_generators, within=pyo.NonNegativeReals)
+    model.generator_start_year = pyo.Param(model.existing_generators, within=pyo.Reals)
+    model.generator_retirement_year = pyo.Param(model.existing_generators, within=pyo.Reals)
+    # new build generators have an annual build limit
+    model.generator_annual_build_limit = pyo.Param(model.new_generators, within=pyo.NonNegativeReals)
+
+    # costs
     model.generator_marginal_cost = pyo.Param(model.generators, model.years, within=pyo.NonNegativeReals)
+    model.generator_capex_cost = pyo.Param(model.new_generators, model.years, within=pyo.NonNegativeReals)
 
-    # AVAILABILITY: 1.0 for dispatchable generators, an hourly capacity factor for renewables
-    model.generator_availability_factor = pyo.Param(model.generators, model.hours, within=pyo.NonNegativeReals)
+    # capacity factor: 1.0 for dispatchable generators, hourly factor for renewables
+    model.generator_capacity_factor = pyo.Param(model.generators, model.hours, within=pyo.NonNegativeReals)
 
-    # DEMAND
+    # demand - defined at each time in each zone
     model.demand = pyo.Param(model.zones, model.times, within=pyo.NonNegativeReals)
-    # penalty cost ($/MWh) for unserved demand; kept high so lost load is only used when truly necessary
-    model.lost_load_penalty = pyo.Param(within=pyo.NonNegativeReals, initialize=1_000_000.0, mutable=True)
+    # value of lost load ($/MWh); kept high so lost load is only used when truly necessary
+    # TODO: why is this intialized
+    model.voll = pyo.Param(within=pyo.NonNegativeReals, initialize=1_000_000.0, mutable=True)
 
     """Variables"""
     model.generation_output = pyo.Var(model.generators, model.times, within=pyo.NonNegativeReals)
-    # capacity added in a given year (persists into all subsequent years); forced to 0 for non-expandable generators
-    model.generation_added_capacity = pyo.Var(model.generators, model.years, within=pyo.NonNegativeReals)
+    # capacity added in a given year (persists into all subsequent years); only new-build generators can add capacity
+    model.generation_added_capacity = pyo.Var(model.new_generators, model.years, within=pyo.NonNegativeReals)
     model.total_capacity = pyo.Var(model.generators, model.years, within=pyo.NonNegativeReals)
     # unserved demand; keeps the model feasible even when capacity/build limits can't otherwise meet demand
     model.lost_load = pyo.Var(model.zones, model.times, within=pyo.NonNegativeReals)
 
     """Objective"""
     def objective_rule(model):
+        # total cost objective
         opex = sum(
             model.generator_marginal_cost[gen, year] * model.generation_output[gen, year, hour]
             for gen in model.generators
@@ -55,24 +59,26 @@ def seer_model():
         )
         capex = sum(
             model.generator_capex_cost[gen, year] * model.generation_added_capacity[gen, year]
-            for gen in model.generators
+            for gen in model.new_generators
             for year in model.years
         )
         lost_load_cost = sum(
-            model.lost_load_penalty * model.lost_load[zone, year, hour]
+            model.voll * model.lost_load[zone, year, hour]
             for zone in model.zones
             for year, hour in model.times
         )
         return opex + capex + lost_load_cost
 
+    # least cost objective
     model.objective = pyo.Objective(
         rule=objective_rule,
         sense=pyo.minimize
     )
 
+
     """Constraints"""
 
-    # 1. supply plus lost load equals demand, summed across all generators in a zone
+    # 1. supply = demand + lost load in each zone
     def supply_equals_demand_rule(model, zone, year, hour):
         return sum(
             model.generation_output[gen, year, hour]
@@ -86,42 +92,46 @@ def seer_model():
         rule=supply_equals_demand_rule
     )
 
-    # 2. capacity added in a year is bounded by the annual build limit; existing generators can't add capacity
+    # 2. capacity added in a year is bounded by the annual build limit (new-build generators only)
     def build_limit_rule(model, gen, year):
-        if pyo.value(model.generator_expandable[gen]):
-            return model.generation_added_capacity[gen, year] <= model.generator_annual_build_limit[gen]
-        return model.generation_added_capacity[gen, year] == 0
+        return model.generation_added_capacity[gen, year] <= model.generator_annual_build_limit[gen]
 
     model.build_limit = pyo.Constraint(
-        model.generators,
+        model.new_generators,
         model.years,
         rule=build_limit_rule
     )
 
-    # 3. total capacity: existing generators are simply present while active; expandable generators
-    #    accumulate whatever capacity has been added up to and including this year
-    def total_capacity_rule(model, gen, year):
-        if pyo.value(model.generator_expandable[gen]):
-            prior_and_current_years = [
-                y for y in model.years if model.years.ord(y) <= model.years.ord(year)
-            ]
-            return model.total_capacity[gen, year] == sum(
-                model.generation_added_capacity[gen, y] for y in prior_and_current_years
-            )
+    # 3. total capacity of new generators is the sum of all capacity added up to and including this year
+    def capacity_accumulation_rule(model, gen, year):
+        prior_and_current_years = [
+            y for y in model.years if model.years.ord(y) <= model.years.ord(year)
+        ]
+        return model.total_capacity[gen, year] == sum(
+            model.generation_added_capacity[gen, y] for y in prior_and_current_years
+        )
 
+    model.capacity_accumulation_constraint = pyo.Constraint(
+        model.new_generators,
+        model.years,
+        rule=capacity_accumulation_rule
+    )
+
+    # 4. capacity of generators depends on whether they are active
+    def existing_capacity_rule(model, gen, year):
         is_active = pyo.value(model.generator_start_year[gen]) <= year <= pyo.value(model.generator_retirement_year[gen])
         return model.total_capacity[gen, year] == (model.generator_capacity[gen] if is_active else 0)
 
-    model.total_capacity_constraint = pyo.Constraint(
-        model.generators,
+    model.existing_capacity_constraint = pyo.Constraint(
+        model.existing_generators,
         model.years,
-        rule=total_capacity_rule
+        rule=existing_capacity_rule
     )
 
-    # 4. generator output is limited by total capacity, derated by hourly availability
+    # 5. generator output is limited by capacity
     def generator_output_limit_rule(model, gen, year, hour):
         return model.generation_output[gen, year, hour] <= (
-            model.total_capacity[gen, year] * model.generator_availability_factor[gen, hour]
+            model.total_capacity[gen, year] * model.generator_capacity_factor[gen, hour]
         )
 
     model.generator_output_limit = pyo.Constraint(

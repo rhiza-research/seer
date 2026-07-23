@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pyomo.environ as pyo
 
-from model import seer_model
+from model import seer_base_model
 from plot import plot_demand, plot_generation
 
 INPUT_DIR = Path(__file__).parent / "input_data"
@@ -24,7 +24,7 @@ def load_data():
 
     years = years_df["year"].tolist()
     zones = zones_df["zone"].tolist()
-    generators = generator_constants_df["generator"].tolist()
+    generators = generator_constants_df["generator"].tolist()  # local convenience list, not passed to Pyomo directly
 
     # hourly index: derived from the demand profile's per-zone row count (e.g. 365 days * 24 hours)
     hours_per_zone = len(demandprofile_df) // len(zones)
@@ -56,17 +56,22 @@ def load_data():
 
     # ---- generator attributes ----
     constants = generator_constants_df.set_index("generator")
+    existing_generators = constants[~constants["expandable"]].index.tolist()
+    new_generators = constants[constants["expandable"]].index.tolist()
+
     generator_zone = constants["zone"].to_dict()
     generator_tech = constants["tech"].to_dict()
     generator_retech = constants["RETech"].astype(bool).to_dict()
-    generator_expandable = constants["expandable"].astype(bool).to_dict()
-    generator_capacity = constants["capacity"].to_dict()
-    generator_annual_build_limit = constants["annual_build_limit"].fillna(0.0).to_dict()
-    generator_start_year = constants["start_year"].fillna(years[0]).to_dict()
-    generator_retirement_year = constants["retirement_year"].fillna(years[-1] + 1).to_dict()
 
-    # dispatchable generators are available every hour; renewables are derated by their zone/tech profile
-    generator_availability_factor = {
+    # only meaningful (and only loaded) for existing generators
+    generator_capacity = constants.loc[existing_generators, "capacity"].to_dict()
+    generator_start_year = constants.loc[existing_generators, "start_year"].to_dict()
+    generator_retirement_year = constants.loc[existing_generators, "retirement_year"].to_dict()
+    # only meaningful (and only loaded) for new-build generators
+    generator_annual_build_limit = constants.loc[new_generators, "annual_build_limit"].to_dict()
+
+    # dispatchable generators have a capacity factor of 1.0 every hour; renewables are derated by their zone/tech profile
+    generator_capacity_factor = {
         (gen, hour): (
             renewable_availability[(generator_zone[gen], generator_tech[gen], hour)]
             if generator_retech[gen] else 1.0
@@ -79,7 +84,7 @@ def load_data():
     costs = generator_costs_df.set_index(["generator", "cost_type"])
     generator_capex_cost = {
         (gen, year): costs.loc[(gen, "capex"), str(year)]
-        for gen in generators
+        for gen in new_generators
         for year in years
     }
     generator_marginal_cost = {
@@ -93,24 +98,24 @@ def load_data():
             "zones": {None: zones},
             "years": {None: years},
             "hours": {None: hours},
-            "generators": {None: generators},
+            "existing_generators": {None: existing_generators},
+            "new_generators": {None: new_generators},
             "generator_zone": generator_zone,
             "generator_tech": generator_tech,
-            "generator_expandable": generator_expandable,
             "generator_capacity": generator_capacity,
             "generator_start_year": generator_start_year,
             "generator_retirement_year": generator_retirement_year,
             "generator_annual_build_limit": generator_annual_build_limit,
             "generator_capex_cost": generator_capex_cost,
             "generator_marginal_cost": generator_marginal_cost,
-            "generator_availability_factor": generator_availability_factor,
+            "generator_capacity_factor": generator_capacity_factor,
             "demand": demand,
         }
     }
 
 
 def solve():
-    model = seer_model()
+    model = seer_base_model()
     instance = model.create_instance(load_data())
 
     solver = pyo.SolverFactory(SOLVER_NAME)
@@ -129,7 +134,7 @@ def print_summary(instance):
     print(f"Total lost load: {total_lost_load:,.1f} MWh\n")
 
     print("Capacity added (MW):")
-    for gen in instance.generators:
+    for gen in instance.new_generators:
         for year in instance.years:
             added = pyo.value(instance.generation_added_capacity[gen, year])
             if added > 1e-3:
