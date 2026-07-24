@@ -1,4 +1,5 @@
-"""Experiment: for a single zone, measure solver performance as the number of years increases."""
+"""Experiment: for a single zone, measure solver performance as the number of years increases,
+comparing continuous vs. integer (discrete-additions) capacity expansion."""
 
 import sys
 from pathlib import Path
@@ -9,29 +10,46 @@ import pyomo.environ as pyo
 
 from generate_data import generate_all_data
 from solve import build_instance, solve
+from plotting_utils import plot_solve_time_scaling
 
 BASE_YEAR = 2025
 N_ZONES = 1
 YEAR_COUNTS = [1, 2, 3, 5, 7, 10]
 
-results = []
+CONFIGURATIONS = {
+    "Continuous": False,
+    "Discrete (integer)": True,
+}
+
+results = {label: [] for label in CONFIGURATIONS}
 for n_years in YEAR_COUNTS:
     years = list(range(BASE_YEAR, BASE_YEAR + n_years))
     generate_all_data(n_zones=N_ZONES, years=years)
 
-    instance = build_instance()
-    _, solve_time = solve(instance)
+    for label, discrete_additions in CONFIGURATIONS.items():
+        instance = build_instance(discrete_additions=discrete_additions)
+        _, solve_time = solve(instance)
 
-    results.append({
-        "n_years": n_years,
-        "n_variables": instance.nvariables(),
-        "n_constraints": instance.nconstraints(),
-        "solve_time": solve_time,
-        "total_cost": pyo.value(instance.objective),
-    })
-    print(
-        f"n_years={n_years:>3}  "
-        f"vars={results[-1]['n_variables']:>8}  "
-        f"constraints={results[-1]['n_constraints']:>8}  "
-        f"solve_time={solve_time:6.2f}s"
-    )
+        results[label].append({
+            "n_years": n_years,
+            "n_variables": instance.nvariables(),
+            "n_constraints": instance.nconstraints(),
+            "solve_time": solve_time,
+            "total_cost": pyo.value(instance.objective),
+        })
+        print(
+            f"{label:<20} n_years={n_years:>3}  "
+            f"vars={results[label][-1]['n_variables']:>8}  "
+            f"constraints={results[label][-1]['n_constraints']:>8}  "
+            f"solve_time={solve_time:6.2f}s"
+        )
+
+plot_solve_time_scaling(
+    results=results,
+    x="n_years",
+    y="solve_time",
+    title="Solve time vs. number of years (1 zone)",
+    save_path=Path(__file__).parent / "single_zone_scaling.png",
+)
+
+breakpoint()
