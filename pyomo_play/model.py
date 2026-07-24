@@ -38,6 +38,8 @@ def seer_base_model(discrete_additions=False):
 
     # demand - defined at each time in each zone
     model.demand = pyo.Param(model.zones, model.times, within=pyo.NonNegativeReals)
+    # discount factor relative to the first modeled year, applied to every cost term in the objective
+    model.year_discount_factor = pyo.Param(model.years, within=pyo.NonNegativeReals)
     # value of lost load ($/MWh); kept high so lost load is only used when truly necessary
     # TODO: why is this intialized
     model.voll = pyo.Param(within=pyo.NonNegativeReals, initialize=1_000_000.0, mutable=True)
@@ -62,19 +64,21 @@ def seer_base_model(discrete_additions=False):
 
     """Objective"""
     def objective_rule(model):
-        # total cost objective
+        # total cost objective, discounted to the first modeled year
         opex = sum(
-            model.generator_marginal_cost[gen, year] * model.generation_output[gen, year, hour]
+            model.year_discount_factor[year]
+            * model.generator_marginal_cost[gen, year] * model.generation_output[gen, year, hour]
             for gen in model.generators
             for year, hour in model.times
         )
         capex = sum(
-            model.generator_capex_cost[gen, year] * model.generation_added_capacity[gen, year]
+            model.year_discount_factor[year]
+            * model.generator_capex_cost[gen, year] * model.generation_added_capacity[gen, year]
             for gen in model.new_generators
             for year in model.years
         )
         lost_load_cost = sum(
-            model.voll * model.lost_load[zone, year, hour]
+            model.year_discount_factor[year] * model.voll * model.lost_load[zone, year, hour]
             for zone in model.zones
             for year, hour in model.times
         )

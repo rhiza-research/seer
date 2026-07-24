@@ -16,6 +16,7 @@ def load_data():
     """Read the seer-schema input CSVs and build a Pyomo AbstractModel data dict."""
 
     years_df = pd.read_csv(INPUT_DIR / "years.csv")
+    settings_df = pd.read_csv(INPUT_DIR / "settings.csv")
     zones_df = pd.read_csv(INPUT_DIR / "zones.csv")
     generator_constants_df = pd.read_csv(INPUT_DIR / "generator_constants.csv")
     generator_costs_df = pd.read_csv(INPUT_DIR / "generator_costs.csv")
@@ -25,6 +26,12 @@ def load_data():
 
     years = years_df["year"].tolist()
     zones = zones_df["zone"].tolist()
+    generators = generator_constants_df["generator"].tolist()  # local convenience list, not passed to Pyomo directly
+
+    # discount rate is a single scalar setting; the per-year factor is computed here
+    discount_rate = settings_df.set_index("parameters")["value"]["dr"]
+    base_year = years[0]
+    year_discount_factor = {year: 1 / (1 + discount_rate) ** (year - base_year) for year in years}
     generators = generator_constants_df["generator"].tolist()  # local convenience list, not passed to Pyomo directly
 
     # hourly index: derived from the demand profile's per-zone row count (e.g. 365 days * 24 hours)
@@ -100,6 +107,7 @@ def load_data():
             "zones": {None: zones},
             "years": {None: years},
             "hours": {None: hours},
+            "year_discount_factor": year_discount_factor,
             "existing_generators": {None: existing_generators},
             "new_generators": {None: new_generators},
             "generator_zone": generator_zone,

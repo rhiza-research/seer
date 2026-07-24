@@ -31,6 +31,9 @@ HOURLY_LOAD_SHAPE = [
 ZONE_GROWTH_RATE_MEAN = 0.02
 ZONE_GROWTH_RATE_STD = 0.005
 
+# ---- discounting ----
+ANNUAL_DISCOUNT_RATE = 0.05  # 5%/year, applied to costs relative to the first modeled year
+
 # ---- renewable profile assumptions ----
 RENEWABLE_TECHS = ["PV"]
 PV_DAILY_SHAPE = [
@@ -49,6 +52,13 @@ PV_MONTHLY_SCALE = [0.75, 0.80, 0.85, 0.90, 0.95, 1.00, 1.00, 0.95, 0.90, 0.85, 
 def generate_years(years):
     df = pd.DataFrame({"year": years})
     df.to_csv(DATA_DIR / "years.csv", index=False)
+    return df
+
+
+# settings.csv - single-valued model settings, one row per setting (parameters, value)
+def generate_settings(discount_rate):
+    df = pd.DataFrame({"parameters": ["dr"], "value": [discount_rate]})
+    df.to_csv(DATA_DIR / "settings.csv", index=False)
     return df
 
 
@@ -232,6 +242,7 @@ def generate_all_data(n_zones, years, zone_peak_demand_mw=None):
     STARTING_RESERVE_MARGIN = 0.9  # existing capacity = max load over the horizon * this margin
 
     generate_years(years)
+    generate_settings(ANNUAL_DISCOUNT_RATE)
     generate_zones(ZONES, COUNTRY_NAME)
 
     demandforecast_df = generate_demandforecast(years, ZONES, zone_peak_demand_mw)
