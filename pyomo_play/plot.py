@@ -95,3 +95,26 @@ def plot_generation(ax, instance, zone=None):
     ax.set_ylabel("Generation (MW)")
     ax.legend(loc="upper left", fontsize=7)
     ax.set_title(f"Generation by tech ({zone if zone else 'all zones'})")
+
+
+def plot_storage(ax, instance, zone=None):
+    """Plot total state of charge as a line, labeling months and years only."""
+    storage_zone = instance.storage_zone.extract_values()
+
+    years = list(instance.years)
+    hours = list(instance.hours)
+    hours_per_year = len(hours)
+
+    soc = instance.soc.extract_values()
+    df = pd.DataFrame(
+        [(s, y, h, v) for (s, y, h), v in soc.items() if zone is None or storage_zone[s] == zone],
+        columns=["storage", "year", "hour", "value"],
+    )
+    series = df.groupby(["year", "hour"])["value"].sum().reindex(
+        pd.MultiIndex.from_product([years, hours], names=["year", "hour"])
+    )
+
+    ax.plot(range(len(series)), series.values, linewidth=0.7, color="tab:green")
+    _label_months_and_years(ax, years, hours_per_year)
+    ax.set_ylabel("State of charge (MWh)")
+    ax.set_title(f"Storage SOC ({zone if zone else 'all zones'})")
