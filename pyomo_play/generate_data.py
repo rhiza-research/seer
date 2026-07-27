@@ -200,12 +200,74 @@ def generate_renewable_profiles(zones):
     return df
 
 
-def generate_storage_constants():
-    pass
+# storage_constants.csv - one existing and one new-build storage option per zone
+def generate_storage_constants(years, zones, storage_types, storage_type_params):
+    rows = []
+    for zone in zones:
+        for storage_type in storage_types:
+            params = storage_type_params[storage_type]
+            duration_hours = params["duration_hours"]
+            common = {
+                "zone": zone,
+                "carrier": params["carrier"],
+                "duration_hours": duration_hours,
+                "life": params["life"],
+            }
+
+            # existing storage: present from the start of the horizon, retires after it
+            existing_capacity_mwh = params["existing_capacity_mwh"]
+            rows.append({
+                "storage": f"{zone}_{storage_type}_existing",
+                **common,
+                "capacity_mwh": existing_capacity_mwh,
+                "capacity_mw": round(existing_capacity_mwh / duration_hours, 3),
+                "retirement_year": years[-1] + 1,
+                "start_year": years[0],
+                "unit_size_mwh": existing_capacity_mwh,
+                "annual_build_limit_mwh": None,
+                "expandable": False,
+            })
+
+            # new-build option: no fixed start/retirement, energy capacity added subject to a per-year limit
+            new_unit_size_mwh = params["new_unit_size_mwh"]
+            rows.append({
+                "storage": f"{zone}_{storage_type}_new",
+                **common,
+                "capacity_mwh": new_unit_size_mwh,
+                "capacity_mw": round(new_unit_size_mwh / duration_hours, 3),
+                "retirement_year": None,
+                "start_year": None,
+                "unit_size_mwh": new_unit_size_mwh,
+                "annual_build_limit_mwh": params["annual_build_limit_mwh"],
+                "expandable": True,
+            })
+
+    df = pd.DataFrame(rows)
+    df.to_csv(DATA_DIR / "storage_constants.csv", index=False)
+    return df
 
 
-def generate_storage_costs():
-    pass
+# storage_costs.csv - costs for each storage unit and cost type (marginal_cost is 0 for now)
+def generate_storage_costs(years, zones, storage_types, storage_type_params):
+    base_year = years[0]
+    rows = []
+    for zone in zones:
+        for storage_type in storage_types:
+            params = storage_type_params[storage_type]
+            for suffix in ("existing", "new"):
+                storage = f"{zone}_{storage_type}_{suffix}"
+                for cost_type, base_value, escalation in (
+                    ("capex", params["capex"], params["capex_escalation"]),
+                    ("marginal_cost", 0.0, 0.0),
+                ):
+                    row = {"storage": storage, "cost_type": cost_type}
+                    for year in years:
+                        row[year] = round(base_value * (1 + escalation) ** (year - base_year), 4)
+                    rows.append(row)
+
+    df = pd.DataFrame(rows)
+    df.to_csv(DATA_DIR / "storage_costs.csv", index=False)
+    return df
 
 
 # base pattern for per-zone peak demand, cycled out to however many zones are requested
@@ -241,6 +303,12 @@ def generate_all_data(n_zones, years, zone_peak_demand_mw=None):
     STARTING_MIX_RATIO = {"gas": 0.5, "coal": 0.3, "PV": 0.2}  # shares of starting capacity by tech; must sum to 1
     STARTING_RESERVE_MARGIN = 0.9  # existing capacity = max load over the horizon * this margin
 
+    STORAGE_TYPES = ["battery"]
+    STORAGE_TYPE_PARAMS = {
+        #          carrier   duration_hours  existing_MWh  new_unit_MWh  annual_build_limit_MWh  capex($M/MWh)  capex_escalation  life(yr)
+        "battery": {"carrier": "Battery", "duration_hours": 4.0, "existing_capacity_mwh": 50.0, "new_unit_size_mwh": 20.0, "annual_build_limit_mwh": 100.0, "capex": 0.30, "capex_escalation": -0.02, "life": 15.0},
+    }
+
     generate_years(years)
     generate_settings(ANNUAL_DISCOUNT_RATE)
     generate_zones(ZONES, COUNTRY_NAME)
@@ -255,8 +323,8 @@ def generate_all_data(n_zones, years, zone_peak_demand_mw=None):
     generate_generator_costs(years, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS)
     generate_demandprofile(ZONES)
     generate_renewable_profiles(ZONES)
-    generate_storage_constants()
-    generate_storage_costs()
+    generate_storage_constants(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS)
+    generate_storage_costs(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS)
 
 
 def main():
