@@ -4,16 +4,15 @@ from pathlib import Path
 
 from seer.inputs.gams import gams_to_seer
 
-MODEL_NAME = "Gambia"  # change this to convert a different model's data
 
-
-def main():
-    input_path = Path("data/processed_gams") / MODEL_NAME
-    output_path = Path("data/seer") / MODEL_NAME
+def epm_to_seer(model_name):
+    input_path = Path("data/processed_gams") / model_name
+    output_path = Path("data/seer") / model_name
 
     gams_to_seer(input_path, output_path)
-    print(f"Wrote seer-schema data for {MODEL_NAME} to {output_path}")
+    print(f"Wrote seer-schema data for {model_name} to {output_path}")
 
 
 if __name__ == "__main__":
-    main()
+    model_name = "Gambia"
+    epm_to_seer(model_name)
