@@ -1,4 +1,4 @@
-"""Convert EPM schema into SEER"""
+"""Convert models from EPM schema into SEER schema"""
 
 from pathlib import Path
 
