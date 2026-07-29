@@ -1,0 +1,13 @@
+generator,cost_type,2025,2030,2035
+zone_0_gas_existing,capex,0.8,0.8202,0.8409
+zone_0_gas_existing,marginal_cost,45.0,47.2955,49.708
+zone_0_gas_new,capex,0.8,0.8202,0.8409
+zone_0_gas_new,marginal_cost,45.0,47.2955,49.708
+zone_0_coal_existing,capex,2.0,2.0505,2.1023
+zone_0_coal_existing,marginal_cost,35.0,36.7854,38.6618
+zone_0_coal_new,capex,2.0,2.0505,2.1023
+zone_0_coal_new,marginal_cost,35.0,36.7854,38.6618
+zone_0_PV_existing,capex,0.9,0.7729,0.6637
+zone_0_PV_existing,marginal_cost,3.0,3.0,3.0
+zone_0_PV_new,capex,0.9,0.7729,0.6637
+zone_0_PV_new,marginal_cost,3.0,3.0,3.0

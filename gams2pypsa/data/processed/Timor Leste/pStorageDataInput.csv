@@ -1,9 +1,0 @@
-plant,year,parameters,value
-Grenfield_Battery,,Capacity,40.0
-Grenfield_Battery,,Capex,250.0
-Grenfield_Battery,,Life,20.0
-Grenfield_Battery,,Efficiency,0.85
-Battery_Generic,,Capacity,1000000.0
-Battery_Generic,,Capex,200.0
-Battery_Generic,,Life,20.0
-Battery_Generic,,Efficiency,0.85

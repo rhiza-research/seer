@@ -1,0 +1,7 @@
+generator,zone,tech,fuel,ramp_down_rate,ramp_up_rate,life,RETech,capacity,retirement_year,start_year,unit_size,annual_build_limit,expandable
+zone_0_gas_existing,zone_0,gas,gas,1.0,1.0,30.0,False,278.398,2036.0,2025.0,278.398,,False
+zone_0_gas_new,zone_0,gas,gas,1.0,1.0,30.0,False,25.0,,,25.0,100.0,True
+zone_0_coal_existing,zone_0,coal,coal,0.5,0.5,40.0,False,167.039,2036.0,2025.0,167.039,,False
+zone_0_coal_new,zone_0,coal,coal,0.5,0.5,40.0,False,50.0,,,50.0,150.0,True
+zone_0_PV_existing,zone_0,PV,PV,1.0,1.0,25.0,True,111.359,2036.0,2025.0,111.359,,False
+zone_0_PV_new,zone_0,PV,PV,1.0,1.0,25.0,True,10.0,,,10.0,50.0,True

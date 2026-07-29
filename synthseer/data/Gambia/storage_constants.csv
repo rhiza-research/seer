@@ -1,4 +1,0 @@
-storage,zone,carrier,capacity_mwh,duration_hours,capacity_mw,capex_mwh,efficiency,life,start_year,retirement_year,unit_size_mwh,annual_build_limit_mwh,expandable
-BESS Project,Gambia,battery,40.0,4.0,10.0,250.0,0.9,15.0,2025,2040,,,False
-Jambur BESS,Gambia,battery,8.0,4.0,2.0,250.0,0.9,15.0,2025,2040,,,False
-New BESS,Gambia,battery,100.0,4.0,25.0,250.0,0.9,15.0,2025,2050,25.0,100.0,True
