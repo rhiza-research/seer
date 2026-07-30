@@ -8,9 +8,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# set by generate_all_data() from its output_path argument; every generate_* function writes here
-DATA_DIR = None
-
 RANDOM_SEED = 42
 rng = np.random.default_rng(RANDOM_SEED)
 
@@ -46,31 +43,25 @@ PV_DAILY_SHAPE = [
 PV_MONTHLY_SCALE = [0.75, 0.80, 0.85, 0.90, 0.95, 1.00, 1.00, 0.95, 0.90, 0.85, 0.80, 0.75]
 
 
-"""Write model data files"""
+"""Compute model data (each function just returns a DataFrame; generate_all_data writes them out)"""
 
-# years.csv - list of years
+# years - list of years
 def generate_years(years):
-    df = pd.DataFrame({"year": years})
-    df.to_csv(DATA_DIR / "years.csv", index=False)
-    return df
+    return pd.DataFrame({"year": years})
 
 
-# settings.csv - single-valued model settings, one row per setting (parameters, value)
+# settings - single-valued model settings, one row per setting (parameters, value)
 def generate_settings(discount_rate):
-    df = pd.DataFrame({"parameters": ["dr"], "value": [discount_rate]})
-    df.to_csv(DATA_DIR / "settings.csv", index=False)
-    return df
+    return pd.DataFrame({"parameters": ["dr"], "value": [discount_rate]})
 
 
-# zones.csv - list of zones
+# zones - list of zones
 def generate_zones(zones, country_name):
     rows = [{"zone": zone, "country": country_name, "name": zone} for zone in zones]
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "zones.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
 
-# generator_constants.csv - list of generators and their fixed parameters
+# generator_constants - list of generators and their fixed parameters
 def generate_generator_constants(years, zones, generator_types, generator_type_params, existing_capacity):
     rows = []
     for zone in zones:
@@ -111,12 +102,10 @@ def generate_generator_constants(years, zones, generator_types, generator_type_p
                 "expandable": True,
             })
 
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "generator_constants.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
 
-# generator_costs.csv - costs for each generator and cost type
+# generator_costs - costs for each generator and cost type
 def generate_generator_costs(years, zones, generator_types, generator_type_params):
     base_year = years[0]
     rows = []
@@ -134,11 +123,10 @@ def generate_generator_costs(years, zones, generator_types, generator_type_param
                         row[year] = round(base_value * (1 + escalation) ** (year - base_year), 4)
                     rows.append(row)
 
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "generator_costs.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
-# demandforecast.csv - annual peak demand for each zone
+
+# demandforecast - annual peak demand for each zone
 def generate_demandforecast(years, zones, peak_demand_mw):
     assert len(peak_demand_mw) == len(zones), "peak_demand_mw must have exactly one entry per zone"
 
@@ -151,10 +139,7 @@ def generate_demandforecast(years, zones, peak_demand_mw):
         for year in years
     ]
 
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "demandforecast.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
 
 # existing capacity per (zone, generator_type): each zone's peak load over the horizon, grossed
@@ -169,7 +154,7 @@ def compute_starting_capacity(zones, generator_types, max_load, mix_ratio, reser
     }
 
 
-# demandprofile.csv - hourly demand profile for each zone
+# demandprofile - hourly demand profile for each zone
 def generate_demandprofile(zones):
     rows = [
         {"zone": zone, "season": month, "day": f"d{day}", "hour": hour, "value": value}
@@ -179,12 +164,10 @@ def generate_demandprofile(zones):
         for hour, value in zip(HOUR_NAMES, HOURLY_LOAD_SHAPE)
     ]
 
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "demandprofile.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
 
-# renewable_profiles.csv - hourly renewable availability profile for each zone and tech
+# renewable_profiles - hourly renewable availability profile for each zone and tech
 def generate_renewable_profiles(zones):
     rows = [
         {"zone": zone, "tech": tech, "month": month, "day": day, "hour": hour, "value": round(scale * shape, 6)}
@@ -195,12 +178,10 @@ def generate_renewable_profiles(zones):
         for hour, shape in zip(range(1, 25), PV_DAILY_SHAPE)
     ]
 
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "renewable_profiles.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
 
-# storage_constants.csv - one existing and one new-build storage option per zone
+# storage_constants - one existing and one new-build storage option per zone
 def generate_storage_constants(years, zones, storage_types, storage_type_params):
     rows = []
     for zone in zones:
@@ -242,12 +223,10 @@ def generate_storage_constants(years, zones, storage_types, storage_type_params)
                 "expandable": True,
             })
 
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "storage_constants.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
 
-# storage_costs.csv - costs for each storage unit and cost type (marginal_cost is 0 for now)
+# storage_costs - costs for each storage unit and cost type (marginal_cost is 0 for now)
 def generate_storage_costs(years, zones, storage_types, storage_type_params):
     base_year = years[0]
     rows = []
@@ -265,9 +244,7 @@ def generate_storage_costs(years, zones, storage_types, storage_type_params):
                         row[year] = round(base_value * (1 + escalation) ** (year - base_year), 4)
                     rows.append(row)
 
-    df = pd.DataFrame(rows)
-    df.to_csv(DATA_DIR / "storage_costs.csv", index=False)
-    return df
+    return pd.DataFrame(rows)
 
 
 # base pattern for per-zone peak demand, cycled out to however many zones are requested
@@ -281,9 +258,7 @@ def generate_all_data(n_zones, years, output_path, country_name="Seerland", zone
     zone_peak_demand_mw, if given, must have exactly one entry per zone; otherwise it's derived
     by cycling ZONE_PEAK_DEMAND_MW_PATTERN out to n_zones.
     """
-    global DATA_DIR
-    DATA_DIR = Path(output_path)
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    output_dir = Path(output_path)
 
     ZONES = [f"zone_{i}" for i in range(n_zones)]
 
@@ -311,24 +286,32 @@ def generate_all_data(n_zones, years, output_path, country_name="Seerland", zone
         "battery": {"carrier": "Battery", "duration_hours": 4.0, "existing_capacity_mwh": 50.0, "new_unit_size_mwh": 20.0, "annual_build_limit_mwh": 100.0, "capex": 0.30, "capex_escalation": -0.02, "life": 15.0},
     }
 
-    generate_years(years)
-    generate_settings(ANNUAL_DISCOUNT_RATE)
-    generate_zones(ZONES, country_name)
-
     demandforecast_df = generate_demandforecast(years, ZONES, zone_peak_demand_mw)
     max_load = demandforecast_df.groupby("zone")["value"].max().to_dict()
     existing_capacity = compute_starting_capacity(
         ZONES, GENERATOR_TYPES, max_load, STARTING_MIX_RATIO, STARTING_RESERVE_MARGIN
     )
 
-    generate_generator_constants(years, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS, existing_capacity)
-    generate_generator_costs(years, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS)
-    generate_demandprofile(ZONES)
-    generate_renewable_profiles(ZONES)
-    generate_storage_constants(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS)
-    generate_storage_costs(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS)
+    outputs = {
+        "years": generate_years(years),
+        "settings": generate_settings(ANNUAL_DISCOUNT_RATE),
+        "zones": generate_zones(ZONES, country_name),
+        "demandforecast": demandforecast_df,
+        "generator_constants": generate_generator_constants(
+            years, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS, existing_capacity
+        ),
+        "generator_costs": generate_generator_costs(years, ZONES, GENERATOR_TYPES, GENERATOR_TYPE_PARAMS),
+        "demandprofile": generate_demandprofile(ZONES),
+        "renewable_profiles": generate_renewable_profiles(ZONES),
+        "storage_constants": generate_storage_constants(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS),
+        "storage_costs": generate_storage_costs(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS),
+    }
 
-    return DATA_DIR
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for name, df in outputs.items():
+        df.to_csv(output_dir / f"{name}.csv", index=False)
+
+    return output_dir
 
 
 def main():
