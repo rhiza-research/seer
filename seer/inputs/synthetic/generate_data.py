@@ -8,9 +8,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# repo root: seer/inputs/synthetic/generate_data.py -> up three levels
-REPO_ROOT = Path(__file__).resolve().parents[3]
-# set by generate_all_data() (depends on country_name); every generate_* function writes here
+# set by generate_all_data() from its output_path argument; every generate_* function writes here
 DATA_DIR = None
 
 RANDOM_SEED = 42
@@ -276,15 +274,15 @@ def generate_storage_costs(years, zones, storage_types, storage_type_params):
 ZONE_PEAK_DEMAND_MW_PATTERN = [500.0, 300.0]
 
 
-def generate_all_data(n_zones, years, country_name="Seerland", zone_peak_demand_mw=None):
-    """Generate every seer-schema input CSV for a given problem scale (number of zones, years).
-    Output is written to data/seer/synthetic/{country_name}/ (relative to the repo root).
+def generate_all_data(n_zones, years, output_path, country_name="Seerland", zone_peak_demand_mw=None):
+    """Generate every seer-schema input CSV for a given problem scale (number of zones, years),
+    writing it to `output_path`.
 
     zone_peak_demand_mw, if given, must have exactly one entry per zone; otherwise it's derived
     by cycling ZONE_PEAK_DEMAND_MW_PATTERN out to n_zones.
     """
     global DATA_DIR
-    DATA_DIR = REPO_ROOT / "data" / "seer" / "synthetic" / country_name
+    DATA_DIR = Path(output_path)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
     ZONES = [f"zone_{i}" for i in range(n_zones)]
@@ -335,7 +333,12 @@ def generate_all_data(n_zones, years, country_name="Seerland", zone_peak_demand_
 
 def main():
     # ---- problem size: adjust these to scale the model ----
-    generate_all_data(n_zones=1, years=[2025, 2030, 2035], country_name="Seerland", zone_peak_demand_mw=[500.0])
+    repo_root = Path(__file__).resolve().parents[3]
+    output_path = repo_root / "data" / "seer" / "synthetic" / "Seerland"
+    generate_all_data(
+        n_zones=1, years=[2025, 2030, 2035], output_path=output_path,
+        country_name="Seerland", zone_peak_demand_mw=[500.0],
+    )
 
 
 if __name__ == "__main__":

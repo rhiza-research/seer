@@ -1,6 +1,6 @@
 """Build a PyPSA model from seer-schema data."""
 
-from seer.build.pypsa_model import build
+from seer.models.pypsa_model import build
 
 DATA_PATH = "data/seer/Gambia/"
 
