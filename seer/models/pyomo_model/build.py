@@ -104,6 +104,7 @@ def load_data(data_path):
     new_storage = storage_constants[storage_constants["expandable"]].index.tolist()
 
     storage_zone = storage_constants["zone"].to_dict()
+    storage_carrier = storage_constants["carrier"].to_dict()
     storage_duration_hours = storage_constants["duration_hours"].to_dict()
 
     # only meaningful (and only loaded) for existing storage
@@ -147,6 +148,7 @@ def load_data(data_path):
             "existing_storage": {None: existing_storage},
             "new_storage": {None: new_storage},
             "storage_zone": storage_zone,
+            "storage_carrier": storage_carrier,
             "storage_duration_hours": storage_duration_hours,
             "storage_capacity_mwh": storage_capacity_mwh,
             "storage_start_year": storage_start_year,

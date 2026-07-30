@@ -88,6 +88,7 @@ def build_results_dataframes(instance):
     - storage_capacity_df: index=years, columns=storage, values=total energy capacity (MWh)
     - storage_change_df: index=(year, hour), columns=storage, values=charge(+)/discharge(-) (MW)
     - soc_df: index=(year, hour), columns=storage, values=state of charge (MWh)
+    - genmap_df: index=generators+storage, columns=[tech, zone]
     """
     years = list(instance.years)
     hours = list(instance.hours)
@@ -99,12 +100,25 @@ def build_results_dataframes(instance):
     storage_change_df = _pivot_by_year_hour(instance.storage_change.extract_values(), "storage", years, hours)
     soc_df = _pivot_by_year_hour(instance.soc.extract_values(), "storage", years, hours)
 
+    genmap_df = pd.concat([
+        pd.DataFrame({
+            "tech": instance.generator_tech.extract_values(),
+            "zone": instance.generator_zone.extract_values(),
+        }),
+        pd.DataFrame({
+            "tech": instance.storage_carrier.extract_values(),
+            "zone": instance.storage_zone.extract_values(),
+        }),
+    ])
+    genmap_df.index.name = None
+
     return {
         "capacity_df": capacity_df,
         "generation_df": generation_df,
         "storage_capacity_df": storage_capacity_df,
         "storage_change_df": storage_change_df,
         "soc_df": soc_df,
+        "genmap_df": genmap_df,
     }
 
 

@@ -3,7 +3,7 @@
 from .build import build, load_data
 from .build_generators import build_generators
 from .build_storage import build_storage
-from .solve import solve, print_summary
+from .solve import solve, print_summary, build_results_dataframes
 
 __all__ = [
     "build",
@@ -12,4 +12,5 @@ __all__ = [
     "build_storage",
     "solve",
     "print_summary",
+    "build_results_dataframes",
 ]
