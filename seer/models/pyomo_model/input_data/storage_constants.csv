@@ -1,3 +1,0 @@
-storage,zone,carrier,duration_hours,life,capacity_mwh,capacity_mw,retirement_year,start_year,unit_size_mwh,annual_build_limit_mwh,expandable
-zone_0_battery_existing,zone_0,Battery,4.0,15.0,50.0,12.5,2036.0,2025.0,50.0,,False
-zone_0_battery_new,zone_0,Battery,4.0,15.0,20.0,5.0,,,20.0,100.0,True
