@@ -1,5 +1,0 @@
-name,zone,carrier,capacity,marginal_cost
-North_Wind_Existing,North,wind,300,0
-North_Solar_Existing,North,solar,250,0
-North_CCGT_Existing,North,ccgt,400,55
-North_Coal_Existing,North,coal,500,35

@@ -1,5 +1,0 @@
-name,zone,max_hours,efficiency_store,efficiency_dispatch,capacity,marginal_cost,capital_cost, build_year
-North_Battery_2025,North,4,0.95,0.95,100,2,800,2025
-North_Battery_2030,North,4,0.96,0.96,100,2,600,2030
-North_Battery_2040,North,4,0.97,0.97,100,2,400,2040
-North_Battery_2050,North,4,0.97,0.97,100,2,300,2050
