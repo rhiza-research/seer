@@ -1,7 +1,6 @@
-"""Generate synthetic input data for pyomo seer model. 
-The data is generated following the seer schema and is then used to
-instantiate a pyomo model in the solve.py file. Data generation is structured
-to enable easy scaling of the model for solver performance testing.
+"""Generate synthetic seer-schema input data.
+Data generation is structured to enable easy scaling of the model (zones, years, generator/storage
+mix) for solver performance testing, independent of which build backend (pyomo or PyPSA) consumes it.
 """
 
 from pathlib import Path
@@ -9,7 +8,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-DATA_DIR = Path(__file__).parent / "input_data"
+# repo root: seer/inputs/synthetic/generate_data.py -> up three levels
+REPO_ROOT = Path(__file__).resolve().parents[3]
+# set by generate_all_data() (depends on country_name); every generate_* function writes here
+DATA_DIR = None
 
 RANDOM_SEED = 42
 rng = np.random.default_rng(RANDOM_SEED)
@@ -274,14 +276,16 @@ def generate_storage_costs(years, zones, storage_types, storage_type_params):
 ZONE_PEAK_DEMAND_MW_PATTERN = [500.0, 300.0]
 
 
-def generate_all_data(n_zones, years, zone_peak_demand_mw=None):
+def generate_all_data(n_zones, years, country_name="Seerland", zone_peak_demand_mw=None):
     """Generate every seer-schema input CSV for a given problem scale (number of zones, years).
+    Output is written to data/seer/synthetic/{country_name}/ (relative to the repo root).
 
     zone_peak_demand_mw, if given, must have exactly one entry per zone; otherwise it's derived
     by cycling ZONE_PEAK_DEMAND_MW_PATTERN out to n_zones.
     """
+    global DATA_DIR
+    DATA_DIR = REPO_ROOT / "data" / "seer" / "synthetic" / country_name
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    COUNTRY_NAME = "Seerland"  # all zones belong to this single synthetic country
 
     ZONES = [f"zone_{i}" for i in range(n_zones)]
 
@@ -311,7 +315,7 @@ def generate_all_data(n_zones, years, zone_peak_demand_mw=None):
 
     generate_years(years)
     generate_settings(ANNUAL_DISCOUNT_RATE)
-    generate_zones(ZONES, COUNTRY_NAME)
+    generate_zones(ZONES, country_name)
 
     demandforecast_df = generate_demandforecast(years, ZONES, zone_peak_demand_mw)
     max_load = demandforecast_df.groupby("zone")["value"].max().to_dict()
@@ -329,7 +333,7 @@ def generate_all_data(n_zones, years, zone_peak_demand_mw=None):
 
 def main():
     # ---- problem size: adjust these to scale the model ----
-    generate_all_data(n_zones=1, years=[2025, 2030, 2035], zone_peak_demand_mw=[500.0])
+    generate_all_data(n_zones=1, years=[2025, 2030, 2035], country_name="Seerland", zone_peak_demand_mw=[500.0])
 
 
 if __name__ == "__main__":

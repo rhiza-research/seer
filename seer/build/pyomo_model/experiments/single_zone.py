@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pyomo.environ as pyo
 
-from generate_data import generate_all_data
+from seer.inputs.synthetic import generate_all_data
 from solve import build_instance, solve
 from plotting_utils import plot_solve_time_scaling
 
