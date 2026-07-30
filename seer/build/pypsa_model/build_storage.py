@@ -4,7 +4,7 @@ from .time_utils import get_valid_years
 
 def build_storage(model, storage_constants, storage_costs, modular_expansion=False):
     # carrier set to be returned after processing
-    carriers = set("battery")
+    carriers = set(["battery"])
     # convert csv inputs into indexed dataframes
     storage_constants = storage_constants.set_index("storage")
     storage_costs = storage_costs.set_index(["storage", "cost_type"])
