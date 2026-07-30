@@ -2,9 +2,11 @@
 
 - seer.inputs: generate seer-schema input data (GAMS conversion or synthetic generation)
 - seer.build: build a runnable model from seer-schema data (pyomo or PyPSA)
+- seer.viz: visualization helpers for solved model instances
 """
 
 from . import inputs
 from . import build
+from . import viz
 
-__all__ = ["inputs", "build"]
+__all__ = ["inputs", "build", "viz"]

@@ -9,7 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import pyomo.environ as pyo
 
 from seer.inputs.synthetic import generate_all_data
-from solve import build_instance, solve
+from build import build
+from solve import solve
 from plotting_utils import plot_solve_time_scaling
 
 BASE_YEAR = 2025
@@ -24,11 +25,11 @@ CONFIGURATIONS = {
 results = {label: [] for label in CONFIGURATIONS}
 for n_years in YEAR_COUNTS:
     years = list(range(BASE_YEAR, BASE_YEAR + n_years))
-    generate_all_data(n_zones=N_ZONES, years=years)
+    data_path = generate_all_data(n_zones=N_ZONES, years=years)
 
     for label, discrete_additions in CONFIGURATIONS.items():
-        instance = build_instance(discrete_additions=discrete_additions)
-        _, solve_time = solve(instance)
+        instance = build(data_path, discrete_additions=discrete_additions)
+        _, solve_time = solve(instance, verbose=False)
 
         results[label].append({
             "n_years": n_years,

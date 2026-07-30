@@ -330,6 +330,8 @@ def generate_all_data(n_zones, years, country_name="Seerland", zone_peak_demand_
     generate_storage_constants(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS)
     generate_storage_costs(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS)
 
+    return DATA_DIR
+
 
 def main():
     # ---- problem size: adjust these to scale the model ----

@@ -1,12 +1,12 @@
 """Build a PyPSA model from seer-schema data."""
 
-from seer.build.pypsa_model import build_model
+from seer.build.pypsa_model import build
 
 DATA_PATH = "data/seer/Gambia/"
 
 
 def main():
-    model = build_model(time_resolution="1h", data_path=DATA_PATH)
+    model = build(DATA_PATH, time_resolution="1h")
 
     print(f"Buses (zones): {list(model.buses.index)}")
     print(f"Investment periods: {list(model.investment_periods)}")

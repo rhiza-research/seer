@@ -11,9 +11,9 @@ TODO: can be moved to a config csv.
 """
 discount_rate = 0.08
 
-def build_model(time_resolution="1h", data_path = "synthseer/data/Gambia/"):
+def build(data_path, time_resolution="1h"):
 
-    input_data = load_input_data(data_path)
+    input_data = load_data(data_path)
 
     model = pypsa.Network()
 
@@ -162,7 +162,7 @@ def fill_missing_times(profile):
     return profile
 
 
-def load_input_data(data_path):
+def load_data(data_path):
     # zones
     zones_df = pd.read_csv(data_path + "zones.csv")
     # time periods
