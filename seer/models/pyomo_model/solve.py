@@ -4,10 +4,9 @@ from pathlib import Path
 import pandas as pd
 import pyomo.environ as pyo
 
-SOLVER_NAME = "appsi_highs"  # swap for "cbc" / "glpk" / "gurobi" if not installed
 
-
-def solve(instance, solver_name=SOLVER_NAME, verbose=True):
+def solve(instance, solver_name="appsi_highs", verbose=True):
+    # solver - swap for "cbc" / "glpk" / "gurobi" if not installed
     """Solve a model instance in place (Pyomo fills in variable values on the instance itself)
     and print a summary of the results. Returns (results, solve_time)."""
     solver = pyo.SolverFactory(solver_name)
@@ -134,25 +133,3 @@ def aggregate_generators(df, instance, by=("tech",)):
 
     return df.T.groupby(group_keys).sum().T
 
-
-if __name__ == "__main__":
-    from .build import build
-
-    data_path = Path(__file__).parent / "input_data"
-
-    instance = build(data_path, discrete_additions=False)
-    solve(instance)
-    rez = build_results_dataframes(instance)
-
-    instance = build(data_path, discrete_additions=True)
-    solve(instance)
-
-    from seer.viz.plot import plot_demand, plot_generation, plot_storage
-    import matplotlib.pyplot as plt
-
-    fig, (demand_ax, generation_ax, storage_ax) = plt.subplots(3, 1, figsize=(14, 11), sharex=True)
-    plot_demand(demand_ax, instance)
-    plot_generation(generation_ax, instance)
-    plot_storage(storage_ax, instance)
-    fig.tight_layout()
-    breakpoint()

@@ -1,5 +1,9 @@
 import pyomo.environ as pyo
 
+"""Specifies a capacity planning model. Features of the model are:
+- hourly resolution dispatch; annual build decisions.
+"""
+
 def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset_hour=0, storage_reset_soc=0.5):
     assert 0 <= storage_reset_hour <= 23, "storage_reset_hour must be between 0 and 23"
     assert 0 <= storage_reset_soc <= 1, "storage_reset_soc must be between 0 and 1"
