@@ -1,4 +1,4 @@
-"""Generate synthetic seer-schema input data (no external model conversion required)."""
+"""Generate synthetic models in the seer schema."""
 
 from .generate_data import generate_all_data
 

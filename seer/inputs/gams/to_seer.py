@@ -1,4 +1,4 @@
-"""Convert a GAMS-based model's processed input data into the seer schema."""
+"""Convert csvs specifying EPM (GAMS) input data into the seer schema."""
 
 from pathlib import Path
 
@@ -7,8 +7,6 @@ import pandas as pd
 from .process_generator_data import process_generator_data
 from .process_re_data import process_re_data
 from .process_storage_data import process_storage_data
-
-import fsspec
 
 
 def process_passthrough_data(data_path):
@@ -27,8 +25,11 @@ def process_passthrough_data(data_path):
 
 
 def gams_to_seer(input_path, output_path, start_year=2025, end_year=2050):
-    """Convert GAMS-processed input data at `input_path` into seer-schema CSVs written to
-    `output_path`. Returns a dict of the generated DataFrames, keyed by output filename stem."""
+    """Run all conversion steps to turn EPM (GAMS) model specification to seer schema
+    seer schema files are written to the output path. 
+    returns a dict of all the dataframes, also written to csvs.
+    """
+
     # process_*_data build paths via `data_path + "file.csv"`, so it must end in "/"
     input_dir = f"{Path(input_path)}/"
     output_dir = Path(output_path)

@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 def process_re_data(data_path="data/Gambia/"):
     """Process the renewable data from the GAMS input files to a consistent format."""
@@ -24,8 +23,3 @@ def process_re_data(data_path="data/Gambia/"):
     re_profiles.rename(columns={col: "month"}, inplace=True)
 
     return re_profiles
-
-if __name__ == "__main__":
-    data_path = "gams2pypsa/data/processed/Gambia/"
-    re_profiles = process_re_data(data_path)
-    re_profiles.to_csv(data_path + "renewable_profiles.csv", index=False)

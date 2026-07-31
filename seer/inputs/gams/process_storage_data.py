@@ -80,20 +80,3 @@ def process_storage_data(data_path="data/Gambia/", start_year=2025, end_year=205
     storage_costs = pd.DataFrame(rows, columns=["storage", "cost_type"] + years)
 
     return storage_constants, storage_costs
-
-
-if __name__ == "__main__":
-
-    data_path = "gams2pypsa/data/processed/Gambia/"
-
-    storage_constants, storage_costs = process_storage_data(data_path)
-
-    storage_constants.to_csv(
-        data_path + "storage_constants.csv",
-        index=False
-    )
-
-    storage_costs.to_csv(
-        data_path + "storage_costs.csv",
-        index=False
-    )

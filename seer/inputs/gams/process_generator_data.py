@@ -136,11 +136,3 @@ def load_input_data(data_path):
         "custom_gen_capex": custom_gen_capex,
         "fuel_prices": fuel_prices,
     }
-
-
-if __name__ == "__main__":
-    data_path = "gams2pypsa/data/processed/Gambia/"
-    generator_constants, generator_cost = process_generator_data(data_path)
-    # save to csvs
-    generator_constants.to_csv(data_path + "generator_constants.csv", index=False)
-    generator_cost.to_csv(data_path + "generator_costs.csv", index=False)
