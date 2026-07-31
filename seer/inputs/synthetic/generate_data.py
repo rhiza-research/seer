@@ -257,8 +257,14 @@ def generate_all_data(n_zones, years, output_path, country_name="Seerland", zone
 
     zone_peak_demand_mw, if given, must have exactly one entry per zone; otherwise it's derived
     by cycling ZONE_PEAK_DEMAND_MW_PATTERN out to n_zones.
+
+    output_path may be a local path or a remote URL (e.g. gs://bucket/prefix); writes go through
+    pandas/fsspec either way, so no filesystem-specific handling is needed here.
     """
-    output_dir = Path(output_path)
+    output_path = str(output_path).rstrip("/")
+    is_remote = "://" in output_path
+    if not is_remote:
+        Path(output_path).mkdir(parents=True, exist_ok=True)
 
     ZONES = [f"zone_{i}" for i in range(n_zones)]
 
@@ -307,11 +313,10 @@ def generate_all_data(n_zones, years, output_path, country_name="Seerland", zone
         "storage_costs": generate_storage_costs(years, ZONES, STORAGE_TYPES, STORAGE_TYPE_PARAMS),
     }
 
-    output_dir.mkdir(parents=True, exist_ok=True)
     for name, df in outputs.items():
-        df.to_csv(output_dir / f"{name}.csv", index=False)
+        df.to_csv(f"{output_path}/{name}.csv", index=False)
 
-    return output_dir
+    return output_path
 
 
 def main():

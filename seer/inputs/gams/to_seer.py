@@ -8,6 +8,8 @@ from .process_generator_data import process_generator_data
 from .process_re_data import process_re_data
 from .process_storage_data import process_storage_data
 
+import fsspec
+
 
 def process_passthrough_data(data_path):
     """Files that need only trivial reshaping to match the seer schema:

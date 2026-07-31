@@ -1,24 +1,24 @@
-from pathlib import Path
-
 import pandas as pd
 
 from .abstract_model import seer_base_model
 
 
 def load_data(data_path):
-    """Read the seer-schema input CSVs at `data_path` and build a Pyomo AbstractModel data dict."""
-    data_path = Path(data_path)
+    """Read the seer-schema input CSVs at `data_path` and build a Pyomo AbstractModel data dict.
+    data_path may be a local path or a remote URL (e.g. gs://bucket/prefix); reads go through
+    pandas/fsspec either way."""
+    data_path = str(data_path).rstrip("/")
 
-    years_df = pd.read_csv(data_path / "years.csv")
-    settings_df = pd.read_csv(data_path / "settings.csv")
-    zones_df = pd.read_csv(data_path / "zones.csv")
-    generator_constants_df = pd.read_csv(data_path / "generator_constants.csv")
-    generator_costs_df = pd.read_csv(data_path / "generator_costs.csv")
-    demandforecast_df = pd.read_csv(data_path / "demandforecast.csv")
-    demandprofile_df = pd.read_csv(data_path / "demandprofile.csv")
-    renewable_profiles_df = pd.read_csv(data_path / "renewable_profiles.csv")
-    storage_constants_df = pd.read_csv(data_path / "storage_constants.csv")
-    storage_costs_df = pd.read_csv(data_path / "storage_costs.csv")
+    years_df = pd.read_csv(f"{data_path}/years.csv")
+    settings_df = pd.read_csv(f"{data_path}/settings.csv")
+    zones_df = pd.read_csv(f"{data_path}/zones.csv")
+    generator_constants_df = pd.read_csv(f"{data_path}/generator_constants.csv")
+    generator_costs_df = pd.read_csv(f"{data_path}/generator_costs.csv")
+    demandforecast_df = pd.read_csv(f"{data_path}/demandforecast.csv")
+    demandprofile_df = pd.read_csv(f"{data_path}/demandprofile.csv")
+    renewable_profiles_df = pd.read_csv(f"{data_path}/renewable_profiles.csv")
+    storage_constants_df = pd.read_csv(f"{data_path}/storage_constants.csv")
+    storage_costs_df = pd.read_csv(f"{data_path}/storage_costs.csv")
 
     years = years_df["year"].tolist()
     zones = zones_df["zone"].tolist()
