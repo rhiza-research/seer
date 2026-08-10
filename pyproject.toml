@@ -11,7 +11,10 @@ dependencies = [
     "pypsa",
     "jupyterlab",
     "pyomo",
-    "coiled"
+    "coiled",
+    "fsspec",
+    "gcsfs",
+    "torch"
 ]
 
 [build-system]
