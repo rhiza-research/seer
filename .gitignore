@@ -5,3 +5,6 @@ __pycache__/
 data/*/
 !data/readme.md
 experiments/tmp_data/
+!data/readme.md
+data/*
+.claude
