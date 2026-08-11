@@ -23,8 +23,8 @@ Every file is a flat csv with a header row.
   - [`storage_constants.csv`](#storage_constantscsv)
   - [`storage_costs.csv`](#storage_costscsv)
 
-# time and space parameters.
-## `zones.csv`
+## time and space parameters.
+### `zones.csv`
 One row per model zone.
 Number of rows is zones.
 
@@ -34,7 +34,7 @@ Number of rows is zones.
 | `country` | country this zone belongs to |
 | `name` | display name |
 
-## `years.csv`
+### `years.csv`
 Years over which to run planning; each year is an investment period, i.e. build decisions happen
 at an annual cadence.
 Number of rows is years.
@@ -43,8 +43,8 @@ Number of rows is years.
 | --- | --- |
 | `year` | a modeled investment-period year |
 
-# demand parameters.
-## `demandforecast.csv`
+## demand parameters.
+### `demandforecast.csv`
 Annual demand trajectory per zone.
 Number of rows is zones x years (x 2 if both energy and peak are specified).
 
@@ -55,7 +55,7 @@ Number of rows is zones x years (x 2 if both energy and peak are specified).
 | `year` | forecast year (matches `years.csv`) |
 | `value` | forecast value in the units implied by `type` |
 
-## `demandprofile.csv`
+### `demandprofile.csv`
 Normalized annual load curve at hourly resolution; a single load curve is used in all years. 
 Number of rows is zones x 8760.
 
@@ -67,8 +67,8 @@ Number of rows is zones x 8760.
 | `hour` | hour of day, encoded as `t1`…`t24` |
 | `value` | demand as a fraction of annual peak (unitless, ~0–1). At build time this is multiplied by `demandforecast`'s `peak` value for the corresponding year to get MW at that snapshot (`seer/models/pypsa_model/build.py:set_demand`). |
 
-# renewable potentials
-## `renewable_profiles.csv`
+## renewable potentials
+### `renewable_profiles.csv`
 Normalized annual capacity-factor curve at hourly resolution, per zone/technology; a
 single curve is used in all years. Number of rows is zones x renewable techs x 8760.
 
@@ -81,8 +81,8 @@ single curve is used in all years. Number of rows is zones x renewable techs x 8
 | `hour` | hour of day, `1`–`24` |
 | `value` | capacity factor: available output as a fraction of nameplate capacity (unitless, 0–1) |
 
-# generator parameters
-## `generator_constants.csv`
+## generator parameters
+### `generator_constants.csv`
 One row per generator (existing unit or a build option), with its fixed technical and
 financial parameters. Number of rows is number of generators.
 
@@ -110,7 +110,7 @@ financial parameters. Number of rows is number of generators.
 | `annual_build_limit` | max MW addable per year; NaN/empty for non-expandable (existing) units |
 | `expandable` | `True` if this is a build option (capacity decided by the optimizer per investment year), `False` if it's fixed existing capacity |
 
-## `generator_costs.csv`
+### `generator_costs.csv`
 Cost trajectories per generator, wide by year. Number of rows is generators x 2 (`capex`,
 `marginal_cost`); columns are `generator`, `cost_type`, then one column per modeled year.
 
@@ -120,8 +120,8 @@ Cost trajectories per generator, wide by year. Number of rows is generators x 2 
 | `cost_type` | `capex` ($/MW, annualized capital cost for build options) or `marginal_cost` ($/MWh, fuel price × `heat_rate`) |
 | `<year>` (one column per modeled year) | cost value for that year, in the units implied by `cost_type` |
 
-# storage parameters.
-## `storage_constants.csv`
+## storage parameters.
+### `storage_constants.csv`
 One row per storage unit (existing or build option), analogous to
 `generator_constants.csv`. Number of rows is number of storage units.
 
@@ -142,7 +142,7 @@ One row per storage unit (existing or build option), analogous to
 | `annual_build_limit_mwh` | max MWh addable per year; NaN/empty for non-expandable (existing) units |
 | `expandable` | `True` if this is a build option, `False` if fixed existing capacity |
 
-## `storage_costs.csv`
+### `storage_costs.csv`
 Cost trajectory per storage unit, wide by year. Number of rows is storage units x cost
 types (currently just `capex`); columns are `storage`, `cost_type`, then one column per
 modeled year.
