@@ -6,6 +6,23 @@ or by generating a synthetic model (as done in `seer/inputs/synthetic`).
 
 Every file is a flat csv with a header row.
 
+## Contents
+
+- [Time and space parameters](#time-and-space-parameters)
+  - [`zones.csv`](#zonescsv)
+  - [`years.csv`](#yearscsv)
+- [Demand parameters](#demand-parameters)
+  - [`demandforecast.csv`](#demandforecastcsv)
+  - [`demandprofile.csv`](#demandprofilecsv)
+- [Renewable potentials](#renewable-potentials)
+  - [`renewable_profiles.csv`](#renewable_profilescsv)
+- [Generator parameters](#generator-parameters)
+  - [`generator_constants.csv`](#generator_constantscsv)
+  - [`generator_costs.csv`](#generator_costscsv)
+- [Storage parameters](#storage-parameters)
+  - [`storage_constants.csv`](#storage_constantscsv)
+  - [`storage_costs.csv`](#storage_costscsv)
+
 # time and space parameters.
 ## `zones.csv`
 One row per model zone.
