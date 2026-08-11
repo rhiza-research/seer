@@ -1,7 +1,12 @@
+"""Build renewable_profiles.csv from EPM input data."""
 import pandas as pd
 
-def process_re_data(data_path="data/Gambia/"):
-    """Process the renewable data from the GAMS input files to a consistent format."""
+def build_re_potentials(data_path="data/Gambia/"):
+    """Process renewable potentials into a seer schema file: renewable_profiles.csv.
+    Files that are read containing renewable data:
+    - pVREProfile.csv: renewable potentials (by zone, tech, month, day, hour)
+    Returns a dataframe: renewable_profiles.
+    """
     re_profiles_path = data_path + "pVREProfile.csv"
     re_profiles = pd.read_csv(re_profiles_path)
     # parse the months column into integers
@@ -13,6 +18,7 @@ def process_re_data(data_path="data/Gambia/"):
             break
     if col is None:
         raise ValueError("No valid month column found in the renewable data.")
+
     # parse the months column into integers - "m1" -> 1, "m2" -> 2, etc.
     re_profiles[col] = re_profiles[col].str.extract('m(\d+)').astype(int)
     # parse the day column into integers - "d1" -> 1, "d2" -> 2, etc.

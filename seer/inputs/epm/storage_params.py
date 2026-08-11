@@ -1,11 +1,17 @@
+"""Build storage_constants.csv and storage_costs.csv from EPM input data."""
 import pandas as pd
 
 
-def process_storage_data(data_path="data/Gambia/", start_year=2025, end_year=2050):
+def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=2050):
     """
-    Processes storage input data into:
+    Processes storage input data into two seer schema files:
     - storage_constants.csv
     - storage_costs.csv
+
+    Files that are read containing storage data:
+    - pStorageDataInput.csv: storage data (by plant)
+    - pGenDataInputCustom.csv: generator parameters (by generator)
+    Returns two dataframes: storage_constants and storage_costs.
     """
 
     storage_data = pd.read_csv(data_path + "pStorageDataInput.csv")

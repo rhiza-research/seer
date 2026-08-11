@@ -1,10 +1,12 @@
+"""Build generator_constants.csv and generator_costs.csv from EPM input data."""
 import pandas as pd
 import numpy as np
 
-def process_generator_data(data_path="data/Gambia/"):
-    """Combines disparate generator data sources into two output dataframes:
-    generator_constants: a dataframe of generator constants (parameters, build limits, etc.)
-    generator_costs: a dataframe of generator costs (capex and marginal cost)
+def build_generator_params(data_path="data/Gambia/"):
+    """Combines disparate generator data sources into two seer schema files:
+    generator_constants.csv: a dataframe of generator constants (parameters, build limits, etc.)
+    generator_costs.csv: a dataframe of generator costs (capex and marginal cost)
+    Returns two dataframes: generator_constants and generator_costs.
     """
     input_data = load_input_data(data_path)
     all_generators = input_data["all_generators"]
@@ -117,6 +119,17 @@ def process_generator_data(data_path="data/Gambia/"):
 
 
 def load_input_data(data_path):
+    """Load EPM data for generators from the data path.
+    Files that are read containing generator data:
+    - gmap.csv: list of all generators including name, zone, fuel
+    - pGenDataInputDefault.csv: generator parameters (by zone, tech, fuel)
+    - pGenDataInputCustom.csv: generator parameters (by generator)
+    - pCapexTrajectoriesDefault.csv: generator capex (by zone, tech, fuel)
+    - pCapexTrajectoriesCustom.csv: generator capex (by generator)
+    - pFuelPrice.csv: fuel prices
+
+    Returns a dictionary of dataframes.
+    """
     # list of all generators including name, zone, fuel
     all_generators = pd.read_csv(data_path + "gmap.csv")
     # generator parameters (by zone, tech, fuel)
