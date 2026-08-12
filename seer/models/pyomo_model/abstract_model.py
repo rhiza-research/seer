@@ -26,6 +26,8 @@ def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset
     model.existing_storage = pyo.Set()
     model.new_storage = pyo.Set()
     model.storage = model.existing_storage | model.new_storage
+    # network - transmission lines connecting zones
+    model.lines = pyo.Set()
 
     """Parameters"""
     # generator attributes
@@ -64,6 +66,11 @@ def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset
     model.storage_marginal_cost = pyo.Param(model.storage, model.years, within=pyo.NonNegativeReals)
     model.storage_capex_cost = pyo.Param(model.new_storage, model.years, within=pyo.NonNegativeReals)
 
+    # network attributes - fixed capacity lines between two zones; no line expansion (yet)
+    model.line_from = pyo.Param(model.lines, within=pyo.Any)
+    model.line_to = pyo.Param(model.lines, within=pyo.Any)
+    model.line_capacity = pyo.Param(model.lines, within=pyo.NonNegativeReals)
+
     # demand - defined at each time in each zone
     model.demand = pyo.Param(model.zones, model.times, within=pyo.NonNegativeReals)
     # discount factor relative to the first modeled year, applied to every cost term in the objective
@@ -96,6 +103,9 @@ def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset
     # energy capacity added in a given year (persists into all subsequent years); only new-build storage can add capacity
     model.storage_added_capacity = pyo.Var(model.new_storage, model.years, within=pyo.NonNegativeReals)
     model.storage_total_energy_capacity = pyo.Var(model.storage, model.years, within=pyo.NonNegativeReals)
+
+    # signed line flow (positive = flowing from line_from to line_to); bounded by capacity below
+    model.line_flow = pyo.Var(model.lines, model.times, within=pyo.Reals)
 
     # power capacity is derived from energy capacity via the fixed duration ratio, never an independent decision
     def storage_power_capacity_rule(model, s, year):
@@ -142,7 +152,7 @@ def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset
 
     """Constraints"""
 
-    # 1. supply + storage discharge = demand + storage charge + lost load, in each zone
+    # 1. supply + storage discharge + net line imports = demand + storage charge + lost load, in each zone
     def supply_equals_demand_rule(model, zone, year, hour):
         generation = sum(
             model.generation_output[gen, year, hour]
@@ -154,7 +164,21 @@ def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset
             for s in model.storage
             if model.storage_zone[s] == zone
         )
-        return generation + storage_net_supply + model.lost_load[zone, year, hour] == model.demand[zone, year, hour]
+        # a line's flow is positive from line_from -> line_to: that's an import for line_to,
+        # an export (negative import) for line_from
+        net_line_imports = sum(
+            model.line_flow[line, year, hour]
+            for line in model.lines
+            if model.line_to[line] == zone
+        ) - sum(
+            model.line_flow[line, year, hour]
+            for line in model.lines
+            if model.line_from[line] == zone
+        )
+        return (
+            generation + storage_net_supply + net_line_imports + model.lost_load[zone, year, hour]
+            == model.demand[zone, year, hour]
+        )
 
     model.supply_equals_demand = pyo.Constraint(
         model.zones,
@@ -295,6 +319,26 @@ def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset
         model.storage,
         model.times,
         rule=soc_rule
+    )
+
+    # 12. line flow (either direction) is bounded by the line's fixed capacity. Two one-sided
+    # constraints rather than a ranged one, for consistency with the storage charge/discharge limits above.
+    def line_flow_upper_limit_rule(model, line, year, hour):
+        return model.line_flow[line, year, hour] <= model.line_capacity[line]
+
+    model.line_flow_upper_limit = pyo.Constraint(
+        model.lines,
+        model.times,
+        rule=line_flow_upper_limit_rule
+    )
+
+    def line_flow_lower_limit_rule(model, line, year, hour):
+        return model.line_flow[line, year, hour] >= -model.line_capacity[line]
+
+    model.line_flow_lower_limit = pyo.Constraint(
+        model.lines,
+        model.times,
+        rule=line_flow_lower_limit_rule
     )
 
     return model

@@ -19,6 +19,11 @@ def load_data(data_path):
     renewable_profiles_df = pd.read_csv(f"{data_path}/renewable_profiles.csv")
     storage_constants_df = pd.read_csv(f"{data_path}/storage_constants.csv")
     storage_costs_df = pd.read_csv(f"{data_path}/storage_costs.csv")
+    # network.csv is optional - datasets with no inter-zone lines (e.g. single-zone) can omit it
+    try:
+        network_df = pd.read_csv(f"{data_path}/network.csv")
+    except FileNotFoundError:
+        network_df = pd.DataFrame(columns=["from", "to", "capacity"])
 
     years = years_df["year"].tolist()
     zones = zones_df["zone"].tolist()
@@ -127,6 +132,12 @@ def load_data(data_path):
         for year in years
     }
 
+    # ---- network attributes - lines identified by row position, since (from, to) isn't guaranteed unique ----
+    lines = network_df.index.tolist()
+    line_from = network_df["from"].to_dict()
+    line_to = network_df["to"].to_dict()
+    line_capacity = network_df["capacity"].to_dict()
+
     return {
         None: {
             "zones": {None: zones},
@@ -156,6 +167,10 @@ def load_data(data_path):
             "storage_annual_build_limit_mwh": storage_annual_build_limit_mwh,
             "storage_capex_cost": storage_capex_cost,
             "storage_marginal_cost": storage_marginal_cost,
+            "lines": {None: lines},
+            "line_from": line_from,
+            "line_to": line_to,
+            "line_capacity": line_capacity,
             "demand": demand,
         }
     }

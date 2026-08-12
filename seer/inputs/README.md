@@ -11,6 +11,7 @@ Every file is a flat csv with a header row.
 - [Time and space parameters](#time-and-space-parameters)
   - [`zones.csv`](#zonescsv)
   - [`years.csv`](#yearscsv)
+  - [`network.csv`](#networkcsv)
 - [Demand parameters](#demand-parameters)
   - [`demandforecast.csv`](#demandforecastcsv)
   - [`demandprofile.csv`](#demandprofilecsv)
@@ -42,6 +43,17 @@ Number of rows is years.
 | column | contents |
 | --- | --- |
 | `year` | a modeled investment-period year |
+
+### `network.csv`
+One row per transmission line connecting two zones. Optional - a dataset with no inter-zone
+lines (e.g. single-zone) can omit this file. Line capacity is fixed for now (no line expansion).
+Number of rows is lines.
+
+| column | contents |
+| --- | --- |
+| `from` | zone id at one end of the line (matches `zones.csv`) |
+| `to` | zone id at the other end |
+| `capacity` | line's transfer capacity, MW (flow is bounded by ± this value in either direction) |
 
 ## demand parameters.
 ### `demandforecast.csv`
