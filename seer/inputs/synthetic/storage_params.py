@@ -11,22 +11,27 @@ seer/models/pyomo_model) are set; the rest of the schema is left unset for now.
 import numpy as np
 import pandas as pd
 
+from .noise import noise_multiplier
 
-def build_storage(zones, mix, initial_capacity, years, cost_variance_pct, aggregate_units=True,
+
+def build_storage(zones, initial_capacity, years, noise_pct, types=None, aggregate_units=True,
                    seed_path="seed_data/storage_seed.csv"):
     """Build storage_constants and storage_costs together (one row of each per storage unit).
+
+    initial_capacity is each zone's total starting storage capacity (MWh), split evenly across
+    `types` (defaults to every type in the seed) - unlike generators, there's no mix by share
+    of total capacity.
 
     If aggregate_units, all existing units of a type in a zone become a single storage unit,
     with capacity = unit_size_mwh * unit_count. Otherwise, each physical unit gets its own row,
     each at capacity = unit_size_mwh. Either way there's also one new-build option per
     (zone, type), always sized at a single unit.
 
-    cost_variance_pct: {"capex": ...} +/- fraction (e.g. 0.10 = +/- 10%) for a one-time draw
-    per storage unit, held constant across years. marginal_cost is fixed at 0 for storage, so
-    no variance is needed for it.
+    noise_pct: one multiplicative noise draw per storage unit's capex, held constant across
+    years. marginal_cost is fixed at 0 for storage, so no noise applies to it.
     """
     seed = pd.read_csv(seed_path).set_index("type")
-    unit_counts = set_capacities(zones, mix, initial_capacity, seed)
+    unit_counts = set_capacities(zones, initial_capacity, seed, types=types)
     base_year = years[0]
 
     constants_rows, cost_rows = [], []
@@ -45,8 +50,7 @@ def build_storage(zones, mix, initial_capacity, years, cost_variance_pct, aggreg
             "expandable": expandable,
         })
 
-        variance = cost_variance_pct["capex"]
-        multiplier = 1 + np.random.uniform(-variance, variance)
+        multiplier = noise_multiplier(noise_pct)
         capex_row = {"storage": storage, "cost_type": "capex"}
         marginal_cost_row = {"storage": storage, "cost_type": "marginal_cost"}
         for year in years:
@@ -83,27 +87,23 @@ def build_storage(zones, mix, initial_capacity, years, cost_variance_pct, aggreg
     return pd.DataFrame(constants_rows), pd.DataFrame(cost_rows)
 
 
-def set_capacities(zones, mix, initial_capacity, seed):
-    """Convert each zone's starting capacity (MWh) and storage mix (share of that capacity by
-    type) into a whole number of per-unit-sized storage units.
+def set_capacities(zones, initial_capacity, seed, types=None):
+    """Convert each zone's starting capacity (MWh) into a whole number of per-unit-sized
+    storage units, split evenly across `types` (defaults to every type in the seed).
 
     Returns {(zone, storage_type): unit_count}.
     """
-    if isinstance(mix, dict):
-        mix_by_zone = {zone: mix for zone in zones}
-    elif len(mix) == len(zones):
-        mix_by_zone = dict(zip(zones, mix))
-    else:
-        raise ValueError("mix must be a single dict, or one dict per zone")
+    if types is None:
+        types = seed.index.tolist()
 
     if np.isscalar(initial_capacity):
         initial_capacity = [initial_capacity] * len(zones)
 
     unit_counts = {}
     for zone, total_capacity in zip(zones, initial_capacity):
-        zone_mix = mix_by_zone[zone]
-        for storage_type, share in zone_mix.items():
+        capacity_per_type = total_capacity / len(types)
+        for storage_type in types:
             unit_size = seed.loc[storage_type, "unit_size_mwh"]
-            unit_counts[(zone, storage_type)] = round(total_capacity * share / unit_size)
+            unit_counts[(zone, storage_type)] = round(capacity_per_type / unit_size)
 
     return unit_counts

@@ -4,8 +4,10 @@
 import numpy as np
 import pandas as pd
 
+from .noise import noise_multiplier
 
-def build_generators(zones, mix, initial_capacity, years, cost_variance_pct, aggregate_units=True,
+
+def build_generators(zones, mix, initial_capacity, years, noise_pct, aggregate_units=True,
                       seed_path="seed_data/generator_seed.csv"):
     """Build generator_constants and generator_costs together (one row of each per generator).
 
@@ -14,9 +16,8 @@ def build_generators(zones, mix, initial_capacity, years, cost_variance_pct, agg
     each at capacity = unit_size_mw. Either way there's also one new-build option per
     (zone, type), always sized at a single unit.
 
-    cost_variance_pct: {"capex": ..., "marginal_cost": ...} +/- fraction (e.g. 0.10 = +/- 10%)
-    for a one-time draw per generator per cost type, held constant across years (so escalation
-    stays smooth).
+    noise_pct: one multiplicative noise draw per generator per cost type, held constant across
+    years (so escalation stays smooth).
     """
     seed = pd.read_csv(seed_path).set_index("type")
     unit_counts = set_capacities(zones, mix, initial_capacity, seed)
@@ -39,8 +40,7 @@ def build_generators(zones, mix, initial_capacity, years, cost_variance_pct, agg
             ("capex", params["capex_per_mw"], params["capex_escalation"]),
             ("marginal_cost", params["marginal_cost_per_mwh"], params["marginal_cost_escalation"]),
         ):
-            variance = cost_variance_pct[cost_type]
-            multiplier = 1 + np.random.uniform(-variance, variance)
+            multiplier = noise_multiplier(noise_pct)
             row = {"generator": generator, "cost_type": cost_type}
             for year in years:
                 row[year] = round(base_value * multiplier * (1 + escalation) ** (year - base_year), 4)
