@@ -13,6 +13,7 @@ import pandas as pd
 
 from .demand_params import build_demand
 from .generator_params import build_generators
+from .network_params import build_network
 from .re_potentials import build_renewable_profiles
 from .storage_params import build_storage
 
@@ -46,6 +47,8 @@ def generate_all_data(
     starting_storage_capacity_pct=0.1,  # existing storage capacity = existing generator capacity * this fraction
     demand_growth_rate_mean=0.02,  # root (unnoised) demand growth rate, shared across zones
     noise_pct=0.10,  # shared noise level for every randomized quantity (see noise.py)
+    mesh_level=0.2,  # probability that each possible line beyond the spanning path also exists
+    congestion_level=0.3,  # fraction by which line capacity is derated below the zones' average peak demand
 ):
     """Generate every seer-schema input CSV for a given problem scale (number of zones, years),
     writing it to `output_path`.
@@ -92,6 +95,7 @@ def generate_all_data(
         ZONES, storage_initial_capacity, years, noise_pct,
         seed_path=SEED_DATA_DIR / "storage_seed.csv",
     )
+    network_df = build_network(ZONES, max_load, mesh_level, congestion_level, noise_pct)
 
     outputs = {
         "years": generate_years(years),
@@ -106,6 +110,7 @@ def generate_all_data(
         ),
         "storage_constants": storage_constants_df,
         "storage_costs": storage_costs_df,
+        "network": network_df,
     }
 
     for name, df in outputs.items():
