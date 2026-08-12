@@ -3,9 +3,8 @@
 import pandas as pd
 from matplotlib.transforms import blended_transform_factory
 
-from seer.inputs.synthetic.generate_data import DAYS_IN_MONTH
-
 MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]  # standard (non-leap) year
 HOURS_PER_DAY = 24
 
 
