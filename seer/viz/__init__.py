@@ -1,5 +1,5 @@
-"""Visualization helpers for solved seer model instances."""
+"""Visualization helpers for the standardized seer output tables (see seer/models/README.md)."""
 
-from .plot import plot_demand, plot_generation, plot_storage
+from .plot import plot_capacity, plot_storage, plot_dispatch, tech_color
 
-__all__ = ["plot_demand", "plot_generation", "plot_storage"]
+__all__ = ["plot_capacity", "plot_storage", "plot_dispatch", "tech_color"]
