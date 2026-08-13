@@ -2,7 +2,8 @@
 
 from .abstract_model import seer_base_model
 from .build import build, load_data
-from .solve import solve, print_summary, build_results_dataframes, aggregate_generators
+from .output import build_output_tables
+from .solve import solve, print_summary
 
 __all__ = [
     "seer_base_model",
@@ -10,6 +11,5 @@ __all__ = [
     "load_data",
     "solve",
     "print_summary",
-    "build_results_dataframes",
-    "aggregate_generators",
+    "build_output_tables",
 ]
