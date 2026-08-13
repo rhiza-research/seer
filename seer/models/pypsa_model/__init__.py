@@ -5,6 +5,7 @@ from .build_generators import build_generators
 from .build_storage import build_storage
 from .output import build_output_tables
 from .solve import solve, print_summary
+from .storage_soc import build_storage_soc
 
 __all__ = [
     "build",
@@ -14,4 +15,5 @@ __all__ = [
     "solve",
     "print_summary",
     "build_output_tables",
+    "build_storage_soc",
 ]
