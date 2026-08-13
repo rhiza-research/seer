@@ -7,33 +7,35 @@ import pandas as pd
 from .noise import noise_multiplier
 
 
-def build_demand(zones, peak_demand_mw, years, growth_rate_mean, noise_pct,
-                  seed_path="seed_data/demand_seed.csv"):
-    """Generates demand parameters:
-    - demandforecast: peak demand by year by zone
-    - demandprofile: normalized hourly load shape
+def build_demand_forecast(zones, peak_demand_mw, years, growth_rate):
+    """Build demandforecast: peak demand by year by zone.
 
-    peak_demand_mw is the expected peak demand per zone; growth_rate_mean is the expected annual growth rate.
-    both the peak demand, growth rate, and load shape are perturbed by noise.
+    peak_demand_mw is the starting (first modeled year) peak demand per zone; growth_rate is
+    each zone's already-realized annual growth rate (randomization happens in generate_data.py,
+    not here - this is a deterministic projection from a given growth rate).
     """
     assert len(peak_demand_mw) == len(zones), "peak_demand_mw must have exactly one entry per zone"
-
-    # determine the annual growth rate, perturbed by noise
-    growth_rate = growth_rate_mean * noise_multiplier(noise_pct, size=len(zones))
+    assert len(growth_rate) == len(zones), "growth_rate must have exactly one entry per zone"
 
     base_year = years[0]
-    forecast_rows = [
+    rows = [
         {"zone": zone, "type": "peak", "year": year, "value": round(start * (1 + growth) ** (year - base_year), 3)}
         for zone, start, growth in zip(zones, peak_demand_mw, growth_rate)
         for year in years
     ]
 
+    return pd.DataFrame(rows)
+
+
+def build_demand_profile(zones, noise_pct, seed_path="seed_data/demand_seed.csv"):
+    """Build demandprofile: the seed's normalized hourly load shape, independently perturbed
+    per zone and timepoint by noise_pct.
+    """
     shape = pd.read_csv(seed_path)
     frames = []
     for zone in zones:
         # perturb the hourly load shape by noise
         noise = noise_multiplier(noise_pct, size=len(shape))
         frames.append(shape.assign(zone=zone, value=(shape["value"] * noise)))
-    profile_df = pd.concat(frames, ignore_index=True)[["zone", "season", "day", "hour", "value"]]
 
-    return pd.DataFrame(forecast_rows), profile_df
+    return pd.concat(frames, ignore_index=True)[["zone", "season", "day", "hour", "value"]]

@@ -11,6 +11,7 @@ cases:
     num_instances: 10
     zone_peak_demand_mw: [500.0, 300.0, 700.0]
     starting_generator_mix: {gas: 0.3, coal: 0.1, PV: 0.6}
+    storage_capacity_pct: 0.15
     noise_pct: 0.15
     mesh_level: 0.4
     congestion_level: 0.2

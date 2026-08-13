@@ -3,7 +3,10 @@ Data generation is structured to enable easy scaling of the model (zones, years,
 mix) for solver performance testing, independent of which build backend (pyomo or PyPSA) consumes it.
 
 Per-parameter-group generation (generator/storage/demand/renewable) lives in its own module,
-each reading its own seed CSV from seed_data/. This file just orchestrates them.
+each reading its own seed CSV from seed_data/, and each drawing its own noise (via noise.py) for
+the quantities it owns. The one exception is demand's peak-growth rate: that's randomized here
+(not inside demand_params.py) since generator/storage/network sizing all depend on its result
+(via zonal capacity/max_load), so it needs to be resolved before those calls, not inside them.
 """
 
 from pathlib import Path
@@ -11,9 +14,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .demand_params import build_demand
+from .demand_params import build_demand_forecast, build_demand_profile
 from .generator_params import build_generators
 from .network_params import build_network
+from .noise import noise_multiplier
 from .re_potentials import build_renewable_profiles
 from .storage_params import build_storage
 
@@ -44,7 +48,7 @@ def generate_all_data(
     annual_discount_rate=0.05,  # 5%/year, applied to costs relative to the first modeled year
     starting_generator_mix=None,  # shares of starting generator capacity by tech; must sum to 1
     starting_reserve_margin=0.9,  # existing generator capacity = max load over the horizon * this margin
-    starting_storage_capacity_pct=0.1,  # existing storage capacity = existing generator capacity * this fraction
+    storage_capacity_pct=0.1,  # existing storage capacity = zonal capacity (max load) * this fraction
     demand_growth_rate_mean=0.02,  # root (unnoised) demand growth rate, shared across zones
     noise_pct=0.10,  # shared noise level for every randomized quantity (see noise.py)
     mesh_level=0.2,  # probability that each possible line beyond the spanning path also exists
@@ -56,9 +60,11 @@ def generate_all_data(
     zone_peak_demand_mw is either a single value (used for every zone) or a list with exactly
     one entry per zone.
 
-    noise_pct is the single shared noise level for every randomized quantity in synthetic
-    generation (demand growth rate, demand profile, renewable profiles, generator/storage
-    costs): each root value is scaled by ~ N(1, noise_pct), clamped to be non-negative.
+    noise_pct is the single shared noise level passed to every parameter-group module (demand
+    profile, renewable profiles, generator/storage costs, network line capacity), each of which
+    draws its own noise ~ N(1, noise_pct) (clamped to be non-negative, see noise.py) for the
+    quantities it owns. The one quantity randomized here instead is the demand growth rate,
+    since generator/storage/network sizing all depend on its realized value.
 
     output_path may be a local path or a remote URL (e.g. gs://bucket/prefix); writes go through
     pandas/fsspec either way, so no filesystem-specific handling is needed here.
@@ -78,19 +84,19 @@ def generate_all_data(
     else:
         assert len(zone_peak_demand_mw) == n_zones, "zone_peak_demand_mw must be a single value or one per zone"
 
-    demandforecast_df, demandprofile_df = build_demand(
-        ZONES, zone_peak_demand_mw, years, demand_growth_rate_mean, noise_pct,
-        seed_path=SEED_DATA_DIR / "demand_seed.csv",
-    )
+    # demand growth rate, perturbed by noise per zone
+    growth_rate = demand_growth_rate_mean * noise_multiplier(noise_pct, size=n_zones)
+    demandforecast_df = build_demand_forecast(ZONES, zone_peak_demand_mw, years, growth_rate)
+    demandprofile_df = build_demand_profile(ZONES, noise_pct, seed_path=SEED_DATA_DIR / "demand_seed.csv")
 
-    # generator/storage starting capacity is sized off each zone's own peak load
+    # zonal capacity - each zone's peak load over the horizon - drives generator, storage, and network sizing
     max_load = demandforecast_df.groupby("zone")["value"].max().to_dict()
     generator_initial_capacity = [max_load[zone] * starting_reserve_margin for zone in ZONES]
     generator_constants_df, generator_costs_df = build_generators(
         ZONES, starting_generator_mix, generator_initial_capacity, years, noise_pct,
         seed_path=SEED_DATA_DIR / "generator_seed.csv",
     )
-    storage_initial_capacity = [c * starting_storage_capacity_pct for c in generator_initial_capacity]
+    storage_initial_capacity = [max_load[zone] * storage_capacity_pct for zone in ZONES]
     storage_constants_df, storage_costs_df = build_storage(
         ZONES, storage_initial_capacity, years, noise_pct,
         seed_path=SEED_DATA_DIR / "storage_seed.csv",

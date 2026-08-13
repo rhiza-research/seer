@@ -15,7 +15,7 @@ from seer.inputs.synthetic.generate_data import generate_all_data
 # are handled separately below)
 CASE_KWARGS = [
     "country_name", "zone_peak_demand_mw", "annual_discount_rate", "starting_generator_mix",
-    "starting_reserve_margin", "starting_storage_capacity_pct", "demand_growth_rate_mean",
+    "starting_reserve_margin", "storage_capacity_pct", "demand_growth_rate_mean",
     "noise_pct", "mesh_level", "congestion_level",
 ]
 
