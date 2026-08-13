@@ -1,8 +1,6 @@
 """Generates the seer schema file `network.csv`.
 
-Topology: a random spanning path across zones guarantees every zone is connected (no isolated
-zones), then every other possible zone pair is added as an extra line independently with
-probability mesh_level (0 = just the path, 1 = fully connected).
+Creates randomized topology and line capacities with guaranteed connectivity.
 """
 
 import itertools
@@ -14,22 +12,27 @@ from .noise import noise_multiplier
 
 
 def build_network(zones, peak_demand_mw, mesh_level, congestion_level, noise_pct):
-    """Build network.csv: one row per transmission line (from, to, capacity).
+    """Build network.
+    A single random spanning path is created to guarantee zones are connected.
+    Additional mesh connections are added with probability mesh_level.
+    Line connecting zones 1 and 2 is given capacity proportional to their average peak demand scaled
+    down by congestion_level. 
 
-    peak_demand_mw: {zone: peak demand (MW)}, used to size line capacity.
     mesh_level: probability [0, 1] that each possible line beyond the spanning path also exists.
     congestion_level: fraction [0, 1] by which a line's capacity is derated below the average of
     its two zones' peak demand.
     """
+    # single node grid has no lines
     if len(zones) < 2:
         return pd.DataFrame(columns=["from", "to", "capacity"])
 
-    # spanning path: a random permutation of zones, connected in sequence, guarantees every
-    # zone is reachable - no isolated zones
+    # spanning path: a random permutation of zones, connected in sequence, guarantees that
+    # no zone is an island.
     order = np.random.permutation(zones)
     path_edges = {frozenset((order[i], order[i + 1])) for i in range(len(order) - 1)}
 
-    # every other possible zone pair becomes a line independently with probability mesh_level
+    # add meshed lines with probability mesh_level
+    # 0 = no meshed lines, 1 = fully connected
     other_edges = {
         frozenset(pair) for pair in itertools.combinations(zones, 2)
         if frozenset(pair) not in path_edges and np.random.uniform() < mesh_level
