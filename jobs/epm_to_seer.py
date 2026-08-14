@@ -6,7 +6,7 @@ from seer.inputs.epm import epm_to_seer as convert_epm_to_seer
 
 
 def epm_to_seer(model_name):
-    input_path = Path("data/processed_gams") / model_name
+    input_path = Path("gdx/data/epm_gams_csv") / model_name
     output_path = Path("data/seer") / model_name
 
     convert_epm_to_seer(input_path, output_path)

@@ -8,7 +8,7 @@ import pandas as pd
 from .sync_symbol import build_symbol_registry, symbol_lookup, symbol_sync
 
 
-def load_gdx_files(data_dir, mapping_path, strict=True):
+def load_gdx_files(data_dir, mapping_path, strict=True, region=None):
     """
     Load every region's input.gdx under data_dir in a single pass, returning
     (all_data, all_data_raw):
@@ -20,6 +20,8 @@ def load_gdx_files(data_dir, mapping_path, strict=True):
     same directory scan and the same single read of each region's .gdx file.
     all_data_raw exists for symbols (pGenDataExcel, pZoneIndex, ftfindex) that
     enrich_gen_data needs in their raw, un-pivoted form.
+
+    If region is provided, only that region's subdirectory is loaded and processed
     """
 
     # Build the symbol mapping registry
@@ -30,6 +32,10 @@ def load_gdx_files(data_dir, mapping_path, strict=True):
     all_data_raw = {}
 
     for country_dir in Path(data_dir).iterdir():
+
+        if region is not None and country_dir.name != region:
+            continue
+
         gdx_file = country_dir / "input.gdx"
         if not gdx_file.exists():
             continue
