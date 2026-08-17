@@ -176,11 +176,11 @@ def load_data(data_path):
     }
 
 
-def build(data_path, discrete_additions=False, storage_daily=False, storage_reset_hour=0, storage_reset_soc=0.5):
+def build(data_path, discrete_additions=False, battery_reset="annual", storage_reset_hour=0, storage_reset_soc=0.5):
     """Build a concrete Pyomo model instance from seer-schema CSVs at `data_path`."""
     model = seer_base_model(
         discrete_additions=discrete_additions,
-        storage_daily=storage_daily,
+        battery_reset=battery_reset,
         storage_reset_hour=storage_reset_hour,
         storage_reset_soc=storage_reset_soc,
     )

@@ -3,11 +3,17 @@ import time
 import pyomo.environ as pyo
 
 
-def solve(instance, solver_name="appsi_highs", verbose=True):
+def solve(instance, solver_name="appsi_highs", verbose=True, solver_options=None):
     # solver - swap for "cbc" / "glpk" / "gurobi" if not installed
     """Solve a model instance in place (Pyomo fills in variable values on the instance itself)
-    and print a summary of the results. Returns (results, solve_time)."""
+    and print a summary of the results. Returns (results, solve_time).
+
+    solver_options: optional dict of solver-native options (e.g. {"presolve": "off"} for
+    appsi_highs), passed straight through to the solver.
+    """
     solver = pyo.SolverFactory(solver_name)
+    if solver_options:
+        solver.options.update(solver_options)
 
     start_time = time.perf_counter()
     results = solver.solve(instance, tee=False)

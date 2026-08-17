@@ -4,7 +4,12 @@ import pyomo.environ as pyo
 - hourly resolution dispatch; annual build decisions.
 """
 
-def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset_hour=0, storage_reset_soc=0.5):
+def seer_base_model(discrete_additions=False, battery_reset="annual", storage_reset_hour=0, storage_reset_soc=0.5):
+    # None = no periodic reset within a year, i.e. only at year start ("annual")
+    reset_periods_hours = {"annual": None, "daily": 24, "weekly": 24 * 7}
+    if battery_reset not in reset_periods_hours:
+        raise ValueError(f"battery_reset must be 'annual', 'daily', or 'weekly', got {battery_reset!r}")
+    reset_period_hours = reset_periods_hours[battery_reset]
     assert 0 <= storage_reset_hour <= 23, "storage_reset_hour must be between 0 and 23"
     assert 0 <= storage_reset_soc <= 1, "storage_reset_soc must be between 0 and 1"
 
@@ -302,14 +307,15 @@ def seer_base_model(discrete_additions=False, storage_daily=False, storage_reset
     )
 
     # 11. state of charge evolution. Years are non-contiguous representative periods, so SOC is always
-    # reset/anchored at the start of every year; storage_daily additionally resets every 24 hours, which
-    # also breaks the year into independent daily windows (the same rule does both jobs).
+    # reset/anchored at the start of every year; battery_reset="daily"/"weekly" additionally resets
+    # every 24/168 hours, which also breaks the year into independent daily/weekly windows (the same
+    # rule does both jobs).
     def soc_rule(model, s, year, hour):
         hour_index = model.hours.ord(hour) - 1  # 0-based position within the year
         is_year_start = hour == model.hours.first()
-        is_daily_reset = storage_daily and (hour_index % 24 == storage_reset_hour)
+        is_periodic_reset = reset_period_hours is not None and (hour_index % reset_period_hours == storage_reset_hour)
 
-        if is_year_start or is_daily_reset:
+        if is_year_start or is_periodic_reset:
             return model.soc[s, year, hour] == storage_reset_soc * model.storage_total_energy_capacity[s, year]
 
         previous_hour = model.hours.prev(hour)
