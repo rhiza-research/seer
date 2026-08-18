@@ -1,10 +1,10 @@
 # seer schema capacity expansion model specification
 The seer schema consists of a set of standard csv files that specify a capacity planning
 model spanning one or more zones (which could correspond to regions or countries) and years.
-The seer schema can be produced by converting EPM models to the schema (as done in `seer/inputs/gams`)
+The seer schema can be produced by converting EPM models to the schema (as done in `seer/inputs/epm`)
 or by generating a synthetic model (as done in `seer/inputs/synthetic`). 
 
-Every file is a flat csv with a header row.
+Every file is a csv with a header row.
 
 ## Contents
 
@@ -34,6 +34,8 @@ Number of rows is zones.
 | `zone` | short zone id, referenced by every other file's `zone` column |
 | `country` | country this zone belongs to |
 | `name` | display name |
+`country` and `name` are convenience fields that enable visualization and analysis, but are
+not used in the optimization model.
 
 ### `years.csv`
 Years over which to run planning; each year is an investment period, i.e. build decisions happen
@@ -45,9 +47,9 @@ Number of rows is years.
 | `year` | a modeled investment-period year |
 
 ### `network.csv`
-One row per transmission line connecting two zones. Optional - a dataset with no inter-zone
-lines (e.g. single-zone) can omit this file. Line capacity is fixed for now (no line expansion).
-Number of rows is lines.
+One row per transmission line connecting two zones. This is **optional** - a dataset with no inter-zone
+lines (e.g. single-zone) can omit this file.
+Number of rows is number of lines.
 
 | column | contents |
 | --- | --- |
@@ -68,8 +70,8 @@ Number of rows is zones x years (x 2 if both energy and peak are specified).
 | `value` | forecast value in the units implied by `type` |
 
 ### `demandprofile.csv`
-Normalized annual load curve at hourly resolution; a single load curve is used in all years. 
-Number of rows is zones x 8760.
+Normalized annual load curve at hourly resolution; a single load curve is used across all years. 
+Number of rows is zones x 8760 (hours per year).
 
 | column | contents |
 | --- | --- |
@@ -77,7 +79,7 @@ Number of rows is zones x 8760.
 | `season` | month, encoded as `m1`…`m12` |
 | `day` | day of month, encoded as `d1`…`d31` (representative days, not calendar dates) |
 | `hour` | hour of day, encoded as `t1`…`t24` |
-| `value` | demand as a fraction of annual peak (unitless, ~0–1). At build time this is multiplied by `demandforecast`'s `peak` value for the corresponding year to get MW at that snapshot (`seer/models/pypsa_model/build.py:set_demand`). |
+| `value` | unitless demand as a fraction of annual peak. This is multiplied by `demandforecast`'s `peak` value for the corresponding year to get MW at that snapshot. |
 
 ## renewable potentials
 ### `renewable_profiles.csv`
