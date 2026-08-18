@@ -23,11 +23,8 @@ import pandas as pd
 RESULTS_PATH = "results.csv" # or "gs://seer-datalake/benchmarking/results.csv"
 
 
-def run_experiment(n_zones, n_years, battery_reset, modular_build, presolve=True):
+def run_experiment(n_zones, n_years, battery_reset, modular_build, presolve=True, trial=0):
     """Generate synthetic data, build+solve a pyomo model, and return one results row.
-
-    Imports are local to this function so it can be sent to a Coiled worker as-is, without the
-    caller needing the seer package pre-imported in its own process.
     """
     from seer.inputs.synthetic import generate_all_data
     from seer.models.pyomo_model import build, solve
@@ -53,7 +50,7 @@ def run_experiment(n_zones, n_years, battery_reset, modular_build, presolve=True
     print(f"-> solve_time={solve_time:.2f}s", flush=True)
     return {
         "n_zones": n_zones, "n_years": n_years, "battery_reset": battery_reset,
-        "modular_build": modular_build, "presolve": presolve, "solve_time": solve_time,
+        "modular_build": modular_build, "presolve": presolve, "trial": trial, "solve_time": solve_time,
     }
 
 
@@ -72,7 +69,8 @@ def run_on_coiled(experiments, name="seer-benchmarking", n_workers=2):
     client = Client(cluster)
     print(f"Coiled dashboard: {cluster.dashboard_link}", flush=True)
 
-    futures = [client.submit(run_experiment, **exp) for exp in experiments]
+    # pure=False: ensures each trial runs in a fresh process
+    futures = [client.submit(run_experiment, pure=False, **exp) for exp in experiments]
     results = client.gather(futures)
 
     # close client connection; cluster will keep running until idle_timeout
@@ -105,10 +103,10 @@ def main(use_coiled, results_path, n_workers=2, presolve=True, repeats=3):
     # time) to capture both average solve time and its run-to-run variance
     experiments = [
         dict(n_zones=n_zones, n_years=n_years, battery_reset=battery_reset, modular_build=modular_build,
-             presolve=presolve)
+             presolve=presolve, trial=trial)
         for n_zones, n_years, battery_reset in sweeps
         for modular_build in modular_build_grid
-        for _ in range(repeats)
+        for trial in range(repeats)
     ]
 
     print(
