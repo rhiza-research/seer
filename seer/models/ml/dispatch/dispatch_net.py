@@ -11,6 +11,10 @@ T = number of time steps
 E = number of lines
 Each node is assumed to have a single dispatchable generator, storage unit, and aggregate load.
 
+Sign convention: consumption/extraction is POSITIVE, generation/injection is NEGATIVE. So
+net_demand < 0 means excess generation, and storage realized_delta > 0 means charging (< 0 =
+discharging). gen_output/lost_load are always >= 0 because they can only produce power.
+
 Inputs (per instance, batched):
     net_demand              : (B, N, T)  net demand at each node (load - RE), can be < 0
     marginal_cost           : (B, N)     marginal cost of each dispatchable generator
@@ -178,18 +182,27 @@ def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_cap
                               gives max slope 1 at SOC = 0.5, matching the max magnitude of a
                               single hour's power-fraction delta (see module docstring).
 
+    Sign convention (see module docstring): consumption/extraction is POSITIVE, generation/
+    injection is NEGATIVE. Discharging INJECTS power into the grid (generation-like), so it is
+    NEGATIVE. Charging EXTRACTS power from the grid (consumption-like), so it is POSITIVE.
+    storage_delta_raw / the returned realized_delta both follow this convention.
+
     Returns:
         soc            : (B, N, T) state of charge, as a FRACTION of storage_energy_capacity, in (0, 1)
         realized_delta : (B, N, T) the delta (fraction of storage_power_capacity, same units as
                          storage_delta_raw once bounded) that actually produces this soc trajectory
     """
-    # Step 1: bound the raw output to [-1, 1] -- a fraction of storage_power_capacity
+    # Step 1: bound the raw output to [-1, 1] -- a fraction of storage_power_capacity.
+    # positive = charging (consumption), negative = discharging (generation) -- see sign
+    # convention note above.
     delta_frac = torch.tanh(storage_delta_raw)  # (B, N, T)
 
     # convert delta from "fraction of power capacity" to "fraction of energy capacity" (SOC
     # space) for this one-hour step: at hourly resolution, running at full power (delta=1) for
     # one hour moves power_capacity MWh, i.e. power_capacity/energy_capacity = 1/duration_hours
-    # of SOC (duration_hours = storage_energy_capacity / storage_power_capacity)
+    # of SOC (duration_hours = storage_energy_capacity / storage_power_capacity). Charging
+    # (delta_frac > 0, consumption-positive) FILLS the battery, so the sign carries through
+    # unchanged here.
     soc_rate = (storage_power_capacity / storage_energy_capacity).unsqueeze(-1)  # (B, N, 1)
     delta_soc_raw = delta_frac * soc_rate  # (B, N, T), fraction of energy capacity
 
@@ -201,7 +214,9 @@ def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_cap
     soc_cumsum = torch.cumsum(delta_soc_raw, dim=-1)  # (B, N, T)
     soc = torch.sigmoid(sigmoid_sharpness * soc_cumsum)  # (B, N, T)
 
-    # Step 3: back out the realized SOC-space deltas from the repaired trajectory (soc0 = 0)
+    # Step 3: back out the realized SOC-space deltas from the repaired trajectory (soc0 = 0).
+    # soc increasing (soc > soc_prev) means charging (consumption-positive), matching the sign
+    # convention -- no extra sign flip needed here.
     soc_prev = torch.cat([torch.zeros_like(soc[:, :, :1]), soc[:, :, :-1]], dim=-1)
     realized_delta_soc = soc - soc_prev  # (B, N, T), fraction of energy capacity
 
