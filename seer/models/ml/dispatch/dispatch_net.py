@@ -13,8 +13,8 @@ Each node is assumed to have a single dispatchable generator, storage unit, and 
 
 Sign convention: production/injection is POSITIVE, consumption/extraction is NEGATIVE. So
 injection < 0 means net consumption (more load than RE), and storage realized_delta > 0 means
-discharging (< 0 = charging). gen_output/lost_load are always >= 0 because they can only
-produce power.
+discharging (< 0 = charging). gen_output is always >= 0 (it can only produce power); lost_load
+is signed -- positive means shedding, negative means curtailment (see dispatch_forward).
 
 Inputs (per instance, batched):
     injection               : (B, N, T)  net injection at each node (RE - load), can be < 0
@@ -28,7 +28,7 @@ Inputs (per instance, batched):
 
 Outputs:
     gen_output : (B, N, T)  dispatchable generator output
-    lost_load  : (B, T)     aggregate lost-load
+    lost_load  : (B, T)     aggregate lost-load; positive = shedding, negative = curtailment
     soc        : (B, N, T)  storage state of charge
     line_flows : (B, E, T)  line flows
 
@@ -40,10 +40,12 @@ Repair sequence:
        0 by the end -- see storage_repair's docstring). Realized deltas are backed out by
        differencing, then everything is scaled from fractional to absolute MW/MWh in
        dispatch_forward.
-    2. Aggregate power balance repair (paper's Theorem-1-style layer,
-       generalized to N+1 "generators": N dispatchable + 1 aggregate
-       lost-load unit). This is done PER TIMESTEP, treating storage's
-       already-fixed realized output as part of the effective balance target.
+    2. Aggregate power balance repair (paper's Theorem-1-style layer) among the N real
+       generators only, against a target that's first clamped to their combined capacity.
+       Lost load is NOT part of this repair -- it's the deterministic residual (target minus
+       what the clamped generators absorb), not a learned output; see dispatch_forward. This is
+       done PER TIMESTEP, treating storage's already-fixed realized output as part of the
+       effective balance target.
     3. PTDF-based flow reconstruction from nodal net injections. Because
        aggregate balance holds exactly (sum injections = 0 every t), the
        resulting flows automatically satisfy KCL -- no repair needed there.
@@ -55,10 +57,11 @@ Known v1 simplifications (documented, not hidden):
       Excess dispatchable generation is only discouraged via cost, not
       hard-repaired (per user's design choice) -- deficit side is exact,
       surplus side is cost-incentivized only.
-    - Lost load is a single AGGREGATE generator (bound = system demand at
-      time t), then allocated back to nodes pro-rata by demand share for
-      PTDF purposes. This is a modeling simplification -- a nodal lost
-      load formulation would remove the need for this allocation step.
+    - Lost load is a single AGGREGATE, deterministic residual (target minus what real
+      generators can absorb -- see dispatch_forward), then allocated back to nodes pro-rata by
+      the pre-lost-load nodal injection (deficit nodes for shedding, surplus nodes for
+      curtailment -- see dispatch_forward) for PTDF purposes. A nodal lost load formulation
+      would remove the need for this allocation step entirely.
     - DispatchNet now sees a per-node topology summary too (each node's total
       connected line capacity, derived from line_capacity via a fixed node-line
       incidence matrix - see below) alongside marginal_cost/gen_capacity/
@@ -127,8 +130,10 @@ class DispatchNet(nn.Module):
             + n_nodes               # connected_capacity (topology summary, see module docstring)
             + 1                      # voll
         )
-        # output: (n+1) x T generator-raw logits + n x T storage-raw deltas
-        output_dim = (n_nodes + 1) * t_steps + n_nodes * t_steps
+        # output: n x T generator-raw logits + n x T storage-raw deltas. No lost-load head --
+        # lost load is a deterministic residual in dispatch_forward, not a learned output
+        # (see balance_repair's docstring / conversation).
+        output_dim = n_nodes * t_steps + n_nodes * t_steps
 
         layers = []
         dim = input_dim
@@ -155,8 +160,8 @@ class DispatchNet(nn.Module):
         out = self.net(x)
 
         n, t = self.n, self.t
-        gen_raw = out[:, : (n + 1) * t].reshape(B, n + 1, t)
-        storage_raw = out[:, (n + 1) * t:].reshape(B, n, t)
+        gen_raw = out[:, : n * t].reshape(B, n, t)
+        storage_raw = out[:, n * t:].reshape(B, n, t)
         return gen_raw, storage_raw
 
 
@@ -227,17 +232,17 @@ def balance_repair(dispatch_raw, dispatch_capacity, target_dispatch):
 
     dispatch_raw      : (B, G, T) proposed dispatch (already within [0, dispatch_capacity])
     dispatch_capacity : (B, G, T) upper bound for each generator at each time
-                        (allows the lost-load "generator"'s bound to vary with time)
-    target_dispatch   : (B, T) target aggregate dispatch (net demand + storage charge)
+    target_dispatch   : (B, T) target aggregate dispatch
 
     Returns:
         dispatch_repaired : (B, G, T) with sum_g dispatch_repaired = target_dispatch exactly,
                      WHENEVER target_dispatch is feasible i.e. 0 <= target_dispatch <=
                      sum_g dispatch_capacity. If target_dispatch is outside that range,
                      dispatch is pinned at the corresponding bound (0 or dispatch_capacity)
-                     and a residual imbalance remains -- this should not occur in this v1
-                     because the lost-load generator's bound is set to always make
-                     target_dispatch feasible; kept here as a safety clamp regardless.
+                     and a residual imbalance remains -- callers should pre-clamp
+                     target_dispatch to [0, sum_g dispatch_capacity] if they need this to never
+                     trigger (e.g. dispatch_forward's target_dispatch_gen); kept here as a
+                     safety clamp regardless.
     """
     dispatch_sum = dispatch_raw.sum(dim=1)          # (B, T)
     capacity_sum = dispatch_capacity.sum(dim=1)      # (B, T)
@@ -285,22 +290,9 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
     )
 
     # ---- clamp generator outputs to capacity (paper's sigmoid-scale trick)
-    # Real generators: static bound gen_capacity. Lost-load "generator": dynamic
-    # bound = system-wide consumption at each t (can't shed more than exists).
-    z = torch.sigmoid(gen_raw)                      # (B, N+1, T)
-    z_gen, z_ll = z[:, :N, :], z[:, N:, :]           # split
-
-    dispatch_capacity_gen = gen_capacity.unsqueeze(-1).expand(B, N, T)   # (B, N, T)
-    gen_output_raw = z_gen * dispatch_capacity_gen
-
-    # system-wide consumption need = -injection (only the deficit, i.e. injection < 0, is
-    # sheddable -- an injection surplus has nothing to shed)
-    consumption_total_t = (-injection.sum(dim=1)).clamp(min=0.0)  # (B, T)
-    dispatch_capacity_ll = consumption_total_t.unsqueeze(1)       # (B, 1, T)
-    lost_load_raw = z_ll * dispatch_capacity_ll                   # (B, 1, T)
-
-    dispatch_capacity_all = torch.cat([dispatch_capacity_gen, dispatch_capacity_ll], dim=1)  # (B, N+1, T)
-    dispatch_raw_all = torch.cat([gen_output_raw, lost_load_raw], dim=1)  # (B, N+1, T)
+    z_gen = torch.sigmoid(gen_raw)                                       # (B, N, T)
+    gen_capacity_t = gen_capacity.unsqueeze(-1).expand(B, N, T)          # (B, N, T)
+    gen_output_raw = z_gen * gen_capacity_t
 
     # ---- storage repair (tanh -> sigmoid-bounded SOC trajectory, guaranteed feasible); returned
     #      in fractional terms, scaled to absolute MW/MWh here, same as generation's z_gen above
@@ -308,23 +300,45 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
     soc = soc_frac * storage_energy_capacity.unsqueeze(-1)
     realized_delta = realized_delta_frac * storage_power_capacity.unsqueeze(-1)
 
-    # ---- aggregate balance target for balance_repair (a consumption-positive "deficit to be
-    #      met by generators + lost load" magnitude -- the opposite convention from injection/
-    #      realized_delta above; NOTE: this sign flip is a placeholder pending further discussion,
-    #      see conversation)
+    # ---- aggregate balance target for balance_repair: a consumption-positive "deficit to be
+    #      met by generators" magnitude -- the opposite convention from injection/realized_delta
+    #      above. This flip is unavoidable (not just a leftover inconsistency): generators are
+    #      non-negative magnitudes, not signed quantities, so their target has to be stated as
+    #      "how much is needed" rather than "net signed position".
     target_dispatch_t = -(injection.sum(dim=1) + realized_delta.sum(dim=1))   # (B, T)
 
-    # ---- aggregate power balance repair (generators + lost load only;
-    #      storage already fixed, entering only via target_dispatch_t)
-    dispatch_repaired_all = balance_repair(dispatch_raw_all, dispatch_capacity_all, target_dispatch_t)  # (B, N+1, T)
-    gen_output = dispatch_repaired_all[:, :N, :]
-    lost_load = dispatch_repaired_all[:, N, :]       # (B, T) aggregate
+    # ---- real generators absorb the target first, up to their combined capacity
+    gen_capacity_sum = gen_capacity_t.sum(dim=1)                                      # (B, T)
+    target_dispatch_gen = torch.clamp(target_dispatch_t, min=torch.zeros_like(gen_capacity_sum), max=gen_capacity_sum)
 
-    # ---- allocate aggregate lost load back to nodes pro-rata by consumption share, purely for
-    #      PTDF injection purposes (see module docstring)
-    consumption_pos = (-injection).clamp(min=0.0)
-    consumption_pos_sum = consumption_pos.sum(dim=1).clamp(min=1e-6)      # (B, T)
-    lost_load_node = lost_load.unsqueeze(1) * (consumption_pos / consumption_pos_sum.unsqueeze(1))  # (B, N, T)
+    # ---- power balance repair among real generators only (storage is already fixed, entering
+    #      only via target_dispatch_t above)
+    gen_output = balance_repair(gen_output_raw, gen_capacity_t, target_dispatch_gen)  # (B, N, T)
+
+    # ---- lost load is whatever's left over -- a deterministic residual, not a learned output
+    #      (see DispatchNet's docstring). Computed from gen_output's ACTUAL realized sum, not
+    #      target_dispatch_gen, so it exactly absorbs any floating-point slippage from
+    #      balance_repair above and injections sums to zero exactly, not just approximately.
+    #      Negative lost load means curtailment (target < 0, i.e. more RE + storage discharge
+    #      than needed, and generators are already floored at 0) -- not a learned choice either,
+    #      just the unavoidable sign of the same residual.
+    lost_load = target_dispatch_t - gen_output.sum(dim=1)                            # (B, T), can be < 0
+
+    # ---- allocate aggregate lost load back to nodes, purely for PTDF injection purposes (see
+    #      module docstring). Basis: the nodal injection BEFORE lost load is added -- i.e. where
+    #      the deficit/surplus that lost_load is covering actually sits, once generators and
+    #      storage have already made their decisions. Shed (lost_load > 0) goes to deficit nodes
+    #      (pre_lost_load < 0), curtailment (lost_load < 0) goes to surplus nodes (pre_lost_load >
+    #      0), each pro-rata by magnitude. Since pre_lost_load.sum(dim=1) == -lost_load exactly
+    #      (gen_output.sum(dim=1) == target_dispatch_gen by construction), whichever basis is
+    #      active is guaranteed to have a nonzero sum -- e.g. lost_load > 0 forces
+    #      pre_lost_load.sum(dim=1) < 0, so not every node can be >= 0.
+    pre_lost_load = gen_output + injection + realized_delta                      # (B, N, T)
+    eps = 1e-8
+    shed_alloc = torch.relu(-pre_lost_load) / torch.relu(-pre_lost_load).sum(dim=1, keepdim=True).clamp(min=eps)
+    curtail_alloc = torch.relu(pre_lost_load) / torch.relu(pre_lost_load).sum(dim=1, keepdim=True).clamp(min=eps)
+    lost_load_t = lost_load.unsqueeze(1)  # (B, 1, T)
+    lost_load_node = torch.where(lost_load_t > 0, lost_load_t * shed_alloc, lost_load_t * curtail_alloc)
 
     # ---- nodal net injections, for the PTDF -- a plain sum, everything here is already
     #      production-positive (see module docstring)
@@ -351,7 +365,7 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
 
 def dispatch_loss(outputs, marginal_cost, voll, line_capacity, m_th=1500.0):
     """
-    cost = sum_t sum_i marginal_cost_i * gen_output(i,t)  +  sum_t voll * lost_load(t)
+    cost = sum_t sum_i marginal_cost_i * gen_output(i,t)  +  sum_t voll * relu(lost_load(t))
     line_penalty = m_th * sum_e sum_t relu(|line_flows(e,t)| - line_capacity(e))
 
     line_capacity : (B, E) - one topology per batch item (see dispatch_forward)
@@ -361,7 +375,9 @@ def dispatch_loss(outputs, marginal_cost, voll, line_capacity, m_th=1500.0):
     line_flows = outputs["line_flows"]   # (B, E, T)
 
     gen_cost = (marginal_cost.unsqueeze(-1) * gen_output).sum(dim=(1, 2))   # (B,)
-    ll_cost = (voll.unsqueeze(-1) * lost_load).sum(dim=1)                   # (B,)
+    # only the shedding part (lost_load > 0) is costed at VOLL -- negative lost_load is
+    # curtailment (see dispatch_forward), which is free for now (no reward, no penalty)
+    ll_cost = (voll.unsqueeze(-1) * torch.relu(lost_load)).sum(dim=1)       # (B,)
 
     overflow = torch.relu(line_flows.abs() - line_capacity.unsqueeze(-1))  # (B, E, 1) broadcast over T
     line_penalty = m_th * overflow.sum(dim=(1, 2))                 # (B,)
