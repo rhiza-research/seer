@@ -28,8 +28,13 @@ Outputs:
     line_flows : (B, E, T)  line flows
 
 Repair sequence:
-    1. Storage repair (sequential over time): clamp charging rate, then
-       clamp SOC to [0, storage_energy_capacity], recompute realized deltas.
+    1. Storage repair: tanh-bound the raw output to a power-capacity fraction in [-1, 1],
+       rescale into SOC-space (divide by duration_hours = energy_capacity/power_capacity),
+       cumsum over time, then bound into (0, 1) with a sharpened sigmoid to get a guaranteed-
+       feasible SOC trajectory (starting from SOC=0 at midnight; no constraint forces it back to
+       0 by the end -- see storage_repair's docstring). Realized deltas are backed out by
+       differencing, then everything is scaled from fractional to absolute MW/MWh in
+       dispatch_forward.
     2. Aggregate power balance repair (paper's Theorem-1-style layer,
        generalized to N+1 "generators": N dispatchable + 1 aggregate
        lost-load unit). This is done PER TIMESTEP, treating storage's
@@ -66,8 +71,13 @@ Known v1 simplifications (documented, not hidden):
       fixed topology converged to line_penalty flat at 0.00, varying topology
       never settled, bouncing roughly 0-1000 epoch to epoch) - that
       comparison should be re-run with this change in.
-    - Initial SOC is fixed at a config-level fraction of storage_energy_capacity
-      (default 50%) for every instance; not learned or input-conditioned in v1.
+    - Initial SOC is fixed at 0 for every instance (start of the midnight-to-midnight
+      horizon); there is no constraint requiring the battery to return to any
+      particular SOC by the end of the horizon.
+    - The sigmoid used to bound the SOC trajectory into (0, 1) reshapes the whole
+      trajectory somewhat, not just out-of-range excursions (see storage_repair's
+      docstring) -- accepted for v1; the network can learn raw outputs that
+      compensate for this during training.
 -----------------------------------------------------------------------------
 """
 
@@ -149,40 +159,56 @@ class DispatchNet(nn.Module):
 # Repair layers
 # =============================================================================
 
-def storage_repair(delta_raw, storage_energy_capacity, storage_power_capacity, soc0_frac=0.5):
+def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_capacity, sigmoid_sharpness=4.0):
     """
-    Sequential storage repair. Enforces both rate and energy bounds exactly.
+    Repairs the network's raw storage output into a guaranteed-feasible SOC trajectory over the
+    day (midnight to midnight), and the deltas that produce it. The battery is assumed to start
+    the horizon at SOC = 0; there is no constraint forcing it back to 0 by the end -- it ends up
+    wherever the repaired trajectory puts it (in practice, since using storage is free in this
+    model, the network should tend to want to discharge whenever it can).
 
-    delta_raw                : (B, N, T) unconstrained deltas from the network
-    storage_energy_capacity  : (B, N) energy capacity
-    storage_power_capacity   : (B, N) power/rate capacity
+    Everything here is in FRACTIONAL terms (fraction of storage_power_capacity /
+    storage_energy_capacity respectively) -- converting to absolute MW/MWh units happens outside,
+    in dispatch_forward, at the same point generation's fraction -> absolute scaling happens.
+
+    storage_delta_raw       : (B, N, T) unconstrained raw output from the network
+    storage_energy_capacity : (B, N) energy capacity
+    storage_power_capacity  : (B, N) power/rate capacity
+    sigmoid_sharpness       : steepness of the sigmoid used to bound SOC into (0, 1); default 4.0
+                              gives max slope 1 at SOC = 0.5, matching the max magnitude of a
+                              single hour's power-fraction delta (see module docstring).
+
     Returns:
-        soc            : (B, N, T) state of charge, in [0, storage_energy_capacity]
-        realized_delta : (B, N, T) actual SOC(t) - SOC(t-1), i.e. actual
-                         charge(+)/discharge(-) power in each interval
+        soc            : (B, N, T) state of charge, as a FRACTION of storage_energy_capacity, in (0, 1)
+        realized_delta : (B, N, T) the delta (fraction of storage_power_capacity, same units as
+                         storage_delta_raw once bounded) that actually produces this soc trajectory
     """
-    B, N, T = delta_raw.shape
+    # Step 1: bound the raw output to [-1, 1] -- a fraction of storage_power_capacity
+    delta_frac = torch.tanh(storage_delta_raw)  # (B, N, T)
 
-    # Step A: clamp raw deltas to the power/rate limit (elementwise, cheap)
-    delta_clamped = torch.clamp(
-        delta_raw, min=-storage_power_capacity.unsqueeze(-1), max=storage_power_capacity.unsqueeze(-1)
-    )
+    # convert delta from "fraction of power capacity" to "fraction of energy capacity" (SOC
+    # space) for this one-hour step: at hourly resolution, running at full power (delta=1) for
+    # one hour moves power_capacity MWh, i.e. power_capacity/energy_capacity = 1/duration_hours
+    # of SOC (duration_hours = storage_energy_capacity / storage_power_capacity)
+    soc_rate = (storage_power_capacity / storage_energy_capacity).unsqueeze(-1)  # (B, N, 1)
+    delta_soc_raw = delta_frac * soc_rate  # (B, N, T), fraction of energy capacity
 
-    soc0 = soc0_frac * storage_energy_capacity  # (B, N)
-    soc_list = []
-    prev_soc = soc0
-    for t in range(T):
-        cand = prev_soc + delta_clamped[:, :, t]
-        # Step B: clamp SOC to [0, storage_energy_capacity]. Because delta was already
-        # rate-clamped, this clamp can only shrink |realized delta|,
-        # never grow it beyond storage_power_capacity.
-        soc_t = torch.clamp(cand, min=torch.zeros_like(storage_energy_capacity), max=storage_energy_capacity)
-        soc_list.append(soc_t)
-        prev_soc = soc_t
+    # Step 2: SOC starts at 0 (midnight); accumulate the raw (unbounded) SOC-space deltas, then
+    # bound into (0, 1) with a sharpened sigmoid. This guarantees feasibility for any input, but
+    # note it reshapes the WHOLE trajectory somewhat (not just out-of-range excursions), since a
+    # plain sigmoid maps input=0 to output=0.5, not to the actual SOC=0 starting point -- the
+    # network can (and must) learn whatever raw deltas compensate for this during training.
+    soc_cumsum = torch.cumsum(delta_soc_raw, dim=-1)  # (B, N, T)
+    soc = torch.sigmoid(sigmoid_sharpness * soc_cumsum)  # (B, N, T)
 
-    soc = torch.stack(soc_list, dim=-1)  # (B, N, T)
-    soc_prev = torch.cat([soc0.unsqueeze(-1), soc[:, :, :-1]], dim=-1)
-    realized_delta = soc - soc_prev
+    # Step 3: back out the realized SOC-space deltas from the repaired trajectory (soc0 = 0)
+    soc_prev = torch.cat([torch.zeros_like(soc[:, :, :1]), soc[:, :, :-1]], dim=-1)
+    realized_delta_soc = soc - soc_prev  # (B, N, T), fraction of energy capacity
+
+    # convert back to "fraction of power capacity" (same units as delta_frac) for the caller --
+    # the inverse of the soc_rate scaling above
+    realized_delta = realized_delta_soc / soc_rate
+
     return soc, realized_delta
 
 
@@ -267,8 +293,11 @@ def dispatch_forward(model, net_demand, marginal_cost, gen_capacity, storage_ene
     dispatch_capacity_all = torch.cat([dispatch_capacity_gen, dispatch_capacity_ll], dim=1)  # (B, N+1, T)
     dispatch_raw_all = torch.cat([gen_output_raw, lost_load_raw], dim=1)  # (B, N+1, T)
 
-    # ---- storage repair (sequential, exact rate + energy bounds)
-    soc, realized_delta = storage_repair(storage_raw, storage_energy_capacity, storage_power_capacity)
+    # ---- storage repair (tanh -> sigmoid-bounded SOC trajectory, guaranteed feasible); returned
+    #      in fractional terms, scaled to absolute MW/MWh here, same as generation's z_gen above
+    soc_frac, realized_delta_frac = storage_repair(storage_raw, storage_energy_capacity, storage_power_capacity)
+    soc = soc_frac * storage_energy_capacity.unsqueeze(-1)
+    realized_delta = realized_delta_frac * storage_power_capacity.unsqueeze(-1)
 
     # ---- aggregate balance target: net demand + net storage charging
     target_dispatch_t = net_demand.sum(dim=1) + realized_delta.sum(dim=1)   # (B, T)
