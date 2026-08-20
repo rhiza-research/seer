@@ -24,7 +24,8 @@ Inputs (per instance, batched):
     storage_power_capacity  : (B, N)     power (rate) capacity of each storage unit
     voll                    : (B,)       value of lost load; identical for all space-time
                                          (can be thought of as cost of a lost load "generator")
-    line_capacity           : (B, E)     thermal line capacities, one per instance
+    line_capacity           : (B, N, N)  thermal line capacities, one per instance; symmetric,
+                                         zero diagonal (0 = no line between that pair)
 
 Outputs:
     gen_output : (B, N, T)  dispatchable generator output
@@ -63,8 +64,8 @@ Known v1 simplifications (documented, not hidden):
       curtailment -- see dispatch_forward) for PTDF purposes. A nodal lost load formulation
       would remove the need for this allocation step entirely.
     - DispatchNet now sees a per-node topology summary too (each node's total
-      connected line capacity, derived from line_capacity via a fixed node-line
-      incidence matrix - see below) alongside marginal_cost/gen_capacity/
+      connected line capacity, a simple row-sum of the NxN line_capacity matrix)
+      alongside marginal_cost/gen_capacity/
       storage_energy_capacity/storage_power_capacity, in addition to
       line_capacity/ptdf still driving the PTDF flow reconstruction and
       line-capacity penalty as before. This was Option 2 of a few considered
@@ -95,17 +96,23 @@ import torch
 import torch.nn as nn
 
 
-def _build_incidence(n_nodes):
-    """(N, E) 0/1 incidence matrix, E = n_nodes*(n_nodes-1)//2. incidence[i, e] = 1 if line slot
-    e touches node i. Slot order must match every other fixed-slots user in this codebase
-    (itertools.combinations(range(n_nodes), 2) - see experiments/ml/daily_dispatch.py's
-    sample_network and experiments/ml/ml_dispatch_experiment.py's network adapter)."""
-    all_pairs = list(itertools.combinations(range(n_nodes), 2))
-    incidence = torch.zeros(n_nodes, len(all_pairs))
-    for e, (i, j) in enumerate(all_pairs):
-        incidence[i, e] = 1.0
-        incidence[j, e] = 1.0
-    return incidence
+def canonical_edge_pairs(n_nodes):
+    """The single fixed (i, j) ordering, i < j, used everywhere an edge-indexed quantity needs
+    to line up with another (PTDF construction, capacity_matrix_to_edges below). E =
+    n_nodes*(n_nodes-1)//2. Anything needing edge order should derive it from here rather than
+    calling itertools.combinations directly, so there is exactly one source of truth."""
+    return list(itertools.combinations(range(n_nodes), 2))
+
+
+def capacity_matrix_to_edges(capacity_matrix, n_nodes):
+    """Extract the canonically-ordered (..., E) edge values from an (..., N, N) symmetric
+    capacity matrix (e.g. line_capacity), using canonical_edge_pairs' ordering. This is what
+    PTDF construction and the line-capacity loss penalty should use to go from the NxN
+    representation to an edge-indexed one -- replaces the old incidence-matrix approach."""
+    pairs = canonical_edge_pairs(n_nodes)
+    idx_i = torch.tensor([i for i, j in pairs], device=capacity_matrix.device)
+    idx_j = torch.tensor([j for i, j in pairs], device=capacity_matrix.device)
+    return capacity_matrix[..., idx_i, idx_j]
 
 
 # =============================================================================
@@ -117,9 +124,6 @@ class DispatchNet(nn.Module):
         super().__init__()
         self.n = n_nodes
         self.t = t_steps
-
-        # fixed (not learned), moves with .to(device) since it's a buffer
-        self.register_buffer("incidence", _build_incidence(n_nodes))  # (N, E)
 
         input_dim = (
             n_nodes * t_steps      # injection
@@ -145,10 +149,10 @@ class DispatchNet(nn.Module):
 
     def forward(self, injection, marginal_cost, gen_capacity, storage_energy_capacity,
                 storage_power_capacity, voll, line_capacity):
-        """line_capacity : (B, E) - see dispatch_forward. E must match this instance's n_nodes
-        (E = n_nodes*(n_nodes-1)//2), i.e. n_nodes is fixed for a given trained model."""
+        """line_capacity : (B, N, N) - see dispatch_forward. Symmetric, zero diagonal; N must
+        match this instance's n_nodes, i.e. n_nodes is fixed for a given trained model."""
         B = injection.shape[0]
-        connected_capacity = torch.einsum('ne,be->bn', self.incidence, line_capacity)  # (B, N)
+        connected_capacity = line_capacity.sum(dim=-1)  # (B, N) -- each node's total connected capacity
 
         # build input tensor
         x = torch.cat([
@@ -274,22 +278,21 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
         as described in the module docstring
     voll           : (B,)
     ptdf           : (B, E, N) tensor - one topology per batch item (see
-                     experiments/ml/daily_dispatch.py's sample_network_batch, or a seer-schema
-                     network.csv converted the same way)
-    line_capacity  : (B, E) tensor - one topology per batch item
+                     experiments/ml/ml_dispatch_experiment.py's compute_ptdf/network adapter)
+    line_capacity  : (B, N, N) tensor - one topology per batch item; symmetric, zero diagonal
+                     (see capacity_matrix_to_edges for the edge-indexed form PTDF/the loss need)
 
     Returns dict with gen_output, lost_load, soc, line_flows, injections.
     """
     B, N, T = injection.shape
 
-    # line_capacity also feeds the model itself now (a per-node connected-capacity summary, see
-    # DispatchNet's docstring) - not just the post-hoc PTDF flow reconstruction/penalty below.
+    # get raw storage and generator dispatch
     gen_raw, storage_raw = model(
         injection, marginal_cost, gen_capacity, storage_energy_capacity, storage_power_capacity,
         voll, line_capacity,
     )
 
-    # ---- clamp generator outputs to capacity (paper's sigmoid-scale trick)
+    # generator dispatch is clamped between 0 and capacity with sigmoid scaling
     z_gen = torch.sigmoid(gen_raw)                                       # (B, N, T)
     gen_capacity_t = gen_capacity.unsqueeze(-1).expand(B, N, T)          # (B, N, T)
     gen_output_raw = z_gen * gen_capacity_t
@@ -368,18 +371,22 @@ def dispatch_loss(outputs, marginal_cost, voll, line_capacity, m_th=1500.0):
     cost = sum_t sum_i marginal_cost_i * gen_output(i,t)  +  sum_t voll * relu(lost_load(t))
     line_penalty = m_th * sum_e sum_t relu(|line_flows(e,t)| - line_capacity(e))
 
-    line_capacity : (B, E) - one topology per batch item (see dispatch_forward)
+    line_capacity : (B, N, N) - one topology per batch item, symmetric, zero diagonal (see
+                    dispatch_forward); converted to edge-indexed form here to compare against
+                    line_flows (which is edge-indexed, from the PTDF)
     """
     gen_output = outputs["gen_output"]   # (B, N, T)
     lost_load = outputs["lost_load"]     # (B, T)
     line_flows = outputs["line_flows"]   # (B, E, T)
+    N = gen_output.shape[1]
+    line_capacity_edges = capacity_matrix_to_edges(line_capacity, N)   # (B, E)
 
     gen_cost = (marginal_cost.unsqueeze(-1) * gen_output).sum(dim=(1, 2))   # (B,)
     # only the shedding part (lost_load > 0) is costed at VOLL -- negative lost_load is
     # curtailment (see dispatch_forward), which is free for now (no reward, no penalty)
     ll_cost = (voll.unsqueeze(-1) * torch.relu(lost_load)).sum(dim=1)       # (B,)
 
-    overflow = torch.relu(line_flows.abs() - line_capacity.unsqueeze(-1))  # (B, E, 1) broadcast over T
+    overflow = torch.relu(line_flows.abs() - line_capacity_edges.unsqueeze(-1))  # (B, E, 1) broadcast over T
     line_penalty = m_th * overflow.sum(dim=(1, 2))                 # (B,)
 
     total = gen_cost + ll_cost + line_penalty

@@ -26,7 +26,6 @@ Known v1 simplifications in the seer -> dispatch adapter (documented, not hidden
       (fixed build-out), we just need one full year of hourly profiles to sample days from.
 """
 
-import itertools
 import tempfile
 
 import numpy as np
@@ -34,7 +33,7 @@ import pandas as pd
 import torch
 
 from seer.inputs.synthetic import generate_all_data
-from seer.models.ml.dispatch import DispatchNet, dispatch_forward, dispatch_loss
+from seer.models.ml.dispatch import DispatchNet, canonical_edge_pairs, dispatch_forward, dispatch_loss
 
 # ---- fixed problem scale for the whole run ----
 N_ZONES = 3
@@ -94,14 +93,14 @@ class SeerDispatchInstance:
     dataset: per-zone technical/cost aggregates (fixed for the whole year) plus a full year of
     hourly net injection, from which a random 24h window is sliced per training sample."""
 
-    def __init__(self, zones, c, gbar, sbar, rbar, ptdf, line_cap, injection_by_hour):
+    def __init__(self, zones, c, gbar, sbar, rbar, ptdf, capacity_matrix, injection_by_hour):
         self.zones = zones                        # list[str], length N
         self.c = c                                 # (N,) marginal cost
         self.gbar = gbar                           # (N,) dispatchable capacity
         self.sbar = sbar                           # (N,) storage energy capacity
         self.rbar = rbar                           # (N,) storage power capacity
         self.ptdf = ptdf                           # (E, N)
-        self.line_cap = line_cap                   # (E,)
+        self.capacity_matrix = capacity_matrix     # (N, N) symmetric, zero diagonal
         self.injection_by_hour = injection_by_hour  # (N, 8760) RE - load, MW
 
     @property
@@ -190,21 +189,23 @@ def load_seer_instance(data_path, n_zones=N_ZONES):
 
     injection_by_hour = re_gen_by_hour - load_by_hour  # (N, 8760), can be < 0
 
-    # ---- network -> fixed-slots ptdf/line_cap (same convention as sample_network) ----
+    # ---- network -> NxN capacity matrix (symmetric, zero diagonal; canonical representation,
+    #      see seer.models.ml.dispatch's module docstring) ----
     network_df = pd.read_csv(f"{data_path}/network.csv")
-    capacity_by_pair = {}
+    capacity_matrix = np.zeros((n_zones, n_zones))
     for row in network_df.itertuples(index=False):
         i, j = zone_index[row[0]], zone_index[row[1]]  # columns: from, to, capacity
-        capacity_by_pair[(min(i, j), max(i, j))] = row[2]
+        capacity_matrix[i, j] = capacity_matrix[j, i] = row[2]
 
-    all_pairs = list(itertools.combinations(range(n_zones), 2))
+    # PTDF needs a flat per-line branch list; derive it from capacity_matrix using the one
+    # canonical edge ordering everything else uses (seer.models.ml.dispatch.canonical_edge_pairs)
     branches = [
-        (i, j, capacity_by_pair.get((i, j), 0.0), capacity_by_pair.get((i, j), 0.0))
-        for (i, j) in all_pairs
+        (i, j, capacity_matrix[i, j], capacity_matrix[i, j])  # susceptance == capacity (stand-in)
+        for (i, j) in canonical_edge_pairs(n_zones)
     ]
-    ptdf, line_cap = compute_ptdf(n_zones, branches, slack_bus=0)
+    ptdf, _ = compute_ptdf(n_zones, branches, slack_bus=0)
 
-    return SeerDispatchInstance(zones, c, gbar, sbar, rbar, ptdf, line_cap, injection_by_hour)
+    return SeerDispatchInstance(zones, c, gbar, sbar, rbar, ptdf, capacity_matrix, injection_by_hour)
 
 
 def build_dataset(n_instances, n_zones=N_ZONES, year=YEAR):
@@ -228,7 +229,7 @@ def sample_batch(dataset, batch_size, t_steps=T_STEPS, device="cpu"):
     sbar = np.zeros((batch_size, n_zones))
     rbar = np.zeros((batch_size, n_zones))
     ptdf = np.zeros((batch_size, *dataset[0].ptdf.shape))
-    line_cap = np.zeros((batch_size, *dataset[0].line_cap.shape))
+    capacity_matrix = np.zeros((batch_size, n_zones, n_zones))
 
     for b in range(batch_size):
         instance = dataset[np.random.randint(len(dataset))]
@@ -241,14 +242,14 @@ def sample_batch(dataset, batch_size, t_steps=T_STEPS, device="cpu"):
         sbar[b] = instance.sbar
         rbar[b] = instance.rbar
         ptdf[b] = instance.ptdf
-        line_cap[b] = instance.line_cap
+        capacity_matrix[b] = instance.capacity_matrix
 
     def to_tensor(x):
         return torch.tensor(x, dtype=torch.float32, device=device)
 
     voll = torch.full((batch_size,), VOLL, dtype=torch.float32, device=device)
     return to_tensor(d), to_tensor(c), to_tensor(gbar), to_tensor(sbar), to_tensor(rbar), voll, \
-        to_tensor(ptdf), to_tensor(line_cap)
+        to_tensor(ptdf), to_tensor(capacity_matrix)
 
 
 def train(n_epochs=200, n_instances=20, batch_size=64, lr=1e-3, device="cpu"):
@@ -259,10 +260,10 @@ def train(n_epochs=200, n_instances=20, batch_size=64, lr=1e-3, device="cpu"):
 
     losses = []
     for epoch in range(n_epochs):
-        d, c, gbar, sbar, rbar, voll, ptdf, line_cap = sample_batch(dataset, batch_size, device=device)
+        d, c, gbar, sbar, rbar, voll, ptdf, capacity_matrix = sample_batch(dataset, batch_size, device=device)
 
-        outputs = dispatch_forward(model, d, c, gbar, sbar, rbar, voll, ptdf, line_cap)
-        loss, parts = dispatch_loss(outputs, c, voll, line_cap)
+        outputs = dispatch_forward(model, d, c, gbar, sbar, rbar, voll, ptdf, capacity_matrix)
+        loss, parts = dispatch_loss(outputs, c, voll, capacity_matrix)
 
         optim.zero_grad()
         loss.backward()

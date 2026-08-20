@@ -1,4 +1,12 @@
-from .dispatch_net import DispatchNet, balance_repair, dispatch_forward, dispatch_loss, storage_repair
+from .dispatch_net import (
+    DispatchNet,
+    balance_repair,
+    canonical_edge_pairs,
+    capacity_matrix_to_edges,
+    dispatch_forward,
+    dispatch_loss,
+    storage_repair,
+)
 
 __all__ = [
     "DispatchNet",
@@ -6,4 +14,6 @@ __all__ = [
     "dispatch_loss",
     "balance_repair",
     "storage_repair",
+    "canonical_edge_pairs",
+    "capacity_matrix_to_edges",
 ]
