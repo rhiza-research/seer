@@ -17,8 +17,9 @@ Known v1 simplifications in the seer -> dispatch adapter (documented, not hidden
       DispatchNet's single per-node (c, gbar): gbar = summed capacity, c = capacity-weighted
       average marginal cost. Same for storage (sbar summed energy capacity, rbar summed power
       capacity). DispatchNet has no notion of multiple techs/units per node.
-    - Renewable (RETech) generators are netted OUT of demand instead (d = load - RE), matching
-      the model's own "net demand" convention - they're not counted in gbar/c at all.
+    - Renewable (RETech) generators are netted into a single per-node injection instead
+      (injection = RE - load), matching the model's own production-positive sign convention -
+      they're not counted in gbar/c at all.
     - voll is a fixed constant (1e6, matching seer.models.pyomo_model's convention) for every
       instance - the seer schema has no per-zone/per-instance VOLL parameter.
     - years is fixed to a single year - multi-year capacity trajectories aren't relevant here
@@ -32,7 +33,6 @@ import numpy as np
 import pandas as pd
 import torch
 
-from experiments.ml.daily_dispatch import compute_ptdf
 from seer.inputs.synthetic import generate_all_data
 from seer.models.ml.dispatch import DispatchNet, dispatch_forward, dispatch_loss
 
@@ -43,12 +43,58 @@ YEAR = 2025
 VOLL = 1_000_000.0    # matches seer.models.pyomo_model.abstract_model's fixed convention
 
 
+# =============================================================================
+# PTDF construction (a data-prep step: computed once per instance from network.csv,
+# then passed straight through to dispatch_forward as a fixed, non-learned tensor)
+# =============================================================================
+
+def compute_ptdf(n_nodes, branches, slack_bus=0):
+    """
+    Build the PTDF matrix from a simple branch list.
+
+    branches: list of (from_bus, to_bus, susceptance, capacity)
+    Returns:
+        ptdf     : (E, n_nodes) numpy array
+        line_cap : (E,) numpy array
+    """
+    E = len(branches)
+    B_f = np.zeros((E, n_nodes))          # branch susceptance matrix
+    line_cap = np.zeros(E)
+
+    for e, (k, l, b_kl, cap) in enumerate(branches):
+        B_f[e, k] += b_kl
+        B_f[e, l] -= b_kl
+        line_cap[e] = cap
+
+    # Nodal susceptance (Laplacian-like) matrix B_bus = sum over branches
+    B_bus = np.zeros((n_nodes, n_nodes))
+    for (k, l, b_kl, _cap) in branches:
+        B_bus[k, k] += b_kl
+        B_bus[l, l] += b_kl
+        B_bus[k, l] -= b_kl
+        B_bus[l, k] -= b_kl
+
+    # Remove slack bus row/col, invert, and re-insert a zero row/col for slack
+    keep = [i for i in range(n_nodes) if i != slack_bus]
+    B_reduced = B_bus[np.ix_(keep, keep)]
+    B_inv_reduced = np.linalg.inv(B_reduced)
+
+    B_inv_full = np.zeros((n_nodes, n_nodes))
+    for i, ii in enumerate(keep):
+        for j, jj in enumerate(keep):
+            B_inv_full[ii, jj] = B_inv_reduced[i, j]
+    # slack bus row/col stay zero -> slack bus injection has no angle effect
+
+    ptdf = B_f @ B_inv_full   # (E, n_nodes)
+    return ptdf, line_cap
+
+
 class SeerDispatchInstance:
     """Everything needed to draw dispatch training samples from one generated seer-schema
     dataset: per-zone technical/cost aggregates (fixed for the whole year) plus a full year of
-    hourly net demand, from which a random 24h window is sliced per training sample."""
+    hourly net injection, from which a random 24h window is sliced per training sample."""
 
-    def __init__(self, zones, c, gbar, sbar, rbar, ptdf, line_cap, net_demand_by_hour):
+    def __init__(self, zones, c, gbar, sbar, rbar, ptdf, line_cap, injection_by_hour):
         self.zones = zones                        # list[str], length N
         self.c = c                                 # (N,) marginal cost
         self.gbar = gbar                           # (N,) dispatchable capacity
@@ -56,11 +102,11 @@ class SeerDispatchInstance:
         self.rbar = rbar                           # (N,) storage power capacity
         self.ptdf = ptdf                           # (E, N)
         self.line_cap = line_cap                   # (E,)
-        self.net_demand_by_hour = net_demand_by_hour  # (N, 8760) load - RE, MW
+        self.injection_by_hour = injection_by_hour  # (N, 8760) RE - load, MW
 
     @property
     def hours_in_year(self):
-        return self.net_demand_by_hour.shape[1]
+        return self.injection_by_hour.shape[1]
 
 
 def _aggregate_existing(constants_df, costs_df, name_col, capacity_col, zones, retech_only=None):
@@ -142,7 +188,7 @@ def load_seer_instance(data_path, n_zones=N_ZONES):
             group = group.sort_values(["month", "day", "hour"])
             re_gen_by_hour[zone_index[zone], :] = group["value"].to_numpy() * re_gbar[zone_index[zone]]
 
-    net_demand_by_hour = load_by_hour - re_gen_by_hour  # (N, 8760), can be < 0
+    injection_by_hour = re_gen_by_hour - load_by_hour  # (N, 8760), can be < 0
 
     # ---- network -> fixed-slots ptdf/line_cap (same convention as sample_network) ----
     network_df = pd.read_csv(f"{data_path}/network.csv")
@@ -158,7 +204,7 @@ def load_seer_instance(data_path, n_zones=N_ZONES):
     ]
     ptdf, line_cap = compute_ptdf(n_zones, branches, slack_bus=0)
 
-    return SeerDispatchInstance(zones, c, gbar, sbar, rbar, ptdf, line_cap, net_demand_by_hour)
+    return SeerDispatchInstance(zones, c, gbar, sbar, rbar, ptdf, line_cap, injection_by_hour)
 
 
 def build_dataset(n_instances, n_zones=N_ZONES, year=YEAR):
@@ -189,7 +235,7 @@ def sample_batch(dataset, batch_size, t_steps=T_STEPS, device="cpu"):
         max_start = instance.hours_in_year - t_steps
         start = np.random.randint(0, max_start + 1)
 
-        d[b] = instance.net_demand_by_hour[:, start:start + t_steps]
+        d[b] = instance.injection_by_hour[:, start:start + t_steps]
         c[b] = instance.c
         gbar[b] = instance.gbar
         sbar[b] = instance.sbar
