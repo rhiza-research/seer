@@ -53,20 +53,6 @@ import torch
 import torch.nn as nn
 
 
-def canonical_edge_pairs(n_nodes):
-    """Define a fixed edge ordering for the network"""
-    return list(itertools.combinations(range(n_nodes), 2))
-
-
-def capacity_matrix_to_edges(capacity_matrix, n_nodes):
-    """Extract the canonically-ordered (..., E) edge values from an (..., N, N) symmetric
-    capacity matrix, using canonical_edge_pairs' ordering."""
-    pairs = canonical_edge_pairs(n_nodes)
-    idx_i = torch.tensor([i for i, j in pairs], device=capacity_matrix.device)
-    idx_j = torch.tensor([j for i, j in pairs], device=capacity_matrix.device)
-    return capacity_matrix[..., idx_i, idx_j]
-
-
 # =============================================================================
 # Model
 # =============================================================================
@@ -122,50 +108,34 @@ class DispatchNet(nn.Module):
 # Repair layers
 # =============================================================================
 
-def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_capacity):
+def storage_repair(storage_raw, storage_energy_capacity, storage_power_capacity):
     """
-    Repairs the network's raw storage output into a guaranteed-feasible SOC trajectory over the
-    day (midnight to midnight), and the deltas that produce it. The battery is assumed to start
-    the horizon at SOC = 0; there is no constraint forcing it back to 0 by the end -- it ends up
-    wherever the repaired trajectory puts it (in practice, since using storage is free in this
-    model, the network should tend to want to discharge whenever it can).
+    Returns corrected hourly storage outputs so power and SOC capacity constraints are
+    respected exactly; operates on fractional values.
 
-    Everything here is in FRACTIONAL terms (fraction of storage_power_capacity /
-    storage_energy_capacity respectively) -- converting to absolute MW/MWh units happens outside,
-    in dispatch_forward, at the same point generation's fraction -> absolute scaling happens.
+        1. storage_raw is tanh-clamped to a fraction in [-1, 1].
+        2. converted to fractional state of charge and
+           accumulated over time, assuming soc(t=0) = 0.
+        3. resulting soc is clamped to [0, 1].
+        4. storage_output is the first difference of the repaired
+           soc trajectory, converted to power fraction units.
 
-    storage_delta_raw       : (B, N, T) unconstrained raw output from the network
-    storage_energy_capacity : (B, N) energy capacity
-    storage_power_capacity  : (B, N) power/rate capacity
+    storage_raw              : (B, N, T) unconstrained raw output from the network
+    storage_energy_capacity  : (B, N) energy capacity
+    storage_power_capacity   : (B, N) power/rate capacity
 
     Returns:
-        soc            : (B, N, T) state of charge, as a FRACTION of storage_energy_capacity, in [0, 1]
-        storage_output : (B, N, T) the power (fraction of storage_power_capacity, same units as
-                         storage_delta_raw once bounded) that actually produces this soc trajectory;
-                         guaranteed |storage_output| <= 1 exactly, at every hour including the first
-                         (see conversation -- a hard clamp, unlike a sigmoid, has slope <= 1
-                         everywhere and can represent the SOC=0 starting boundary exactly, so this
-                         bound holds uniformly with no special-casing needed)
+        soc            : (B, N, T) state of charge, fraction of storage_energy_capacity, in [0, 1]
+        storage_output : (B, N, T) power, fraction of storage_power_capacity; guaranteed |.| <= 1
     """
-    # Step 1: bound the raw output to [-1, 1] -- a fraction of storage_power_capacity.
-    delta_frac = torch.tanh(storage_delta_raw)  # (B, N, T)
-
-    # rate converting between "fraction of power capacity" and "fraction of energy capacity"
-    # (SOC space) for a one-hour step: at hourly resolution, running at full power for one hour
-    # moves power_capacity MWh, i.e. power_capacity/energy_capacity = 1/duration_hours of SOC
-    # (duration_hours = storage_energy_capacity / storage_power_capacity)
+    # bound raw storage dispatch to [-1, 1] of storage_power_capacity
+    power_frac = torch.tanh(storage_raw)  # (B, N, T)
+    # convert fractional power output to fractional state of charge
     soc_rate = (storage_power_capacity / storage_energy_capacity).unsqueeze(-1)  # (B, N, 1)
-
-    # Step 2: SOC starts at 0 (midnight); accumulate the raw (unbounded) SOC-space deltas, then
-    # clamp into [0, 1]. A hard clamp (rather than a sigmoid) is identity within [0, 1] -- it
-    # only touches values that actually stray outside the range, so it doesn't reshape/damp
-    # already-valid trajectories the way a sigmoid does.
-    soc_cumsum = torch.cumsum(-delta_frac * soc_rate, dim=-1)  # (B, N, T), negated: SOC moves
-                                                                # opposite to delta_frac (discharge drains it)
+    soc_cumsum = torch.cumsum(-power_frac * soc_rate, dim=-1)  # (B, N, T)
+    # clamp soc between 0 and 1
     soc = torch.clamp(soc_cumsum, 0.0, 1.0)  # (B, N, T)
-
-    # Step 3: back out the storage output from the repaired trajectory (soc0 = 0), negated back
-    # into delta_frac's power-fraction convention for the same reason as the cumsum above
+    # determine corrected storage output
     soc_prev = torch.cat([torch.zeros_like(soc[:, :, :1]), soc[:, :, :-1]], dim=-1)
     storage_output = -(soc - soc_prev) / soc_rate
 
@@ -339,3 +309,17 @@ def dispatch_loss(outputs, marginal_cost, voll, line_capacity, m_th=1500.0):
         "ll_cost": ll_cost.mean().item(),
         "line_penalty": line_penalty.mean().item(),
     }
+
+
+def canonical_edge_pairs(n_nodes):
+    """Define a fixed edge ordering for the network"""
+    return list(itertools.combinations(range(n_nodes), 2))
+
+
+def capacity_matrix_to_edges(capacity_matrix, n_nodes):
+    """Extract the canonically-ordered (..., E) edge values from an (..., N, N) symmetric
+    capacity matrix, using canonical_edge_pairs' ordering."""
+    pairs = canonical_edge_pairs(n_nodes)
+    idx_i = torch.tensor([i for i, j in pairs], device=capacity_matrix.device)
+    idx_j = torch.tensor([j for i, j in pairs], device=capacity_matrix.device)
+    return capacity_matrix[..., idx_i, idx_j]
