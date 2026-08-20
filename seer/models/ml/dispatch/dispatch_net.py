@@ -1,6 +1,4 @@
-"""Daily dispatch model with repair layers for feasibility.
-
-Hourly dispatch model incorporating network, storage, and lost load.
+"""Daily dispatch model.
 
 -----------------------------------------------------------------------------
 Architecture Summary
@@ -11,82 +9,41 @@ T = number of time steps
 E = number of lines
 Each node is assumed to have a single dispatchable generator, storage unit, and aggregate load.
 
-Sign convention: production/injection is POSITIVE, consumption/extraction is NEGATIVE. So
-injection < 0 means net consumption (more load than RE), and storage realized_delta > 0 means
-discharging (< 0 = charging). gen_output is always >= 0 (it can only produce power); lost_load
-is signed -- positive means shedding, negative means curtailment (see dispatch_forward).
+Sign convention: production/injection is POSITIVE, consumption/extraction is NEGATIVE.
 
-Inputs (per instance, batched):
-    injection               : (B, N, T)  net injection at each node (RE - load), can be < 0
-    marginal_cost           : (B, N)     marginal cost of each dispatchable generator
-    gen_capacity            : (B, N)     capacity of each dispatchable generator
-    storage_energy_capacity : (B, N)     energy capacity of each storage unit
-    storage_power_capacity  : (B, N)     power (rate) capacity of each storage unit
-    voll                    : (B,)       value of lost load; identical for all space-time
-                                         (can be thought of as cost of a lost load "generator")
-    line_capacity           : (B, N, N)  thermal line capacities, one per instance; symmetric,
-                                         zero diagonal (0 = no line between that pair)
+Inputs (per instance, batched):                                                              range
+    injection               : (B, N, T)  net injection at each node                         signed (+prod / -consum)
+    marginal_cost           : (B, N)     marginal cost, per generator                       >= 0
+    gen_capacity            : (B, N)     capacity, per generator                            >= 0
+    storage_energy_capacity : (B, N)     energy capacity, per storage                       > 0 (divisor, see storage_repair)
+    storage_power_capacity  : (B, N)     power/rate capacity, per storage                   >= 0
+    voll                    : (B,)       value of lost load                                 >= 0
+    line_capacity           : (B, N, N)  thermal line capacities, symmetric, zero diagonal   >= 0 (0 = no line)
 
-Outputs:
-    gen_output : (B, N, T)  dispatchable generator output
-    lost_load  : (B, T)     aggregate lost-load; positive = shedding, negative = curtailment
-    soc        : (B, N, T)  storage state of charge
-    line_flows : (B, E, T)  line flows
+Outputs:                                                            range
+    gen_output     : (B, N, T)  dispatchable generator output       [0, gen_capacity]
+    lost_load      : (B, T)     aggregate lost load                 signed (+shed / -curtail)
+    soc            : (B, N, T)  storage state of charge             [0, storage_energy_capacity]
+    storage_output : (B, N, T)  storage power output                signed, |.| <= storage_power_capacity
+    injections     : (B, N, T)  nodal net injection (post-repair)   signed
+    line_flows     : (B, E, T)  line flows                          signed
 
-Repair sequence:
-    1. Storage repair: tanh-bound the raw output to a power-capacity fraction in [-1, 1],
-       rescale into SOC-space (divide by duration_hours = energy_capacity/power_capacity),
-       cumsum over time, then bound into (0, 1) with a sharpened sigmoid to get a guaranteed-
-       feasible SOC trajectory (starting from SOC=0 at midnight; no constraint forces it back to
-       0 by the end -- see storage_repair's docstring). Realized deltas are backed out by
-       differencing, then everything is scaled from fractional to absolute MW/MWh in
-       dispatch_forward.
-    2. Aggregate power balance repair (paper's Theorem-1-style layer) among the N real
-       generators only, against a target that's first clamped to their combined capacity.
-       Lost load is NOT part of this repair -- it's the deterministic residual (target minus
-       what the clamped generators absorb), not a learned output; see dispatch_forward. This is
-       done PER TIMESTEP, treating storage's already-fixed realized output as part of the
-       effective balance target.
-    3. PTDF-based flow reconstruction from nodal net injections. Because
-       aggregate balance holds exactly (sum injections = 0 every t), the
-       resulting flows automatically satisfy KCL -- no repair needed there.
-       Line capacity is a SOFT constraint (penalized in the loss), matching
-       the original paper's treatment of thermal limits.
-
-Known v1 simplifications (documented, not hidden):
-    - Balance is enforced in AGGREGATE (system-wide) only, not nodally.
-      Excess dispatchable generation is only discouraged via cost, not
-      hard-repaired (per user's design choice) -- deficit side is exact,
-      surplus side is cost-incentivized only.
-    - Lost load is a single AGGREGATE, deterministic residual (target minus what real
-      generators can absorb -- see dispatch_forward), then allocated back to nodes pro-rata by
-      the pre-lost-load nodal injection (deficit nodes for shedding, surplus nodes for
-      curtailment -- see dispatch_forward) for PTDF purposes. A nodal lost load formulation
-      would remove the need for this allocation step entirely.
-    - DispatchNet now sees a per-node topology summary too (each node's total
-      connected line capacity, a simple row-sum of the NxN line_capacity matrix)
-      alongside marginal_cost/gen_capacity/
-      storage_energy_capacity/storage_power_capacity, in addition to
-      line_capacity/ptdf still driving the PTDF flow reconstruction and
-      line-capacity penalty as before. This was Option 2 of a few considered
-      (see conversation): cheap, contained to DispatchNet, but still a plain
-      MLP with fixed N and only a coarse per-node summary (not the full graph
-      structure - which line connects to which specific neighbor is not
-      visible, just each node's total connected capacity). A GNN/PTDF-
-      conditioned encoder taking the full graph (and able to generalize
-      across varying N) remains the follow-on step if this coarser summary
-      isn't enough - not done here. Not yet re-validated empirically against
-      the earlier topology-blind run (see conversation for that baseline:
-      fixed topology converged to line_penalty flat at 0.00, varying topology
-      never settled, bouncing roughly 0-1000 epoch to epoch) - that
-      comparison should be re-run with this change in.
-    - Initial SOC is fixed at 0 for every instance (start of the midnight-to-midnight
-      horizon); there is no constraint requiring the battery to return to any
-      particular SOC by the end of the horizon.
-    - The sigmoid used to bound the SOC trajectory into (0, 1) reshapes the whole
-      trajectory somewhat, not just out-of-range excursions (see storage_repair's
-      docstring) -- accepted for v1; the network can learn raw outputs that
-      compensate for this during training.
+Model structure:
+    1. DispatchNet (MLP) outputs unconstrained gen & storage dispatch.
+    2. Capacity repair: generator dispatch clamped to generator capacity via sigmoid scaling.
+    3. Storage repair: tanh + cumsum + clamp turns storage_raw into a guaranteed-feasible SOC
+       trajectory and the storage_output that produces it (see storage_repair). Runs before
+       generator balance repair because storage_output feeds directly into the target that
+       repair balances against.
+    4. Generator balance repair: balance_repair forces the N (capacity-clamped) generators to
+       sum exactly to a target aggregate dispatch that already accounts for storage_output
+       (pre-clamped to be feasible). Lost load is the residual beyond generator capacity -- a
+       deterministic fallback, not a learned output (see dispatch_forward).
+    5. Nodal injections + PTDF: gen_output, allocated lost load, injection, and storage_output
+       combine into nodal net injections (summing to exactly 0, by construction), which the
+       PTDF converts into line_flows -- KCL holds automatically, no repair needed there.
+    6. Loss: generation cost + shedding cost (VOLL, positive lost_load only) + a soft penalty
+       for exceeding line_capacity.
 -----------------------------------------------------------------------------
 """
 
@@ -97,18 +54,13 @@ import torch.nn as nn
 
 
 def canonical_edge_pairs(n_nodes):
-    """The single fixed (i, j) ordering, i < j, used everywhere an edge-indexed quantity needs
-    to line up with another (PTDF construction, capacity_matrix_to_edges below). E =
-    n_nodes*(n_nodes-1)//2. Anything needing edge order should derive it from here rather than
-    calling itertools.combinations directly, so there is exactly one source of truth."""
+    """Define a fixed edge ordering for the network"""
     return list(itertools.combinations(range(n_nodes), 2))
 
 
 def capacity_matrix_to_edges(capacity_matrix, n_nodes):
     """Extract the canonically-ordered (..., E) edge values from an (..., N, N) symmetric
-    capacity matrix (e.g. line_capacity), using canonical_edge_pairs' ordering. This is what
-    PTDF construction and the line-capacity loss penalty should use to go from the NxN
-    representation to an edge-indexed one -- replaces the old incidence-matrix approach."""
+    capacity matrix, using canonical_edge_pairs' ordering."""
     pairs = canonical_edge_pairs(n_nodes)
     idx_i = torch.tensor([i for i, j in pairs], device=capacity_matrix.device)
     idx_j = torch.tensor([j for i, j in pairs], device=capacity_matrix.device)
@@ -131,12 +83,10 @@ class DispatchNet(nn.Module):
             + n_nodes               # gen_capacity
             + n_nodes               # storage_energy_capacity
             + n_nodes               # storage_power_capacity
-            + n_nodes               # connected_capacity (topology summary, see module docstring)
+            + n_nodes               # connected_capacity
             + 1                      # voll
         )
-        # output: n x T generator-raw logits + n x T storage-raw deltas. No lost-load head --
-        # lost load is a deterministic residual in dispatch_forward, not a learned output
-        # (see balance_repair's docstring / conversation).
+        # output: n x T gen_raw + n x T storage_raw.
         output_dim = n_nodes * t_steps + n_nodes * t_steps
 
         layers = []
@@ -149,12 +99,11 @@ class DispatchNet(nn.Module):
 
     def forward(self, injection, marginal_cost, gen_capacity, storage_energy_capacity,
                 storage_power_capacity, voll, line_capacity):
-        """line_capacity : (B, N, N) - see dispatch_forward. Symmetric, zero diagonal; N must
-        match this instance's n_nodes, i.e. n_nodes is fixed for a given trained model."""
         B = injection.shape[0]
-        connected_capacity = line_capacity.sum(dim=-1)  # (B, N) -- each node's total connected capacity
+        # connectivity information currently passed as total connected line capacity
+        connected_capacity = line_capacity.sum(dim=-1)
 
-        # build input tensor
+        # input tensor
         x = torch.cat([
             injection.reshape(B, -1),
             marginal_cost, gen_capacity, storage_energy_capacity, storage_power_capacity,
@@ -173,7 +122,7 @@ class DispatchNet(nn.Module):
 # Repair layers
 # =============================================================================
 
-def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_capacity, sigmoid_sharpness=4.0):
+def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_capacity):
     """
     Repairs the network's raw storage output into a guaranteed-feasible SOC trajectory over the
     day (midnight to midnight), and the deltas that produce it. The battery is assumed to start
@@ -188,19 +137,15 @@ def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_cap
     storage_delta_raw       : (B, N, T) unconstrained raw output from the network
     storage_energy_capacity : (B, N) energy capacity
     storage_power_capacity  : (B, N) power/rate capacity
-    sigmoid_sharpness       : steepness of the sigmoid used to bound SOC into (0, 1); default 4.0
-                              gives max slope 1 at SOC = 0.5, matching the max magnitude of a
-                              single hour's power-fraction delta (see module docstring).
-
-    Sign convention (see module docstring): production/injection is POSITIVE, consumption/
-    extraction is NEGATIVE. Discharging INJECTS power into the grid (production-like), so it is
-    POSITIVE. Charging EXTRACTS power from the grid (consumption-like), so it is NEGATIVE.
-    storage_delta_raw / the returned realized_delta both follow this convention.
 
     Returns:
-        soc            : (B, N, T) state of charge, as a FRACTION of storage_energy_capacity, in (0, 1)
-        realized_delta : (B, N, T) the delta (fraction of storage_power_capacity, same units as
-                         storage_delta_raw once bounded) that actually produces this soc trajectory
+        soc            : (B, N, T) state of charge, as a FRACTION of storage_energy_capacity, in [0, 1]
+        storage_output : (B, N, T) the power (fraction of storage_power_capacity, same units as
+                         storage_delta_raw once bounded) that actually produces this soc trajectory;
+                         guaranteed |storage_output| <= 1 exactly, at every hour including the first
+                         (see conversation -- a hard clamp, unlike a sigmoid, has slope <= 1
+                         everywhere and can represent the SOC=0 starting boundary exactly, so this
+                         bound holds uniformly with no special-casing needed)
     """
     # Step 1: bound the raw output to [-1, 1] -- a fraction of storage_power_capacity.
     delta_frac = torch.tanh(storage_delta_raw)  # (B, N, T)
@@ -212,20 +157,19 @@ def storage_repair(storage_delta_raw, storage_energy_capacity, storage_power_cap
     soc_rate = (storage_power_capacity / storage_energy_capacity).unsqueeze(-1)  # (B, N, 1)
 
     # Step 2: SOC starts at 0 (midnight); accumulate the raw (unbounded) SOC-space deltas, then
-    # bound into (0, 1) with a sharpened sigmoid. This guarantees feasibility for any input, but
-    # note it reshapes the WHOLE trajectory somewhat (not just out-of-range excursions), since a
-    # plain sigmoid maps input=0 to output=0.5, not to the actual SOC=0 starting point -- the
-    # network can (and must) learn whatever raw deltas compensate for this during training.
+    # clamp into [0, 1]. A hard clamp (rather than a sigmoid) is identity within [0, 1] -- it
+    # only touches values that actually stray outside the range, so it doesn't reshape/damp
+    # already-valid trajectories the way a sigmoid does.
     soc_cumsum = torch.cumsum(-delta_frac * soc_rate, dim=-1)  # (B, N, T), negated: SOC moves
                                                                 # opposite to delta_frac (discharge drains it)
-    soc = torch.sigmoid(sigmoid_sharpness * soc_cumsum)  # (B, N, T)
+    soc = torch.clamp(soc_cumsum, 0.0, 1.0)  # (B, N, T)
 
-    # Step 3: back out the realized deltas from the repaired trajectory (soc0 = 0), negated back
+    # Step 3: back out the storage output from the repaired trajectory (soc0 = 0), negated back
     # into delta_frac's power-fraction convention for the same reason as the cumsum above
     soc_prev = torch.cat([torch.zeros_like(soc[:, :, :1]), soc[:, :, :-1]], dim=-1)
-    realized_delta = -(soc - soc_prev) / soc_rate
+    storage_output = -(soc - soc_prev) / soc_rate
 
-    return soc, realized_delta
+    return soc, storage_output
 
 
 def balance_repair(dispatch_raw, dispatch_capacity, target_dispatch):
@@ -299,16 +243,16 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
 
     # ---- storage repair (tanh -> sigmoid-bounded SOC trajectory, guaranteed feasible); returned
     #      in fractional terms, scaled to absolute MW/MWh here, same as generation's z_gen above
-    soc_frac, realized_delta_frac = storage_repair(storage_raw, storage_energy_capacity, storage_power_capacity)
+    soc_frac, storage_output_frac = storage_repair(storage_raw, storage_energy_capacity, storage_power_capacity)
     soc = soc_frac * storage_energy_capacity.unsqueeze(-1)
-    realized_delta = realized_delta_frac * storage_power_capacity.unsqueeze(-1)
+    storage_output = storage_output_frac * storage_power_capacity.unsqueeze(-1)
 
     # ---- aggregate balance target for balance_repair: a consumption-positive "deficit to be
-    #      met by generators" magnitude -- the opposite convention from injection/realized_delta
+    #      met by generators" magnitude -- the opposite convention from injection/storage_output
     #      above. This flip is unavoidable (not just a leftover inconsistency): generators are
     #      non-negative magnitudes, not signed quantities, so their target has to be stated as
     #      "how much is needed" rather than "net signed position".
-    target_dispatch_t = -(injection.sum(dim=1) + realized_delta.sum(dim=1))   # (B, T)
+    target_dispatch_t = -(injection.sum(dim=1) + storage_output.sum(dim=1))   # (B, T)
 
     # ---- real generators absorb the target first, up to their combined capacity
     gen_capacity_sum = gen_capacity_t.sum(dim=1)                                      # (B, T)
@@ -336,7 +280,7 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
     #      (gen_output.sum(dim=1) == target_dispatch_gen by construction), whichever basis is
     #      active is guaranteed to have a nonzero sum -- e.g. lost_load > 0 forces
     #      pre_lost_load.sum(dim=1) < 0, so not every node can be >= 0.
-    pre_lost_load = gen_output + injection + realized_delta                      # (B, N, T)
+    pre_lost_load = gen_output + injection + storage_output                      # (B, N, T)
     eps = 1e-8
     shed_alloc = torch.relu(-pre_lost_load) / torch.relu(-pre_lost_load).sum(dim=1, keepdim=True).clamp(min=eps)
     curtail_alloc = torch.relu(pre_lost_load) / torch.relu(pre_lost_load).sum(dim=1, keepdim=True).clamp(min=eps)
@@ -345,7 +289,7 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
 
     # ---- nodal net injections, for the PTDF -- a plain sum, everything here is already
     #      production-positive (see module docstring)
-    injections = gen_output + lost_load_node + injection + realized_delta   # (B, N, T)
+    injections = gen_output + lost_load_node + injection + storage_output   # (B, N, T)
 
     # ---- PTDF flows (KCL holds exactly since sum_i injections = 0 by
     #      construction of the balance repair layer)
@@ -356,7 +300,7 @@ def dispatch_forward(model, injection, marginal_cost, gen_capacity, storage_ener
         "gen_output": gen_output,
         "lost_load": lost_load,
         "soc": soc,
-        "realized_delta": realized_delta,
+        "storage_output": storage_output,
         "injections": injections,
         "line_flows": line_flows,
     }
