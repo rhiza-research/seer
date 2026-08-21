@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.patches import FancyArrowPatch
+
+FLOW_CMAP = LinearSegmentedColormap.from_list("light_to_dark_red", ["#FFD6D6", "#8B0000"])
 
 
 def build_susceptance_matrix(n_nodes, lines):
@@ -67,7 +70,7 @@ def plot_network(ax, n_nodes, lines, flow_changes=None, injections=None, node_po
         magnitudes = np.abs(flow_changes)
         max_magnitude = max(magnitudes.max(), 1e-9)
         norm = plt.Normalize(vmin=0, vmax=max_magnitude)
-        cmap = plt.get_cmap("viridis")  # sequential, since color now encodes magnitude only
+        cmap = FLOW_CMAP  # sequential (light -> dark red), since color now encodes magnitude only
 
     for idx, (i, j, capacity) in enumerate(lines):
         linewidth = 2 + 8 * (capacity / max_capacity)
