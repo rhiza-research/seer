@@ -47,7 +47,7 @@ def generate_all_data(
     n_zones, years, output_path, country_name="Seerland", zone_peak_demand_mw=500.0,
     annual_discount_rate=0.05,  # 5%/year, applied to costs relative to the first modeled year
     starting_generator_mix=None,  # shares of starting generator capacity by tech; must sum to 1
-    starting_reserve_margin=0.9,  # existing generator capacity = max load over the horizon * this margin
+    starting_reserve_margin=1.5,  # existing generator capacity = max load over the horizon * this margin
     storage_capacity_pct=0.1,  # existing storage capacity = zonal capacity (max load) * this fraction
     demand_growth_rate_mean=0.02,  # root (unnoised) demand growth rate, shared across zones
     noise_pct=0.10,  # shared noise level for every randomized quantity (see noise.py)
