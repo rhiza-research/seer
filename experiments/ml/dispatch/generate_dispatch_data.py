@@ -22,6 +22,7 @@ Known v1 simplifications (documented, not hidden):
     - years is fixed to a single year -- we just need one full year of hourly profiles.
 """
 
+import pickle
 import tempfile
 
 import numpy as np
@@ -29,59 +30,10 @@ import pandas as pd
 import torch
 
 from seer.inputs.synthetic import generate_all_data
-from seer.models.ml.dispatch import canonical_edge_pairs
 
 N_ZONES = 3
 YEAR = 2025
 VOLL = 1_000_000.0    # matches seer.models.pyomo_model.abstract_model's fixed convention
-DEMAND_SCALE = 1 / 3  # hack to roughly match demand to a single random existing generator's
-                      # capacity per zone, rather than the full existing fleet (see dispatch_adaptor)
-
-
-# =============================================================================
-# PTDF construction (a data-prep step: computed once per instance from network.csv,
-# then passed straight through to dispatch_forward as a fixed, non-learned tensor)
-# =============================================================================
-
-def compute_ptdf(n_nodes, branches, slack_bus=0):
-    """
-    Build the PTDF matrix from a simple branch list.
-
-    branches: list of (from_bus, to_bus, susceptance, capacity)
-    Returns:
-        ptdf     : (E, n_nodes) numpy array
-        line_cap : (E,) numpy array
-    """
-    E = len(branches)
-    B_f = np.zeros((E, n_nodes))          # branch susceptance matrix
-    line_cap = np.zeros(E)
-
-    for e, (k, l, b_kl, cap) in enumerate(branches):
-        B_f[e, k] += b_kl
-        B_f[e, l] -= b_kl
-        line_cap[e] = cap
-
-    # Nodal susceptance (Laplacian-like) matrix B_bus = sum over branches
-    B_bus = np.zeros((n_nodes, n_nodes))
-    for (k, l, b_kl, _cap) in branches:
-        B_bus[k, k] += b_kl
-        B_bus[l, l] += b_kl
-        B_bus[k, l] -= b_kl
-        B_bus[l, k] -= b_kl
-
-    # Remove slack bus row/col, invert, and re-insert a zero row/col for slack
-    keep = [i for i in range(n_nodes) if i != slack_bus]
-    B_reduced = B_bus[np.ix_(keep, keep)]
-    B_inv_reduced = np.linalg.inv(B_reduced)
-
-    B_inv_full = np.zeros((n_nodes, n_nodes))
-    for i, ii in enumerate(keep):
-        for j, jj in enumerate(keep):
-            B_inv_full[ii, jj] = B_inv_reduced[i, j]
-    # slack bus row/col stay zero -> slack bus injection has no angle effect
-
-    ptdf = B_f @ B_inv_full   # (E, n_nodes)
-    return ptdf, line_cap
 
 
 # =============================================================================
@@ -90,16 +42,17 @@ def compute_ptdf(n_nodes, branches, slack_bus=0):
 
 class DispatchInstance:
     """One SEER-generated year/topology, adapted into per-zone dispatch tensors. injection_by_hour
-    covers the full year, so 365 non-overlapping days of training data can be sliced from it."""
+    covers the full year, so 365 non-overlapping days of training data can be sliced from it.
+    No PTDF here -- that's derived from capacity_matrix at experiment time, not stored (see
+    ml_dispatch_experiment.py); it's a modeling choice, not intrinsic to the data itself."""
 
     def __init__(self, zones, marginal_cost, gen_capacity, storage_energy_capacity,
-                 storage_power_capacity, ptdf, capacity_matrix, injection_by_hour):
+                 storage_power_capacity, capacity_matrix, injection_by_hour):
         self.zones = zones                                     # list[str], length N
         self.marginal_cost = marginal_cost                     # (N,)
         self.gen_capacity = gen_capacity                       # (N,)
         self.storage_energy_capacity = storage_energy_capacity  # (N,)
         self.storage_power_capacity = storage_power_capacity   # (N,)
-        self.ptdf = ptdf                                       # (E, N)
         self.capacity_matrix = capacity_matrix                 # (N, N) symmetric, zero diagonal
         self.injection_by_hour = injection_by_hour             # (N, 8760)
 
@@ -127,16 +80,19 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
     ].set_index("generator")[str(YEAR)]
 
     # ---- one non-renewable generator per zone, picked at random (not blended) -- so different
-    #      zones can end up with genuinely different marginal costs
+    #      zones can end up with genuinely different marginal costs. Capacity is still the SUM
+    #      of the whole existing fleet at that zone, though -- only the cost rate is randomly
+    #      picked, not the amount of capacity, otherwise we'd throw away most of the zone's
+    #      actual capacity and create an artificial supply shortfall (see conversation).
     existing_nonre = generator_constants[
         (~generator_constants["expandable"]) & (~generator_constants["RETech"])
     ]
     gen_capacity = np.zeros(n_zones)
     marginal_cost = np.zeros(n_zones)
     for zone, group in existing_nonre.groupby("zone"):
-        chosen = group.iloc[rng.integers(len(group))]   # random pick, one row
+        chosen = group.iloc[rng.integers(len(group))]   # random pick, for its cost only
         zi = zone_index[zone]
-        gen_capacity[zi] = chosen["capacity"]
+        gen_capacity[zi] = group["capacity"].sum()      # full existing fleet capacity
         marginal_cost[zi] = marginal_cost_by_gen.get(chosen["generator"], 0.0)
 
     # ---- storage: sum existing capacity per zone (storage is free to use, so blending units
@@ -173,12 +129,8 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
             pv_by_hour[zone_index[zone], :] = group["value"].to_numpy() * pv_capacity_by_zone.get(zone, 0.0)
 
     # net_load = demand - PV (consumption-positive); injection = -net_load (production-positive,
-    # matching seer.models.ml.dispatch's sign convention). DEMAND_SCALE is a hack: seer's existing
-    # capacity is sized to ~90% of peak load ASSUMING the full existing fleet is kept (this is
-    # capacity-EXPANSION infra, deliberately undersized so there's something to build) -- since we
-    # keep only one random generator per zone instead of the full fleet, demand needs scaling down
-    # too or shedding dominates almost everything (see conversation).
-    net_load_by_hour = (load_by_hour - pv_by_hour) * DEMAND_SCALE
+    # matching seer.models.ml.dispatch's sign convention)
+    net_load_by_hour = load_by_hour - pv_by_hour
     injection_by_hour = -net_load_by_hour
 
     # ---- network -> NxN capacity matrix (symmetric, zero diagonal; canonical representation,
@@ -189,16 +141,8 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
         i, j = zone_index[row[0]], zone_index[row[1]]  # columns: from, to, capacity
         capacity_matrix[i, j] = capacity_matrix[j, i] = row[2]
 
-    # PTDF needs a flat per-line branch list; derive it from capacity_matrix using the one
-    # canonical edge ordering everything else uses (seer.models.ml.dispatch.canonical_edge_pairs)
-    branches = [
-        (i, j, capacity_matrix[i, j], capacity_matrix[i, j])  # susceptance == capacity (stand-in)
-        for (i, j) in canonical_edge_pairs(n_zones)
-    ]
-    ptdf, _ = compute_ptdf(n_zones, branches, slack_bus=0)
-
     return DispatchInstance(zones, marginal_cost, gen_capacity, storage_energy_capacity,
-                             storage_power_capacity, ptdf, capacity_matrix, injection_by_hour)
+                             storage_power_capacity, capacity_matrix, injection_by_hour)
 
 
 def build_dataset(n_instances, n_zones=N_ZONES, year=YEAR, seed=None):
@@ -217,27 +161,30 @@ def build_dataset(n_instances, n_zones=N_ZONES, year=YEAR, seed=None):
 
 def sample_batch(dataset, batch_size, t_steps=24, device="cpu"):
     """Draw batch_size (instance, random day) pairs -- each instance covers a full year, so it
-    yields 365 non-overlapping days of dispatch training data."""
+    yields 365 non-overlapping days of dispatch training data. No PTDF here -- that's a
+    per-instance, capacity_matrix-derived quantity computed at experiment time (see
+    ml_dispatch_experiment.py), not part of the raw dispatch data itself."""
     n_zones = len(dataset[0].zones)
     injection = np.zeros((batch_size, n_zones, t_steps))
     marginal_cost = np.zeros((batch_size, n_zones))
     gen_capacity = np.zeros((batch_size, n_zones))
     storage_energy_capacity = np.zeros((batch_size, n_zones))
     storage_power_capacity = np.zeros((batch_size, n_zones))
-    ptdf = np.zeros((batch_size, *dataset[0].ptdf.shape))
     capacity_matrix = np.zeros((batch_size, n_zones, n_zones))
+    instance_indices = np.zeros(batch_size, dtype=int)   # so callers can align a precomputed PTDF
 
     for b in range(batch_size):
-        instance = dataset[np.random.randint(len(dataset))]
+        idx = np.random.randint(len(dataset))
+        instance = dataset[idx]
         day = np.random.randint(instance.n_days)      # one of the 365 days, not an arbitrary window
         start = day * t_steps
 
+        instance_indices[b] = idx
         injection[b] = instance.injection_by_hour[:, start:start + t_steps]
         marginal_cost[b] = instance.marginal_cost
         gen_capacity[b] = instance.gen_capacity
         storage_energy_capacity[b] = instance.storage_energy_capacity
         storage_power_capacity[b] = instance.storage_power_capacity
-        ptdf[b] = instance.ptdf
         capacity_matrix[b] = instance.capacity_matrix
 
     def to_tensor(x):
@@ -246,4 +193,27 @@ def sample_batch(dataset, batch_size, t_steps=24, device="cpu"):
     voll = torch.full((batch_size,), VOLL, dtype=torch.float32, device=device)
     return (to_tensor(injection), to_tensor(marginal_cost), to_tensor(gen_capacity),
             to_tensor(storage_energy_capacity), to_tensor(storage_power_capacity), voll,
-            to_tensor(ptdf), to_tensor(capacity_matrix))
+            to_tensor(capacity_matrix), instance_indices)
+
+
+# =============================================================================
+# Save/load a generated dataset to/from disk (SEER generation is slow -- do it once, then
+# reuse the pickled dataset across training runs)
+# =============================================================================
+
+def save_dataset(dataset, path):
+    with open(path, "wb") as f:
+        pickle.dump(dataset, f)
+
+
+def load_dataset(path):
+    with open(path, "rb") as f:
+        return pickle.load(f)
+
+
+def generate_and_save(path, n_instances, n_zones=N_ZONES, year=YEAR, seed=None):
+    """Generate n_instances DispatchInstances and pickle them to path, for later reuse via
+    load_dataset (see ml_dispatch_experiment.py)."""
+    dataset = build_dataset(n_instances, n_zones=n_zones, year=year, seed=seed)
+    save_dataset(dataset, path)
+    return dataset
