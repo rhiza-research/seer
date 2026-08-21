@@ -71,7 +71,9 @@ class DispatchNet(nn.Module):
             + n_nodes               # storage_energy_capacity
             + n_nodes               # storage_power_capacity
             + n_nodes               # connected_capacity
-            + 1                      # voll
+            # voll deliberately NOT included -- it's currently a constant (1e6) across every
+            # training example, so it carries no information, and its raw scale was dwarfing
+            # every other feature and destabilizing training (see conversation).
         )
         # output: n x T gen_raw + n x T storage_raw.
         output_dim = n_nodes * t_steps + n_nodes * t_steps
@@ -84,18 +86,27 @@ class DispatchNet(nn.Module):
         layers += [nn.Linear(dim, output_dim)]
         self.net = nn.Sequential(*layers)
 
+    # quick-and-dirty input-only rescale for power/energy-type features (hundreds of MW/MWh),
+    # purely to keep the MLP's own input conditioned to a smaller scale -- this ONLY affects
+    # what's fed into the network here; gen_capacity/storage capacities/etc. are used at their
+    # true scale everywhere else (dispatch_forward, storage_repair, balance_repair, dispatch_loss
+    # all see the real, unscaled values), so nothing downstream needs to change (see conversation)
+    INPUT_SCALE = 1000.0
+
     def forward(self, injection, marginal_cost, gen_capacity, storage_energy_capacity,
                 storage_power_capacity, voll, line_capacity):
+        # voll is accepted for call-site/signature compatibility with dispatch_forward, but
+        # deliberately not used as a model input (see input_dim's comment above)
         B = injection.shape[0]
         # connectivity information currently passed as total connected line capacity
         connected_capacity = line_capacity.sum(dim=-1)
 
         # input tensor
+        s = self.INPUT_SCALE
         x = torch.cat([
-            injection.reshape(B, -1),
-            marginal_cost, gen_capacity, storage_energy_capacity, storage_power_capacity,
-            connected_capacity,
-            voll.reshape(B, 1),
+            (injection / s).reshape(B, -1),
+            marginal_cost, gen_capacity / s, storage_energy_capacity / s, storage_power_capacity / s,
+            connected_capacity / s,
         ], dim=1)
         out = self.net(x)
 
