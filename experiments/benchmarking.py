@@ -20,14 +20,20 @@ import tempfile
 
 import pandas as pd
 
-RESULTS_PATH = "results.csv" # or "gs://seer-datalake/benchmarking/results.csv"
+RESULTS_PATH = "gs://seer-datalake/benchmarking/results.csv"
 
 
-def run_experiment(n_zones, n_years, battery_reset, modular_build, presolve=True, trial=0):
+def run_experiment(n_zones, n_years, battery_reset, modular_build, presolve=True, trial=0,
+                    experiment_id=None, n_experiments=None):
     """Generate synthetic data, build+solve a pyomo model, and return one results row.
     """
     from seer.inputs.synthetic import generate_all_data
     from seer.models.pyomo_model import build, solve
+
+    # tag print statements with which experiment this is -- assigned once, up front, when the
+    # (ordered, pre-built) experiments list is created, so it's stable and race-free even though
+    # execution order across parallel workers isn't (see main())
+    tag = f"[{experiment_id + 1}/{n_experiments}] " if experiment_id is not None else ""
 
     years = list(range(2025, 2025 + n_years))
     with tempfile.TemporaryDirectory() as tmp:
@@ -36,7 +42,7 @@ def run_experiment(n_zones, n_years, battery_reset, modular_build, presolve=True
 
         # STEP 2: build + solve the pyomo model from that dataset
         print(
-            f"Solving: {n_zones} zones, {n_years} years, {battery_reset} battery reset, "
+            f"{tag}Solving: {n_zones} zones, {n_years} years, {battery_reset} battery reset, "
             f"modular_build={modular_build}, presolve={presolve}",
             flush=True,
         )
@@ -47,9 +53,9 @@ def run_experiment(n_zones, n_years, battery_reset, modular_build, presolve=True
     del instance
     gc.collect()
 
-    print(f"-> solve_time={solve_time:.2f}s", flush=True)
+    print(f"{tag}-> solve_time={solve_time:.2f}s", flush=True)
     return {
-        "n_zones": n_zones, "n_years": n_years, "battery_reset": battery_reset,
+        "experiment_id": experiment_id, "n_zones": n_zones, "n_years": n_years, "battery_reset": battery_reset,
         "modular_build": modular_build, "presolve": presolve, "trial": trial, "solve_time": solve_time,
     }
 
@@ -108,6 +114,11 @@ def main(use_coiled, results_path, n_workers=2, presolve=True, repeats=3):
         for modular_build in modular_build_grid
         for trial in range(repeats)
     ]
+    # assign experiment_id here, sequentially, before any parallel dispatch -- race-free by
+    # construction, since it's just indexing an already-built list
+    for i, exp in enumerate(experiments):
+        exp["experiment_id"] = i
+        exp["n_experiments"] = len(experiments)
 
     print(
         f"Running {len(experiments)} experiments "
