@@ -48,10 +48,19 @@ def passthrough(data_path):
     (already in seer-schema column form)."""
     years = pd.read_csv(f"{data_path}y.csv")[["year"]]
 
-    zones = pd.read_csv(f"{data_path}zcmap.csv")[["zone", "country"]]
-    zones["name"] = zones["zone"]
-
     demand_forecast = pd.read_csv(f"{data_path}pDemandForecast.csv")
     demand_profile = pd.read_csv(f"{data_path}pDemandProfile.csv")
+
+    zcmap_path = Path(f"{data_path}zcmap.csv")
+    if zcmap_path.exists():
+        zones = pd.read_csv(zcmap_path)[["zone", "country"]]
+    else:
+        # Some regions' raw gdx has no zcmap symbol at all. Only "zone" drives spatial
+        # resolution (buses) in either model backend -- "country" isn't consumed anywhere
+        # -- so fall back to the zone list implied by demand data and stub in a placeholder
+        # country rather than failing.
+        zones = pd.DataFrame({"zone": sorted(demand_forecast["zone"].unique())})
+        zones["country"] = "default"
+    zones["name"] = zones["zone"]
 
     return years, zones, demand_forecast, demand_profile

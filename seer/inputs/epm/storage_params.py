@@ -27,21 +27,36 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
         .reset_index()
     )
 
-    # select and rename parameters
+    # select and rename parameters (reindex, not [], since some regions have no "Life"
+    # parameter at all for any storage plant -- that column just comes back all-NaN)
     param_list = ["plant", "CapacityMWh", "CapexMWh", "Efficiency", "Life"]
     param_names = ["storage", "capacity_mwh", "capex_mwh", "efficiency", "life"]
-    storage_constants = storage_constants[param_list].rename(columns=dict(zip(param_list, param_names)))
+    storage_constants = storage_constants.reindex(columns=param_list).rename(columns=dict(zip(param_list, param_names)))
 
     """Pull the remaining attributes from the generator custom-parameters file - storage plants
     are just generators with tech="Storage" there - matched here by name, same as generator_constants.
     """
     storage_gen_params = custom_gen_params[custom_gen_params["generator"].isin(storage_constants["storage"])]
 
-    # zone and carrier (fuel) are plain columns rather than "parameters" rows
+    # zone and carrier (fuel) are plain columns rather than "parameters" rows. carrier naming
+    # is aligned to fixed values ("Battery", "PumpedHydro") upstream in gdx.enrich_data's
+    # normalize_storage_tech, regardless of each region's raw naming quirks.
     zone_carrier = storage_gen_params[["generator", "zone", "fuel"]].drop_duplicates().rename(
         columns={"generator": "storage", "fuel": "carrier"}
     )
     storage_constants = storage_constants.merge(zone_carrier, on="storage", how="left")
+
+    # fill missing lifetimes (some regions have no "Life" value at all for any storage
+    # plant) with a default by carrier. Battery figure is the standard utility-scale
+    # Li-ion assumption (matches the Life=15 value already present for battery plants
+    # elsewhere in this dataset, e.g. Guinea's BESS). Pumped hydro is civil infrastructure,
+    # comparable to conventional hydro, and gets a much longer default.
+    default_lifetime = {
+        "Battery": 15,
+        "PumpedHydro": 50,
+    }
+    missing_life = storage_constants["life"].isna()
+    storage_constants.loc[missing_life, "life"] = storage_constants.loc[missing_life, "carrier"].map(default_lifetime)
 
     # fill in the remaining GAMS parameters (same names generator_constants pulls)
     gams_param_list = ["Capacity", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear"]

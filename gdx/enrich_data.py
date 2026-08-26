@@ -109,6 +109,7 @@ FUEL_NAME_MAP = {
 # passes through unchanged.
 TECH_SET_ALIAS = {
     "Storage":    "STORAGE",
+    "STO HY":     "STORAGE",  # pumped-hydro storage, named as a hydro tech in some regions
     "Geothermal": "GEO",
     "Nuclear":    "NUC",
     "CCGT_CCS":   "GasCCS",
@@ -118,6 +119,36 @@ TECH_SET_ALIAS = {
     "Rooftop":    "PV",
     "ST":         "ICE",
 }
+
+# Aliases for storage carrier (fuel) names, applied only to rows whose tech is/aliases to
+# STORAGE -- "Water"/"Pumped"/"Hydro" all mean the same thing (pumped-hydro storage) across
+# different regions' raw gdx. Battery is already spelled consistently everywhere.
+STORAGE_CARRIER_ALIAS = {
+    "Water":  "PumpedHydro",
+    "Pumped": "PumpedHydro",
+    "Hydro":  "PumpedHydro",
+}
+
+
+def normalize_storage_tech(df):
+    """Align storage tech/fuel naming in a pGenDataInputCustom-shaped dataframe (columns
+    tech, fuel) to fixed canonical values: tech "STORAGE", fuel/carrier "Battery" or
+    "PumpedHydro" -- so downstream code (e.g. default lifetime lookups) can use fixed keys
+    instead of pattern-matching plant names."""
+    if "tech" not in df.columns:
+        return df
+    df = df.copy()
+    # gamspy returns dimension columns as pandas Categorical -- cast to plain strings so
+    # assigning a new value ("STORAGE") doesn't fail for not being an existing category
+    df["tech"] = df["tech"].astype(str)
+    if "fuel" in df.columns:
+        df["fuel"] = df["fuel"].astype(str)
+    resolved_tech = df["tech"].map(TECH_SET_ALIAS).fillna(df["tech"])
+    is_storage = resolved_tech.eq("STORAGE")
+    df.loc[is_storage, "tech"] = "STORAGE"
+    if "fuel" in df.columns:
+        df.loc[is_storage, "fuel"] = df.loc[is_storage, "fuel"].replace(STORAGE_CARRIER_ALIAS)
+    return df
 
 # Aliases for pStorageDataInput parameter names (the "parameters" column values) that vary
 # across regions/vintages of the raw pStorDataExcel symbol -- e.g. some regions use plain
@@ -437,6 +468,11 @@ def reconcile_data(all_data, all_data_raw):
         storage_df = updated.get("pStorageDataInput")
         if storage_df is not None and not storage_df.empty:
             updated["pStorageDataInput"] = normalize_storage_params(storage_df)
+
+        for gen_symbol in ("pGenDataInputCustom", "pGenDataInputDefault"):
+            gen_df = updated.get(gen_symbol)
+            if gen_df is not None and not gen_df.empty:
+                updated[gen_symbol] = normalize_storage_tech(gen_df)
 
         updated.update(standardize_all_profiles(region, updated))
         reconciled[region] = updated
