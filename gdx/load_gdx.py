@@ -1,6 +1,8 @@
 """Load GAMS EPM .gdx inputs into raw and canonically-aligned dataframes."""
 
 # Import relevant packages and modules
+import shutil
+import tempfile
 from pathlib import Path
 import gamspy as gp
 import pandas as pd
@@ -42,31 +44,48 @@ def load_gdx_files(data_dir, mapping_path, strict=True, region=None):
 
         print(f"Processing {country_dir.name}")
 
-        # Convert all symbols into dataframes
-        m = gp.Container()
-        m.read(str(gdx_file))
+        # gamspy's GDX loader breaks on paths containing spaces (the path gets embedded,
+        # unquoted, in a generated GAMS script, and GAMS's tokenizer splits on whitespace
+        # -- e.g. "Timor Leste/input.gdx" fails to load). Work around it by reading from a
+        # space-free temp copy whenever the real path contains a space.
+        read_path = gdx_file
+        tmp_dir = None
+        if " " in str(gdx_file):
+            tmp_dir = tempfile.mkdtemp(prefix="gdx_read_")
+            read_path = Path(tmp_dir) / "input.gdx"
+            shutil.copyfile(gdx_file, read_path)
 
-        country_data = {}
-        country_data_raw = {}
+        try:
+            # Convert all symbols into dataframes. gamspy's read() doesn't fully consume the
+            # gdx file synchronously (GAMS reads it lazily under the hood), so the temp copy
+            # must stay alive through the whole symbol-processing loop below, not just read().
+            m = gp.Container()
+            m.read(str(read_path))
 
-        for raw_symbol in m.listSymbols():
+            country_data = {}
+            country_data_raw = {}
 
-            # Convert symbol record into dataframe
-            symbol_obj = m[raw_symbol]
-            df = pd.DataFrame(symbol_obj.records)
+            for raw_symbol in m.listSymbols():
 
-            # Store the raw symbol data
-            country_data_raw[raw_symbol] = df
+                # Convert symbol record into dataframe
+                symbol_obj = m[raw_symbol]
+                df = pd.DataFrame(symbol_obj.records)
 
-            # Find the corresponding resolved symbol name in the symbol registry
-            resolved_symbol = symbol_lookup(raw_symbol, registry)
-            if resolved_symbol is None:
-                continue
+                # Store the raw symbol data
+                country_data_raw[raw_symbol] = df
 
-            # Rename columns of symbol data and append to country data
-            country_data[resolved_symbol] = symbol_sync(df, symbol_obj, resolved_symbol, registry, strict)
+                # Find the corresponding resolved symbol name in the symbol registry
+                resolved_symbol = symbol_lookup(raw_symbol, registry)
+                if resolved_symbol is None:
+                    continue
 
-        all_data[country_dir.name] = country_data
-        all_data_raw[country_dir.name] = country_data_raw
+                # Rename columns of symbol data and append to country data
+                country_data[resolved_symbol] = symbol_sync(df, symbol_obj, resolved_symbol, registry, strict)
+
+            all_data[country_dir.name] = country_data
+            all_data_raw[country_dir.name] = country_data_raw
+        finally:
+            if tmp_dir is not None:
+                shutil.rmtree(tmp_dir, ignore_errors=True)
 
     return all_data, all_data_raw

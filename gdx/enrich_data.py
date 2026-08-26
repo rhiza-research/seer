@@ -119,6 +119,15 @@ TECH_SET_ALIAS = {
     "ST":         "ICE",
 }
 
+# Aliases for pStorageDataInput parameter names (the "parameters" column values) that vary
+# across regions/vintages of the raw pStorDataExcel symbol -- e.g. some regions use plain
+# "Capacity"/"Capex" instead of "CapacityMWh"/"CapexMWh" for the same storage-energy fields.
+# Canonical names (right-hand side) are what seer.inputs.epm.storage_params expects.
+STORAGE_PARAM_ALIAS = {
+    "Capacity": "CapacityMWh",
+    "Capex": "CapexMWh",
+}
+
 
 def _strip_ordinal_prefix(name) -> str:
     """Strip a leading GAMS ordinal prefix, e.g. "18.WindNew" -> "WindNew"."""
@@ -249,7 +258,15 @@ def enrich_gen_data(region, country_data, country_data_raw):
         if target_col in target.columns and enrich_col in target.columns:
             target[target_col] = target[target_col].fillna(target[enrich_col])
 
-    return target.drop(columns=["generator", "_zone", "_fuel", "_tech"], errors="ignore")
+    # "generator" from the merge is only a redundant artifact column when gen_id_col is a
+    # differently-named column holding the same identity (e.g. "plant"); when gen_id_col IS
+    # "generator", the merge collapses both sides into that single column, and it's target's
+    # own real per-generator identity — must not be dropped.
+    drop_cols = ["_zone", "_fuel", "_tech"]
+    if gen_id_col != "generator":
+        drop_cols.append("generator")
+
+    return target.drop(columns=drop_cols, errors="ignore")
 
 
 def map_vre_tech(region, symbol_name, df):
@@ -390,6 +407,14 @@ def enrich_gen_vre_data(region: str, country_data: dict, country_data_raw: dict)
     return updates
 
 
+def normalize_storage_params(df):
+    """Normalize pStorageDataInput parameter-name variants (STORAGE_PARAM_ALIAS) to the
+    canonical names seer.inputs.epm.storage_params expects."""
+    df = df.copy()
+    df["parameters"] = df["parameters"].replace(STORAGE_PARAM_ALIAS)
+    return df
+
+
 def reconcile_data(all_data, all_data_raw):
     """
     Apply enrich_gen_vre_data() to every country/region  — enriching
@@ -408,6 +433,11 @@ def reconcile_data(all_data, all_data_raw):
         updated = dict(country_data)
         updates = enrich_gen_vre_data(region, country_data, country_data_raw)
         updated.update(updates)
+
+        storage_df = updated.get("pStorageDataInput")
+        if storage_df is not None and not storage_df.empty:
+            updated["pStorageDataInput"] = normalize_storage_params(storage_df)
+
         updated.update(standardize_all_profiles(region, updated))
         reconciled[region] = updated
 

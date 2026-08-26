@@ -1,4 +1,6 @@
 """Build generator_constants.csv and generator_costs.csv from EPM input data."""
+from pathlib import Path
+
 import pandas as pd
 import numpy as np
 
@@ -72,7 +74,14 @@ def build_generator_params(data_path="data/Gambia/"):
     Result has two rows per generator (capex and marginal cost) and years as columns.
     """
     # setup cost dataframe
-    years = sorted(default_gen_capex["year"].unique())
+    # (years normally comes from the default capex trajectory; some regions have no
+    # default capex data at all, so fall back to whatever years the custom trajectory covers)
+    if not default_gen_capex.empty:
+        years = sorted(default_gen_capex["year"].unique())
+    elif not custom_gen_capex.empty:
+        years = sorted(custom_gen_capex["year"].unique())
+    else:
+        years = []
     rows = []
 
     for _, gen in generator_constants.iterrows():
@@ -118,10 +127,19 @@ def build_generator_params(data_path="data/Gambia/"):
     return generator_constants, generator_cost
 
 
+def _read_csv_or_empty(path, columns):
+    """Read a csv, or return an empty dataframe with the given columns if it doesn't exist
+    (some regions' raw gdx simply has no data for certain symbols)."""
+    if Path(path).exists():
+        return pd.read_csv(path)
+    return pd.DataFrame(columns=columns)
+
+
 def load_input_data(data_path):
     """Load EPM data for generators from the data path.
     Files that are read containing generator data:
-    - gmap.csv: list of all generators including name, zone, fuel
+    - gmap.csv: list of all generators including name, zone, fuel (if available — some
+      regions' raw gdx has no gmap symbol at all, see below)
     - pGenDataInputDefault.csv: generator parameters (by zone, tech, fuel)
     - pGenDataInputCustom.csv: generator parameters (by generator)
     - pCapexTrajectoriesDefault.csv: generator capex (by zone, tech, fuel)
@@ -130,14 +148,36 @@ def load_input_data(data_path):
 
     Returns a dictionary of dataframes.
     """
-    # list of all generators including name, zone, fuel
-    all_generators = pd.read_csv(data_path + "gmap.csv")
-    # generator parameters (by zone, tech, fuel)
-    default_gen_params = pd.read_csv(data_path + "pGenDataInputDefault.csv")
+    # generator parameters (by zone, tech, fuel) -- some regions have no default params at
+    # all (no such symbol in their raw gdx); treat as empty rather than failing, so those
+    # params just stay NaN on generator_constants (to be filled in properly later)
+    default_gen_params = _read_csv_or_empty(
+        data_path + "pGenDataInputDefault.csv", ["zone", "tech", "fuel", "parameters", "value"]
+    )
     custom_gen_params = pd.read_csv(data_path + "pGenDataInputCustom.csv")
-    # generator capex (by zone, tech, fuel)
-    default_gen_capex = pd.read_csv(data_path + "pCapexTrajectoriesDefault.csv")
-    custom_gen_capex = pd.read_csv(data_path + "pCapexTrajectoriesCustom.csv")
+
+    # list of all generators including name, zone, fuel
+    gmap_path = Path(data_path + "gmap.csv")
+    if gmap_path.exists():
+        all_generators = pd.read_csv(gmap_path)
+    else:
+        # This region's raw gdx has no gmap symbol at all. gdx's enrich_gen_data already
+        # backfills zone/tech/fuel into pGenDataInputCustom per generator in this case
+        # (via pZoneIndex/ftfindex), so derive the generator list from there instead.
+        all_generators = (
+            custom_gen_params[["generator", "zone", "tech", "fuel"]]
+            .drop_duplicates(subset="generator")
+            .reset_index(drop=True)
+        )
+    # generator capex (by zone, tech, fuel) -- same story: treat a missing default or
+    # custom capex trajectory as empty rather than failing, so build_generator_params
+    # falls back to whichever of the two is actually available
+    default_gen_capex = _read_csv_or_empty(
+        data_path + "pCapexTrajectoriesDefault.csv", ["zone", "tech", "fuel", "year", "value"]
+    )
+    custom_gen_capex = _read_csv_or_empty(
+        data_path + "pCapexTrajectoriesCustom.csv", ["plant", "year", "value"]
+    )
     # fuel prices
     fuel_prices = pd.read_csv(data_path + "pFuelPrice.csv")
 
