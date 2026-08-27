@@ -8,3 +8,4 @@ experiments/tmp_data/
 !data/readme.md
 data/*
 .claude
+experiments/tmp_data/
