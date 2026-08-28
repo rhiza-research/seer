@@ -94,26 +94,32 @@ def prepare_renewable_profiles(model, re_profiles):
     # try to match renewable profiles to snapshots
     times = model.snapshots.get_level_values(1)
     dft = pd.DataFrame({'year': [dt.year for dt in times],
-                        'month': [dt.month for dt in times], 
-                        'day': [dt.day for dt in times], 
+                        'month': [dt.month for dt in times],
+                        'day': [dt.day for dt in times],
                         'hour': [dt.hour for dt in times]})
     # increment hours to be 1 indexed
     dft["hour"] = dft["hour"] + 1
     # determine tech and zones
     zone_tech = re_profiles[["zone", "tech"]].drop_duplicates()
+    # track (placeholder column name -> (zone, tech)) so the final MultiIndex can be rebuilt
+    # directly from known tuples, rather than round-tripping through a combined string and
+    # re-splitting it -- zone names can themselves contain underscores (e.g. "zone_0"), which
+    # breaks a naive str.split("_") reconstruction of (zone, tech)
+    column_keys = {}
     for zone, tech in zone_tech.itertuples(index=False):
         profile = re_profiles[(re_profiles["zone"] == zone) & (re_profiles["tech"] == tech)]
         dft = dft.merge(profile[["month", "day", "hour", "value"]], on=["month", "day", "hour"], how="left")
-        # make value into a multi-indexed column
-        dft = dft.rename(columns={"value": f"{zone}_{tech}"})
+        col_name = f"__profile_{len(column_keys)}__"
+        dft = dft.rename(columns={"value": col_name})
+        column_keys[col_name] = (zone, tech)
     # fill leap day
     dft = fill_missing_times(dft)
     # set the index to the model multi-index
     dft.index = model.snapshots
     # drop the year, month, day, hour columns
     dft = dft.drop(columns=["year", "month", "day", "hour"])
-    # turn value columns into a multilevel column
-    dft.columns = dft.columns.str.split("_", expand=True)
+    # rebuild a clean 2-level (zone, tech) MultiIndex directly from the tracked mapping
+    dft.columns = pd.MultiIndex.from_tuples([column_keys[c] for c in dft.columns], names=["zone", "tech"])
     return dft
 
 def set_demand(model, demandforecast, demandprofile):
