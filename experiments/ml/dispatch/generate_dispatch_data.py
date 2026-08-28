@@ -85,7 +85,7 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
     #      picked, not the amount of capacity, otherwise we'd throw away most of the zone's
     #      actual capacity and create an artificial supply shortfall (see conversation).
     existing_nonre = generator_constants[
-        (~generator_constants["expandable"]) & (~generator_constants["RETech"])
+        (~generator_constants["expandable"]) & (~generator_constants["isre"])
     ]
     gen_capacity = np.zeros(n_zones)
     marginal_cost = np.zeros(n_zones)
@@ -102,7 +102,8 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
     storage_power_capacity = np.zeros(n_zones)
     for zone, group in existing_storage.groupby("zone"):
         zi = zone_index[zone]
-        storage_energy_capacity[zi] = group["capacity_mwh"].sum()
+        # capacity_mwh isn't a stored column -- derive it from capacity_mw * duration_hours
+        storage_energy_capacity[zi] = (group["capacity_mw"] * group["duration_hours"]).sum()
         storage_power_capacity[zi] = group["capacity_mw"].sum()
 
     # ---- full-year hourly load per zone (MW)
@@ -119,7 +120,7 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
 
     # ---- full-year hourly PV generation per zone (MW)
     pv_capacity_by_zone = generator_constants[
-        (~generator_constants["expandable"]) & (generator_constants["RETech"])
+        (~generator_constants["expandable"]) & (generator_constants["isre"])
     ].groupby("zone")["capacity"].sum()
     renewable_profiles = pd.read_csv(f"{data_path}/renewable_profiles.csv")
     pv_by_hour = np.zeros((n_zones, 8760))

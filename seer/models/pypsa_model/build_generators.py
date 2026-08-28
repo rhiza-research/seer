@@ -25,17 +25,21 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
         gen = gen_constants.iloc[i]
         name, zone, carrier, expandable, gen_type = gen.name, gen.zone, gen.fuel, gen.expandable, gen.tech
         carriers.add(carrier)
+        # ramp rates and unit_size are optional columns -- absent entirely means unconstrained
+        ramp_up_rate = gen.get("ramp_up_rate")
+        ramp_down_rate = gen.get("ramp_down_rate")
+        is_renewable = bool(gen.isre)
 
         if expandable:
             """Build option.
             In the PyPSA framework, we need to create a build option for each year.
-            """ 
+            """
             y0, y1 = gen.start_year, gen.retirement_year
             valid_years = get_valid_years(model, y0, y1)
             capex = gen_costs.loc[(name, "capex"), :]
             # fill missing marginal costs with 0
             mc = gen_costs.loc[(name, "marginal_cost"), :].fillna(0)
-            unit_capacity = gen.unit_size if modular_expansion else None
+            unit_capacity = gen.get("unit_size") if modular_expansion else None
 
             for year in valid_years:
                 gen_year_name = name + "_" + str(year)
@@ -45,7 +49,7 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
                     valid_years,
                     year,
                     gen.life
-                ) if is_renewable(gen_type) else 1
+                ) if is_renewable else 1
                 model.add("Generator", gen_year_name, bus = zone,
                           carrier = carrier,
                           build_year = year,
@@ -57,11 +61,11 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
                           # costs
                           marginal_cost = mc[year], capital_cost = capex[year],
                           # ramping limits
-                          ramp_up_rate = gen.ramp_up_rate, ramp_down_rate = gen.ramp_down_rate)
+                          ramp_up_rate = ramp_up_rate, ramp_down_rate = ramp_down_rate)
                 # time series parameters must be added through the generators_t dataframe
                 model.generators_t.p_max_pu[gen_year_name] = p_max_pu
 
-        else:  
+        else:
             """Existing generator. Create a single generator for the entire lifetime.
             """
             y0, y1 = gen.start_year, gen.retirement_year
@@ -69,16 +73,16 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             if len(years) == 0:
                 warnings.warn(f"No valid years found for generator {name}.")
                 continue
-            
+
             # TODO: do we need to add capex for existing generators?
             # capex = gen_costs.loc[(name, "capex"), :]
             mc = annual_to_snapshots(model, gen_costs.loc[(name, "marginal_cost"), :]).fillna(0)
 
-            if is_renewable(gen_type):
+            if is_renewable:
                 p_max_pu = re_profiles.loc[slice(None), (zone, gen_type)]
             else:
                 p_max_pu = 1
-            
+
             model.add("Generator", name, bus = zone,
                         carrier = carrier,
                         build_year = years[0],
@@ -87,14 +91,11 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
                         p_nom = gen.capacity,
                         p_nom_extendable = False,
                         # ramping limits
-                        ramp_up_rate = gen.ramp_up_rate, ramp_down_rate = gen.ramp_down_rate)
+                        ramp_up_rate = ramp_up_rate, ramp_down_rate = ramp_down_rate)
             # time series parameters must be added through the generators_t dataframe
             model.generators_t.p_max_pu[name] = p_max_pu
             model.generators_t.marginal_cost[name] = mc
     return carriers
-
-def is_renewable(carrier):
-    return carrier in ["PV", "wind"]
 
 # TODO: check that this makes sense
 def mask_renewable_profile(profile, valid_years, build_year, lifetime, default=0.0):

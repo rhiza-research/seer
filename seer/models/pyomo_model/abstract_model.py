@@ -56,7 +56,7 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
 
     # storage attributes
     model.storage_zone = pyo.Param(model.storage, within=pyo.Any)
-    model.storage_carrier = pyo.Param(model.storage, within=pyo.Any)
+    model.storage_tech = pyo.Param(model.storage, within=pyo.Any)
     # duration (energy/power ratio, hours) is fixed by technology; power capacity is derived from it, never expanded independently
     model.storage_duration_hours = pyo.Param(model.storage, within=pyo.PositiveReals)
 

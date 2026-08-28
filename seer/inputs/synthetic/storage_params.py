@@ -42,8 +42,8 @@ def build_storage(zones, initial_capacity, years, noise_pct, aggregate_units=Tru
         params = seed.loc[storage_type]
         duration_hours = params["duration_hours"]
         constants_rows.append({
-            "storage": storage, "zone": zone, "carrier": params["carrier"],
-            "capacity_mwh": capacity_mwh, "duration_hours": duration_hours,
+            "storage": storage, "zone": zone, "tech": params["carrier"],
+            "duration_hours": duration_hours,
             "capacity_mw": round(capacity_mwh / duration_hours, 3),
             "efficiency": params["efficiency"], "life": params["life"],
             "start_year": start_year, "retirement_year": retirement_year,

@@ -69,7 +69,7 @@ def load_data(data_path):
 
     generator_zone = constants["zone"].to_dict()
     generator_tech = constants["tech"].to_dict()
-    generator_retech = constants["RETech"].astype(bool).to_dict()
+    generator_isre = constants["isre"].astype(bool).to_dict()
 
     # only meaningful (and only loaded) for existing generators
     generator_capacity = constants.loc[existing_generators, "capacity"].to_dict()
@@ -83,7 +83,7 @@ def load_data(data_path):
     generator_capacity_factor = {
         (gen, hour): (
             renewable_availability[(generator_zone[gen], generator_tech[gen], hour)]
-            if generator_retech[gen] else 1.0
+            if generator_isre[gen] else 1.0
         )
         for gen in generators
         for hour in hours
@@ -109,11 +109,14 @@ def load_data(data_path):
     new_storage = storage_constants[storage_constants["expandable"]].index.tolist()
 
     storage_zone = storage_constants["zone"].to_dict()
-    storage_carrier = storage_constants["carrier"].to_dict()
+    storage_tech = storage_constants["tech"].to_dict()
     storage_duration_hours = storage_constants["duration_hours"].to_dict()
 
-    # only meaningful (and only loaded) for existing storage
-    storage_capacity_mwh = storage_constants.loc[existing_storage, "capacity_mwh"].to_dict()
+    # only meaningful (and only loaded) for existing storage. capacity_mwh isn't a stored
+    # column -- it's derived from capacity_mw * duration_hours wherever it's needed.
+    storage_capacity_mwh = (
+        storage_constants["capacity_mw"] * storage_constants["duration_hours"]
+    ).loc[existing_storage].to_dict()
     storage_start_year = storage_constants.loc[existing_storage, "start_year"].to_dict()
     storage_retirement_year = storage_constants.loc[existing_storage, "retirement_year"].to_dict()
     # only meaningful (and only loaded) for new-build storage
@@ -159,7 +162,7 @@ def load_data(data_path):
             "existing_storage": {None: existing_storage},
             "new_storage": {None: new_storage},
             "storage_zone": storage_zone,
-            "storage_carrier": storage_carrier,
+            "storage_tech": storage_tech,
             "storage_duration_hours": storage_duration_hours,
             "storage_capacity_mwh": storage_capacity_mwh,
             "storage_start_year": storage_start_year,

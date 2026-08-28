@@ -14,7 +14,7 @@ def build_output_tables(instance):
     generator_zone = instance.generator_zone.extract_values()
     generator_tech = instance.generator_tech.extract_values()
     storage_zone = instance.storage_zone.extract_values()
-    storage_carrier = instance.storage_carrier.extract_values()
+    storage_tech = instance.storage_tech.extract_values()
 
     generator_capacity = pd.DataFrame([
         {
@@ -26,7 +26,7 @@ def build_output_tables(instance):
 
     storage_capacity = pd.DataFrame([
         {
-            "zone": storage_zone[s], "tech": storage_carrier[s], "storage": s,
+            "zone": storage_zone[s], "tech": storage_tech[s], "storage": s,
             "year": year, "capacity": pyo.value(instance.storage_total_energy_capacity[s, year]),
         }
         for s in instance.storage for year in instance.years
@@ -43,7 +43,7 @@ def build_output_tables(instance):
     # of storage_change (positive = charging/drawing from the grid - see abstract_model.py)
     storage_dispatch_rows = [
         {
-            "zone": storage_zone[s], "tech": storage_carrier[s], "name": s,
+            "zone": storage_zone[s], "tech": storage_tech[s], "name": s,
             "year": year, "hour": hour, "dispatch": -pyo.value(instance.storage_change[s, year, hour]),
         }
         for s in instance.storage for year, hour in instance.times

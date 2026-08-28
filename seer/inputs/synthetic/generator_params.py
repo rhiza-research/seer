@@ -36,7 +36,7 @@ def build_generators(zones, mix, initial_capacity, years, noise_pct, aggregate_u
             "generator": generator, "zone": zone, "tech": gen_type, "fuel": params["fuel"],
             "capacity": capacity, "unit_size": unit_size,
             "ramp_down_rate": params["ramp_down_rate"], "ramp_up_rate": params["ramp_up_rate"],
-            "life": params["life"], "RETech": params["retech"],
+            "life": params["life"], "isre": params["retech"],
             "start_year": start_year, "retirement_year": retirement_year,
             "annual_build_limit": annual_build_limit, "expandable": expandable,
         })
