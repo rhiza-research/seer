@@ -64,13 +64,13 @@ def run_locally(experiments):
     return [run_experiment(**exp) for exp in experiments]
 
 
-def run_on_coiled(experiments, name="seer-benchmarking", n_workers=2):
+def run_on_coiled(experiments, name="seer-benchmarking", n_workers=2, region="us-west2"):
     import coiled
     from dask.distributed import Client
 
     cluster = coiled.Cluster(
         name=name, n_workers=n_workers, worker_cpu=2, worker_memory="8 GiB",
-        worker_options={"nthreads": 1}, idle_timeout="20 minutes",
+        worker_options={"nthreads": 1}, idle_timeout="20 minutes", region=region,
     )
     client = Client(cluster)
     print(f"Coiled dashboard: {cluster.dashboard_link}", flush=True)
@@ -84,7 +84,7 @@ def run_on_coiled(experiments, name="seer-benchmarking", n_workers=2):
     return results
 
 
-def main(use_coiled, results_path, n_workers=2, presolve=True, repeats=3):
+def main(use_coiled, results_path, n_workers=2, presolve=True, repeats=3, region="us-west-2"):
     # ---- default problem size, held fixed while sweeping one dimension at a time ----
     default_n_zones = 2
     default_n_years = 2
@@ -126,7 +126,7 @@ def main(use_coiled, results_path, n_workers=2, presolve=True, repeats=3):
         f"{'coiled' if use_coiled else 'local'})...",
         flush=True,
     )
-    results = run_on_coiled(experiments, n_workers=n_workers) if use_coiled else run_locally(experiments)
+    results = run_on_coiled(experiments, n_workers=n_workers, region=region) if use_coiled else run_locally(experiments)
 
     df = pd.DataFrame(results)
     df.to_csv(results_path, index=False)
@@ -137,6 +137,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--coiled", action="store_true", help="run experiments on a Coiled cluster")
     parser.add_argument("--n-workers", type=int, default=2, help="Coiled cluster size (ignored without --coiled)")
+    parser.add_argument(
+        "--region", default="us-west2", help="Cloud region for the Coiled cluster (ignored without --coiled)"
+    )
     parser.add_argument("--no-presolve", action="store_true", help="disable HiGHS presolve for every experiment")
     parser.add_argument("--repeats", type=int, default=3, help="times to repeat each config, on fresh synthetic data")
     parser.add_argument(
@@ -146,5 +149,5 @@ if __name__ == "__main__":
 
     main(
         use_coiled=args.coiled, results_path=args.results_path, n_workers=args.n_workers,
-        presolve=not args.no_presolve, repeats=args.repeats,
+        presolve=not args.no_presolve, repeats=args.repeats, region=args.region,
     )
