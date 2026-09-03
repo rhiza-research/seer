@@ -22,7 +22,7 @@ def epm_to_seer(input_path, output_path, start_year=2025, end_year=2050):
     generator_constants, generator_costs = build_generator_params(input_dir)
     renewable_profiles = build_re_potentials(input_dir)
     storage_constants, storage_costs = build_storage_params(input_dir, start_year=start_year, end_year=end_year)
-    years, zones, demandforecast, demandprofile = passthrough(input_dir)
+    years, zones, demand_forecast, demand_profile = passthrough(input_dir)
 
     outputs = {
         "generator_constants": generator_constants,
@@ -32,8 +32,8 @@ def epm_to_seer(input_path, output_path, start_year=2025, end_year=2050):
         "storage_costs": storage_costs,
         "years": years,
         "zones": zones,
-        "demandforecast": demandforecast,
-        "demandprofile": demandprofile,
+        "demand_forecast": demand_forecast,
+        "demand_profile": demand_profile,
     }
     # save seer schema csv files to output directory
     for name, df in outputs.items():
@@ -44,14 +44,14 @@ def epm_to_seer(input_path, output_path, start_year=2025, end_year=2050):
 
 def passthrough(data_path):
     """Files that need only trivial reshaping to match the seer schema:
-    y.csv -> years, zcmap.csv -> zones, pDemandForecast/pDemandProfile -> demandforecast/demandprofile
+    y.csv -> years, zcmap.csv -> zones, pDemandForecast/pDemandProfile -> demand_forecast/demand_profile
     (already in seer-schema column form)."""
     years = pd.read_csv(f"{data_path}y.csv")[["year"]]
 
     zones = pd.read_csv(f"{data_path}zcmap.csv")[["zone", "country"]]
     zones["name"] = zones["zone"]
 
-    demandforecast = pd.read_csv(f"{data_path}pDemandForecast.csv")
-    demandprofile = pd.read_csv(f"{data_path}pDemandProfile.csv")
+    demand_forecast = pd.read_csv(f"{data_path}pDemandForecast.csv")
+    demand_profile = pd.read_csv(f"{data_path}pDemandProfile.csv")
 
-    return years, zones, demandforecast, demandprofile
+    return years, zones, demand_forecast, demand_profile

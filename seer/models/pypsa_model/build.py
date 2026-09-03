@@ -53,9 +53,9 @@ def build(data_path, time_resolution="1h"):
 
     """DEMAND: Set up demand trajectory.
     """
-    demandforecast = input_data["demandforecast"]
-    demandprofile = input_data["demandprofile"]
-    set_demand(model, demandforecast, demandprofile)
+    demand_forecast = input_data["demand_forecast"]
+    demand_profile = input_data["demand_profile"]
+    set_demand(model, demand_forecast, demand_profile)
 
     """RENEWABLES: Prepare renewable profiles for use in generator setup.
     """
@@ -122,13 +122,13 @@ def prepare_renewable_profiles(model, re_profiles):
     dft.columns = pd.MultiIndex.from_tuples([column_keys[c] for c in dft.columns], names=["zone", "tech"])
     return dft
 
-def set_demand(model, demandforecast, demandprofile):
+def set_demand(model, demand_forecast, demand_profile):
     # for each zone in demand_forecast, get demand profile, multiply by demand forecast for each year, and set as load
-    zones = demandforecast["zone"].unique()
+    zones = demand_forecast["zone"].unique()
     years = model.investment_periods
     for zone in zones:
-        profile = demandprofile[demandprofile["zone"] == zone]
-        forecast_peaks = demandforecast[demandforecast["zone"] == zone][demandforecast["type"] == "peak"]
+        profile = demand_profile[demand_profile["zone"] == zone]
+        forecast_peaks = demand_forecast[demand_forecast["zone"] == zone][demand_forecast["type"] == "peak"]
         # create the time series of demand
         demand_ts = pd.Series(index=model.snapshots, name=zone)
         for year in years:
@@ -173,9 +173,9 @@ def load_data(data_path):
     zones_df = pd.read_csv(data_path + "zones.csv")
     # time periods
     years_df = pd.read_csv(data_path + "years.csv")
-    # demand 
-    demandforecast_df = pd.read_csv(data_path + "demandforecast.csv")
-    demandprofile_df = pd.read_csv(data_path + "demandprofile.csv")
+    # demand
+    demand_forecast_df = pd.read_csv(data_path + "demand_forecast.csv")
+    demand_profile_df = pd.read_csv(data_path + "demand_profile.csv")
     # renewable profiles
     renewable_profiles_df = pd.read_csv(data_path + "renewable_profiles.csv")
     # generator data
@@ -188,8 +188,8 @@ def load_data(data_path):
     return {
         "zones": zones_df,
         "years": years_df,
-        "demandforecast": demandforecast_df,
-        "demandprofile": demandprofile_df,
+        "demand_forecast": demand_forecast_df,
+        "demand_profile": demand_profile_df,
         "renewable_profiles": renewable_profiles_df,
         "generator_constants": generator_constants_df,
         "generator_costs": generator_costs_df,

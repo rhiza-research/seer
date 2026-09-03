@@ -107,14 +107,14 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
         storage_power_capacity[zi] = group["capacity_mw"].sum()
 
     # ---- full-year hourly load per zone (MW)
-    demandforecast = pd.read_csv(f"{data_path}/demandforecast.csv")
-    demandprofile = pd.read_csv(f"{data_path}/demandprofile.csv")
-    peak_by_zone = demandforecast[
-        (demandforecast["type"] == "peak") & (demandforecast["year"] == YEAR)
+    demand_forecast = pd.read_csv(f"{data_path}/demand_forecast.csv")
+    demand_profile = pd.read_csv(f"{data_path}/demand_profile.csv")
+    peak_by_zone = demand_forecast[
+        (demand_forecast["type"] == "peak") & (demand_forecast["year"] == YEAR)
     ].set_index("zone")["value"]
 
     load_by_hour = np.zeros((n_zones, 8760))
-    for zone, group in demandprofile.groupby("zone", sort=False):
+    for zone, group in demand_profile.groupby("zone", sort=False):
         # rows are already in (season, day, hour) order = chronological order within the year
         load_by_hour[zone_index[zone], :] = group["value"].to_numpy() * peak_by_zone[zone]
 

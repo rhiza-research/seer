@@ -1,4 +1,4 @@
-"""Generates the seer schema files `demandforecast.csv` and `demandprofile.csv`.
+"""Generates the seer schema files `demand_forecast.csv` and `demand_profile.csv`.
 seed: annual hourly demand shape that is perturbed per zone and time point.
 """
 
@@ -8,7 +8,7 @@ from .noise import noise_multiplier
 
 
 def build_demand_forecast(zones, peak_demand_mw, years, growth_rate):
-    """Build demandforecast: peak demand by year by zone.
+    """Build demand_forecast: peak demand by year by zone.
 
     peak_demand_mw is the starting (first modeled year) peak demand per zone; growth_rate is
     each zone's already-realized annual growth rate (randomization happens in generate_data.py,
@@ -28,7 +28,7 @@ def build_demand_forecast(zones, peak_demand_mw, years, growth_rate):
 
 
 def build_demand_profile(zones, noise_pct, seed_path="seed_data/demand_seed.csv"):
-    """Build demandprofile: the seed's normalized hourly load shape, independently perturbed
+    """Build demand_profile: the seed's normalized hourly load shape, independently perturbed
     per zone and timepoint by noise_pct.
     """
     shape = pd.read_csv(seed_path)

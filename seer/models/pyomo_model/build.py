@@ -14,8 +14,8 @@ def load_data(data_path):
     zones_df = pd.read_csv(f"{data_path}/zones.csv")
     generator_constants_df = pd.read_csv(f"{data_path}/generator_constants.csv")
     generator_costs_df = pd.read_csv(f"{data_path}/generator_costs.csv")
-    demandforecast_df = pd.read_csv(f"{data_path}/demandforecast.csv")
-    demandprofile_df = pd.read_csv(f"{data_path}/demandprofile.csv")
+    demand_forecast_df = pd.read_csv(f"{data_path}/demand_forecast.csv")
+    demand_profile_df = pd.read_csv(f"{data_path}/demand_profile.csv")
     renewable_profiles_df = pd.read_csv(f"{data_path}/renewable_profiles.csv")
     storage_constants_df = pd.read_csv(f"{data_path}/storage_constants.csv")
     storage_costs_df = pd.read_csv(f"{data_path}/storage_costs.csv")
@@ -35,18 +35,18 @@ def load_data(data_path):
     year_discount_factor = {year: 1 / (1 + discount_rate) ** (year - base_year) for year in years}
 
     # hourly index: derived from the demand profile's per-zone row count (e.g. 365 days * 24 hours)
-    hours_per_zone = len(demandprofile_df) // len(zones)
+    hours_per_zone = len(demand_profile_df) // len(zones)
     hours = list(range(1, hours_per_zone + 1))
 
-    # ---- demand: annual peak (demandforecast) x normalized hourly shape (demandprofile) ----
+    # ---- demand: annual peak (demand_forecast) x normalized hourly shape (demand_profile) ----
     demand_shape = {
         (zone, hour): value
-        for zone, group in demandprofile_df.groupby("zone", sort=False)
+        for zone, group in demand_profile_df.groupby("zone", sort=False)
         for hour, value in zip(hours, group["value"])
     }
     peak_demand = {
         (row.zone, int(row.year)): row.value
-        for row in demandforecast_df.itertuples()
+        for row in demand_forecast_df.itertuples()
     }
     demand = {
         (zone, year, hour): peak_demand[(zone, year)] * demand_shape[(zone, hour)]

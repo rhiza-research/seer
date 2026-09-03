@@ -86,11 +86,11 @@ def generate_all_data(
 
     # demand growth rate, perturbed by noise per zone
     growth_rate = demand_growth_rate_mean * noise_multiplier(noise_pct, size=n_zones)
-    demandforecast_df = build_demand_forecast(ZONES, zone_peak_demand_mw, years, growth_rate)
-    demandprofile_df = build_demand_profile(ZONES, noise_pct, seed_path=SEED_DATA_DIR / "demand_seed.csv")
+    demand_forecast_df = build_demand_forecast(ZONES, zone_peak_demand_mw, years, growth_rate)
+    demand_profile_df = build_demand_profile(ZONES, noise_pct, seed_path=SEED_DATA_DIR / "demand_seed.csv")
 
     # zonal capacity - each zone's peak load over the horizon - drives generator, storage, and network sizing
-    max_load = demandforecast_df.groupby("zone")["value"].max().to_dict()
+    max_load = demand_forecast_df.groupby("zone")["value"].max().to_dict()
     generator_initial_capacity = [max_load[zone] * starting_reserve_margin for zone in ZONES]
     generator_constants_df, generator_costs_df = build_generators(
         ZONES, starting_generator_mix, generator_initial_capacity, years, noise_pct,
@@ -107,8 +107,8 @@ def generate_all_data(
         "years": generate_years(years),
         "settings": generate_settings(annual_discount_rate),
         "zones": generate_zones(ZONES, country_name),
-        "demandforecast": demandforecast_df,
-        "demandprofile": demandprofile_df,
+        "demand_forecast": demand_forecast_df,
+        "demand_profile": demand_profile_df,
         "generator_constants": generator_constants_df,
         "generator_costs": generator_costs_df,
         "renewable_profiles": build_renewable_profiles(

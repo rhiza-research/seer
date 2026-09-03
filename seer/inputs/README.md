@@ -13,8 +13,8 @@ Every file is a csv with a header row.
   - [`years.csv`](#yearscsv)
   - [`network.csv`](#networkcsv)
 - [Demand parameters](#demand-parameters)
-  - [`demandforecast.csv`](#demandforecastcsv)
-  - [`demandprofile.csv`](#demandprofilecsv)
+  - [`demand_forecast.csv`](#demand_forecastcsv)
+  - [`demand_profile.csv`](#demand_profilecsv)
 - [Renewable potentials](#renewable-potentials)
   - [`renewable_profiles.csv`](#renewable_profilescsv)
 - [Generator parameters](#generator-parameters)
@@ -58,7 +58,7 @@ Number of rows is number of lines.
 | `capacity` | line's transfer capacity, MW (flow is bounded by ± this value in either direction) |
 
 ## demand parameters.
-### `demandforecast.csv`
+### `demand_forecast.csv`
 Annual demand trajectory per zone.
 Number of rows is zones x years (x 2 if both energy and peak are specified).
 
@@ -69,7 +69,7 @@ Number of rows is zones x years (x 2 if both energy and peak are specified).
 | `year` | forecast year (matches `years.csv`) |
 | `value` | forecast value in the units implied by `type` |
 
-### `demandprofile.csv`
+### `demand_profile.csv`
 Normalized annual load curve at hourly resolution; a single load curve is used across all years. 
 Number of rows is zones x 8760 (hours per year).
 
@@ -79,7 +79,7 @@ Number of rows is zones x 8760 (hours per year).
 | `season` | month, encoded as `m1`…`m12` |
 | `day` | day of month, encoded as `d1`…`d31` (representative days, not calendar dates) |
 | `hour` | hour of day, encoded as `t1`…`t24` |
-| `value` | unitless demand as a fraction of annual peak. This is multiplied by `demandforecast`'s `peak` value for the corresponding year to get MW at that snapshot. |
+| `value` | unitless demand as a fraction of annual peak. This is multiplied by `demand_forecast`'s `peak` value for the corresponding year to get MW at that snapshot. |
 
 ## renewable potentials
 ### `renewable_profiles.csv`
