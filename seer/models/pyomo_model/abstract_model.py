@@ -83,6 +83,9 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
 
     # demand - defined at each time in each zone
     model.demand = pyo.Param(model.zones, model.times, within=pyo.NonNegativeReals)
+    # the real timestamp each (year, hour) represents (see seer.models.time_utils) - carried
+    # only for output tables to report a real datetime, not used by any constraint/objective
+    model.snapshot_datetime = pyo.Param(model.times, within=pyo.Any)
     # discount factor relative to the first modeled year, applied to every cost term in the objective
     model.year_discount_factor = pyo.Param(model.years, within=pyo.NonNegativeReals)
     # value of lost load ($/MWh); kept high so lost load is only used when truly necessary

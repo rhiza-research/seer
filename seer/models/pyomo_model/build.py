@@ -40,6 +40,9 @@ def load_data(data_path):
     calendar = build_snapshot_calendar(years, load_times(data_path))
     hours = sorted(calendar["hour"].unique())
     times = list(zip(calendar["year"], calendar["hour"]))
+    snapshot_datetime = {
+        (row.year, row.hour): row.datetime for row in calendar.itertuples()
+    }
 
     # ---- demand: annual peak (demand_forecast) x normalized profile shape (demand_profile) ----
     peak = demand_forecast_df[demand_forecast_df["type"] == "peak"][["zone", "year", "value"]].rename(
@@ -147,6 +150,7 @@ def load_data(data_path):
             "years": {None: years},
             "hours": {None: hours},
             "times": {None: times},
+            "snapshot_datetime": snapshot_datetime,
             "year_discount_factor": year_discount_factor,
             "existing_generators": {None: existing_generators},
             "new_generators": {None: new_generators},

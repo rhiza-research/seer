@@ -15,6 +15,7 @@ def build_output_tables(instance):
     generator_tech = instance.generator_tech.extract_values()
     storage_zone = instance.storage_zone.extract_values()
     storage_tech = instance.storage_tech.extract_values()
+    snapshot_datetime = instance.snapshot_datetime.extract_values()
 
     generator_capacity = pd.DataFrame([
         {
@@ -35,7 +36,8 @@ def build_output_tables(instance):
     generator_dispatch_rows = [
         {
             "zone": generator_zone[gen], "tech": generator_tech[gen], "name": gen,
-            "year": year, "hour": hour, "dispatch": pyo.value(instance.generation_output[gen, year, hour]),
+            "year": year, "hour": hour, "datetime": snapshot_datetime[year, hour],
+            "dispatch": pyo.value(instance.generation_output[gen, year, hour]),
         }
         for gen in instance.generators for year, hour in instance.times
     ]
@@ -44,7 +46,8 @@ def build_output_tables(instance):
     storage_dispatch_rows = [
         {
             "zone": storage_zone[s], "tech": storage_tech[s], "name": s,
-            "year": year, "hour": hour, "dispatch": -pyo.value(instance.storage_change[s, year, hour]),
+            "year": year, "hour": hour, "datetime": snapshot_datetime[year, hour],
+            "dispatch": -pyo.value(instance.storage_change[s, year, hour]),
         }
         for s in instance.storage for year, hour in instance.times
     ]

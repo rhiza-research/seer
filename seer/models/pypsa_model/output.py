@@ -35,14 +35,16 @@ def _consolidate_capacity_by_year(model, static_df):
 
 def _consolidate_timeseries_by_base_name(static_df, t_df):
     """t_df: e.g. model.generators_t.p, indexed by model.snapshots. Collapses vintage columns
-    to their base name (summing overlaps) and reindexes to (year, hour), hour 1-indexed within
-    each year -- matching the pyomo side's convention."""
+    to their base name (summing overlaps) and reindexes to (year, hour, datetime): hour is
+    1-indexed within each year (matching the pyomo side's convention), datetime is the real
+    timestamp already carried by model.snapshots."""
     base_name_map = {name: _base_name(name, static_df.loc[name, "build_year"]) for name in t_df.columns}
     renamed = t_df.rename(columns=base_name_map).T.groupby(level=0).sum().T
 
     years = renamed.index.get_level_values(0)
+    datetimes = renamed.index.get_level_values(1)
     hours = pd.Series(range(len(renamed)), index=renamed.index).groupby(years).cumcount() + 1
-    renamed.index = pd.MultiIndex.from_arrays([years, hours.values], names=["year", "hour"])
+    renamed.index = pd.MultiIndex.from_arrays([years, hours.values, datetimes], names=["year", "hour", "datetime"])
     renamed.columns.name = None
     return renamed
 
@@ -66,11 +68,13 @@ def _melt_capacity(capacity_df, genmap_df, name_col):
 
 
 def _melt_dispatch(dispatch_df, genmap_df):
-    """dispatch_df: from _consolidate_timeseries_by_base_name (index=(year, hour), columns=base names)."""
-    long_df = dispatch_df.reset_index().melt(id_vars=["year", "hour"], var_name="name", value_name="dispatch")
+    """dispatch_df: from _consolidate_timeseries_by_base_name (index=(year, hour, datetime), columns=base names)."""
+    long_df = dispatch_df.reset_index().melt(
+        id_vars=["year", "hour", "datetime"], var_name="name", value_name="dispatch"
+    )
     long_df["zone"] = long_df["name"].map(genmap_df["zone"])
     long_df["tech"] = long_df["name"].map(genmap_df["tech"])
-    return long_df[["zone", "tech", "name", "year", "hour", "dispatch"]]
+    return long_df[["zone", "tech", "name", "year", "hour", "datetime", "dispatch"]]
 
 
 def build_output_tables(model):
