@@ -1,55 +1,35 @@
-# seer model outputs
+# seer models
 
-Both backends expose the same long-format output tables, each via its own small module (`output.py`,
-`network_flows.py`, `storage_soc.py`) so results can be compared/plotted the same way regardless
-of which backend solved the model:
+Two backends implement the same seer-schema capacity-expansion model: `seer.models.pypsa_model`
+(built on PyPSA) and `seer.models.pyomo_model` (built on Pyomo).
 
-- `seer.models.pyomo_model.output.build_output_tables(instance)` /
-  `seer.models.pypsa_model.output.build_output_tables(model)` -> `{"generator_capacity": df,
-  "storage_capacity": df, "dispatch": df}`
-- `seer.models.pyomo_model.network_flows.build_network_flows(instance)` -> a single
-  `network_flows` DataFrame (pyomo only for now - see the note below)
-- `seer.models.pyomo_model.storage_soc.build_storage_soc(instance)` /
-  `seer.models.pypsa_model.storage_soc.build_storage_soc(model)` -> a single `storage_soc`
-  DataFrame
+## Creating a model
 
-## `generator_capacity`
-Columns: `zone`, `tech`, `generator`, `year`, `capacity` (MW). One row per (generator, year):
-total capacity in service that year (existing capacity, or everything built up to and including
-that year for a build option).
+- **`seer.models.pypsa_model.build(data_path)`** reads the seer-schema CSVs at `data_path` and
+  builds a PyPSA `Network` directly including buses, generators, storage units, etc.
+- **`seer.models.pyomo_model.build(data_path)`** does the same, but Pyomo separates the model
+  *structure* from its *data*: `seer_base_model()` in `abstract_model.py` declares an
+  `AbstractModel` (sets, params, variables, constraints, objective) independent of any data,
+  and `build.py`'s `load_data()` reads the seer schema into a data dict that's used to create a
+  concrete instance of it.
 
-## `storage_capacity`
-Columns: `zone`, `tech`, `storage`, `year`, `capacity` (MWh). Same annual granularity as
-`generator_capacity`.
+Both expose `build(data_path)`; call `solve(model)` (also exported by
+both) to solve the built model and print a summary.
 
-## `dispatch`
-Columns: `zone`, `tech`, `name`, `year`, `hour`, `dispatch` (MW). Hourly; combines generator
-output and storage's net dispatch into one table (distinguish them via `tech`/`name`). Positive
-= net supply to the grid (generator output, or storage discharging); storage charging draws from
-the grid, so its dispatch goes negative.
+## Solved outputs
 
-## `network_flows`
-Columns: `from`, `to`, `year`, `hour`, `flow` (MW). Hourly flow on each transmission line.
-Positive = flowing from `from` to `to` (see `network.csv`/the pyomo abstract model's `line_flow`
-variable). **Pyomo only for now** - PyPSA's model builder doesn't create any `Line` components
-from `network.csv` yet (that was deferred - see seer/inputs/README.md's `network.csv` entry), so
-there's nothing yet for a PyPSA `network_flows.py` to read.
+Both backends expose the same long-format output tables via `output.py`'s
+`build_output_tables(model)`, so results can be compared/plotted the same way regardless of
+which backend solved the model. Returns `{"generator_capacity": df, "storage_capacity": df,
+"dispatch": df}`:
 
-## `storage_soc`
-Columns: `zone`, `tech`, `storage`, `year`, `hour`, `soc` (MWh). Hourly state of charge for each
-storage unit.
+| table | columns | granularity | notes |
+| --- | --- | --- | --- |
+| `generator_capacity` | `zone`, `tech`, `generator`, `year`, `capacity` (MW) | annual | capacity in service that year |
+| `storage_capacity` | `zone`, `tech`, `storage`, `year`, `capacity` (MWh) | annual | capacity in service that year |
+| `dispatch` | `zone`, `tech`, `name`, `year`, `hour`, `dispatch` (MW) | hourly | generator output and storage net dispatch in one table (distinguish via `tech`/`name`); positive = net supply to the grid, storage charging is negative |
 
-## `hour` convention
 `hour` is a 1-indexed position within that year's representative profile, not a calendar
-day-of-year. It's always 1-8760 under the pyomo backend. Under PyPSA, an investment year that's
-a calendar leap year gets an extra day (1-8784, see `pypsa_model/build.py`'s leap-day handling) -
-so the hour range can differ between backends and between years. Handle that in plotting rather
-than assuming a fixed range.
-
-## PyPSA vintage consolidation
-PyPSA needs one component per (build option, investment-period vintage) for anything
-expandable - e.g. `name_2025`, `name_2030`, ... - since PyPSA requires a distinct component per
-build year. `seer.models.pypsa_model._consolidate` collapses these back into a single logical
-row per base name (matching the fixed per-option naming already used on the pyomo side), summing
-capacity/dispatch/soc across every vintage active in a given year/hour. Shared by that backend's
-`output.py` and `storage_soc.py`.
+day-of-year. It's always 1-8760 under pyomo. Under PyPSA, a leap year gets an extra day
+(1-8784, see `pypsa_model/build.py`'s leap-day handling) — so the hour range can differ between
+backends and between years; don't assume a fixed range when plotting.
