@@ -27,9 +27,6 @@ which backend solved the model. Returns `{"generator_capacity": df, "storage_cap
 | --- | --- | --- | --- |
 | `generator_capacity` | `zone`, `tech`, `generator`, `year`, `capacity` (MW) | annual | capacity in service that year |
 | `storage_capacity` | `zone`, `tech`, `storage`, `year`, `capacity` (MWh) | annual | capacity in service that year |
-| `dispatch` | `zone`, `tech`, `name`, `year`, `hour`, `dispatch` (MW) | hourly | generator output and storage net dispatch in one table (distinguish via `tech`/`name`); positive = net supply to the grid, storage charging is negative |
+| `dispatch` | `zone`, `tech`, `name`, `year`, `hour`, `datetime`, `dispatch` (MW) | per `times.csv` | generator output and storage net dispatch in one table (distinguish via `tech`/`name`); positive = net supply to the grid, storage charging is negative |
 
-`hour` is a 1-indexed position within that year's representative profile, not a calendar
-day-of-year. It's always 1-8760 under pyomo. Under PyPSA, a leap year gets an extra day
-(1-8784, see `pypsa_model/build.py`'s leap-day handling) — so the hour range can differ between
-backends and between years; don't assume a fixed range when plotting.
+In `dispatch.csv`, time is indexed redundantly via `datetime` and `year`, `hour` column so there are multiple ways to plot, label, or aggregate the data.
