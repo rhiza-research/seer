@@ -32,6 +32,12 @@ def generate_years(years):
     return pd.DataFrame({"year": years})
 
 
+# times - the canonical (year-less) dispatch time grid; taken directly from the demand seed,
+# which already defines a full non-leap-year hourly calendar (see seed_data/demand_seed.csv)
+def generate_times(seed_path):
+    return pd.read_csv(seed_path)[["time"]]
+
+
 # settings - single-valued model settings, one row per setting (parameters, value)
 def generate_settings(discount_rate):
     return pd.DataFrame({"parameters": ["dr"], "value": [discount_rate]})
@@ -105,6 +111,7 @@ def generate_all_data(
 
     outputs = {
         "years": generate_years(years),
+        "times": generate_times(SEED_DATA_DIR / "demand_seed.csv"),
         "settings": generate_settings(annual_discount_rate),
         "zones": generate_zones(ZONES, country_name),
         "demand_forecast": demand_forecast_df,

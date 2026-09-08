@@ -6,7 +6,7 @@ DATA_PATH = "data/seer/Gambia/"
 
 
 def main():
-    model = build(DATA_PATH, time_resolution="1h")
+    model = build(DATA_PATH)
 
     print(f"Buses (zones): {list(model.buses.index)}")
     print(f"Investment periods: {list(model.investment_periods)}")

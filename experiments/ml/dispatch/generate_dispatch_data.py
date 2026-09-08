@@ -30,6 +30,7 @@ import pandas as pd
 import torch
 
 from seer.inputs.synthetic import generate_all_data
+from seer.models.time_utils import build_snapshot_calendar, load_times, resolve_profile
 
 N_ZONES = 3
 YEAR = 2025
@@ -107,15 +108,16 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
         storage_power_capacity[zi] = group["capacity_mw"].sum()
 
     # ---- full-year hourly load per zone (MW)
+    calendar = build_snapshot_calendar([YEAR], load_times(data_path))
     demand_forecast = pd.read_csv(f"{data_path}/demand_forecast.csv")
     demand_profile = pd.read_csv(f"{data_path}/demand_profile.csv")
     peak_by_zone = demand_forecast[
         (demand_forecast["type"] == "peak") & (demand_forecast["year"] == YEAR)
     ].set_index("zone")["value"]
 
+    demand_long = resolve_profile(demand_profile, calendar, key_cols=["zone"]).sort_values("hour")
     load_by_hour = np.zeros((n_zones, 8760))
-    for zone, group in demand_profile.groupby("zone", sort=False):
-        # rows are already in (season, day, hour) order = chronological order within the year
+    for zone, group in demand_long.groupby("zone", sort=False):
         load_by_hour[zone_index[zone], :] = group["value"].to_numpy() * peak_by_zone[zone]
 
     # ---- full-year hourly PV generation per zone (MW)
@@ -125,8 +127,8 @@ def dispatch_adaptor(data_path, n_zones=N_ZONES, rng=None):
     renewable_profiles = pd.read_csv(f"{data_path}/renewable_profiles.csv")
     pv_by_hour = np.zeros((n_zones, 8760))
     if len(renewable_profiles) > 0:
-        for zone, group in renewable_profiles.groupby("zone", sort=False):
-            group = group.sort_values(["month", "day", "hour"])
+        re_long = resolve_profile(renewable_profiles, calendar, key_cols=["zone", "tech"]).sort_values("hour")
+        for zone, group in re_long.groupby("zone", sort=False):
             pv_by_hour[zone_index[zone], :] = group["value"].to_numpy() * pv_capacity_by_zone.get(zone, 0.0)
 
     # net_load = demand - PV (consumption-positive); injection = -net_load (production-positive,

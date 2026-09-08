@@ -1,40 +1,40 @@
 """Build a PyPSA Network from seer-schema input CSVs."""
 
-import calendar
 import warnings
 
 import numpy as np
 import pandas as pd
 import pypsa
 
+from ..time_utils import build_snapshot_calendar, load_times, resolve_profile
+
 # TODO: move to a config csv
 discount_rate = 0.08
 
 
-def build(data_path, time_resolution="1h"):
+def build(data_path):
     input_data = load_data(data_path)
     model = pypsa.Network()
 
     """TIME: Set up multi-period optimization.
     Years are investment periods. Build decisions can be made in each year.
-    Each year has some temporal resolution (snapshots) at which dispatch is modelled.
+    times.csv defines the within-year dispatch grid (see seer/inputs/README.md); years x times,
+    projected onto each real year (skipping e.g. Feb 29 in non-leap years), gives the snapshots.
     """
     years = input_data["years"]["year"].tolist()
+    calendar = build_snapshot_calendar(years, input_data["times"])
     model.investment_periods = years
     model.investment_period_weightings["years"] = get_year_steps(years)
 
     # discount each period's objective terms relative to the first modeled year
     start_at = 0
     for period, nyears in model.investment_period_weightings.years.items():
+        nyears = int(nyears)
         discounts = [(1 / (1 + discount_rate) ** t) for t in range(start_at, start_at + nyears)]
         model.investment_period_weightings.at[period, "objective"] = sum(discounts)
         start_at += nyears
 
-    # snapshots need a (year, timestamp) multi-index to work with investment periods
-    snapshots = pd.DatetimeIndex(np.concatenate([
-        pd.date_range(f"{y}-01-01 00:00", f"{y}-12-31 23:00", freq=time_resolution) for y in years
-    ]))
-    model.snapshots = pd.MultiIndex.from_arrays([snapshots.year, snapshots])
+    model.snapshots = pd.MultiIndex.from_arrays([calendar["year"], calendar["datetime"]])
 
     """SPACE: Set up components of the model.
     Zones represent the spatial resolution of the model.
@@ -44,11 +44,11 @@ def build(data_path, time_resolution="1h"):
 
     """DEMAND: Set up demand trajectory.
     """
-    set_demand(model, input_data["demand_forecast"], input_data["demand_profile"])
+    set_demand(model, input_data["demand_forecast"], input_data["demand_profile"], calendar)
 
     """RENEWABLES: Prepare renewable profiles for use in generator setup.
     """
-    re_profiles = prepare_renewable_profiles(model, input_data["renewable_profiles"])
+    re_profiles = prepare_renewable_profiles(input_data["renewable_profiles"], calendar)
 
     """GENERATION: Set up existing generation and build options.
     """
@@ -74,66 +74,28 @@ def get_year_steps(years):
     return pd.Series(steps, index=years)
 
 
-def prepare_renewable_profiles(model, re_profiles):
-    """Reshape renewable_profiles.csv (long format) into a wide (zone, tech)-columned frame
-    indexed by model.snapshots, for lookup during generator setup."""
-    times = model.snapshots.get_level_values(1)
-    dft = pd.DataFrame({
-        "year": [dt.year for dt in times], "month": [dt.month for dt in times],
-        "day": [dt.day for dt in times], "hour": [dt.hour + 1 for dt in times],  # 1-indexed hours
-    })
-
-    zone_tech = re_profiles[["zone", "tech"]].drop_duplicates()
-
-    column_keys = {}
-    for zone, tech in zone_tech.itertuples(index=False):
-        profile = re_profiles[(re_profiles["zone"] == zone) & (re_profiles["tech"] == tech)]
-        dft = dft.merge(profile[["month", "day", "hour", "value"]], on=["month", "day", "hour"], how="left")
-        col_name = f"__profile_{len(column_keys)}__"
-        dft = dft.rename(columns={"value": col_name})
-        column_keys[col_name] = (zone, tech)
-
-    dft = fill_missing_times(dft)  # fills leap day with the nearest hour's value
-    dft.index = model.snapshots
-    dft = dft.drop(columns=["year", "month", "day", "hour"])
-    dft.columns = pd.MultiIndex.from_tuples([column_keys[c] for c in dft.columns], names=["zone", "tech"])
-    return dft
+def prepare_renewable_profiles(re_profiles, calendar):
+    """Resolve renewable_profiles.csv to a wide (zone, tech)-columned frame indexed by
+    (year, datetime) snapshots, for lookup during generator setup."""
+    resolved = resolve_profile(re_profiles, calendar, key_cols=["zone", "tech"])
+    resolved = resolved.merge(calendar[["year", "hour", "datetime"]], on=["year", "hour"])
+    wide = resolved.pivot(index=["year", "datetime"], columns=["zone", "tech"], values="value")
+    wide.index.names = [None, None]
+    return wide
 
 
-def set_demand(model, demand_forecast, demand_profile):
-    """Load = normalized hourly profile x annual peak forecast, per zone/year."""
-    years = model.investment_periods
-    for zone in demand_forecast["zone"].unique():
-        profile = demand_profile[demand_profile["zone"] == zone]
-        forecast_peaks = demand_forecast[(demand_forecast["zone"] == zone) & (demand_forecast["type"] == "peak")]
+def set_demand(model, demand_forecast, demand_profile, calendar):
+    """Load = normalized profile shape x annual peak forecast, per zone/year."""
+    peak = demand_forecast[demand_forecast["type"] == "peak"][["zone", "year", "value"]].rename(columns={"value": "peak"})
+    resolved = resolve_profile(demand_profile, calendar, key_cols=["zone"])
+    resolved = resolved.merge(peak, on=["zone", "year"], how="left")
+    resolved = resolved.merge(calendar[["year", "hour", "datetime"]], on=["year", "hour"])
+    resolved["demand"] = resolved["value"] * resolved["peak"]
 
-        demand_ts = pd.Series(index=model.snapshots, name=zone)
-        for year in years:
-            annual_profile = add_leap_day(profile["value"], year)
-            annual_scale = forecast_peaks[forecast_peaks["year"] == year]["value"].values
-            demand_ts.loc[(year, slice(None))] = annual_profile.values * annual_scale
+    for zone, group in resolved.groupby("zone"):
+        group = group.sort_values(["year", "hour"])
+        demand_ts = pd.Series(group["demand"].values, index=pd.MultiIndex.from_arrays([group["year"], group["datetime"]]))
         model.add("Load", zone, bus=zone, p_set=demand_ts)
-
-
-def add_leap_day(profile, year):
-    """Extend a normalized 365-day profile with an extra day (copy of the last day) for leap
-    years."""
-    if not calendar.isleap(year):
-        return profile
-    extra = profile.iloc[-24:].copy()
-    extra.index = range(len(profile), len(profile) + 24)
-    return pd.concat([profile, extra])
-
-
-def fill_missing_times(profile):
-    """Fill the leap-day gap (nearest available hour) in a wide year/month/day/hour profile."""
-    value_cols = profile.columns.difference(["year", "month", "day", "hour"])
-    fill_nearest = lambda g: g.interpolate(method="nearest", limit_direction="both")
-    profile[value_cols] = (
-        profile.sort_values(["year", "hour", "month", "day"])
-        .groupby(["year", "hour"], group_keys=False)[value_cols].apply(fill_nearest)
-    )
-    return profile
 
 
 def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expansion=False):
@@ -265,6 +227,7 @@ def load_data(data_path):
     return {
         "zones": pd.read_csv(data_path + "zones.csv"),
         "years": pd.read_csv(data_path + "years.csv"),
+        "times": load_times(data_path.rstrip("/")),
         "demand_forecast": pd.read_csv(data_path + "demand_forecast.csv"),
         "demand_profile": pd.read_csv(data_path + "demand_profile.csv"),
         "renewable_profiles": pd.read_csv(data_path + "renewable_profiles.csv"),

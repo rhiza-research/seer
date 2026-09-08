@@ -1,5 +1,6 @@
 import pandas as pd
 
+from ..time_utils import build_snapshot_calendar, load_times, resolve_profile
 from .abstract_model import seer_base_model
 
 
@@ -34,32 +35,30 @@ def load_data(data_path):
     base_year = years[0]
     year_discount_factor = {year: 1 / (1 + discount_rate) ** (year - base_year) for year in years}
 
-    # hourly index: derived from the demand profile's per-zone row count (e.g. 365 days * 24 hours)
-    hours_per_zone = len(demand_profile_df) // len(zones)
-    hours = list(range(1, hours_per_zone + 1))
+    # times.csv x years.csv, projected onto each real year (skipping e.g. Feb 29 in a
+    # non-leap year) -- see seer/inputs/README.md and seer.models.time_utils
+    calendar = build_snapshot_calendar(years, load_times(data_path))
+    hours = sorted(calendar["hour"].unique())
+    times = list(zip(calendar["year"], calendar["hour"]))
 
-    # ---- demand: annual peak (demand_forecast) x normalized hourly shape (demand_profile) ----
-    demand_shape = {
-        (zone, hour): value
-        for zone, group in demand_profile_df.groupby("zone", sort=False)
-        for hour, value in zip(hours, group["value"])
-    }
-    peak_demand = {
-        (row.zone, int(row.year)): row.value
-        for row in demand_forecast_df.itertuples()
-    }
+    # ---- demand: annual peak (demand_forecast) x normalized profile shape (demand_profile) ----
+    peak = demand_forecast_df[demand_forecast_df["type"] == "peak"][["zone", "year", "value"]].rename(
+        columns={"value": "peak"}
+    )
+    demand_long = resolve_profile(demand_profile_df, calendar, key_cols=["zone"])
+    demand_long = demand_long.merge(peak, on=["zone", "year"], how="left")
     demand = {
-        (zone, year, hour): peak_demand[(zone, year)] * demand_shape[(zone, hour)]
-        for zone in zones
-        for year in years
-        for hour in hours
+        (row.zone, row.year, row.hour): row.value * row.peak
+        for row in demand_long.itertuples()
     }
 
-    # ---- renewable availability, keyed by (zone, tech) ----
+    # ---- renewable availability, keyed by (zone, tech, year, hour) -- template profiles
+    # (no year in renewable_profiles.csv) are already replicated across every year by
+    # resolve_profile, so this is uniform whether or not the source data varies by year ----
+    re_long = resolve_profile(renewable_profiles_df, calendar, key_cols=["zone", "tech"])
     renewable_availability = {
-        (zone, tech, hour): value
-        for (zone, tech), group in renewable_profiles_df.groupby(["zone", "tech"], sort=False)
-        for hour, value in zip(hours, group["value"])
+        (row.zone, row.tech, row.year, row.hour): row.value
+        for row in re_long.itertuples()
     }
 
     # ---- generator attributes ----
@@ -79,14 +78,15 @@ def load_data(data_path):
     generator_annual_build_limit = constants.loc[new_generators, "annual_build_limit"].to_dict()
     generator_unit_size = constants.loc[new_generators, "unit_size"].to_dict()
 
-    # dispatchable generators have a capacity factor of 1.0 every hour; renewables are derated by their zone/tech profile
+    # dispatchable generators have a capacity factor of 1.0 every (year, hour); renewables are
+    # derated by their zone/tech profile, which may itself vary by year
     generator_capacity_factor = {
-        (gen, hour): (
-            renewable_availability[(generator_zone[gen], generator_tech[gen], hour)]
+        (gen, year, hour): (
+            renewable_availability[(generator_zone[gen], generator_tech[gen], year, hour)]
             if generator_isre[gen] else 1.0
         )
         for gen in generators
-        for hour in hours
+        for year, hour in times
     }
 
     # ---- costs ----
@@ -146,6 +146,7 @@ def load_data(data_path):
             "zones": {None: zones},
             "years": {None: years},
             "hours": {None: hours},
+            "times": {None: times},
             "year_discount_factor": year_discount_factor,
             "existing_generators": {None: existing_generators},
             "new_generators": {None: new_generators},

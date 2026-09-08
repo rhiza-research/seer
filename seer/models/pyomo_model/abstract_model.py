@@ -19,10 +19,13 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
     """Indices"""
     # spatial
     model.zones = pyo.Set()
-    # temporal
+    # temporal. hours is a 1-indexed within-year position (see seer/inputs/README.md's
+    # times.csv), ranging over the longest modeled year -- times is NOT a strict years x hours
+    # cross product, since a time can be skipped in a given year (e.g. Feb 29 in a non-leap
+    # year), so it's supplied explicitly as its own (year, hour) pairs rather than derived.
     model.years = pyo.Set(ordered=True)
     model.hours = pyo.Set(ordered=True)
-    model.times = model.years * model.hours
+    model.times = pyo.Set(ordered=True, dimen=2)
     # generators - existing and new build generators together comprise all generators
     model.existing_generators = pyo.Set()
     model.new_generators = pyo.Set()
@@ -51,8 +54,10 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
     model.generator_marginal_cost = pyo.Param(model.generators, model.years, within=pyo.NonNegativeReals)
     model.generator_capex_cost = pyo.Param(model.new_generators, model.years, within=pyo.NonNegativeReals)
 
-    # capacity factor: 1.0 for dispatchable generators, hourly factor for renewables
-    model.generator_capacity_factor = pyo.Param(model.generators, model.hours, within=pyo.NonNegativeReals)
+    # capacity factor: 1.0 for dispatchable generators, per-(year, hour) factor for renewables
+    # (renewable_profiles.csv may be a template reused every year, or vary by year -- see
+    # seer.models.time_utils.resolve_profile)
+    model.generator_capacity_factor = pyo.Param(model.generators, model.times, within=pyo.NonNegativeReals)
 
     # storage attributes
     model.storage_zone = pyo.Param(model.storage, within=pyo.Any)
@@ -230,7 +235,7 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
     # 5. generator output is limited by capacity
     def generator_output_limit_rule(model, gen, year, hour):
         return model.generation_output[gen, year, hour] <= (
-            model.total_capacity[gen, year] * model.generator_capacity_factor[gen, hour]
+            model.total_capacity[gen, year] * model.generator_capacity_factor[gen, year, hour]
         )
 
     model.generator_output_limit = pyo.Constraint(

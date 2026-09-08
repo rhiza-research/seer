@@ -1,9 +1,9 @@
 """Generates the seer schema file `renewable_profiles.csv`.
 
 The "seed" is `seed_data/re_seed.csv`: a full annual capacity-factor curve per tech (tech,
-month, day, hour, value - same layout as renewable_profiles.csv, minus the zone column), so
-it can be edited without touching code. Each zone gets its own noised copy of this shared
-curve, rather than an identical copy.
+time, value - same layout as renewable_profiles.csv, minus the zone column), so it can be
+edited without touching code. Each zone gets its own noised copy of this shared curve, rather
+than an identical copy.
 """
 
 import pandas as pd
@@ -32,4 +32,4 @@ def build_renewable_profiles(zones, noise_pct, techs=None, seed_path="seed_data/
                 value=(tech_curve["value"] * multiplier).clip(0, 1).round(6),
             ))
 
-    return pd.concat(frames, ignore_index=True)[["zone", "tech", "month", "day", "hour", "value"]]
+    return pd.concat(frames, ignore_index=True)[["zone", "tech", "time", "value"]]

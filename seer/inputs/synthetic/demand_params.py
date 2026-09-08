@@ -38,4 +38,4 @@ def build_demand_profile(zones, noise_pct, seed_path="seed_data/demand_seed.csv"
         noise = noise_multiplier(noise_pct, size=len(shape))
         frames.append(shape.assign(zone=zone, value=(shape["value"] * noise)))
 
-    return pd.concat(frames, ignore_index=True)[["zone", "season", "day", "hour", "value"]]
+    return pd.concat(frames, ignore_index=True)[["zone", "time", "value"]]

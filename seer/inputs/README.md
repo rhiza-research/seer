@@ -11,6 +11,7 @@ Every file is a csv with a header row.
 - [Time and space parameters](#time-and-space-parameters)
   - [`zones.csv`](#zonescsv)
   - [`years.csv`](#yearscsv)
+  - [`times.csv`](#timescsv)
   - [`network.csv`](#networkcsv)
 - [Demand parameters](#demand-parameters)
   - [`demand_forecast.csv`](#demand_forecastcsv)
@@ -46,6 +47,26 @@ Number of rows is years.
 | --- | --- |
 | `year` | a modeled investment-period year |
 
+### `times.csv`
+The canonical dispatch time grid: which time-of-year points are modeled within each year, at
+whatever resolution you choose (hourly, sub-hourly, or a handful of representative days) -
+independent of which/how many years are modeled (that's `years.csv`). This split is
+deliberate: build (investment) decisions happen at annual resolution, dispatch happens at
+whatever resolution `times.csv` specifies.
+Number of rows is however many dispatch timepoints you want per year.
+
+| column | contents |
+| --- | --- |
+| `time` | a time-of-year, formatted `MM-DD HH:MM:SS` (e.g. `01-15 13:00:00`) - deliberately no year, since this is a template applied to every modeled year (see `demand_profile.csv`/`renewable_profiles.csv` below). Rows should be in chronological order. |
+
+`time` is parsed by hand (`seer.models.time_utils.parse_time_string`), never through a generic
+date parser - those need to invent a year when none is given (pandas/dateutil defaults to
+today's year; `datetime.strptime` defaults to 1900, which isn't even a leap year and would
+reject Feb 29). A real year is only ever attached once a specific modeled year is known
+(`seer.models.time_utils.project_to_year`), so a `time` that doesn't exist in a given year (Feb
+29 in a non-leap year) is simply skipped for that year - meaning different years can end up
+with different numbers of dispatch snapshots.
+
 ### `network.csv`
 One row per transmission line connecting two zones. This is **optional** - a dataset with no inter-zone
 lines (e.g. single-zone) can omit this file.
@@ -70,29 +91,28 @@ Number of rows is zones x years (x 2 if both energy and peak are specified).
 | `value` | forecast value in the units implied by `type` |
 
 ### `demand_profile.csv`
-Normalized annual load curve at hourly resolution; a single load curve is used across all years. 
-Number of rows is zones x 8760 (hours per year).
+Normalized load curve, at whatever time resolution `times.csv` specifies.
+Number of rows is zones x `times.csv` rows (x years, only if given per-year - see below).
 
 | column | contents |
 | --- | --- |
 | `zone` | zone id |
-| `season` | month, encoded as `m1`…`m12` |
-| `day` | day of month, encoded as `d1`…`d31` (representative days, not calendar dates) |
-| `hour` | hour of day, encoded as `t1`…`t24` |
+| `time` | matches a `times.csv` value |
+| `year` | **optional.** Omit entirely (or leave a single/null value throughout) to give one template curve reused for every modeled year; give a real value per row to provide a distinct curve per year - in which case every (zone, year, time) implied by `years.csv` x `times.csv` must be present. |
 | `value` | unitless demand as a fraction of annual peak. This is multiplied by `demand_forecast`'s `peak` value for the corresponding year to get MW at that snapshot. |
 
 ## renewable potentials
 ### `renewable_profiles.csv`
-Normalized annual capacity-factor curve at hourly resolution, per zone/technology; a
-single curve is used in all years. Number of rows is zones x renewable techs x 8760.
+Normalized capacity-factor curve per zone/technology, at whatever time resolution `times.csv`
+specifies. Number of rows is zones x renewable techs x `times.csv` rows (x years, only if
+given per-year).
 
 | column | contents |
 | --- | --- |
 | `zone` | zone id |
 | `tech` | renewable technology; matches `generator_constants.tech` for renewable generators |
-| `month` | month of year, `1`–`12` |
-| `day` | day of month, `1`–`31` (representative days) |
-| `hour` | hour of day, `1`–`24` |
+| `time` | matches a `times.csv` value |
+| `year` | **optional**, same template-vs-per-year rule as `demand_profile.csv` above |
 | `value` | capacity factor: available output as a fraction of nameplate capacity (unitless, 0–1) |
 
 ## generator parameters
