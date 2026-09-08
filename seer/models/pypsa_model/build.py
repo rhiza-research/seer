@@ -84,9 +84,7 @@ def prepare_renewable_profiles(model, re_profiles):
     })
 
     zone_tech = re_profiles[["zone", "tech"]].drop_duplicates()
-    # track (placeholder column -> (zone, tech)) so the final MultiIndex can be rebuilt from
-    # known tuples, rather than round-tripping through a combined string and re-splitting it
-    # (zone names can contain underscores, e.g. "zone_0", which breaks naive str.split("_"))
+
     column_keys = {}
     for zone, tech in zone_tech.itertuples(index=False):
         profile = re_profiles[(re_profiles["zone"] == zone) & (re_profiles["tech"] == tech)]
