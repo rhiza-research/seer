@@ -38,16 +38,16 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
     """
     storage_gen_params = custom_gen_params[custom_gen_params["generator"].isin(storage_constants["storage"])]
 
-    # zone and carrier (fuel) are plain columns rather than "parameters" rows. carrier naming
-    # is aligned to fixed values ("Battery", "PumpedHydro") upstream in gdx.enrich_data's
+    # zone and tech (fuel) are plain columns rather than "parameters" rows. tech naming is
+    # aligned to fixed values ("Battery", "PumpedHydro") upstream in gdx.enrich_data's
     # normalize_storage_tech, regardless of each region's raw naming quirks.
-    zone_carrier = storage_gen_params[["generator", "zone", "fuel"]].drop_duplicates().rename(
-        columns={"generator": "storage", "fuel": "carrier"}
+    zone_tech = storage_gen_params[["generator", "zone", "fuel"]].drop_duplicates().rename(
+        columns={"generator": "storage", "fuel": "tech"}
     )
-    storage_constants = storage_constants.merge(zone_carrier, on="storage", how="left")
+    storage_constants = storage_constants.merge(zone_tech, on="storage", how="left")
 
     # fill missing lifetimes (some regions have no "Life" value at all for any storage
-    # plant) with a default by carrier. Battery figure is the standard utility-scale
+    # plant) with a default by tech. Battery figure is the standard utility-scale
     # Li-ion assumption (matches the Life=15 value already present for battery plants
     # elsewhere in this dataset, e.g. Guinea's BESS). Pumped hydro is civil infrastructure,
     # comparable to conventional hydro, and gets a much longer default.
@@ -56,7 +56,7 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
         "PumpedHydro": 50,
     }
     missing_life = storage_constants["life"].isna()
-    storage_constants.loc[missing_life, "life"] = storage_constants.loc[missing_life, "carrier"].map(default_lifetime)
+    storage_constants.loc[missing_life, "life"] = storage_constants.loc[missing_life, "tech"].map(default_lifetime)
 
     # fill in the remaining GAMS parameters (same names generator_constants pulls)
     gams_param_list = ["Capacity", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear"]
@@ -77,13 +77,6 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
 
     storage_constants["duration_hours"] = storage_constants["capacity_mwh"] / storage_constants["capacity_mw"]
 
-    # reorder to match the seer schema
-    storage_constants = storage_constants[[
-        "storage", "zone", "carrier", "capacity_mwh", "duration_hours", "capacity_mw",
-        "capex_mwh", "efficiency", "life", "start_year", "retirement_year",
-        "unit_size_mwh", "annual_build_limit_mwh", "expandable",
-    ]]
-
     """Setup storage costs.
     Use storage constants to fill in a single dataframe of storage costs.
     """
@@ -99,5 +92,14 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
         rows.append(row_capex)
 
     storage_costs = pd.DataFrame(rows, columns=["storage", "cost_type"] + years)
+
+    # reorder to match the seer schema. capacity_mwh/capex_mwh are dropped here -- they were
+    # only needed to compute duration_hours and the capex trajectory above; energy capacity is
+    # derived as capacity_mw * duration_hours wherever it's needed downstream.
+    storage_constants = storage_constants[[
+        "storage", "zone", "tech", "duration_hours", "capacity_mw",
+        "efficiency", "life", "start_year", "retirement_year",
+        "unit_size_mwh", "annual_build_limit_mwh", "expandable",
+    ]]
 
     return storage_constants, storage_costs

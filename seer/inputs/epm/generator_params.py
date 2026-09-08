@@ -21,11 +21,12 @@ def build_generator_params(data_path="data/Gambia/"):
     """Setup generator constants.
     Use generator list, default parameters, and custom parameters to fill in a single dataframe of generator constants.
     """
+    # Capex and HeatRate are needed only to compute generator_costs below (capex scaling
+    # multiplier, marginal cost from heat_rate x fuel price); dropped from the final output,
+    # since they're already baked into generator_costs.csv by the time this returns.
     param_list = [
-        "Capacity", "Capex", "FOMperMW", "MinLimitShare", "Overloadfactor",
-        "RampDnRate", "RampUpRate", "ReserveCost", "ResLimShare", "Life",
-        "HeatRate", "VOM", "RETech", "RetrYr", "StYr", "UnitSize",
-        "BuildLimitperYear"
+        "Capacity", "Capex", "RampDnRate", "RampUpRate", "Life",
+        "HeatRate", "RETech", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear",
     ]
     # Initialize generator_constants dataframe
     generator_constants = pd.DataFrame(columns=["generator", "zone", "tech", "fuel"] + param_list)
@@ -63,7 +64,8 @@ def build_generator_params(data_path="data/Gambia/"):
         "HeatRate": "heat_rate",
         "StYr": "start_year",
         "RetrYr": "retirement_year",
-        "UnitSize": "unit_size"
+        "UnitSize": "unit_size",
+        "RETech": "isre",
     }, inplace=True)
     # change all capital leters to lowercase in column names
     generator_constants.columns = generator_constants.columns.str.lower()
@@ -124,6 +126,10 @@ def build_generator_params(data_path="data/Gambia/"):
             rows.append(row_mc)
 
     generator_cost = pd.DataFrame(rows, columns=["generator", "cost_type"] + years)
+
+    # capex/heat_rate were only needed above (capex scaling multiplier, marginal-cost
+    # computation) -- already baked into generator_cost, so drop from the final output
+    generator_constants = generator_constants.drop(columns=["capex", "heat_rate"])
     return generator_constants, generator_cost
 
 
