@@ -9,11 +9,17 @@ import numpy as np
 NO_RETIREMENT_YEAR = 9999
 
 
-def build_generator_params(data_path="data/Gambia/"):
+def build_generator_params(data_path="data/Gambia/", model_years=None):
     """Combines disparate generator data sources into two seer schema files:
     generator_constants.csv: a dataframe of generator constants (parameters, build limits, etc.)
     generator_costs.csv: a dataframe of generator costs (capex and marginal cost)
     Returns two dataframes: generator_constants and generator_costs.
+
+    `model_years` (the region's years.csv) is only used as a fallback: some regions have a base
+    capex value per generator (pGenDataInputCustom's "Capex" param) but no capex *trajectory*
+    data at all (neither pCapexTrajectoriesDefault.csv nor Custom.csv exists) -- there's no cost
+    decline curve to apply, so capex is held flat across model_years instead of producing an
+    empty generator_costs.csv with no year columns.
     """
     input_data = load_input_data(data_path)
     all_generators = input_data["all_generators"]
@@ -84,6 +90,22 @@ def build_generator_params(data_path="data/Gambia/"):
     generator_constants["retirement_year"] = (
         generator_constants["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
     )
+    # no Life value found -- required for expandable generators (see seer/inputs/README.md),
+    # but some regions mark existing units "expandable" too (they have both existing capacity
+    # and a BuildLimitperYear, i.e. can be built out further) without ever giving them a Life
+    # param. Their already-known active window is a reasonable stand-in for lifetime when
+    # nothing else is given.
+    missing_life = generator_constants["Life"].isna()
+    if missing_life.any():
+        generator_constants.loc[missing_life, "Life"] = (
+            generator_constants.loc[missing_life, "retirement_year"] - generator_constants.loc[missing_life, "start_year"]
+        )
+        still_missing = generator_constants["Life"].isna()
+        if still_missing.any():
+            warnings.warn(
+                f"No Life value (and no start/retirement year to derive one from) in {data_path!r} "
+                f"for generators: {generator_constants.loc[still_missing, 'generator'].tolist()}"
+            )
     # change all capital leters to lowercase in column names
     generator_constants.columns = generator_constants.columns.str.lower()
 
@@ -95,10 +117,20 @@ def build_generator_params(data_path="data/Gambia/"):
     # setup cost dataframe
     # (years normally comes from the default capex trajectory; some regions have no
     # default capex data at all, so fall back to whatever years the custom trajectory covers)
+    has_capex_trajectory = not default_gen_capex.empty or not custom_gen_capex.empty
     if not default_gen_capex.empty:
         years = sorted(default_gen_capex["year"].unique())
     elif not custom_gen_capex.empty:
         years = sorted(custom_gen_capex["year"].unique())
+    elif model_years:
+        # no trajectory data at all (neither symbol exists in this region's raw gdx) -- base
+        # capex values are still present on generator_constants (pGenDataInputCustom's Capex
+        # param), just no decline curve to apply, so hold them flat across the modeled years
+        warnings.warn(
+            f"No capex trajectory data (pCapexTrajectoriesDefault/Custom) found in {data_path!r} "
+            "-- holding capex flat (no cost decline) across all modeled years."
+        )
+        years = list(model_years)
     else:
         years = []
     rows = []
@@ -108,22 +140,26 @@ def build_generator_params(data_path="data/Gambia/"):
         # capex
         row_capex = {"generator": gen.generator, "cost_type": "capex"}
 
-        # get capex trajectory - custom if it exists, otherwise default
-        if gen.generator in custom_gen_capex["plant"].values:
-            capex_traj = custom_gen_capex[
-                custom_gen_capex["plant"] == gen.generator
-            ][["year", "value"]].set_index("year")
+        if not has_capex_trajectory:
+            for y in years:
+                row_capex[y] = gen.capex
         else:
-            capex_traj = default_gen_capex[
-                (default_gen_capex["zone"] == gen.zone) &
-                (default_gen_capex["tech"] == gen.tech) &
-                (default_gen_capex["fuel"] == gen.fuel)
-            ][["year", "value"]].set_index("year")
+            # get capex trajectory - custom if it exists, otherwise default
+            if gen.generator in custom_gen_capex["plant"].values:
+                capex_traj = custom_gen_capex[
+                    custom_gen_capex["plant"] == gen.generator
+                ][["year", "value"]].set_index("year")
+            else:
+                capex_traj = default_gen_capex[
+                    (default_gen_capex["zone"] == gen.zone) &
+                    (default_gen_capex["tech"] == gen.tech) &
+                    (default_gen_capex["fuel"] == gen.fuel)
+                ][["year", "value"]].set_index("year")
 
-        capex_traj = gen.capex * capex_traj["value"]
+            capex_traj = gen.capex * capex_traj["value"]
 
-        for y in years:
-            row_capex[y] = capex_traj.get(y, pd.NA)
+            for y in years:
+                row_capex[y] = capex_traj.get(y, pd.NA)
 
         rows.append(row_capex)
 

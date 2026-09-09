@@ -4,7 +4,7 @@ import pandas as pd
 from .generator_params import NO_RETIREMENT_YEAR
 
 
-def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=2050):
+def build_storage_params(data_path="data/Gambia/", years=None):
     """
     Processes storage input data into two seer schema files:
     - storage_constants.csv
@@ -14,7 +14,14 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
     - pStorageDataInput.csv: storage data (by plant)
     - pGenDataInputCustom.csv: generator parameters (by generator)
     Returns two dataframes: storage_constants and storage_costs.
+
+    `years` should be the same modeled years as years.csv (the model's investment periods) --
+    storage_costs.csv must have a column for every one of them, since build_storage's
+    per-vintage capex lookup indexes by those exact year values. Defaults to 2025-2050 for
+    standalone use, but epm_to_seer always passes the region's actual years explicitly.
     """
+    if years is None:
+        years = list(range(2025, 2051))
 
     storage_data = pd.read_csv(data_path + "pStorageDataInput.csv")
     custom_gen_params = pd.read_csv(data_path + "pGenDataInputCustom.csv")
@@ -89,8 +96,6 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
     """Setup storage costs.
     Use storage constants to fill in a single dataframe of storage costs.
     """
-    years = list(range(start_year, end_year + 1))
-
     rows = []
 
     for _, storage in storage_constants.iterrows():

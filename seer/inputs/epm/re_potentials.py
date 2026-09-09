@@ -16,6 +16,7 @@ This module returns every candidate profile found, not yet filtered to only the 
 actually match a real generator/tech combination -- see to_seer.epm_to_seer's matching step,
 which needs the generator list this module doesn't have access to.
 """
+import warnings
 from pathlib import Path
 
 import pandas as pd
@@ -30,6 +31,30 @@ RENEWABLE_TECH_ALIAS = {
     "Solar": "PV",
     "SolarTracker": "PV",
 }
+
+
+def _dedup_profile(df, key_cols, source):
+    """Some regions' raw profile data has duplicate (key, time) rows -- collapse exact
+    repeats (same value), and drop any key entirely, with a warning, where duplicates
+    disagree on value (a real data conflict -- e.g. several distinct plants sharing one
+    zone/tech label -- that can't be resolved by arbitrarily picking one)."""
+    group_cols = key_cols + ["time"]
+    counts = df.groupby(group_cols)["value"].nunique().reset_index(name="n_values")
+    conflicting = counts[counts["n_values"] > 1]
+    if not conflicting.empty:
+        bad_keys = conflicting[key_cols].drop_duplicates()
+        warnings.warn(
+            f"{source}: conflicting duplicate rows (same {key_cols}+time, different value) "
+            f"for {list(bad_keys.itertuples(index=False, name=None))} -- dropping these keys "
+            "entirely rather than guessing which value is correct."
+        )
+        df = df.merge(bad_keys.assign(_bad=True), on=key_cols, how="left")
+        df = df[df["_bad"].isna()].drop(columns="_bad")
+    before = len(df)
+    df = df.drop_duplicates(subset=group_cols, keep="first")
+    if len(df) < before:
+        warnings.warn(f"{source}: dropped {before - len(df)} exact-duplicate rows.")
+    return df
 
 
 def build_re_potentials(data_path="data/Gambia/"):
@@ -58,6 +83,7 @@ def _read_zone_tech_profile(path):
     df = convert_season_day_hour(df)
     df["tech"] = df["tech"].replace(RENEWABLE_TECH_ALIAS)
     df["generator"] = pd.NA
+    df = _dedup_profile(df, ["zone", "tech"], path)
     return df[["zone", "tech", "generator", "time", "value"]]
 
 
@@ -81,4 +107,5 @@ def _read_gen_profile(path):
     identifier_col = "generator" if "generator" in df.columns else "tech"
     df["generator"] = df[identifier_col]
     df["tech"] = pd.NA
+    df = _dedup_profile(df, ["zone", "generator"], path)
     return df[["zone", "tech", "generator", "time", "value"]]
