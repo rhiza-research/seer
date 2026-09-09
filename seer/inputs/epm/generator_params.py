@@ -5,6 +5,10 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
+# sentinel for "no known retirement year" -- well beyond any realistic modeled horizon
+NO_RETIREMENT_YEAR = 9999
+
+
 def build_generator_params(data_path="data/Gambia/"):
     """Combines disparate generator data sources into two seer schema files:
     generator_constants.csv: a dataframe of generator constants (parameters, build limits, etc.)
@@ -72,6 +76,14 @@ def build_generator_params(data_path="data/Gambia/"):
     # tech", not "unknown"; must be a real bool here, since bool(float("nan")) is True in
     # Python and would otherwise silently misclassify every such generator as renewable
     generator_constants["isre"] = generator_constants["isre"].infer_objects(copy=False).fillna(0).astype(bool)
+    # no RetrYr value found means "no known retirement" -- default to a sentinel year well
+    # beyond any realistic modeled horizon, not NaN. A NaN retirement_year makes every
+    # `year <= retirement_year` comparison False (both model backends' active-year checks work
+    # this way), which silently drops the generator/its capacity from every modeled year
+    # instead of leaving it active for the full horizon as intended.
+    generator_constants["retirement_year"] = (
+        generator_constants["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
+    )
     # change all capital leters to lowercase in column names
     generator_constants.columns = generator_constants.columns.str.lower()
 
@@ -120,8 +132,11 @@ def build_generator_params(data_path="data/Gambia/"):
         # marginal_cost rows in generator_costs.csv
         row_mc = {"generator": gen.generator, "cost_type": "marginal_cost"}
         if pd.notna(gen.heat_rate):
+            # fuel prices are zone-specific (pFuelPrice.csv has a zone column) -- filtering
+            # by fuel alone matches every zone's price row for that fuel/year, producing a
+            # multi-row Series instead of a scalar per year
             fuel_price = fuel_prices[
-                fuel_prices["fuel"] == gen.fuel
+                (fuel_prices["fuel"] == gen.fuel) & (fuel_prices["zone"] == gen.zone)
             ][["year", "value"]].set_index("year")
 
             mc = fuel_price["value"] * gen.heat_rate

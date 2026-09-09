@@ -145,7 +145,7 @@ generator.
 | `life` | asset lifetime, years. **Required if `expandable`** |
 | `annual_build_limit` | max MW addable per year. **Required if `expandable`**; NaN/empty for non-expandable (existing) units |
 | `start_year` | first year the unit is available. Optional, only meaningful when not `expandable` |
-| `retirement_year` | last year the unit is available. Optional, only meaningful when not `expandable` |
+| `retirement_year` | last year the unit is available. Optional, only meaningful when not `expandable`; if absent/NaN, the unit is treated as active through the full modeled horizon (not "unknown"/never-active) |
 | `ramp_up_rate` / `ramp_down_rate` | optional max ramp rate, fraction of capacity per hour |
 | `unit_size` | optional MW increment used for modular capacity expansion |
 
@@ -184,7 +184,7 @@ capacity is `capacity_mw * duration_hours`, derived wherever it's needed rather 
 | `unit_size_mwh` | MWh increment used for modular capacity expansion. **Required if `expandable`** |
 | `annual_build_limit_mwh` | max MWh addable per year. **Required if `expandable`**; NaN/empty for non-expandable (existing) units |
 | `start_year` | first year available. Optional, only meaningful when not `expandable` |
-| `retirement_year` | last year available. Optional, only meaningful when not `expandable` |
+| `retirement_year` | last year available. Optional, only meaningful when not `expandable`; if absent/NaN, the unit is treated as active through the full modeled horizon (not "unknown"/never-active) |
 | `efficiency` | optional round-trip efficiency component (unitless, 0–1), applied to both charging and discharging |
 
 ### `storage_costs.csv`

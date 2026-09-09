@@ -1,6 +1,8 @@
 """Build storage_constants.csv and storage_costs.csv from EPM input data."""
 import pandas as pd
 
+from .generator_params import NO_RETIREMENT_YEAR
+
 
 def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=2050):
     """
@@ -74,6 +76,13 @@ def build_storage_params(data_path="data/Gambia/", start_year=2025, end_year=205
         "UnitSize": "unit_size_mwh",
         "BuildLimitperYear": "annual_build_limit_mwh",
     }, inplace=True)
+    # no RetrYr value found means "no known retirement" -- default to a sentinel year well
+    # beyond any realistic modeled horizon, not NaN (see generator_params.py for why: a NaN
+    # retirement_year makes every `year <= retirement_year` check False, silently dropping
+    # the unit from every modeled year instead of leaving it active for the full horizon).
+    storage_constants["retirement_year"] = (
+        storage_constants["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
+    )
 
     storage_constants["duration_hours"] = storage_constants["capacity_mwh"] / storage_constants["capacity_mw"]
 
