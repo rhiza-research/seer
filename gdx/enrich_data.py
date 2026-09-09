@@ -159,6 +159,17 @@ STORAGE_PARAM_ALIAS = {
     "Capex": "CapexMWh",
 }
 
+# Alias for pGenDataInputCustom/pGenDataInputDefault parameter names that vary across regions.
+# "VRETech" is the synonym for "RETech" (seer.inputs.epm.generator_params expects "RETech";
+# renamed to "isre" in the seer schema): confirmed by checking actual values across regions --
+# VRETech=1 only for variable-renewable techs (PV/Wind), matching RETech's meaning exactly.
+# NOT the same as "RE_Flag", which is also 1 for storage/hydro in most regions (a broader
+# "RE-related" eligibility flag, not "output driven by a weather profile") and would
+# mis-tag non-profile-driven generators as renewable if aliased here.
+GEN_PARAM_ALIAS = {
+    "VRETech": "RETech",
+}
+
 
 def _strip_ordinal_prefix(name) -> str:
     """Strip a leading GAMS ordinal prefix, e.g. "18.WindNew" -> "WindNew"."""
@@ -446,6 +457,14 @@ def normalize_storage_params(df):
     return df
 
 
+def normalize_gen_params(df):
+    """Normalize pGenDataInputCustom/pGenDataInputDefault parameter-name variants
+    (GEN_PARAM_ALIAS) to the canonical names seer.inputs.epm.generator_params expects."""
+    df = df.copy()
+    df["parameters"] = df["parameters"].replace(GEN_PARAM_ALIAS)
+    return df
+
+
 def reconcile_data(all_data, all_data_raw):
     """
     Apply enrich_gen_vre_data() to every country/region  — enriching
@@ -472,7 +491,7 @@ def reconcile_data(all_data, all_data_raw):
         for gen_symbol in ("pGenDataInputCustom", "pGenDataInputDefault"):
             gen_df = updated.get(gen_symbol)
             if gen_df is not None and not gen_df.empty:
-                updated[gen_symbol] = normalize_storage_tech(gen_df)
+                updated[gen_symbol] = normalize_storage_tech(normalize_gen_params(gen_df))
 
         updated.update(standardize_all_profiles(region, updated))
         reconciled[region] = updated

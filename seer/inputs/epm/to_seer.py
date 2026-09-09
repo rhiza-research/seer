@@ -1,5 +1,6 @@
 """Convert csvs specifying EPM input data into the seer schema."""
 
+import warnings
 from pathlib import Path
 import pandas as pd
 
@@ -7,6 +8,49 @@ from ._time_convert import convert_season_day_hour
 from .generator_params import build_generator_params
 from .re_potentials import build_re_potentials
 from .storage_params import build_storage_params
+
+
+def _match_renewable_profiles(generator_constants, profiles_raw):
+    """Keep only renewable_profiles rows that actually match something real: a generic (zone,
+    tech) row is kept only if some generator actually has that (zone, tech); a
+    generator-specific row is kept only if its identifier is an actual generator name (some
+    regions' pVREgenProfile.csv variant has no real "generator" column at all, so its
+    identifiers are really sub-zone resource labels with nothing to attach to -- see
+    re_potentials.py's docstring).
+
+    isre is (re)computed here from scratch, straight from profile existence: True if a
+    generator has a matching specific profile (checked first) or, failing that, a matching
+    generic (zone, tech) profile -- regardless of what any raw RETech/VRETech flag said,
+    since profile existence is the actual ground truth for whether a generator's dispatch
+    should be profile-driven. A generator whose raw flag claimed renewable but has no
+    matching profile at all gets a warning and isre=False (can't be simulated as a variable
+    renewable with no profile to mask its output).
+
+    Returns (generator_constants, renewable_profiles) with isre updated and unmatched profile
+    rows dropped.
+    """
+    real_zone_tech = generator_constants[["zone", "tech"]].drop_duplicates()
+    real_generators = set(generator_constants["generator"])
+
+    is_generic = profiles_raw["tech"].notna()
+    generic_matched = profiles_raw[is_generic].merge(real_zone_tech, on=["zone", "tech"], how="inner")
+    specific_matched = profiles_raw[~is_generic & profiles_raw["generator"].isin(real_generators)]
+
+    has_specific = generator_constants["generator"].isin(set(specific_matched["generator"]))
+    matched_zone_tech = set(zip(generic_matched["zone"], generic_matched["tech"]))
+    has_generic = generator_constants.apply(lambda g: (g.zone, g.tech) in matched_zone_tech, axis=1)
+
+    claimed_but_unmatched = generator_constants["isre"] & ~(has_specific | has_generic)
+    for _, gen in generator_constants[claimed_but_unmatched].iterrows():
+        warnings.warn(
+            f"Generator {gen.generator!r} (zone={gen.zone}, tech={gen.tech}) is flagged "
+            "renewable but has no matching renewable_profiles.csv data -- marking as non-renewable."
+        )
+
+    generator_constants = generator_constants.copy()
+    generator_constants["isre"] = has_specific | has_generic
+    matched = pd.concat([generic_matched, specific_matched], ignore_index=True)
+    return generator_constants, matched
 
 
 def epm_to_seer(input_path, output_path, start_year=2025, end_year=2050):
@@ -21,7 +65,8 @@ def epm_to_seer(input_path, output_path, start_year=2025, end_year=2050):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     generator_constants, generator_costs = build_generator_params(input_dir)
-    renewable_profiles = build_re_potentials(input_dir)
+    renewable_profiles_raw = build_re_potentials(input_dir)
+    generator_constants, renewable_profiles = _match_renewable_profiles(generator_constants, renewable_profiles_raw)
     storage_constants, storage_costs = build_storage_params(input_dir, start_year=start_year, end_year=end_year)
     years, zones, demand_forecast, demand_profile = passthrough(input_dir)
     # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own

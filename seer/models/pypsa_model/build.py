@@ -75,11 +75,25 @@ def get_year_steps(years):
 
 
 def prepare_renewable_profiles(re_profiles, calendar):
-    """Resolve renewable_profiles.csv to a wide (zone, tech)-columned frame indexed by
-    (year, datetime) snapshots, for lookup during generator setup."""
-    resolved = resolve_profile(re_profiles, calendar, key_cols=["zone", "tech"])
+    """Resolve renewable_profiles.csv into two wide frames indexed by (year, datetime)
+    snapshots, for lookup during generator setup: generic (columns=(zone, tech)) and
+    generator-specific (columns=generator name) -- the latter takes priority over the former
+    when a generator has both (see seer/inputs/README.md's renewable_profiles.csv entry)."""
+    generic = _resolve_wide(re_profiles[re_profiles["tech"].notna()], calendar, ["zone", "tech"])
+    specific = _resolve_wide(re_profiles[re_profiles["generator"].notna()], calendar, ["generator"])
+    return generic, specific
+
+
+def _resolve_wide(profiles, calendar, key_cols):
+    index = pd.MultiIndex.from_arrays([calendar["year"], calendar["datetime"]], names=[None, None])
+    if profiles.empty:
+        return pd.DataFrame(index=index)
+    resolved = resolve_profile(profiles, calendar, key_cols=key_cols)
     resolved = resolved.merge(calendar[["year", "hour", "datetime"]], on=["year", "hour"])
-    wide = resolved.pivot(index=["year", "datetime"], columns=["zone", "tech"], values="value")
+    # a single key column pivots to a flat column index (e.g. bare generator names); multiple
+    # key columns pivot to a MultiIndex (e.g. (zone, tech) tuples)
+    col_spec = key_cols[0] if len(key_cols) == 1 else key_cols
+    wide = resolved.pivot(index=["year", "datetime"], columns=col_spec, values="value")
     wide.index.names = [None, None]
     return wide
 
@@ -98,8 +112,20 @@ def set_demand(model, demand_forecast, demand_profile, calendar):
         model.add("Load", zone, bus=zone, p_set=demand_ts)
 
 
+def _marginal_cost(gen_costs, name):
+    """gen_costs.loc[(name, "marginal_cost"), :], or all-zero if that row is absent (should
+    always be present per seer/inputs/README.md, but fall back defensively rather than crash)."""
+    if (name, "marginal_cost") not in gen_costs.index:
+        return pd.Series(0.0, index=gen_costs.columns)
+    return gen_costs.loc[(name, "marginal_cost"), :].fillna(0)
+
+
 def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expansion=False):
-    """Add existing generators and build options to the model. Returns the set of carriers used."""
+    """Add existing generators and build options to the model. Returns the set of carriers used.
+
+    re_profiles: (generic, specific) tuple from prepare_renewable_profiles -- a generator's own
+    specific profile takes priority over its tech's generic one when both exist."""
+    generic_profiles, specific_profiles = re_profiles
     carriers = set()
     gen_constants = gen_constants.set_index("generator")
     gen_costs = gen_costs.set_index(["generator", "cost_type"])
@@ -117,18 +143,21 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
         ramp_up_rate = gen.get("ramp_up_rate")
         ramp_down_rate = gen.get("ramp_down_rate")
         is_renewable = bool(gen.isre)
+        # isre guarantees a matching profile exists (see seer.inputs.epm.to_seer's matching
+        # step) -- specific (by this generator's own name) takes priority over generic
+        profile = specific_profiles[name] if name in specific_profiles.columns else generic_profiles.get((zone, gen_type))
 
         if expandable:
             # one PyPSA component per build-year vintage
             valid_years = get_valid_years(model, gen.start_year, gen.retirement_year)
             capex = gen_costs.loc[(name, "capex"), :]
-            mc = gen_costs.loc[(name, "marginal_cost"), :].fillna(0)
+            mc = _marginal_cost(gen_costs, name)
             unit_capacity = gen.get("unit_size") if modular_expansion else None
 
             for year in valid_years:
                 gen_year_name = f"{name}_{year}"
                 p_max_pu = mask_renewable_profile(
-                    re_profiles[(zone, gen_type)], valid_years, year, gen.life
+                    profile, valid_years, year, gen.life
                 ) if is_renewable else 1
                 model.add("Generator", gen_year_name, bus=zone,
                           carrier=carrier, build_year=year, lifetime=gen.life,
@@ -144,8 +173,8 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
                 warnings.warn(f"No valid years found for generator {name}.")
                 continue
 
-            mc = annual_to_snapshots(model, gen_costs.loc[(name, "marginal_cost"), :]).fillna(0)
-            p_max_pu = re_profiles.loc[slice(None), (zone, gen_type)] if is_renewable else 1
+            mc = annual_to_snapshots(model, _marginal_cost(gen_costs, name))
+            p_max_pu = profile if is_renewable else 1
 
             model.add("Generator", name, bus=zone,
                         carrier=carrier, build_year=years[0], lifetime=gen.life,

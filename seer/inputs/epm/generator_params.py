@@ -1,4 +1,5 @@
 """Build generator_constants.csv and generator_costs.csv from EPM input data."""
+import warnings
 from pathlib import Path
 
 import pandas as pd
@@ -67,6 +68,10 @@ def build_generator_params(data_path="data/Gambia/"):
         "UnitSize": "unit_size",
         "RETech": "isre",
     }, inplace=True)
+    # isre is a boolean flag -- no RETech/VRETech value found means "not a variable-renewable
+    # tech", not "unknown"; must be a real bool here, since bool(float("nan")) is True in
+    # Python and would otherwise silently misclassify every such generator as renewable
+    generator_constants["isre"] = generator_constants["isre"].infer_objects(copy=False).fillna(0).astype(bool)
     # change all capital leters to lowercase in column names
     generator_constants.columns = generator_constants.columns.str.lower()
 
@@ -110,10 +115,11 @@ def build_generator_params(data_path="data/Gambia/"):
 
         rows.append(row_capex)
 
-        # marginal cost
+        # marginal cost -- always write a row (0 when there's no heat_rate at all, e.g.
+        # renewables that don't burn fuel), so every generator has both capex and
+        # marginal_cost rows in generator_costs.csv
+        row_mc = {"generator": gen.generator, "cost_type": "marginal_cost"}
         if pd.notna(gen.heat_rate):
-            row_mc = {"generator": gen.generator, "cost_type": "marginal_cost"}
-
             fuel_price = fuel_prices[
                 fuel_prices["fuel"] == gen.fuel
             ][["year", "value"]].set_index("year")
@@ -122,8 +128,11 @@ def build_generator_params(data_path="data/Gambia/"):
 
             for y in years:
                 row_mc[y] = mc.get(y, pd.NA)
+        else:
+            for y in years:
+                row_mc[y] = 0
 
-            rows.append(row_mc)
+        rows.append(row_mc)
 
     generator_cost = pd.DataFrame(rows, columns=["generator", "cost_type"] + years)
 
@@ -175,6 +184,22 @@ def load_input_data(data_path):
             .drop_duplicates(subset="generator")
             .reset_index(drop=True)
         )
+
+    # generator names must be unique -- they're the primary key joining generator_constants.csv
+    # <-> generator_costs.csv, and are used for component naming in both model backends. Some
+    # regions' raw gmap.csv reuses the same name for two conceptually different plants (e.g. a
+    # hydro dam and a co-located PV installation both literally called "Lauca" -- see CAPP).
+    # Keep only the first occurrence and warn, rather than silently producing duplicate/
+    # ambiguous rows downstream.
+    dupes = all_generators["generator"].duplicated(keep=False)
+    if dupes.any():
+        dup_names = sorted(all_generators.loc[dupes, "generator"].unique())
+        warnings.warn(
+            f"Duplicate generator names found in {data_path!r} (keeping first occurrence of "
+            f"each, dropping the rest): {dup_names}"
+        )
+        all_generators = all_generators.drop_duplicates(subset="generator", keep="first")
+
     # generator capex (by zone, tech, fuel) -- same story: treat a missing default or
     # custom capex trajectory as empty rather than failing, so build_generator_params
     # falls back to whichever of the two is actually available

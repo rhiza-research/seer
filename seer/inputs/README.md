@@ -103,17 +103,24 @@ Number of rows is zones x `times.csv` rows (x years, only if given per-year - se
 
 ## renewable potentials
 ### `renewable_profiles.csv`
-Normalized capacity-factor curve per zone/technology, at whatever time resolution `times.csv`
-specifies. Number of rows is zones x renewable techs x `times.csv` rows (x years, only if
-given per-year).
+Normalized capacity-factor curve, at whatever time resolution `times.csv` specifies. Each row
+is either a **generic** profile (shared by every generator of a given zone/tech) or a
+**generator-specific** one (one individual generator's own profile, taking priority over its
+tech's generic profile where both exist) -- distinguished by which of `tech`/`generator` is
+populated; exactly one of the two is set per row, never both, never neither.
 
 | column | contents |
 | --- | --- |
 | `zone` | zone id |
-| `tech` | renewable technology; matches `generator_constants.tech` for renewable generators |
+| `tech` | renewable technology, for a **generic** row; matches `generator_constants.tech`. NaN for a generator-specific row. |
+| `generator` | generator name, for a **generator-specific** row; matches `generator_constants.generator`. NaN for a generic row. |
 | `time` | matches a `times.csv` value |
 | `year` | **optional**, same template-vs-per-year rule as `demand_profile.csv` above |
 | `value` | capacity factor: available output as a fraction of nameplate capacity (unitless, 0–1) |
+
+A generator's `isre` (see `generator_constants.csv` below) reflects whether a matching profile
+(specific or generic) actually exists for it — not a raw source flag — so `isre=True` always
+implies there's something here to look up, and `isre=False` never needs a lookup.
 
 ## generator parameters
 ### `generator_constants.csv`
