@@ -1,0 +1,975 @@
+plant,scenario,season,value
+MariaGleta,,dry,0.85
+MariaGleta,,wet,0.85
+Y\xe9ripao,,dry,0.4692191792339268
+Y\xe9ripao,,wet,0.521719177269519
+Akpakpa2,,dry,0.85
+Akpakpa2,,wet,0.85
+Gbegamey,,dry,0.85
+Gbegamey,,wet,0.85
+Natitingou,,dry,0.85
+Natitingou,,wet,0.85
+Parakou1,,dry,0.85
+Parakou1,,wet,0.85
+Porto-Novo,,dry,0.85
+Porto-Novo,,wet,0.85
+Akpakpa1,,dry,0.85
+Akpakpa1,,wet,0.85
+MariaGleta2_IPP,,dry,0.85
+MariaGleta2_IPP,,wet,0.85
+Solaire_Pobe,,dry,1.0
+Solaire_Pobe,,wet,0.85
+Groupes secours SBEE,,dry,1.0
+Groupes secours SBEE,,wet,0.85
+MariaGleta3,,dry,0.85
+MariaGleta3,,wet,0.85
+SOLEN : Glo-Djigb\xe9 225 MW :,,dry,1.0
+SOLEN : Glo-Djigb\xe9 225 MW :,,wet,0.85
+Solaire_Pobe_ext,,dry,1.0
+Solaire_Pobe_ext,,wet,0.85
+IPP 50 mW,,dry,1.0
+IPP 50 mW,,wet,0.85
+Storage_Pobe,,dry,1.0
+Storage_Pobe,,wet,0.85
+GT_Benin,,dry,0.85
+GT_Benin,,wet,0.85
+Beterou,,dry,0.0916963902732607
+Beterou,,wet,0.06548379682024667
+Ketou,,dry,0.05456349055842151
+Ketou,,wet,0.06066849068183731
+Oulougb\xe9,,dry,0.08921163713032293
+Oulougb\xe9,,wet,0.06370934234634952
+Vossa,,dry,0.09097929205816657
+Vossa,,wet,0.0649716903602492
+CC_GAS_LNG_BEN,,dry,0.85
+CC_GAS_LNG_BEN,,wet,0.85
+OFSHORE_WIND_BEN,,dry,0.85
+OFSHORE_WIND_BEN,,wet,0.85
+HYD_CAND_BEN,,dry,0.07106887490829909
+HYD_CAND_BEN,,wet,0.07902062956412767
+ONSHORE_WIND_BEN,,dry,1.0
+ONSHORE_WIND_BEN,,wet,0.85
+BAGRE,,dry,0.3338432501796665
+BAGRE,,wet,0.2355622933510731
+KOMPIENGA,,dry,0.215321469844099
+KOMPIENGA,,wet,0.1519324390021446
+NIOFILA,,dry,0.07133245698320623
+NIOFILA,,wet,0.1886749522757583
+Samendini,,dry,0.05650830759319638
+Samendini,,wet,0.1686580202321637
+TOURNI,,dry,0.05650830759319638
+TOURNI,,wet,0.1686580202321637
+DEDOUGOU,,dry,0.85
+DEDOUGOU,,wet,0.85
+DORI,,dry,0.85
+DORI,,wet,0.85
+FADA,,dry,0.85
+FADA,,wet,0.85
+GAOUA,,dry,0.85
+GAOUA,,wet,0.85
+OUAGAI,,dry,0.85
+OUAGAI,,wet,0.85
+OUAHIGOUYA,,dry,0.85
+OUAHIGOUYA,,wet,0.85
+BOBOII,,dry,0.85
+BOBOII,,wet,0.85
+KOMSILGA,,dry,0.85
+KOMSILGA,,wet,0.85
+KOSSODO1,,dry,0.85
+KOSSODO1,,wet,0.85
+OUAGAII,,dry,0.85
+OUAGAII,,wet,0.85
+Zagtouli,,dry,1.0
+Zagtouli,,wet,0.85
+Ziga,,dry,1.0
+Ziga,,wet,0.85
+FIESS,,dry,0.85
+FIESS,,wet,0.85
+Ziga/Gaoua,,dry,1.0
+Ziga/Gaoua,,wet,0.85
+Ouaga NO,,dry,1.0
+Ouaga NO,,wet,0.85
+Nagreongo,,dry,1.0
+Nagreongo,,wet,0.85
+Zano,,dry,1.0
+Zano,,wet,0.85
+Zina Solaire,,dry,1.0
+Zina Solaire,,wet,0.85
+FADA2,,dry,0.85
+FADA2,,wet,0.85
+KOSSODO2,,dry,0.85
+KOSSODO2,,wet,0.85
+GT_Burkina,,dry,0.85
+GT_Burkina,,wet,0.85
+Bagr\xe9II,,dry,0.3619661055023478
+Bagr\xe9II,,wet,0.2554059903310959
+Bontioli,,dry,0.1016521675386671
+Bontioli,,wet,0.1517694536926953
+Folonzo,,dry,0.1120057039303724
+Folonzo,,wet,0.1672275654084031
+Gongourou,,dry,0.1566577040317419
+Gongourou,,wet,0.2338942172443633
+Ou\xe9ssa,,dry,0.1548876309786725
+Ou\xe9ssa,,wet,0.2312514499845474
+Ouaga-NordOuest,,dry,0.85
+Ouaga-NordOuest,,wet,0.85
+Kodeni_PV,,dry,1.0
+Kodeni_PV,,wet,0.85
+Pa_PV,,dry,1.0
+Pa_PV,,wet,0.85
+WIND_CAND_BUR,,dry,1.0
+WIND_CAND_BUR,,wet,0.85
+HYD_CAND_BUR,,dry,0.1548876309786725
+HYD_CAND_BUR,,wet,0.2312514499845475
+Karpower_IPP,,dry,0.85
+Karpower_IPP,,wet,0.85
+Brikama,,dry,0.85
+Brikama,,wet,0.85
+Brikama3,,dry,0.85
+Brikama3,,wet,0.85
+DualFuel_CAND_Gambia,,dry,0.85
+DualFuel_CAND_Gambia,,wet,0.85
+WIND_CAND_GAM,,dry,1.0
+WIND_CAND_GAM,,wet,0.85
+OFSHORE_WIND_GAM,,dry,0.85
+OFSHORE_WIND_GAM,,wet,0.85
+TAPCO_IPP,,dry,0.85
+TAPCO_IPP,,wet,0.85
+SUNSONASOGLI_IPP,,dry,0.85
+SUNSONASOGLI_IPP,,wet,0.85
+SUNSONASOGLI2_IPP,,dry,0.85
+SUNSONASOGLI2_IPP,,wet,0.85
+KTPP1_IPP,,dry,0.85
+KTPP1_IPP,,wet,0.85
+CENIT_IPP,,dry,0.85
+CENIT_IPP,,wet,0.85
+AMERI_6units_IPP,,dry,0.85
+AMERI_6units_IPP,,wet,0.85
+AKSA_IPP,,dry,0.85
+AKSA_IPP,,wet,0.85
+Genser,,dry,0.85
+Genser,,wet,0.85
+KARPOWERIII_IPP,,dry,0.85
+KARPOWERIII_IPP,,wet,0.85
+Bui_IPP,,dry,0.17
+Bui_IPP,,wet,0.45
+Winneba (BXC solar)_IPP,,dry,1.0
+Winneba (BXC solar)_IPP,,wet,0.85
+TICO,,dry,0.85
+TICO,,wet,0.85
+TT1PP,,dry,0.85
+TT1PP,,wet,0.85
+TT2PP,,dry,0.85
+TT2PP,,wet,0.85
+Akosombo,,dry,0.68
+Akosombo,,wet,0.73
+Navrongo,,dry,1.0
+Navrongo,,wet,0.85
+Kpong,,dry,0.65
+Kpong,,wet,0.69
+EarlyPower_U1_IPP,,dry,0.85
+EarlyPower_U1_IPP,,wet,0.85
+CENPOWER_IPP,,dry,0.85
+CENPOWER_IPP,,wet,0.85
+Amandi_IPP,,dry,0.85
+Amandi_IPP,,wet,0.85
+Meinenergy_IPP,,dry,1.0
+Meinenergy_IPP,,wet,0.85
+Ghana_PV,,dry,1.0
+Ghana_PV,,wet,0.85
+CENPOWER2_IPP,,dry,0.85
+CENPOWER2_IPP,,wet,0.85
+GT_Ghana,,dry,0.85
+GT_Ghana,,wet,0.85
+Daboya,,dry,0.24
+Daboya,,wet,0.7
+Juale,,dry,0.24
+Juale,,wet,0.7
+Kulpawn,,dry,0.24
+Kulpawn,,wet,0.7
+Pwalugu,,dry,0.15
+Pwalugu,,wet,0.4
+Hemang,,dry,0.14
+Hemang,,wet,0.4
+CC_GAS_LNG_GHA,,dry,0.85
+CC_GAS_LNG_GHA,,wet,0.85
+ONSHORE_WIND_GHA,,dry,1.0
+ONSHORE_WIND_GHA,,wet,0.85
+HYD_CAND_GHA,,dry,0.24
+HYD_CAND_GHA,,wet,0.7
+DIESEL_HFO,,dry,0.85
+DIESEL_HFO,,wet,0.85
+New_HFO,,dry,0.85
+New_HFO,,wet,0.85
+Bonkon-Diaria,,dry,0.21083333333333332
+Bonkon-Diaria,,wet,0.45516666666666666
+Boureya,,dry,0.2661666666666667
+Boureya,,wet,0.1855
+Diallol,,dry,0.3203333333333333
+Diallol,,wet,0.44566666666666666
+Diareguela,,dry,0.24783333333333332
+Diareguela,,wet,0.216
+Digan,,dry,0.19949999999999998
+Digan,,wet,0.20049999999999998
+Farankonedou,,dry,0.19283333333333338
+Farankonedou,,wet,0.36933333333333335
+Fello Sounga,,dry,0.29933333333333334
+Fello Sounga,,wet,0.3545
+Fetore,,dry,0.16116666666666668
+Fetore,,wet,0.44783333333333336
+Grand Kinkon,,dry,0.12499999999999999
+Grand Kinkon,,wet,0.5186666666666667
+Guozoguezia,,dry,0.549
+Guozoguezia,,wet,0.505
+Hakkunde-Mitti,,dry,0.24933333333333332
+Hakkunde-Mitti,,wet,0.43116666666666664
+Kassa,,dry,0.20866666666666667
+Kassa,,wet,0.20249999999999999
+Kogebedou,,dry,0.3383333333333334
+Kogebedou,,wet,0.2575
+Korafindi,,dry,0.41500000000000004
+Korafindi,,wet,0.4666666666666666
+Kouravel,,dry,0.21700000000000005
+Kouravel,,wet,0.4576666666666667
+Morisanako,,dry,0.3336666666666666
+Morisanako,,wet,0.3465
+Niagara,,dry,0.17816666666666667
+Niagara,,wet,0.15516666666666667
+Nzebela,,dry,0.38833333333333336
+Nzebela,,wet,0.4255
+Poudalde,,dry,0.32250000000000006
+Poudalde,,wet,0.5576666666666666
+Tiopo,,dry,0.5849999999999999
+Tiopo,,wet,0.36566666666666664
+PV_CAND_Guinea,,dry,1.0
+PV_CAND_Guinea,,wet,0.85
+Storage_CAND_2027_Guinea,,dry,1.0
+Storage_CAND_2027_Guinea,,wet,0.85
+Amaria,,dry,0.41183333333333344
+Amaria,,wet,0.5793333333333334
+Fomi,,dry,0.38966666666666666
+Fomi,,wet,0.32716666666666666
+Koukoutamba,,dry,0.18783333333333332
+Koukoutamba,,wet,0.15733333333333335
+Grand Chutes,,dry,0.5913333333333332
+Grand Chutes,,wet,0.7599999999999999
+Donkea,,dry,0.6403333333333333
+Donkea,,wet,0.8033333333333332
+Baneah,,dry,0.39999999999999997
+Baneah,,wet,0.6
+Garafiri,,dry,0.4116666666666666
+Garafiri,,wet,0.4366666666666667
+Kaleta,,dry,0.502
+Kaleta,,wet,0.5930000000000001
+Souapiti,,dry,0.48433333333333334
+Souapiti,,wet,0.5403333333333333
+Karpowership_IPP,,dry,0.85
+Karpowership_IPP,,wet,0.85
+Kipe_IPP,,dry,0.85
+Kipe_IPP,,wet,0.85
+GDE_IPP,,dry,0.85
+GDE_IPP,,wet,0.85
+Kaloum5,,dry,0.85
+Kaloum5,,wet,0.85
+Kaloum3_IPP,,dry,0.85
+Kaloum3_IPP,,wet,0.85
+Kaloum1_IPP,,dry,0.85
+Kaloum1_IPP,,wet,0.85
+Kaloum2_IPP,,dry,0.85
+Kaloum2_IPP,,wet,0.85
+Te_IPP,,dry,0.85
+Te_IPP,,wet,0.85
+Powership1_IPP,,dry,0.85
+Powership1_IPP,,wet,0.85
+Powership2_IPP,,dry,0.85
+Powership2_IPP,,wet,0.85
+Saltinho,,dry,0.35
+Saltinho,,wet,0.9
+Bor(BOAD),,dry,0.85
+Bor(BOAD),,wet,0.85
+Bissau_Bafata_Cacheu,,dry,1.0
+Bissau_Bafata_Cacheu,,wet,0.85
+WIND_CAND_GBI,,dry,1.0
+WIND_CAND_GBI,,wet,0.85
+OFSHORE_WIND_GBI,,dry,0.85
+OFSHORE_WIND_GBI,,wet,0.85
+Azito_IPP,,dry,0.85
+Azito_IPP,,wet,0.85
+Ciprel3_IPP,,dry,0.85
+Ciprel3_IPP,,wet,0.85
+Ciprel4_IPP,,dry,0.85
+Ciprel4_IPP,,wet,0.85
+Ciprel5_IPP,,dry,0.85
+Ciprel5_IPP,,wet,0.85
+Ciprel1_IPP,,dry,0.85
+Ciprel1_IPP,,wet,0.85
+Ciprel2_IPP,,dry,0.85
+Ciprel2_IPP,,wet,0.85
+Aggreko_cot_IPP,,dry,0.85
+Aggreko_cot_IPP,,wet,0.85
+Aggreko_ext_cot,,dry,0.85
+Aggreko_ext_cot,,wet,0.85
+Vridi,,dry,0.85
+Vridi,,wet,0.85
+Ayam\xe91,,dry,0.4658981693018943
+Ayam\xe91,,wet,0.5414223197916542
+Buyo,,dry,0.4482694973259013
+Buyo,,wet,0.6115341397373314
+Kossou,,dry,0.114817880794702
+Kossou,,wet,0.08101635514018692
+Soubr\xe9,,dry,0.4051535428978981
+Soubr\xe9,,wet,0.5652514720673708
+Taabo,,dry,0.2016463378982215
+Taabo,,wet,0.5483616961559278
+Ayam\xe92,,dry,0.3102952111975916
+Ayam\xe92,,wet,0.3605954350895498
+Faye,,dry,0.001612117878149085
+Faye,,wet,0.005670888786913496
+AzitoIV1_IPP,,dry,0.85
+AzitoIV1_IPP,,wet,0.85
+AzitoIV2_IPP,,dry,0.85
+AzitoIV2_IPP,,wet,0.85
+Atinkou - TAG,,dry,0.85
+Atinkou - TAG,,wet,0.85
+Atinkou -  TAV,,dry,0.85
+Atinkou -  TAV,,wet,0.85
+Centrale thermique Publique TAG,,dry,0.85
+Centrale thermique Publique TAG,,wet,0.85
+KORHOGO_IPP,,dry,1.0
+KORHOGO_IPP,,wet,0.85
+POROPOWER_IPP,,dry,1.0
+POROPOWER_IPP,,wet,0.85
+Gribo-Popoli,,dry,0.4571575901332997
+Gribo-Popoli,,wet,0.6322321024939209
+Centrale thermique Publique TAV,,dry,0.85
+Centrale thermique Publique TAV,,wet,0.85
+KarPower_IPP_Cot,,dry,0.85
+KarPower_IPP_Cot,,wet,0.85
+Abatta1,,dry,0.85
+Abatta1,,wet,0.85
+Abatta2,,dry,0.85
+Abatta2,,wet,0.85
+Abatta3,,dry,0.85
+Abatta3,,wet,0.85
+Songon1,,dry,0.85
+Songon1,,wet,0.85
+Songon2,,dry,0.85
+Songon2,,wet,0.85
+Songon3,,dry,0.85
+Songon3,,wet,0.85
+Centrale thermique AKSA Taboth - TAG 1,,dry,0.85
+Centrale thermique AKSA Taboth - TAG 1,,wet,0.85
+Centrale thermique AKSA Taboth \x96 TAG 2,,dry,0.85
+Centrale thermique AKSA Taboth \x96 TAG 2,,wet,0.85
+Centrale thermique AKSA Taboth \x96 TAV,,dry,0.85
+Centrale thermique AKSA Taboth \x96 TAV,,wet,0.85
+Boutoubre,,dry,0.4628165887440386
+Boutoubre,,wet,0.6276854911198606
+Daboiti\xe9,,dry,0.2439781850384145
+Daboiti\xe9,,wet,0.6369593180336421
+Louga 1,,dry,0.23
+Louga 1,,wet,0.7
+Louga 2,,dry,0.23
+Louga 2,,wet,0.7
+Singrobo,,dry,0.2388210371479115
+Singrobo,,wet,0.6234954364049783
+Tayaboui,,dry,0.1768108518849556
+Tayaboui,,wet,0.6843530904923912
+Tiassal\xe9,,dry,0.1477698071761877
+Tiassal\xe9,,wet,0.5938633603569891
+Tiboto/Cavally,,dry,0.2100969822002302
+Tiboto/Cavally,,wet,0.6608661480736693
+Kokumno,,dry,0.25
+Kokumno,,wet,0.7
+Brou Attakro,,dry,0.25
+Brou Attakro,,wet,0.7
+N'dieliesso,,dry,0.25
+N'dieliesso,,wet,0.7
+Projets types de 40 MW,,dry,0.85
+Projets types de 40 MW,,wet,0.85
+Projets types de 100 MW,,dry,0.85
+Projets types de 100 MW,,wet,0.85
+Aboisso(Biokala),,dry,0.85
+Aboisso(Biokala),,wet,0.85
+Aboisso,,dry,0.85
+Aboisso,,wet,0.85
+SanPedroI1,,dry,0.85
+SanPedroI1,,wet,0.85
+SanPedroI2,,dry,0.85
+SanPedroI2,,wet,0.85
+OFSHORE_WIND_COT,,dry,0.85
+OFSHORE_WIND_COT,,wet,0.85
+WIND_CAND_COT,,dry,1.0
+WIND_CAND_COT,,wet,0.85
+MountCoffeeReservoir,,dry,0.4
+MountCoffeeReservoir,,wet,0.72
+Bushrod,,dry,0.85
+Bushrod,,wet,0.85
+MTCoffee_ext,,dry,0.4
+MTCoffee_ext,,wet,0.72
+SP2_150,,dry,0.42
+SP2_150,,wet,0.79
+SP2_161,,dry,0.42
+SP2_161,,wet,0.83
+Existing_gen_lib,,dry,0.85
+Existing_gen_lib,,wet,0.85
+Respite_PV,,dry,1.0
+Respite_PV,,wet,0.85
+Solar Yekepa / Buchanan,,dry,1.0
+Solar Yekepa / Buchanan,,wet,0.85
+BESS Yekepa / Buchanan 15 /60,,dry,1.0
+BESS Yekepa / Buchanan 15 /60,,wet,0.85
+OFSHORE_WIND_LIB,,dry,0.85
+OFSHORE_WIND_LIB,,wet,0.85
+Loc. BDK Kati,,dry,0.85
+Loc. BDK Kati,,wet,0.85
+SES Darsalam - 10 MW,,dry,0.85
+SES Darsalam - 10 MW,,wet,0.85
+MANANTALI_mali,,dry,0.5302395472054935
+MANANTALI_mali,,wet,0.3741409889160258
+SELINGUE,,dry,0.02398542737267479
+SELINGUE,,wet,0.06115390400665684
+SES(Lafia_Badala),,dry,0.85
+SES(Lafia_Badala),,wet,0.85
+Aska Balkou,,dry,0.85
+Aska Balkou,,wet,0.85
+Centrale BID \xe0 Sirakoro (100 MW),,dry,0.85
+Centrale BID \xe0 Sirakoro (100 MW),,wet,0.85
+Loc. AKSA Sirakoro - 30 MW,,dry,0.85
+Loc. AKSA Sirakoro - 30 MW,,wet,0.85
+Darsalam,,dry,0.85
+Darsalam,,wet,0.85
+Balingu\xe9 Deutz,,dry,0.85
+Balingu\xe9 Deutz,,wet,0.85
+Balingu\xe9BID,,dry,0.85
+Balingu\xe9BID,,wet,0.85
+Sotuba,,dry,0.5960603698439738
+Sotuba,,wet,0.4205846534880377
+Albatros,,dry,0.85
+Albatros,,wet,0.85
+Balingu\xe9,,dry,0.85
+Balingu\xe9,,wet,0.85
+FELOU_MAL,,dry,0.5960603698439738
+FELOU_MAL,,wet,0.4205846534880377
+Gouina_mali,,dry,0.4680307775441863
+Gouina_mali,,wet,0.3302460159307109
+PV_Akuo \x96 50 MWp,,dry,1.0
+PV_Akuo \x96 50 MWp,,wet,0.85
+Djenn\xe9(CentreMali\x96Noconnect\xe9RI),,dry,0.1811901152028396
+Djenn\xe9(CentreMali\x96Noconnect\xe9RI),,wet,0.2985527691793047
+GT_Mali,,dry,0.85
+GT_Mali,,wet,0.85
+WIND_CAND_MAL,,dry,1.0
+WIND_CAND_MAL,,wet,0.85
+HYD_CAND_MAL,,dry,0.2048307981634658
+HYD_CAND_MAL,,wet,0.3375062813799213
+AGGREKO_ngr_IPP,,dry,0.85
+AGGREKO_ngr_IPP,,wet,0.85
+DIFFA,,dry,0.85
+DIFFA,,wet,0.85
+GAYA1,,dry,0.85
+GAYA1,,wet,0.85
+GAYA2,,dry,0.85
+GAYA2,,wet,0.85
+GOROUBANDA,,dry,0.85
+GOROUBANDA,,wet,0.85
+GOUDEL1,,dry,0.85
+GOUDEL1,,wet,0.85
+GOUDEL2,,dry,0.85
+GOUDEL2,,wet,0.85
+MALBAZA,,dry,0.85
+MALBAZA,,wet,0.85
+MARADI,,dry,0.85
+MARADI,,wet,0.85
+NIAMEY,,dry,0.85
+NIAMEY,,wet,0.85
+TAHOUA1,,dry,0.85
+TAHOUA1,,wet,0.85
+TAHOUA2,,dry,0.85
+TAHOUA2,,wet,0.85
+ZINDER,,dry,0.85
+ZINDER,,wet,0.85
+SONICHAR Phase I,,dry,0.85
+SONICHAR Phase I,,wet,0.85
+SONICHAR Phase II,,dry,0.85
+SONICHAR Phase II,,wet,0.85
+RemainingNigerCapacity,,dry,0.85
+RemainingNigerCapacity,,wet,0.85
+GOROUBANDA2,,dry,0.85
+GOROUBANDA2,,wet,0.85
+AGADEZ,,dry,0.85
+AGADEZ,,wet,0.85
+agadezpv,,dry,1.0
+agadezpv,,wet,0.85
+GorouBanda1,,dry,1.0
+GorouBanda1,,wet,0.85
+SONICHAR2,,dry,0.85
+SONICHAR2,,wet,0.85
+GT_Niger,,dry,0.85
+GT_Niger,,wet,0.85
+Gambou,,dry,0.02641399085256929
+Gambou,,wet,0.4042235720345791
+Kandadji,,dry,0.3779922183452458
+Kandadji,,wet,0.156153065384507
+SALKADAMNAphase1,,dry,0.85
+SALKADAMNAphase1,,wet,0.85
+SALKADAMNAphase2,,dry,0.85
+SALKADAMNAphase2,,wet,0.85
+SALKADAMNAphase3,,dry,0.85
+SALKADAMNAphase3,,wet,0.85
+WIND_CAND_NGR,,dry,1.0
+WIND_CAND_NGR,,wet,0.85
+HYD_CAND_NGR,,dry,0.2856734103103847
+HYD_CAND_NGR,,wet,0.2212939476015031
+Tobene_IPP,,dry,0.9764629962979315
+Tobene_IPP,,wet,0.9764629962979315
+HFO IPP_Tobene Power_GNL ELTON,,dry,0.9764629962979315
+HFO IPP_Tobene Power_GNL ELTON,,wet,0.9764629962979315
+Tobene - Dual,,dry,0.9764629962979315
+Tobene - Dual,,wet,0.9764629962979315
+Contour Global_IPP,,dry,0.9626681614349778
+Contour Global_IPP,,wet,0.9626681614349778
+HFO IPP_Contour Global_GNL ELTON,,dry,0.9626681614349778
+HFO IPP_Contour Global_GNL ELTON,,wet,0.9626681614349778
+CONTOURGLGlo-Dual,,dry,0.9626681614349778
+CONTOURGLGlo-Dual,,wet,0.9626681614349778
+CCGT Saint Louis,,dry,0.8807915057915059
+CCGT Saint Louis,,wet,0.8807915057915059
+CCGT Saint Louis - ST,,dry,0.8404255319148937
+CCGT Saint Louis - ST,,wet,0.8404255319148937
+CCGT Saint Louis - Extension,,dry,0.8661841700030798
+CCGT Saint Louis - Extension,,wet,0.8661841700030798
+CCGT WAE,,dry,0.7751937984496124
+CCGT WAE,,wet,0.7751937984496124
+CCGT WAE Cap des Biches - LNG,,dry,0.7446016381236039
+CCGT WAE Cap des Biches - LNG,,wet,0.7446016381236039
+CCGT WAE Cap des Biches Ext- Dual,,dry,0.7446016381236039
+CCGT WAE Cap des Biches Ext- Dual,,wet,0.7446016381236039
+Mboro_IPP_AESA,,dry,1.0
+Mboro_IPP_AESA,,wet,1.0
+Mboro_IPP_AESA - Ext,,dry,1.0
+Mboro_IPP_AESA - Ext,,wet,1.0
+EPC CCGT GTI2_GNL ELTON,,dry,0.9134088417975886
+EPC CCGT GTI2_GNL ELTON,,wet,0.9134088417975886
+EPC CCGT GTI2_Domestic Gas- Dual,,dry,0.9134088417975886
+EPC CCGT GTI2_Domestic Gas- Dual,,wet,0.9134088417975886
+Malicounda_IPP_HFO,,dry,0.870195794053662
+Malicounda_IPP_HFO,,wet,0.870195794053662
+HFO IPP_Malicounda_GNL ELTON,,dry,0.870195794053662
+HFO IPP_Malicounda_GNL ELTON,,wet,0.870195794053662
+Malicounda - Dual,,dry,0.870195794053662
+Malicounda - Dual,,wet,0.870195794053662
+"C6 Bel Air (120, 51\xa0\xa0)",,dry,0.9343434343434344
+"C6 Bel Air (120, 51\xa0\xa0)",,wet,0.9343434343434344
+HFO Senelec_C-6_GNL ELTON,,dry,0.9343434343434344
+HFO Senelec_C-6_GNL ELTON,,wet,0.9343434343434344
+CVI- Dual,,dry,0.9343434343434344
+CVI- Dual,,wet,0.9343434343434344
+Kahoune _ CVII_Diesel,,dry,0.8875739644970414
+Kahoune _ CVII_Diesel,,wet,0.8875739644970414
+Kahoune _HFO Senelec_C-7_GNL ELTON,,dry,0.8875739644970414
+Kahoune _HFO Senelec_C-7_GNL ELTON,,wet,0.8875739644970414
+Kahoune _HFO Senelec_C-7_Domestic Gas,,dry,0.8875739644970414
+Kahoune _HFO Senelec_C-7_Domestic Gas,,wet,0.8875739644970414
+CIV_Diesel_E,,dry,1.0
+CIV_Diesel_E,,wet,1.0
+HFO Senelec_C-4_Ext_GNL ELTON,,dry,1.0
+HFO Senelec_C-4_Ext_GNL ELTON,,wet,1.0
+CIV_Diesel_E_Glo,,dry,1.0
+CIV_Diesel_E_Glo,,wet,1.0
+Cap-des-BichesTAG2,,dry,0.9
+Cap-des-BichesTAG2,,wet,0.9
+HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),,dry,0.9097525473071325
+HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),,wet,0.9097525473071325
+HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),,dry,0.9573195053849223
+HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),,wet,0.9573195053849223
+Karpower 125 MW,,dry,0.9174311926605505
+Karpower 125 MW,,wet,0.9174311926605505
+Karpower 220 MW,,dry,0.9174311926605505
+Karpower 220 MW,,wet,0.9174311926605505
+Sendou1,,dry,0.92
+Sendou1,,wet,0.92
+Boutoute G831_836,,dry,1.0
+Boutoute G831_836,,wet,1.0
+Boutoute (G805-806-807),,dry,1.0
+Boutoute (G805-806-807),,wet,1.0
+Boutoute Ext (G805-806-807),,dry,1.0
+Boutoute Ext (G805-806-807),,wet,1.0
+CIII_Vapeur,,dry,0.85
+CIII_Vapeur,,wet,0.85
+Kounoune_IPP,,dry,0.85
+Kounoune_IPP,,wet,0.85
+DO_Tamba,,dry,0.85
+DO_Tamba,,wet,0.85
+Bel-airTAG4,,dry,0.85
+Bel-airTAG4,,wet,0.85
+Kahone,,dry,0.85
+Kahone,,wet,0.85
+Storage_CAND_2026_Senegal,,dry,1.0
+Storage_CAND_2026_Senegal,,wet,0.85
+Eolien sarreole,,dry,1.0
+Eolien sarreole,,wet,0.85
+CICAD_Diamiadio,,dry,1.0
+CICAD_Diamiadio,,wet,0.85
+CICAD_Diamiadio II,,dry,1.0
+CICAD_Diamiadio II,,wet,0.85
+Diass,,dry,1.0
+Diass,,wet,0.85
+Solaire IPP 1,,dry,1.0
+Solaire IPP 1,,wet,0.85
+Solaire IPP 2,,dry,1.0
+Solaire IPP 2,,wet,0.85
+Solaire IPP 3,,dry,1.0
+Solaire IPP 3,,wet,0.85
+Solaire IPP 4,,dry,1.0
+Solaire IPP 4,,wet,0.85
+FELOU_SEN,,dry,0.5329672897196263
+FELOU_SEN,,wet,0.7553311258278147
+Gouina_SEN,,dry,0.4304906542056075
+Gouina_SEN,,wet,0.6100993377483444
+Hydro_Kaleta_viaGuinea,,dry,0.46
+Hydro_Kaleta_viaGuinea,,wet,0.46
+Hydro_Koukoutamba,,dry,0.29
+Hydro_Koukoutamba,,wet,0.29
+MANANTALI_Sen,,dry,0.374929906542056
+MANANTALI_Sen,,wet,0.5313576158940397
+Sambangalou_SEN_IPP,,dry,0.3411214953271027
+Sambangalou_SEN_IPP,,wet,0.4834437086092715
+Hydro_Souapiti_viaGuinea,,dry,0.51
+Hydro_Souapiti_viaGuinea,,wet,0.51
+KARPOWERSHIP_IC_IPP,,dry,0.85
+KARPOWERSHIP_IC_IPP,,wet,0.85
+BUMBUNA-I_HY,,dry,0.2
+BUMBUNA-I_HY,,wet,1.0
+BLACKHALL ROAD NEW_IC_HFO,,dry,0.85
+BLACKHALL ROAD NEW_IC_HFO,,wet,0.85
+Sunbird Bioenergy,,dry,0.85
+Sunbird Bioenergy,,wet,0.85
+Respite_PV_SR,,dry,1.0
+Respite_PV_SR,,wet,0.85
+BEKONGOR-III_HY,,dry,0.1001367709751049
+BEKONGOR-III_HY,,wet,0.5235706787468114
+BUMBUNA-II_HY,,dry,0.3022268569108544
+BUMBUNA-II_HY,,wet,0.5692312122446417
+CAND_IC_Diesel,,dry,0.85
+CAND_IC_Diesel,,wet,0.85
+CAND_GT_HFO,,dry,0.85
+CAND_GT_HFO,,wet,0.85
+WND_CAND_22_SIL,,dry,1.0
+WND_CAND_22_SIL,,wet,0.85
+OFSHORE_WIND_SIL,,dry,0.85
+OFSHORE_WIND_SIL,,wet,0.85
+ContourGlobal_IPP,,dry,0.85
+ContourGlobal_IPP,,wet,0.85
+Lome2,,dry,0.85
+Lome2,,wet,0.85
+Nangbeto,,dry,0.1620606212816599
+Nangbeto,,wet,0.142142776243378
+Lome1,,dry,0.85
+Lome1,,wet,0.85
+Sokod\xe9,,dry,0.85
+Sokod\xe9,,wet,0.85
+K\xe9k\xe9li Thermal Power Station,,dry,1.0
+K\xe9k\xe9li Thermal Power Station,,wet,0.85
+Blitta Solar Power Station,,dry,1.0
+Blitta Solar Power Station,,wet,0.85
+250 MW gas-fired combined-cycle power plant,,dry,0.85
+250 MW gas-fired combined-cycle power plant,,wet,0.85
+Sarakawa,,dry,0.1813915869444201
+Sarakawa,,wet,0.2969815745068728
+Dapaong RESPITE,,dry,1.0
+Dapaong RESPITE,,wet,0.85
+Sokod\xe9 PV,,dry,1.0
+Sokod\xe9 PV,,wet,0.85
+Blitta Extension,,dry,1.0
+Blitta Extension,,wet,0.85
+Kara,,dry,1.0
+Kara,,wet,0.85
+Former Agoe-Nyiv\xe9 landfill site,,dry,1.0
+Former Agoe-Nyiv\xe9 landfill site,,wet,0.85
+GT_Togo,,dry,0.85
+GT_Togo,,wet,0.85
+CCGT_TOG,,dry,0.85
+CCGT_TOG,,wet,0.85
+Adjarala,,dry,0.06653473585866441
+Adjarala,,wet,0.1956311226483909
+Baghan,,dry,0.1079655989911797
+Baghan,,wet,0.3515918330632012
+Kpessi,,dry,0.1817742143539547
+Kpessi,,wet,0.2976080274336443
+T\xe9t\xe9tou,,dry,0.1518446311088787
+T\xe9t\xe9tou,,wet,0.1331823687504905
+Titira,,dry,0.1902231611444396
+Titira,,wet,0.3405405387521133
+Wawa,,dry,0.18490563579409
+Wawa,,wet,0.3027349160915009
+CC_GAS_LNG_TOG,,dry,0.85
+CC_GAS_LNG_TOG,,wet,0.85
+OFSHORE_WIND_TOG,,dry,0.85
+OFSHORE_WIND_TOG,,wet,0.85
+WIND_CAND_TOG,,dry,1.0
+WIND_CAND_TOG,,wet,0.85
+Nouakchott_Est_Solar,,dry,1.0
+Nouakchott_Est_Solar,,wet,0.85
+Nouakchott_Zayed_Solar,,dry,1.0
+Nouakchott_Zayed_Solar,,wet,0.85
+Nouakchott_Wind_Plant,,dry,1.0
+Nouakchott_Wind_Plant,,wet,0.85
+Boulenouar,,dry,1.0
+Boulenouar,,wet,0.85
+Solaire SNIM (15 MWc),,dry,1.0
+Solaire SNIM (15 MWc),,wet,0.85
+Boulenouar II,,dry,1.0
+Boulenouar II,,wet,0.85
+Solar Nema 50 MWc,,dry,1.0
+Solar Nema 50 MWc,,wet,0.85
+Solar Kiffa 50 MWc,,dry,1.0
+Solar Kiffa 50 MWc,,wet,0.85
+Wind 120 MW,,dry,1.0
+Wind 120 MW,,wet,0.85
+Projet BESS 2030,,dry,1.0
+Projet BESS 2030,,wet,0.85
+GT_CAND_MAU,,dry,0.85
+GT_CAND_MAU,,wet,0.85
+WIND_CAND_MAU,,dry,1.0
+WIND_CAND_MAU,,wet,0.85
+CC_GAS_CAND_MAU,,dry,0.85
+CC_GAS_CAND_MAU,,wet,0.85
+OFSHORE_WIND_MAU,,dry,0.85
+OFSHORE_WIND_MAU,,wet,0.85
+EarlyPower_U2_IPP,,dry,0.85
+EarlyPower_U2_IPP,,wet,0.85
+TAPCO_T3,,dry,0.85
+TAPCO_T3,,wet,0.85
+AMERI_4units_IPP,,dry,0.85
+AMERI_4units_IPP,,wet,0.85
+Kaleo,,dry,1.0
+Kaleo,,wet,0.85
+Lawra,,dry,1.0
+Lawra,,wet,0.85
+BUI (BXC solar)_IPP,,dry,1.0
+BUI (BXC solar)_IPP,,wet,0.85
+AKSA_IPP_Conv,,dry,0.85
+AKSA_IPP_Conv,,wet,0.85
+PV_CAND_Benin,,dry,1.0
+PV_CAND_Benin,,wet,0.85
+PV_CAND_Burkina,,dry,1.0
+PV_CAND_Burkina,,wet,0.85
+23 MWp Solar PV,,dry,1.0
+23 MWp Solar PV,,wet,0.85
+PV_CAND_Gambia,,dry,1.0
+PV_CAND_Gambia,,wet,0.85
+PV_CAND_Ghana,,dry,1.0
+PV_CAND_Ghana,,wet,0.85
+PV_CAND_GuineaBissau,,dry,1.0
+PV_CAND_GuineaBissau,,wet,0.85
+PV_CAND_Liberia,,dry,1.0
+PV_CAND_Liberia,,wet,0.85
+PV_CAND_Mali,,dry,1.0
+PV_CAND_Mali,,wet,0.85
+PV_CAND_Niger,,dry,1.0
+PV_CAND_Niger,,wet,0.85
+PV_CAND_SierraLeone,,dry,1.0
+PV_CAND_SierraLeone,,wet,0.85
+PV_CAND_Togo,,dry,1.0
+PV_CAND_Togo,,wet,0.85
+PV_CAND_Mauritania_grid,,dry,1.0
+PV_CAND_Mauritania_grid,,wet,0.85
+Storage_CAND_2027_Benin,,dry,1.0
+Storage_CAND_2027_Benin,,wet,0.85
+Storage_CAND_2027_Burkina,,dry,1.0
+Storage_CAND_2027_Burkina,,wet,0.85
+Storage_CAND_2027_Gambia,,dry,1.0
+Storage_CAND_2027_Gambia,,wet,0.85
+Storage_CAND_2027_Ghana,,dry,1.0
+Storage_CAND_2027_Ghana,,wet,0.85
+Storage_CAND_2027_GuineaBissau,,dry,1.0
+Storage_CAND_2027_GuineaBissau,,wet,0.85
+Storage_CAND_2027_IvoryCoast,,dry,1.0
+Storage_CAND_2027_IvoryCoast,,wet,0.85
+Storage_CAND_2027_Liberia,,dry,1.0
+Storage_CAND_2027_Liberia,,wet,0.85
+Storage_CAND_2027_Mali,,dry,1.0
+Storage_CAND_2027_Mali,,wet,0.85
+Storage_CAND_2027_Niger,,dry,1.0
+Storage_CAND_2027_Niger,,wet,0.85
+Storage_CAND_2027_SierraLeone,,dry,1.0
+Storage_CAND_2027_SierraLeone,,wet,0.85
+Storage_CAND_2027_Togo,,dry,1.0
+Storage_CAND_2027_Togo,,wet,0.85
+Storage_CAND_2027_Mauritania_grid,,dry,1.0
+Storage_CAND_2027_Mauritania_grid,,wet,0.85
+HFO_NEW_Burkina,,dry,0.85
+HFO_NEW_Burkina,,wet,0.85
+8MWh_4h_Gambia,,dry,1.0
+8MWh_4h_Gambia,,wet,0.85
+HFO_NEW_Gambia,,dry,0.85
+HFO_NEW_Gambia,,wet,0.85
+HFO_NEW_GuineaBissau,,dry,0.85
+HFO_NEW_GuineaBissau,,wet,0.85
+HFO_NEW_Liberia,,dry,0.85
+HFO_NEW_Liberia,,wet,0.85
+HFO_NEW_Niger,,dry,0.85
+HFO_NEW_Niger,,wet,0.85
+HFO_NEW_SierraLeone,,dry,0.85
+HFO_NEW_SierraLeone,,wet,0.85
+DELTA,,dry,0.85
+DELTA,,wet,0.85
+EGBIN,,dry,0.85
+EGBIN,,wet,0.85
+GEREGU TTP,,dry,0.85
+GEREGU TTP,,wet,0.85
+OKPAI TTP,,dry,0.85
+OKPAI TTP,,wet,0.85
+Alaoji TPP,,dry,0.85
+Alaoji TPP,,wet,0.85
+Ibom TPP,,dry,0.85
+Ibom TPP,,wet,0.85
+JEBBA_North,,dry,0.1137491909439742
+JEBBA_North,,wet,0.5235167395244984
+KAINJI_North,,dry,0.2992573940293899
+KAINJI_North,,wet,0.2111582546655976
+IHOVBOR NIP,,dry,0.85
+IHOVBOR NIP,,wet,0.85
+Olorunsogo I TPP,,dry,0.85
+Olorunsogo I TPP,,wet,0.85
+Omoku TPP,,dry,0.85
+Omoku TPP,,wet,0.85
+OMOTOSHO TTP,,dry,0.85
+OMOTOSHO TTP,,wet,0.85
+RIVERS IPP TTP,,dry,0.85
+RIVERS IPP TTP,,wet,0.85
+Sapele TPP,,dry,0.85
+Sapele TPP,,wet,0.85
+SHIRORO_North,,dry,0.3047951438429272
+SHIRORO_North,,wet,0.494786126626562
+TRANSAMADI,,dry,0.85
+TRANSAMADI,,wet,0.85
+Azura-Edo IPP,,dry,0.85
+Azura-Edo IPP,,wet,0.85
+CALABAR/Odukpami,,dry,0.85
+CALABAR/Odukpami,,wet,0.85
+AFAM TTP,,dry,0.85
+AFAM TTP,,wet,0.85
+EGBIN_Part2,,dry,0.85
+EGBIN_Part2,,wet,0.85
+KAINJI_North_Part2,,dry,0.16304373948570056
+KAINJI_North_Part2,,wet,0.3326303773131459
+Olorunsogo NIPP,,dry,0.85
+Olorunsogo NIPP,,wet,0.85
+CALABAR_Part2,,dry,0.85
+CALABAR_Part2,,wet,0.85
+AFAM TTP_Part2,,dry,0.85
+AFAM TTP_Part2,,wet,0.85
+Generic Gas Plant GT,,dry,0.85
+Generic Gas Plant GT,,wet,0.85
+Generic Gas Plant CCGT,,dry,0.85
+Generic Gas Plant CCGT,,wet,0.85
+PV_CAND_Nigeria,,dry,1.0
+PV_CAND_Nigeria,,wet,0.85
+JBSWindpowerplant_IPP,,dry,1.0
+JBSWindpowerplant_IPP,,wet,0.85
+Gurara,,dry,0.1183454684610857
+Gurara,,wet,0.3348710586948681
+Mabon,,dry,0.1950298559887601
+Mabon,,wet,0.2967158412363892
+Mambila,,dry,0.16646455573021934
+Mambila,,wet,0.2532524889587544
+OFSHORE_WIND_NGA,,dry,0.85
+OFSHORE_WIND_NGA,,wet,0.85
+WIND_CAND_NGA,,dry,1.0
+WIND_CAND_NGA,,wet,0.85
+Storage_CAND_2027_Nigeria,,dry,1.0
+Storage_CAND_2027_Nigeria,,wet,0.85
+Centrale Solaire de Boundiali Phase 1,,dry,1.0
+Centrale Solaire de Boundiali Phase 1,,wet,0.85
+Extension de la Centrale de Boundiali - CI-ENERGIES,,dry,1.0
+Extension de la Centrale de Boundiali - CI-ENERGIES,,wet,0.85
+Centrale Solaire de Bondoukou - AMEA POWER,,dry,1.0
+Centrale Solaire de Bondoukou - AMEA POWER,,wet,0.85
+Centrale Solaire de Katiola \x96 JC-MONFORT,,dry,1.0
+Centrale Solaire de Katiola \x96 JC-MONFORT,,wet,0.85
+Centrale Solaire de Ferkess\xe9dougou \x96 PFO ENERGIE,,dry,1.0
+Centrale Solaire de Ferkess\xe9dougou \x96 PFO ENERGIE,,wet,0.85
+Centrale Solaire de Kong \x96 AFRICA VIA,,dry,1.0
+Centrale Solaire de Kong \x96 AFRICA VIA,,wet,0.85
+Centrale Solaire de Tongon - EKDS,,dry,1.0
+Centrale Solaire de Tongon - EKDS,,wet,0.85
+Centrale Solaire de Touba \x96 SCALING SOLAR,,dry,1.0
+Centrale Solaire de Touba \x96 SCALING SOLAR,,wet,0.85
+Centrale Solaire de Laboa - SCALING SOLAR,,dry,1.0
+Centrale Solaire de Laboa - SCALING SOLAR,,wet,0.85
+Centrale Solaire de S\xe9r\xe9bou - CI-ENERGIES,,dry,1.0
+Centrale Solaire de S\xe9r\xe9bou - CI-ENERGIES,,wet,0.85
+Centrale Solaire de Soubr\xe9 - CI-ENERGIES,,dry,1.0
+Centrale Solaire de Soubr\xe9 - CI-ENERGIES,,wet,0.85
+Centrale Solaire de Odienn\xe9 \x96 PFO ENERGIE,,dry,1.0
+Centrale Solaire de Odienn\xe9 \x96 PFO ENERGIE,,wet,0.85
+Centrale Solaire de Tengr\xe9la - EKDS,,dry,1.0
+Centrale Solaire de Tengr\xe9la - EKDS,,wet,0.85
+Centrale Solaire de Ferk\xe9 II \x96 SHIBA ENERGY,,dry,1.0
+Centrale Solaire de Ferk\xe9 II \x96 SHIBA ENERGY,,wet,0.85
+Centrale Solaire de Mankono \x96TECMON ENERGY,,dry,1.0
+Centrale Solaire de Mankono \x96TECMON ENERGY,,wet,0.85
+Nouakchott_Dual_Power,,dry,0.85
+Nouakchott_Dual_Power,,wet,0.85
+Nouakchott_Wharf_Plant,,dry,0.85
+Nouakchott_Wharf_Plant,,wet,0.85
+Nouadhibou_New_Plant,,dry,0.85
+Nouadhibou_New_Plant,,wet,0.85
+Beni Naji,,dry,0.85
+Beni Naji,,wet,0.85
+Arafat Rehab (2 gr),,dry,0.85
+Arafat Rehab (2 gr),,wet,0.85
+GTA_MAU,,dry,0.85
+GTA_MAU,,wet,0.85
+DUALE Gaz,,dry,0.85
+DUALE Gaz,,wet,0.85
+SNIM Zouerate,,dry,0.85
+SNIM Zouerate,,wet,0.85
+Reserve Akjoujt,,dry,0.85
+Reserve Akjoujt,,wet,0.85
+Centrale d'appoint 2023,,dry,0.85
+Centrale d'appoint 2023,,wet,0.85
+Rehab Wharf,,dry,0.85
+Rehab Wharf,,wet,0.85
+Groupes supplementaires HFO,,dry,0.85
+Groupes supplementaires HFO,,wet,0.85
+Rehab Arafat 4 gr,,dry,0.85
+Rehab Arafat 4 gr,,wet,0.85
+Groupes supplementaires Gaz,,dry,0.85
+Groupes supplementaires Gaz,,wet,0.85
+Felou_MAU,,dry,0.61
+Felou_MAU,,wet,0.64
+Manantali_MAU,,dry,0.31
+Manantali_MAU,,wet,0.57
+Gouina_hydro,,dry,0.31
+Gouina_hydro,,wet,0.57
+Gourbassi_MAU,,dry,0.31
+Gourbassi_MAU,,wet,0.57
+Koukoutamba + Boureya,,dry,0.31
+Koukoutamba + Boureya,,wet,0.57
+PV_CAND_IvoryCoast,,dry,1.0
+PV_CAND_IvoryCoast,,wet,0.85
+CC_GAS_COT,,dry,0.85
+CC_GAS_COT,,wet,0.85
+BESS DIASS  1h,,dry,0.85
+BESS DIASS  1h,,wet,0.85
+BESS KIAT 1h,,dry,0.85
+BESS KIAT 1h,,wet,0.85
+BESS NIAKHAR STORAGE 3h,,dry,0.85
+BESS NIAKHAR STORAGE 3h,,wet,0.85
+BESS Walo Storage 2h,,dry,0.85
+BESS Walo Storage 2h,,wet,0.85
+BESS AKUO 3h,,dry,0.85
+BESS AKUO 3h,,wet,0.85
+BESS Dioudoubou 3h,,dry,0.85
+BESS Dioudoubou 3h,,wet,0.85
+BESS TAMBACOUNDA 2h,,dry,0.85
+BESS TAMBACOUNDA 2h,,wet,0.85
+BESS axian de Tankanto 3h,,dry,0.85
+BESS axian de Tankanto 3h,,wet,0.85
+BESS nexentury 1h,,dry,0.85
+BESS nexentury 1h,,wet,0.85
+BESS Serengeti 3h,,dry,0.85
+BESS Serengeti 3h,,wet,0.85

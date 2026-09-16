@@ -1,0 +1,40 @@
+plant,year,parameters,value
+Candidate_BESS_Rwanda,,CapacityMWh,10000000.0
+Candidate_BESS_Rwanda,,CapexMWh,180.0
+Candidate_BESS_Rwanda,,Efficiency,0.9
+Candidate_BESS_Burundi,,CapacityMWh,10000000.0
+Candidate_BESS_Burundi,,CapexMWh,180.0
+Candidate_BESS_Burundi,,Efficiency,0.9
+Candidate_BESS_Congo,,CapacityMWh,10000000.0
+Candidate_BESS_Congo,,CapexMWh,180.0
+Candidate_BESS_Congo,,Efficiency,0.9
+Candidate_BESS_Angola,,CapacityMWh,10000000.0
+Candidate_BESS_Angola,,CapexMWh,180.0
+Candidate_BESS_Angola,,Efficiency,0.9
+Candidate_BESS_DRC,,CapacityMWh,10000000.0
+Candidate_BESS_DRC,,CapexMWh,180.0
+Candidate_BESS_DRC,,Efficiency,0.9
+Candidate_BESS_DRCEast,,CapacityMWh,10000000.0
+Candidate_BESS_DRCEast,,CapexMWh,180.0
+Candidate_BESS_DRCEast,,Efficiency,0.9
+Candidate_BESS_Gabon,,CapacityMWh,10000000.0
+Candidate_BESS_Gabon,,CapexMWh,180.0
+Candidate_BESS_Gabon,,Efficiency,0.9
+PumpedStorage Rwanda,,CapacityMWh,3000.0
+PumpedStorage Rwanda,,CapexMWh,150.0
+PumpedStorage Rwanda,,Efficiency,0.8
+Candidate_BESS_Cameroon,,CapacityMWh,10000000.0
+Candidate_BESS_Cameroon,,CapexMWh,180.0
+Candidate_BESS_Cameroon,,Efficiency,0.9
+Candidate_BESS_CAF,,CapacityMWh,10000000.0
+Candidate_BESS_CAF,,CapexMWh,180.0
+Candidate_BESS_CAF,,Efficiency,0.9
+Candidate_BESS_Chad,,CapacityMWh,10000000.0
+Candidate_BESS_Chad,,CapexMWh,180.0
+Candidate_BESS_Chad,,Efficiency,0.9
+Candidate_BESS_EquatorialGuinea,,CapacityMWh,10000000.0
+Candidate_BESS_EquatorialGuinea,,CapexMWh,180.0
+Candidate_BESS_EquatorialGuinea,,Efficiency,0.9
+Candidate_BESS_DRCSouth,,CapacityMWh,10000000.0
+Candidate_BESS_DRCSouth,,CapexMWh,180.0
+Candidate_BESS_DRCSouth,,Efficiency,0.9

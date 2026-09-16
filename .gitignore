@@ -2,10 +2,11 @@
 
 .DS_Store
 __pycache__/
-data/*/
-!data/readme.md
 experiments/tmp_data/
-!data/readme.md
+
+# data/ is bulk gams data (raw/extracted/seer-schema outputs), regenerable and often large --
+# ignored by default, with specific carve-outs for files/folders worth tracking in git.
 data/*
+!data/readme.md
+!data/processed_gams
 .claude
-experiments/tmp_data/

@@ -33,6 +33,31 @@ def _drop_incomplete_profiles(df, key_cols, times, label):
     )
 
 
+def _drop_unknown_zones(df, valid_zones, label, costs_df=None, id_col=None):
+    """Drop rows referencing a zone not in zones.csv -- with a warning naming what was
+    dropped, since no Bus is ever created for such a zone (e.g. cross-region contamination
+    in the raw gams csvs: Mexico's pDemandProfile.csv has real rows for "Mogadishu", CAPP's
+    generator data references "Burundi"/"Rwanda"/"DRC_East", none of which are CAPP zones).
+
+    If `costs_df`/`id_col` are given (generator_costs.csv/storage_costs.csv, joined by
+    generator/storage name), matching rows are dropped there too so the two files stay
+    consistent.
+    """
+    bad = ~df["zone"].isin(valid_zones)
+    if not bad.any():
+        return (df, costs_df) if costs_df is not None else df
+    bad_zones = sorted(df.loc[bad, "zone"].unique())
+    warnings.warn(
+        f"{label}: dropping {bad.sum()} row(s) referencing zone(s) not in zones.csv "
+        f"(not modeled -- likely cross-region data contamination): {bad_zones}"
+    )
+    df = df[~bad]
+    if costs_df is not None:
+        costs_df = costs_df[costs_df[id_col].isin(df[id_col])]
+        return df, costs_df
+    return df
+
+
 def _match_renewable_profiles(generator_constants, profiles_raw, times):
     """Keep only renewable_profiles rows that actually match something real: a generic (zone,
     tech) row is kept only if some generator actually has that (zone, tech); a
@@ -94,7 +119,14 @@ def epm_to_seer(input_path, output_path):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     years, zones, demand_forecast, demand_profile = passthrough(input_dir)
+    valid_zones = set(zones["zone"])
+    demand_forecast = _drop_unknown_zones(demand_forecast, valid_zones, "demand_forecast.csv")
+    demand_profile = _drop_unknown_zones(demand_profile, valid_zones, "demand_profile.csv")
+
     generator_constants, generator_costs = build_generator_params(input_dir, model_years=years["year"].tolist())
+    generator_constants, generator_costs = _drop_unknown_zones(
+        generator_constants, valid_zones, "generator_constants.csv", generator_costs, "generator"
+    )
     renewable_profiles_raw = build_re_potentials(input_dir)
     # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own
     # `time` values (EPM data is often already a handful of representative days per month, not
@@ -107,6 +139,9 @@ def epm_to_seer(input_path, output_path):
     # per-vintage capex lookup indexes storage_costs by those exact values (see
     # storage_params.py's build_storage_params docstring)
     storage_constants, storage_costs = build_storage_params(input_dir, years=years["year"].tolist())
+    storage_constants, storage_costs = _drop_unknown_zones(
+        storage_constants, valid_zones, "storage_constants.csv", storage_costs, "storage"
+    )
 
     outputs = {
         "generator_constants": generator_constants,
@@ -141,6 +176,19 @@ def passthrough(data_path):
     zcmap_path = Path(f"{data_path}zcmap.csv")
     if zcmap_path.exists():
         zones = pd.read_csv(zcmap_path)[["zone", "country"]]
+        # zcmap.csv isn't always a plain one-row-per-zone table -- some regions' variant
+        # encodes a bidirectional zone/trade-partner network instead (e.g. Eswatini has 4
+        # rows for "Eswatini", one per trade partner, plus the reverse row for each). Only
+        # the "zone" column is a genuine per-zone list; keep the first "country" value seen
+        # for each zone and don't try to validate it further -- it's used as given.
+        dupes = zones["zone"].duplicated(keep=False)
+        if dupes.any():
+            dup_zones = sorted(zones.loc[dupes, "zone"].unique())
+            warnings.warn(
+                f"zcmap.csv has multiple rows for the same zone(s) {dup_zones} -- "
+                "keeping the first country value seen for each."
+            )
+            zones = zones.drop_duplicates(subset="zone", keep="first")
     else:
         # Some regions' raw gdx has no zcmap symbol at all. Only "zone" drives spatial
         # resolution (buses) in either model backend -- "country" isn't consumed anywhere

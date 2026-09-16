@@ -1,0 +1,112 @@
+plant,year,parameters,value
+Storage_Pobe,,CapacityMWh,5.0
+Storage_Pobe,,Life,20.0
+Storage_Pobe,,CapexMWh,250.0
+Storage_Pobe,,Efficiency,0.85
+Storage_CAND_2027_Guinea,,CapacityMWh,30000.0
+Storage_CAND_2027_Guinea,,Life,20.0
+Storage_CAND_2027_Guinea,,CapexMWh,250.0
+Storage_CAND_2027_Guinea,,Efficiency,0.85
+BESS Yekepa / Buchanan 15 /60,,CapacityMWh,60.0
+BESS Yekepa / Buchanan 15 /60,,Life,20.0
+BESS Yekepa / Buchanan 15 /60,,CapexMWh,250.0
+BESS Yekepa / Buchanan 15 /60,,Efficiency,0.85
+Storage_CAND_2026_Senegal,,Life,20.0
+Storage_CAND_2026_Senegal,,CapexMWh,250.0
+Storage_CAND_2026_Senegal,,Efficiency,0.85
+Storage_CAND_2027_Benin,,CapacityMWh,30000.0
+Storage_CAND_2027_Benin,,Life,20.0
+Storage_CAND_2027_Benin,,CapexMWh,250.0
+Storage_CAND_2027_Benin,,Efficiency,0.85
+Storage_CAND_2027_Burkina,,CapacityMWh,30000.0
+Storage_CAND_2027_Burkina,,Life,20.0
+Storage_CAND_2027_Burkina,,CapexMWh,250.0
+Storage_CAND_2027_Burkina,,Efficiency,0.85
+Storage_CAND_2027_Gambia,,CapacityMWh,30000.0
+Storage_CAND_2027_Gambia,,Life,20.0
+Storage_CAND_2027_Gambia,,CapexMWh,250.0
+Storage_CAND_2027_Gambia,,Efficiency,0.85
+Storage_CAND_2027_Ghana,,CapacityMWh,30000.0
+Storage_CAND_2027_Ghana,,Life,20.0
+Storage_CAND_2027_Ghana,,CapexMWh,250.0
+Storage_CAND_2027_Ghana,,Efficiency,0.85
+Storage_CAND_2027_GuineaBissau,,CapacityMWh,30000.0
+Storage_CAND_2027_GuineaBissau,,Life,20.0
+Storage_CAND_2027_GuineaBissau,,CapexMWh,250.0
+Storage_CAND_2027_GuineaBissau,,Efficiency,0.85
+Storage_CAND_2027_IvoryCoast,,CapacityMWh,30000.0
+Storage_CAND_2027_IvoryCoast,,Life,20.0
+Storage_CAND_2027_IvoryCoast,,CapexMWh,250.0
+Storage_CAND_2027_IvoryCoast,,Efficiency,0.85
+Storage_CAND_2027_Liberia,,CapacityMWh,30000.0
+Storage_CAND_2027_Liberia,,Life,20.0
+Storage_CAND_2027_Liberia,,CapexMWh,250.0
+Storage_CAND_2027_Liberia,,Efficiency,0.85
+Storage_CAND_2027_Mali,,CapacityMWh,30000.0
+Storage_CAND_2027_Mali,,Life,20.0
+Storage_CAND_2027_Mali,,CapexMWh,250.0
+Storage_CAND_2027_Mali,,Efficiency,0.85
+Storage_CAND_2027_Niger,,CapacityMWh,30000.0
+Storage_CAND_2027_Niger,,Life,20.0
+Storage_CAND_2027_Niger,,CapexMWh,250.0
+Storage_CAND_2027_Niger,,Efficiency,0.85
+Storage_CAND_2027_SierraLeone,,CapacityMWh,30000.0
+Storage_CAND_2027_SierraLeone,,Life,20.0
+Storage_CAND_2027_SierraLeone,,CapexMWh,250.0
+Storage_CAND_2027_SierraLeone,,Efficiency,0.85
+Storage_CAND_2027_Togo,,CapacityMWh,30000.0
+Storage_CAND_2027_Togo,,Life,20.0
+Storage_CAND_2027_Togo,,CapexMWh,250.0
+Storage_CAND_2027_Togo,,Efficiency,0.85
+Storage_CAND_2027_Mauritania_grid,,CapacityMWh,30000.0
+Storage_CAND_2027_Mauritania_grid,,Life,20.0
+Storage_CAND_2027_Mauritania_grid,,CapexMWh,250.0
+Storage_CAND_2027_Mauritania_grid,,Efficiency,0.85
+8MWh_4h_Gambia,,CapacityMWh,8.0
+8MWh_4h_Gambia,,Life,20.0
+8MWh_4h_Gambia,,CapexMWh,250.0
+8MWh_4h_Gambia,,Efficiency,0.85
+Storage_CAND_2027_Nigeria,,CapacityMWh,30000.0
+Storage_CAND_2027_Nigeria,,Life,20.0
+Storage_CAND_2027_Nigeria,,CapexMWh,250.0
+Storage_CAND_2027_Nigeria,,Efficiency,0.85
+BESS DIASS  1h,,CapacityMWh,56.0
+BESS DIASS  1h,,Life,20.0
+BESS DIASS  1h,,CapexMWh,250.0
+BESS DIASS  1h,,Efficiency,0.85
+BESS KIAT 1h,,CapacityMWh,10.0
+BESS KIAT 1h,,Life,20.0
+BESS KIAT 1h,,CapexMWh,250.0
+BESS KIAT 1h,,Efficiency,0.85
+BESS NIAKHAR STORAGE 3h,,CapacityMWh,45.0
+BESS NIAKHAR STORAGE 3h,,Life,20.0
+BESS NIAKHAR STORAGE 3h,,CapexMWh,250.0
+BESS NIAKHAR STORAGE 3h,,Efficiency,0.85
+BESS Walo Storage 2h,,CapacityMWh,20.0
+BESS Walo Storage 2h,,Life,20.0
+BESS Walo Storage 2h,,CapexMWh,250.0
+BESS Walo Storage 2h,,Efficiency,0.85
+BESS AKUO 3h,,CapacityMWh,180.0
+BESS AKUO 3h,,Life,20.0
+BESS AKUO 3h,,CapexMWh,250.0
+BESS AKUO 3h,,Efficiency,0.85
+BESS Dioudoubou 3h,,CapacityMWh,90.0
+BESS Dioudoubou 3h,,Life,20.0
+BESS Dioudoubou 3h,,CapexMWh,250.0
+BESS Dioudoubou 3h,,Efficiency,0.85
+BESS TAMBACOUNDA 2h,,CapacityMWh,47.4
+BESS TAMBACOUNDA 2h,,Life,20.0
+BESS TAMBACOUNDA 2h,,CapexMWh,250.0
+BESS TAMBACOUNDA 2h,,Efficiency,0.85
+BESS axian de Tankanto 3h,,CapacityMWh,30.0
+BESS axian de Tankanto 3h,,Life,20.0
+BESS axian de Tankanto 3h,,CapexMWh,250.0
+BESS axian de Tankanto 3h,,Efficiency,0.85
+BESS nexentury 1h,,CapacityMWh,5.0
+BESS nexentury 1h,,Life,20.0
+BESS nexentury 1h,,CapexMWh,250.0
+BESS nexentury 1h,,Efficiency,0.85
+BESS Serengeti 3h,,CapacityMWh,45.0
+BESS Serengeti 3h,,Life,20.0
+BESS Serengeti 3h,,CapexMWh,250.0
+BESS Serengeti 3h,,Efficiency,0.85

@@ -1,0 +1,111 @@
+tech,parameters,value
+Coal,Assigned Value,3.0
+Coal,Construction Period (years),7.0
+Coal,LifeTime,30.0
+Wind,Assigned Value,5.0
+Wind,Construction Period (years),2.0
+Wind,LifeTime,30.0
+Wind,Hourly Variation? (Yes/No),1.0
+Wind,RE Technology (Yes/No),1.0
+Biomass,Assigned Value,11.0
+Biomass,Construction Period (years),2.0
+Biomass,LifeTime,30.0
+Biomass,RE Technology (Yes/No),1.0
+GasCCS,Assigned Value,28.0
+GasCCS,Construction Period (years),2.5
+GasCCS,LifeTime,30.0
+Biogas,Assigned Value,7.0
+Biogas,Construction Period (years),2.0
+Biogas,LifeTime,30.0
+Biogas,RE Technology (Yes/No),1.0
+CSP,Assigned Value,14.0
+CSP,Construction Period (years),3.0
+CSP,LifeTime,30.0
+CSP,RE Technology (Yes/No),1.0
+pvwsto,Assigned Value,15.0
+pvwsto,Construction Period (years),1.0
+pvwsto,LifeTime,25.0
+pvwsto,Hourly Variation? (Yes/No),1.0
+pvwsto,RE Technology (Yes/No),1.0
+GT,Assigned Value,1.0
+GT,Construction Period (years),2.0
+GT,LifeTime,30.0
+CCGT,Assigned Value,2.0
+CCGT,Construction Period (years),2.5
+CCGT,LifeTime,30.0
+STO HY,Assigned Value,4.0
+STO HY,Construction Period (years),6.0
+STO HY,LifeTime,50.0
+STO HY,RE Technology (Yes/No),1.0
+PV,Assigned Value,6.0
+PV,Construction Period (years),1.0
+PV,LifeTime,25.0
+PV,Hourly Variation? (Yes/No),1.0
+PV,RE Technology (Yes/No),1.0
+INT,Assigned Value,8.0
+INT,Construction Period (years),2.0
+INT,LifeTime,30.0
+RPV,Assigned Value,9.0
+RPV,Construction Period (years),1.0
+RPV,LifeTime,20.0
+RPV,Hourly Variation? (Yes/No),1.0
+RPV,RE Technology (Yes/No),1.0
+ICE,Assigned Value,10.0
+ICE,Construction Period (years),1.0
+ICE,LifeTime,30.0
+ROR,Assigned Value,12.0
+ROR,Construction Period (years),2.0
+ROR,LifeTime,50.0
+ROR,RE Technology (Yes/No),1.0
+ST,Assigned Value,13.0
+ST,Construction Period (years),4.0
+ST,LifeTime,30.0
+STOPV,Assigned Value,16.0
+STOPV,Construction Period (years),1.0
+STOPV,LifeTime,20.0
+STOPV,RE Technology (Yes/No),1.0
+STORAGE,Assigned Value,17.0
+STORAGE,Construction Period (years),1.0
+STORAGE,LifeTime,20.0
+NUCLEAR,Assigned Value,18.0
+NUCLEAR,Construction Period (years),7.0
+NUCLEAR,LifeTime,50.0
+GEO,Assigned Value,19.0
+GEO,Construction Period (years),2.0
+GEO,LifeTime,30.0
+GEO,RE Technology (Yes/No),1.0
+WINDwSTO,Assigned Value,20.0
+WINDwSTO,Construction Period (years),1.0
+WINDwSTO,LifeTime,30.0
+WINDwSTO,Hourly Variation? (Yes/No),1.0
+WINDwSTO,RE Technology (Yes/No),1.0
+ICE_Hybrid_PV,Assigned Value,21.0
+ICE_Hybrid_PV,Construction Period (years),1.0
+CT_Hybrid_Diesel,Assigned Value,22.0
+CT_Hybrid_Diesel,Construction Period (years),1.0
+CT_Hybrid_PV,Assigned Value,23.0
+CT_Hybrid_PV,Construction Period (years),1.0
+CCGT_CCS,Assigned Value,24.0
+CCGT_CCS,Construction Period (years),3.0
+CCGT_CCS,LifeTime,30.0
+OCGT_CCS,Assigned Value,25.0
+OCGT_CCS,Construction Period (years),2.0
+OCGT_CCS,LifeTime,30.0
+Wind_OffShore,Assigned Value,26.0
+Wind_OffShore,Construction Period (years),3.0
+Wind_OffShore,LifeTime,30.0
+Wind_OffShore,Hourly Variation? (Yes/No),1.0
+Wind_OffShore,RE Technology (Yes/No),1.0
+Cogeneration,Assigned Value,27.0
+Cogeneration,Construction Period (years),3.0
+Cogeneration,LifeTime,30.0
+SHPP,Assigned Value,28.0
+SHPP,Construction Period (years),3.0
+SHPP,LifeTime,30.0
+PHPP,Assigned Value,27.0
+PHPP,Construction Period (years),4.0
+PHPP,LifeTime,50.0
+PHPP,RE Technology (Yes/No),1.0
+CCGTH2,Assigned Value,29.0
+CCGTH2,Construction Period (years),3.0
+CCGTH2,LifeTime,30.0

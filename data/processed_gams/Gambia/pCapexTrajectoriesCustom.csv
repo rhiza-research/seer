@@ -1,0 +1,301 @@
+plant,year,value
+Kotu G5,2025,1.0
+Kotu G5,2026,1.0
+Kotu G5,2027,1.0
+Kotu G5,2028,1.0
+Kotu G5,2029,1.0
+Kotu G5,2030,1.0
+Kotu G5,2035,1.0
+Kotu G5,2040,1.0
+Kotu G5,2045,1.0
+Kotu G5,2050,1.0
+Kotu G6,2025,1.0
+Kotu G6,2026,1.0
+Kotu G6,2027,1.0
+Kotu G6,2028,1.0
+Kotu G6,2029,1.0
+Kotu G6,2030,1.0
+Kotu G6,2035,1.0
+Kotu G6,2040,1.0
+Kotu G6,2045,1.0
+Kotu G6,2050,1.0
+Kotu G7,2025,1.0
+Kotu G7,2026,1.0
+Kotu G7,2027,1.0
+Kotu G7,2028,1.0
+Kotu G7,2029,1.0
+Kotu G7,2030,1.0
+Kotu G7,2035,1.0
+Kotu G7,2040,1.0
+Kotu G7,2045,1.0
+Kotu G7,2050,1.0
+Kotu G8,2025,1.0
+Kotu G8,2026,1.0
+Kotu G8,2027,1.0
+Kotu G8,2028,1.0
+Kotu G8,2029,1.0
+Kotu G8,2030,1.0
+Kotu G8,2035,1.0
+Kotu G8,2040,1.0
+Kotu G8,2045,1.0
+Kotu G8,2050,1.0
+Brikama G1,2025,1.0
+Brikama G1,2026,1.0
+Brikama G1,2027,1.0
+Brikama G1,2028,1.0
+Brikama G1,2029,1.0
+Brikama G1,2030,1.0
+Brikama G1,2035,1.0
+Brikama G1,2040,1.0
+Brikama G1,2045,1.0
+Brikama G1,2050,1.0
+Brikama G3,2025,1.0
+Brikama G3,2026,1.0
+Brikama G3,2027,1.0
+Brikama G3,2028,1.0
+Brikama G3,2029,1.0
+Brikama G3,2030,1.0
+Brikama G3,2035,1.0
+Brikama G3,2040,1.0
+Brikama G3,2045,1.0
+Brikama G3,2050,1.0
+Brikama G4,2025,1.0
+Brikama G4,2026,1.0
+Brikama G4,2027,1.0
+Brikama G4,2028,1.0
+Brikama G4,2029,1.0
+Brikama G4,2030,1.0
+Brikama G4,2035,1.0
+Brikama G4,2040,1.0
+Brikama G4,2045,1.0
+Brikama G4,2050,1.0
+Brikama G6,2025,1.0
+Brikama G6,2026,1.0
+Brikama G6,2027,1.0
+Brikama G6,2028,1.0
+Brikama G6,2029,1.0
+Brikama G6,2030,1.0
+Brikama G6,2035,1.0
+Brikama G6,2040,1.0
+Brikama G6,2045,1.0
+Brikama G6,2050,1.0
+Brikama G7,2025,1.0
+Brikama G7,2026,1.0
+Brikama G7,2027,1.0
+Brikama G7,2028,1.0
+Brikama G7,2029,1.0
+Brikama G7,2030,1.0
+Brikama G7,2035,1.0
+Brikama G7,2040,1.0
+Brikama G7,2045,1.0
+Brikama G7,2050,1.0
+Brikama II,2025,1.0
+Brikama II,2026,1.0
+Brikama II,2027,1.0
+Brikama II,2028,1.0
+Brikama II,2029,1.0
+Brikama II,2030,1.0
+Brikama II,2035,1.0
+Brikama II,2040,1.0
+Brikama II,2045,1.0
+Brikama II,2050,1.0
+Brikama III G1,2025,1.0
+Brikama III G1,2026,1.0
+Brikama III G1,2027,1.0
+Brikama III G1,2028,1.0
+Brikama III G1,2029,1.0
+Brikama III G1,2030,1.0
+Brikama III G1,2035,1.0
+Brikama III G1,2040,1.0
+Brikama III G1,2045,1.0
+Brikama III G1,2050,1.0
+Brikama III G2,2025,1.0
+Brikama III G2,2026,1.0
+Brikama III G2,2027,1.0
+Brikama III G2,2028,1.0
+Brikama III G2,2029,1.0
+Brikama III G2,2030,1.0
+Brikama III G2,2035,1.0
+Brikama III G2,2040,1.0
+Brikama III G2,2045,1.0
+Brikama III G2,2050,1.0
+Karpower 1,2025,1.0
+Karpower 1,2026,1.0
+Karpower 1,2027,1.0
+Karpower 1,2028,1.0
+Karpower 1,2029,1.0
+Karpower 1,2030,1.0
+Karpower 1,2035,1.0
+Karpower 1,2040,1.0
+Karpower 1,2045,1.0
+Karpower 1,2050,1.0
+Karpower 2,2025,1.0
+Karpower 2,2026,1.0
+Karpower 2,2027,1.0
+Karpower 2,2028,1.0
+Karpower 2,2029,1.0
+Karpower 2,2030,1.0
+Karpower 2,2035,1.0
+Karpower 2,2040,1.0
+Karpower 2,2045,1.0
+Karpower 2,2050,1.0
+Farafenni,2025,1.0
+Farafenni,2026,1.0
+Farafenni,2027,1.0
+Farafenni,2028,1.0
+Farafenni,2029,1.0
+Farafenni,2030,1.0
+Farafenni,2035,1.0
+Farafenni,2040,1.0
+Farafenni,2045,1.0
+Farafenni,2050,1.0
+Basse,2025,1.0
+Basse,2026,1.0
+Basse,2027,1.0
+Basse,2028,1.0
+Basse,2029,1.0
+Basse,2030,1.0
+Basse,2035,1.0
+Basse,2040,1.0
+Basse,2045,1.0
+Basse,2050,1.0
+Jambur PV,2025,0.894
+Jambur PV,2026,0.84
+Jambur PV,2027,0.787
+Jambur PV,2028,0.734
+Jambur PV,2029,0.681
+Jambur PV,2030,0.628
+Jambur PV,2035,0.58
+Jambur PV,2040,0.532
+Jambur PV,2045,0.484
+Jambur PV,2050,0.436
+Jambur BESS,2025,0.896
+Jambur BESS,2026,0.858
+Jambur BESS,2027,0.82
+Jambur BESS,2028,0.782
+Jambur BESS,2029,0.744
+Jambur BESS,2030,0.706
+Jambur BESS,2035,0.644
+Jambur BESS,2040,0.582
+Jambur BESS,2045,0.52
+Jambur BESS,2050,0.458
+Import Guinea,2025,1.0
+Import Guinea,2026,1.0
+Import Guinea,2027,1.0
+Import Guinea,2028,1.0
+Import Guinea,2029,1.0
+Import Guinea,2030,1.0
+Import Guinea,2035,1.0
+Import Guinea,2040,1.0
+Import Guinea,2045,1.0
+Import Guinea,2050,1.0
+Import Senegal,2025,1.0
+Import Senegal,2026,1.0
+Import Senegal,2027,1.0
+Import Senegal,2028,1.0
+Import Senegal,2029,1.0
+Import Senegal,2030,1.0
+Import Senegal,2035,1.0
+Import Senegal,2040,1.0
+Import Senegal,2045,1.0
+Import Senegal,2050,1.0
+Import Senegal MV,2025,1.0
+Import Senegal MV,2026,1.0
+Import Senegal MV,2027,1.0
+Import Senegal MV,2028,1.0
+Import Senegal MV,2029,1.0
+Import Senegal MV,2030,1.0
+Import Senegal MV,2035,1.0
+Import Senegal MV,2040,1.0
+Import Senegal MV,2045,1.0
+Import Senegal MV,2050,1.0
+New ICE,2025,1.0
+New ICE,2026,1.0
+New ICE,2027,1.0
+New ICE,2028,1.0
+New ICE,2029,1.0
+New ICE,2030,1.0
+New ICE,2035,1.0
+New ICE,2040,1.0
+New ICE,2045,1.0
+New ICE,2050,1.0
+New CCGT,2025,1.0
+New CCGT,2026,1.0
+New CCGT,2027,1.0
+New CCGT,2028,1.0
+New CCGT,2029,1.0
+New CCGT,2030,1.0
+New CCGT,2035,1.0
+New CCGT,2040,1.0
+New CCGT,2045,1.0
+New CCGT,2050,1.0
+New Solar,2025,0.894
+New Solar,2026,0.84
+New Solar,2027,0.787
+New Solar,2028,0.734
+New Solar,2029,0.681
+New Solar,2030,0.628
+New Solar,2035,0.58
+New Solar,2040,0.532
+New Solar,2045,0.484
+New Solar,2050,0.436
+New BESS,2025,0.896
+New BESS,2026,0.858
+New BESS,2027,0.82
+New BESS,2028,0.782
+New BESS,2029,0.744
+New BESS,2030,0.706
+New BESS,2035,0.644
+New BESS,2040,0.582
+New BESS,2045,0.52
+New BESS,2050,0.458
+New CCGT Senegal,2025,1.0
+New CCGT Senegal,2026,1.0
+New CCGT Senegal,2027,1.0
+New CCGT Senegal,2028,1.0
+New CCGT Senegal,2029,1.0
+New CCGT Senegal,2030,1.0
+New CCGT Senegal,2035,1.0
+New CCGT Senegal,2040,1.0
+New CCGT Senegal,2045,1.0
+New CCGT Senegal,2050,1.0
+New CCGT Cote d'Ivoire,2025,1.0
+New CCGT Cote d'Ivoire,2026,1.0
+New CCGT Cote d'Ivoire,2027,1.0
+New CCGT Cote d'Ivoire,2028,1.0
+New CCGT Cote d'Ivoire,2029,1.0
+New CCGT Cote d'Ivoire,2030,1.0
+New CCGT Cote d'Ivoire,2035,1.0
+New CCGT Cote d'Ivoire,2040,1.0
+New CCGT Cote d'Ivoire,2045,1.0
+New CCGT Cote d'Ivoire,2050,1.0
+New OMVG Import,2025,1.0
+New OMVG Import,2026,1.0
+New OMVG Import,2027,1.0
+New OMVG Import,2028,1.0
+New OMVG Import,2029,1.0
+New OMVG Import,2030,1.0
+New OMVG Import,2035,1.0
+New OMVG Import,2040,1.0
+New OMVG Import,2045,1.0
+New OMVG Import,2050,1.0
+Solar Project,2025,0.894
+Solar Project,2026,0.84
+Solar Project,2027,0.787
+Solar Project,2028,0.734
+Solar Project,2029,0.681
+Solar Project,2030,0.628
+Solar Project,2035,0.58
+Solar Project,2040,0.532
+Solar Project,2045,0.484
+Solar Project,2050,0.436
+BESS Project,2025,0.896
+BESS Project,2026,0.858
+BESS Project,2027,0.82
+BESS Project,2028,0.782
+BESS Project,2029,0.744
+BESS Project,2030,0.706
+BESS Project,2035,0.644
+BESS Project,2040,0.582
+BESS Project,2045,0.52
+BESS Project,2050,0.458
