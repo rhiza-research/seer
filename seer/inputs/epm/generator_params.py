@@ -197,9 +197,7 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
     # matched with old names between raw files.
     generator_constants["tech"] = standardize_tech(generator_constants["tech"], generator_constants["fuel"])
     generator_constants["fuel"] = standardize_fuel(generator_constants["fuel"])
-    # fill any still-missing fuel using that tech's default (pypsa_tech_names.csv's "fuel"
-    # column) -- combustion techs (coal/oil/CCGT/OCGT/...) always have one; renewables/
-    # storage/import generally don't
+    # fill any still-missing fuel using that tech's default
     missing_fuel = generator_constants["fuel"].isna()
     if missing_fuel.any():
         generator_constants.loc[missing_fuel, "fuel"] = (
