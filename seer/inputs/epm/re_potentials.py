@@ -3,9 +3,9 @@
 renewable_profiles.csv can carry two different kinds of rows, distinguished by which of
 `tech`/`generator` is populated (see seer/inputs/README.md):
 - generic (tech set, generator NaN): one profile shared by every generator of that
-  (zone, tech), sourced from pVREProfile.csv. tech names are standardized (e.g. "Solar" ->
-  "PV") to match generator_constants.tech's canonical vocabulary (see gdx.enrich_data's
-  FUEL_NAME_MAP tech_label conventions).
+  (zone, tech), sourced from pVREProfile.csv. tech names are standardized (see
+  seer.inputs.utils) to match generator_constants.tech's canonical (PyPSA-aligned)
+  vocabulary.
 - generator-specific (generator set, tech NaN): a profile for one individual generator,
   sourced from pVREgenProfile.csv. That symbol sometimes has a real "generator" column (e.g.
   hydro plants, resolved via gdx.enrich_data.enrich_vre_zone_tech) -- other regions' variant
@@ -22,15 +22,10 @@ from pathlib import Path
 import pandas as pd
 
 from ._time_convert import convert_season_day_hour
+from ..utils import standardize_tech
 
 # the month column's name varies across sources
 MONTH_COL_OPTIONS = ["month", "Month", "Month of the Year", "season"]
-
-# pVREProfile.csv's raw tech names -> generator_constants.tech's canonical vocabulary
-RENEWABLE_TECH_ALIAS = {
-    "Solar": "PV",
-    "SolarTracker": "PV",
-}
 
 
 def _dedup_profile(df, key_cols, source):
@@ -81,7 +76,7 @@ def _read_zone_tech_profile(path):
     df = df.rename(columns={col: "season"})
 
     df = convert_season_day_hour(df)
-    df["tech"] = df["tech"].replace(RENEWABLE_TECH_ALIAS)
+    df["tech"] = standardize_tech(df["tech"])
     df["generator"] = pd.NA
     df = _dedup_profile(df, ["zone", "tech"], path)
     return df[["zone", "tech", "generator", "time", "value"]]

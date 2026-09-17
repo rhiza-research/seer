@@ -17,10 +17,10 @@ Nkayi Mill,Congo,BiomassPlant,Biomass,Capacity,6.0
 Ouesso Biomass,Congo,BiomassPlant,Biomass,Status,1.0
 Ouesso Biomass,Congo,BiomassPlant,Biomass,StYr,2024.0
 Ouesso Biomass,Congo,BiomassPlant,Biomass,Capacity,2.5
-Candidate_BESS_Rwanda,Rwanda,STORAGE,Battery,Status,3.0
-Candidate_BESS_Rwanda,Rwanda,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_Rwanda,Rwanda,STORAGE,Battery,Capacity,40000.0
-Candidate_BESS_Rwanda,Rwanda,STORAGE,Battery,BuildLimitperYear,40.0
+Candidate_BESS_Rwanda,Rwanda,Storage,Battery,Status,3.0
+Candidate_BESS_Rwanda,Rwanda,Storage,Battery,StYr,2035.0
+Candidate_BESS_Rwanda,Rwanda,Storage,Battery,Capacity,40000.0
+Candidate_BESS_Rwanda,Rwanda,Storage,Battery,BuildLimitperYear,40.0
 Bagasse 1,Rwanda,BiomassPlant,Biomass,Status,3.0
 Bagasse 1,Rwanda,BiomassPlant,Biomass,StYr,2023.0
 Bagasse 1,Rwanda,BiomassPlant,Biomass,Capacity,12.0
@@ -45,10 +45,10 @@ Baia farta,Angola,PV,Solar,Status,1.0
 Baia farta,Angola,PV,Solar,StYr,2024.0
 Baia farta,Angola,PV,Solar,Capacity,96.0
 Baia farta,Angola,PV,Solar,BuildLimitperYear,96.0
-Candidate_BESS_Burundi,Burundi,STORAGE,Battery,Status,3.0
-Candidate_BESS_Burundi,Burundi,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_Burundi,Burundi,STORAGE,Battery,Capacity,3000.0
-Candidate_BESS_Burundi,Burundi,STORAGE,Battery,BuildLimitperYear,6.0
+Candidate_BESS_Burundi,Burundi,Storage,Battery,Status,3.0
+Candidate_BESS_Burundi,Burundi,Storage,Battery,StYr,2035.0
+Candidate_BESS_Burundi,Burundi,Storage,Battery,Capacity,3000.0
+Candidate_BESS_Burundi,Burundi,Storage,Battery,BuildLimitperYear,6.0
 Candidate_CSP_Cameroon,Cameroon,CSPPlant,CSP,Status,3.0
 Candidate_CSP_Cameroon,Cameroon,CSPPlant,CSP,StYr,2035.0
 Candidate_CSP_Cameroon,Cameroon,CSPPlant,CSP,BuildLimitperYear,40000.0
@@ -350,10 +350,10 @@ Cafunfo,Angola,PV,Solar,Status,3.0
 Cafunfo,Angola,PV,Solar,StYr,2030.0
 Cafunfo,Angola,PV,Solar,Capacity,40.0
 Cafunfo,Angola,PV,Solar,BuildLimitperYear,40.0
-Candidate_BESS_Congo,Congo,STORAGE,Battery,Status,3.0
-Candidate_BESS_Congo,Congo,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_Congo,Congo,STORAGE,Battery,Capacity,50000.0
-Candidate_BESS_Congo,Congo,STORAGE,Battery,BuildLimitperYear,45.0
+Candidate_BESS_Congo,Congo,Storage,Battery,Status,3.0
+Candidate_BESS_Congo,Congo,Storage,Battery,StYr,2035.0
+Candidate_BESS_Congo,Congo,Storage,Battery,Capacity,50000.0
+Candidate_BESS_Congo,Congo,Storage,Battery,BuildLimitperYear,45.0
 Cambulo,Angola,PV,Solar,Status,3.0
 Cambulo,Angola,PV,Solar,StYr,2030.0
 Cambulo,Angola,PV,Solar,Capacity,37.0
@@ -651,10 +651,10 @@ Candidate_PV_Chad,Chad,PV,Solar,Status,3.0
 Candidate_PV_Chad,Chad,PV,Solar,StYr,2035.0
 Candidate_PV_Chad,Chad,PV,Solar,Capacity,40000.0
 Candidate_PV_Chad,Chad,PV,Solar,BuildLimitperYear,7.0
-Candidate_BESS_Angola,Angola,STORAGE,Battery,Status,3.0
-Candidate_BESS_Angola,Angola,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_Angola,Angola,STORAGE,Battery,Capacity,200000.0
-Candidate_BESS_Angola,Angola,STORAGE,Battery,BuildLimitperYear,100.0
+Candidate_BESS_Angola,Angola,Storage,Battery,Status,3.0
+Candidate_BESS_Angola,Angola,Storage,Battery,StYr,2035.0
+Candidate_BESS_Angola,Angola,Storage,Battery,Capacity,200000.0
+Candidate_BESS_Angola,Angola,Storage,Battery,BuildLimitperYear,100.0
 Candidate_CCGT_Gas_Angola,Angola,CCGT,Gas,Status,3.0
 Candidate_CCGT_Gas_Angola,Angola,CCGT,Gas,StYr,2035.0
 Candidate_CCGT_Gas_Angola,Angola,CCGT,Gas,Capacity,1500.0
@@ -931,10 +931,10 @@ Zongo 2,DRC,ReservoirHydro,Water,Status,1.0
 Zongo 2,DRC,ReservoirHydro,Water,StYr,2019.0
 Zongo 2,DRC,ReservoirHydro,Water,RetrYr,2051.0
 Zongo 2,DRC,ReservoirHydro,Water,Capacity,74.0
-Candidate_BESS_DRC,DRC,STORAGE,Battery,Status,3.0
-Candidate_BESS_DRC,DRC,STORAGE,Battery,StYr,2030.0
-Candidate_BESS_DRC,DRC,STORAGE,Battery,Capacity,400000.0
-Candidate_BESS_DRC,DRC,STORAGE,Battery,BuildLimitperYear,100.0
+Candidate_BESS_DRC,DRC,Storage,Battery,Status,3.0
+Candidate_BESS_DRC,DRC,Storage,Battery,StYr,2030.0
+Candidate_BESS_DRC,DRC,Storage,Battery,Capacity,400000.0
+Candidate_BESS_DRC,DRC,Storage,Battery,BuildLimitperYear,100.0
 Ruzizi 1 (DRC),DRC_East,ReservoirHydro,Water,Status,1.0
 Ruzizi 1 (DRC),DRC_East,ReservoirHydro,Water,StYr,2010.0
 Ruzizi 1 (DRC),DRC_East,ReservoirHydro,Water,RetrYr,2051.0
@@ -955,10 +955,10 @@ Cankuzo,Burundi,PV,Solar,Status,3.0
 Cankuzo,Burundi,PV,Solar,StYr,2030.0
 Cankuzo,Burundi,PV,Solar,Capacity,20.0
 Cankuzo,Burundi,PV,Solar,BuildLimitperYear,10.0
-Candidate_BESS_DRCEast,DRC_East,STORAGE,Battery,Status,3.0
-Candidate_BESS_DRCEast,DRC_East,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_DRCEast,DRC_East,STORAGE,Battery,Capacity,400000.0
-Candidate_BESS_DRCEast,DRC_East,STORAGE,Battery,BuildLimitperYear,10.0
+Candidate_BESS_DRCEast,DRC_East,Storage,Battery,Status,3.0
+Candidate_BESS_DRCEast,DRC_East,Storage,Battery,StYr,2035.0
+Candidate_BESS_DRCEast,DRC_East,Storage,Battery,Capacity,400000.0
+Candidate_BESS_DRCEast,DRC_East,Storage,Battery,BuildLimitperYear,10.0
 Caraculo,Angola,PV,Solar,Status,3.0
 Caraculo,Angola,PV,Solar,StYr,2030.0
 Caraculo,Angola,PV,Solar,Capacity,25.0
@@ -989,10 +989,10 @@ Sendje,EquatorialGuinea,ReservoirHydro,Water,BuildLimitperYear,200.0
 Grand Poubara,Gabon,ReservoirHydro,Water,Status,1.0
 Grand Poubara,Gabon,ReservoirHydro,Water,StYr,2009.0
 Grand Poubara,Gabon,ReservoirHydro,Water,Capacity,160.0
-Candidate_BESS_Gabon,Gabon,STORAGE,Battery,Status,3.0
-Candidate_BESS_Gabon,Gabon,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_Gabon,Gabon,STORAGE,Battery,Capacity,40000.0
-Candidate_BESS_Gabon,Gabon,STORAGE,Battery,BuildLimitperYear,45.0
+Candidate_BESS_Gabon,Gabon,Storage,Battery,Status,3.0
+Candidate_BESS_Gabon,Gabon,Storage,Battery,StYr,2035.0
+Candidate_BESS_Gabon,Gabon,Storage,Battery,Capacity,40000.0
+Candidate_BESS_Gabon,Gabon,Storage,Battery,BuildLimitperYear,45.0
 Candidate_OCGT_Diesel_Gabon,Gabon,OCGT,Diesel,Status,3.0
 Candidate_OCGT_Diesel_Gabon,Gabon,OCGT,Diesel,StYr,2030.0
 Candidate_OCGT_Diesel_Gabon,Gabon,OCGT,Diesel,BuildLimitperYear,10000.0
@@ -1030,12 +1030,12 @@ Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,Status,2.0
 Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,StYr,2035.0
 Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,Capacity,145.0
 Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,BuildLimitperYear,145.0
-PumpedStorage Rwanda,Rwanda,STORAGE,PumpedHydro,Status,3.0
-PumpedStorage Rwanda,Rwanda,STORAGE,PumpedHydro,StYr,2040.0
-PumpedStorage Rwanda,Rwanda,STORAGE,PumpedHydro,Capacity,48.0
-PumpedStorage Rwanda,Rwanda,STORAGE,PumpedHydro,BuildLimitperYear,48.0
-PumpedStorage Rwanda,Rwanda,STORAGE,PumpedHydro,Capex,2.9
-PumpedStorage Rwanda,Rwanda,STORAGE,PumpedHydro,FOMperMW,50000.0
+PumpedStorage Rwanda,Rwanda,Storage,Water,Status,3.0
+PumpedStorage Rwanda,Rwanda,Storage,Water,StYr,2040.0
+PumpedStorage Rwanda,Rwanda,Storage,Water,Capacity,48.0
+PumpedStorage Rwanda,Rwanda,Storage,Water,BuildLimitperYear,48.0
+PumpedStorage Rwanda,Rwanda,Storage,Water,Capex,2.9
+PumpedStorage Rwanda,Rwanda,Storage,Water,FOMperMW,50000.0
 Nyabarongo 1,Rwanda,ROR,Water,Status,1.0
 Nyabarongo 1,Rwanda,ROR,Water,StYr,2014.0
 Nyabarongo 1,Rwanda,ROR,Water,RetrYr,2051.0
@@ -1468,18 +1468,18 @@ Mutukura,Burundi,PV,Solar,Status,3.0
 Mutukura,Burundi,PV,Solar,StYr,2030.0
 Mutukura,Burundi,PV,Solar,Capacity,20.0
 Mutukura,Burundi,PV,Solar,BuildLimitperYear,10.0
-Candidate_BESS_Cameroon,Cameroon,STORAGE,Battery,Status,3.0
-Candidate_BESS_Cameroon,Cameroon,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_Cameroon,Cameroon,STORAGE,Battery,Capacity,70000.0
-Candidate_BESS_Cameroon,Cameroon,STORAGE,Battery,BuildLimitperYear,170.0
-Candidate_BESS_CAF,CAR,STORAGE,Battery,Status,3.0
-Candidate_BESS_CAF,CAR,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_CAF,CAR,STORAGE,Battery,Capacity,1000.0
-Candidate_BESS_CAF,CAR,STORAGE,Battery,BuildLimitperYear,4.0
-Candidate_BESS_Chad,Chad,STORAGE,Battery,Status,3.0
-Candidate_BESS_Chad,Chad,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_Chad,Chad,STORAGE,Battery,Capacity,40000.0
-Candidate_BESS_Chad,Chad,STORAGE,Battery,BuildLimitperYear,7.0
+Candidate_BESS_Cameroon,Cameroon,Storage,Battery,Status,3.0
+Candidate_BESS_Cameroon,Cameroon,Storage,Battery,StYr,2035.0
+Candidate_BESS_Cameroon,Cameroon,Storage,Battery,Capacity,70000.0
+Candidate_BESS_Cameroon,Cameroon,Storage,Battery,BuildLimitperYear,170.0
+Candidate_BESS_CAF,CAR,Storage,Battery,Status,3.0
+Candidate_BESS_CAF,CAR,Storage,Battery,StYr,2035.0
+Candidate_BESS_CAF,CAR,Storage,Battery,Capacity,1000.0
+Candidate_BESS_CAF,CAR,Storage,Battery,BuildLimitperYear,4.0
+Candidate_BESS_Chad,Chad,Storage,Battery,Status,3.0
+Candidate_BESS_Chad,Chad,Storage,Battery,StYr,2035.0
+Candidate_BESS_Chad,Chad,Storage,Battery,Capacity,40000.0
+Candidate_BESS_Chad,Chad,Storage,Battery,BuildLimitperYear,7.0
 Sounda Gorge,Congo,ReservoirHydro,Water,Status,3.0
 Sounda Gorge,Congo,ReservoirHydro,Water,StYr,2035.0
 Sounda Gorge,Congo,ReservoirHydro,Water,Capacity,500.0
@@ -1487,10 +1487,10 @@ Sounda Gorge,Congo,ReservoirHydro,Water,BuildLimitperYear,600.0
 Mwadingusha,DRC_South,ReservoirHydro,Water,Status,1.0
 Mwadingusha,DRC_South,ReservoirHydro,Water,StYr,1954.0
 Mwadingusha,DRC_South,ReservoirHydro,Water,RetrYr,2060.0
-Candidate_BESS_EquatorialGuinea,EquatorialGuinea,STORAGE,Battery,Status,3.0
-Candidate_BESS_EquatorialGuinea,EquatorialGuinea,STORAGE,Battery,StYr,2030.0
-Candidate_BESS_EquatorialGuinea,EquatorialGuinea,STORAGE,Battery,Capacity,4000.0
-Candidate_BESS_EquatorialGuinea,EquatorialGuinea,STORAGE,Battery,BuildLimitperYear,17.0
+Candidate_BESS_EquatorialGuinea,EquatorialGuinea,Storage,Battery,Status,3.0
+Candidate_BESS_EquatorialGuinea,EquatorialGuinea,Storage,Battery,StYr,2030.0
+Candidate_BESS_EquatorialGuinea,EquatorialGuinea,Storage,Battery,Capacity,4000.0
+Candidate_BESS_EquatorialGuinea,EquatorialGuinea,Storage,Battery,BuildLimitperYear,17.0
 NSTT,Chad,PV,Solar,Status,3.0
 NSTT,Chad,PV,Solar,StYr,2028.0
 NSTT,Chad,PV,Solar,Capacity,30.0
@@ -1570,7 +1570,7 @@ Nzilo,DRC_South,ReservoirHydro,Water,Status,1.0
 Nzilo,DRC_South,ReservoirHydro,Water,StYr,1954.0
 Nzilo,DRC_South,ReservoirHydro,Water,RetrYr,2060.0
 Nzilo,DRC_South,ReservoirHydro,Water,Capacity,110.0
-Candidate_BESS_DRCSouth,DRC_South,STORAGE,Battery,Status,3.0
-Candidate_BESS_DRCSouth,DRC_South,STORAGE,Battery,StYr,2035.0
-Candidate_BESS_DRCSouth,DRC_South,STORAGE,Battery,Capacity,400000.0
-Candidate_BESS_DRCSouth,DRC_South,STORAGE,Battery,BuildLimitperYear,74.0
+Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,Status,3.0
+Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,StYr,2035.0
+Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,Capacity,400000.0
+Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,BuildLimitperYear,74.0

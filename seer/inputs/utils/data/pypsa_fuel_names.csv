@@ -1,0 +1,74 @@
+standard_name,synonym
+coal,Coal
+coal,CoalEx
+coal,CoalNew
+coal,DomesticCoal
+coal,ImportedCoal
+coal,CoalCCS
+coal,Coal_CCS
+coal,Coke
+coal,Steam
+lignite,Lignite
+oil,Diesel
+oil,HFO
+oil,FuelOil
+oil,LFO
+gas,Gas
+gas,LNG
+gas,Methane
+gas,CCGTEx
+gas,CCGTNew
+gas,CCGT_CCS
+gas,GasCCS
+gas,OCGTEx
+gas,OCGTNew
+gas,GasResidual
+uranium,Uranium
+uranium,Nuclear
+uranium,CustomFuel
+solid biomass,Woodchip
+solid biomass,Biomass
+solid biomass,Bagasse
+solid biomass,Biomas
+solid biomass,Biomass_CCS
+solid biomass,LicorNegro
+peat,Peat
+waste,Waste
+battery,Battery
+battery,BESS
+battery,BESS1h
+battery,BESS2h
+battery,BESS3h
+water,Water
+water,Pumped
+water,PumpedHy
+water,PumpedHydro
+water,HydroStorEx
+water,HydroStorNew
+solar,PV
+solar,PVEx
+solar,PVNew
+solar,Solar
+solar,SolarTracker
+wind,Wind
+wind,WindEx
+wind,WindNew
+wind,Offshore
+wind,OffshoreWind
+wind,OnshoreWind
+geothermal,Geothermal
+import,Import
+import,Imports
+hydrogen,Hydrogen
+hydrogen,GreenHydrogen
+solar,CSP
+water,MPA_Main
+water,MPA_Opt
+water,MPA_Reg
+water,RoREx
+water,RoRNew
+water,Hydro
+water,PHP
+solid biomass,Biogas
+chem_reaction,ChemReaction
+wind,OSW

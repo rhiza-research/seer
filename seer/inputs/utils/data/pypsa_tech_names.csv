@@ -1,0 +1,140 @@
+standard_name,synonym,fuel
+battery storage,BESS,
+battery storage,BESS1h,
+battery storage,BESS2h,
+battery storage,BESS3h,
+battery storage,Battery,
+battery storage,Storage,
+PHS,HydroStorEx,
+PHS,HydroStorNew,
+PHS,PumpedHy,
+PHS,STO HY,
+battery storage,Storage-Battery,
+battery storage,STO HY-Battery,
+PHS,Storage-Water,
+PHS,Storage-Pumped,
+PHS,Storage-Hydro,
+PHS,STO HY-Water,
+PHS,STO HY-Pumped,
+PHS,STO HY-Hydro,
+biomass,Woodchip,solid biomass
+biomass,Biomass,solid biomass
+biomass,Bagasse,solid biomass
+biomass,Biomas,solid biomass
+biomass,BiomassPlant,solid biomass
+biomass,Biomass_CCS,solid biomass
+biomass,Biogas,solid biomass
+biomass,LicorNegro,solid biomass
+coal,Coal,coal
+coal,CoalEx,coal
+coal,CoalNew,coal
+coal,DomesticCoal,coal
+coal,ImportedCoal,coal
+coal,CoalCCS,coal
+coal,Coal_CCS,coal
+coal,Coke,coal
+nuclear,Uranium,uranium
+nuclear,Nuclear,uranium
+nuclear,NUC,uranium
+geothermal,Geothermal,
+geothermal,GEO,
+hydrogen_CCGT,CCGTH2,
+oil,Diesel,oil
+oil,HFO,oil
+oil,FuelOil,oil
+CCGT,CCGT,gas
+CCGT,CCGTEx,gas
+CCGT,CCGTNew,gas
+CCGT,Gas,gas
+CCGT,LNG,gas
+CCGT,Methane,gas
+CCGT,CCGT_CCS,gas
+CCGT,GasCCS,gas
+OCGT,OCGT,gas
+OCGT,OCGTNew,gas
+OCGT,OCGT_CCS,gas
+OCGT,GasResidual,gas
+hydro,MPA_Main,
+hydro,MPA_Opt,
+hydro,MPA_Reg,
+hydro,PHP,
+hydro,ReservoirHydro,
+hydro,Hydro,
+hydro,Water,
+ror,ROR,
+ror,RoREx,
+ror,RoRNew,
+import,Import,
+import,Imports,
+import,ImportTransmission,
+solar-utility,PV,
+solar-utility,PVEx,
+solar-utility,PVNew,
+solar-utility,Solar,
+solar-utility,SolarTracker,
+solar-rooftop,Rooftop,
+solar-rooftop,RPV,
+csp-tower,CSP,
+csp-tower,CSPPlant,
+offwind,Offshore,
+offwind,OffshoreWind,
+offwind,OSW,
+onwind,OnshoreWind,
+onwind,Wind,
+onwind,WindEx,
+onwind,WindNew,
+hydrogen_CCGT,Hydrogen,
+hydrogen_CCGT,GreenHydrogen,
+chem_reaction,ChemReaction,
+coal,ICE-Coal,coal
+coal,ICE-CoalEx,coal
+coal,ICE-CoalNew,coal
+coal,ICE-DomesticCoal,coal
+coal,ICE-ImportedCoal,coal
+coal,ICE-CoalCCS,coal
+coal,ICE-Coal_CCS,coal
+coal,ICE-Coke,coal
+coal,ST-Coal,coal
+coal,ST-CoalEx,coal
+coal,ST-CoalNew,coal
+coal,ST-DomesticCoal,coal
+coal,ST-ImportedCoal,coal
+coal,Steam-Coal,coal
+coal,Steam-CoalEx,coal
+coal,Steam-CoalNew,coal
+oil,ICE-Diesel,oil
+oil,ICE-HFO,oil
+oil,ICE-FuelOil,oil
+oil,ST-Diesel,oil
+oil,ST-HFO,oil
+oil,ST-FuelOil,oil
+oil,Steam-Diesel,oil
+oil,Steam-HFO,oil
+oil,Steam-FuelOil,oil
+biomass,ICE-Biomass,solid biomass
+biomass,ICE-Bagasse,solid biomass
+biomass,ICE-Woodchip,solid biomass
+biomass,ICE-LicorNegro,solid biomass
+biomass,ST-Biomass,solid biomass
+biomass,Steam-Biomass,solid biomass
+CCGT,ICE-Gas,gas
+CCGT,ICE-LNG,gas
+CCGT,ICE-Methane,gas
+OCGT,ICE-GasResidual,gas
+lignite,ICE-Lignite,lignite
+lignite,ST-Lignite,lignite
+lignite,Steam-Lignite,lignite
+CCGT,ST-Gas,gas
+CCGT,Steam-Gas,gas
+geothermal,ST-Geothermal,
+geothermal,Steam-Geothermal,
+coal,ST-Peat,coal
+coal,Steam-Peat,coal
+biomass,ST-Waste,solid biomass
+biomass,Steam-Waste,solid biomass
+oil,ICE-LFO,oil
+oil,ST-LFO,oil
+oil,Steam-LFO,oil
+coal,Steam-Steam,coal
+nuclear,ST-Uranium,uranium
+nuclear,Steam-Uranium,uranium

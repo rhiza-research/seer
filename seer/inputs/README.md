@@ -137,8 +137,8 @@ generator.
 | --- | --- |
 | `generator` | generator name (unique id, used to join `generator_costs.csv`) |
 | `zone` | zone id the generator sits in |
-| `tech` | technology category |
-| `fuel` | fuel/carrier used to generate |
+| `tech` | technology category, aligned to [PyPSA's technology-data](https://github.com/PyPSA/technology-data) naming (e.g. `CCGT`, `solar-utility`, `onwind`) -- see `seer/inputs/utils` for the synonym tables that standardize raw region-specific spellings to this vocabulary |
+| `fuel` | fuel/carrier used to generate, same PyPSA-aligned vocabulary (e.g. `gas`, `coal`); empty for renewables/storage/import, which have no fuel commodity |
 | `capacity` | nameplate capacity, MW (existing generators only; ignored/NaN for build options) |
 | `expandable` | `True` if this is a build option (capacity decided by the optimizer per investment year), `False` if it's fixed existing capacity |
 | `isre` | renewable-technology flag (boolean): whether output is driven by `renewable_profiles.csv` |
@@ -176,7 +176,7 @@ capacity is `capacity_mw * duration_hours`, derived wherever it's needed rather 
 | --- | --- |
 | `storage` | storage unit name (unique id, joins `storage_costs.csv`) |
 | `zone` | zone id |
-| `tech` | storage technology/carrier (e.g. `Battery`, `PumpedHydro`) |
+| `tech` | storage technology/carrier, aligned to [PyPSA's technology-data](https://github.com/PyPSA/technology-data) naming (e.g. `battery storage`, `PHS`) |
 | `capacity_mw` | power capacity, MW (existing units only; ignored/NaN for build options) |
 | `duration_hours` | hours of storage at rated power; energy capacity is `capacity_mw * duration_hours` |
 | `expandable` | `True` if this is a build option, `False` if fixed existing capacity |

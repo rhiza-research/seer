@@ -4,6 +4,7 @@ import warnings
 import pandas as pd
 
 from .generator_params import NO_RETIREMENT_YEAR
+from ..utils import standardize_tech
 
 
 def build_storage_params(data_path="data/Gambia/", years=None):
@@ -47,13 +48,16 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     """Pull the remaining attributes from the generator custom-parameters file - storage plants
     are just generators with tech="Storage" there - matched here by name, same as generator_constants.
     """
-    storage_gen_params = custom_gen_params[custom_gen_params["generator"].isin(storage_constants["storage"])]
+    storage_gen_params = custom_gen_params[custom_gen_params["generator"].isin(storage_constants["storage"])].copy()
 
-    # zone and tech (fuel) are plain columns rather than "parameters" rows. tech naming is
-    # aligned to fixed values ("Battery", "PumpedHydro") upstream in gdx.enrich_data's
-    # normalize_storage_tech, regardless of each region's raw naming quirks.
-    zone_tech = storage_gen_params[["generator", "zone", "fuel"]].drop_duplicates().rename(
-        columns={"generator": "storage", "fuel": "tech"}
+    # zone and tech (the storage carrier, e.g. "battery storage"/"PHS") are plain columns
+    # rather than "parameters" rows. The raw "fuel" column here is the actual carrier
+    # (Battery/Water/Pumped/...); the raw "tech" column (Storage/STO HY/...) is itself an
+    # ambiguous placeholder that only disambiguates Water/Pumped/Hydro (pumped-hydro storage)
+    # from Battery once paired with it -- see seer.inputs.utils's compound tech-fuel synonyms.
+    storage_gen_params["tech"] = standardize_tech(storage_gen_params["tech"], storage_gen_params["fuel"])
+    zone_tech = storage_gen_params[["generator", "zone", "tech"]].drop_duplicates().rename(
+        columns={"generator": "storage"}
     )
     storage_constants = storage_constants.merge(zone_tech, on="storage", how="left")
 
@@ -69,8 +73,8 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     # fill missing lifetimes (some regions have no "Life" value at all for any storage
     # plant) with a default by tech.
     default_lifetime = {
-        "Battery": 15,
-        "PumpedHydro": 50,
+        "battery storage": 15,
+        "PHS": 50,
     }
     missing_life = storage_constants["life"].isna()
     storage_constants.loc[missing_life, "life"] = storage_constants.loc[missing_life, "tech"].map(default_lifetime)

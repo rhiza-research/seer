@@ -1,154 +1,20 @@
-"""Fuel/tech domain lookups and generator & VRE profile enrichment."""
+"""Fuel/tech domain lookups and generator & VRE profile enrichment.
+
+Standardizing raw tech/fuel *values* (e.g. "CCGTEx" -> a canonical PyPSA technology name) is
+deliberately NOT done here -- it happens once, centrally, in seer.inputs.utils, so every raw
+region-specific spelling is seen and mapped in one place rather than split across gdx's own
+ad hoc vocabulary and a second seer-side pass. This module still normalizes raw *parameter
+names* (STORAGE_PARAM_ALIAS, GEN_PARAM_ALIAS -- e.g. "Capacity" vs "CapacityMWh") and does the
+structural work of reconstructing zone/fuel/tech for generators when a region's raw gdx has
+no gmap symbol at all -- both of those need GAMS-specific domain knowledge seer.inputs has no
+way to reconstruct on its own, so they stay here.
+"""
 
 # Import relevant packages
 import re
 import numpy as np
 import pandas as pd
 from .standardize_profiles import standardize_all_profiles
-
-# Keys are the stripped fuel_name strings from ftfindex (e.g. "CCGTEx").
-# Values are (fuel_label, tech_label) for populating pGenDataInputCustom.
-FUEL_NAME_MAP = {
-    # ── Battery ──────────────────────────────────────────────────────────────
-    "BESS":             ("Battery",     "STORAGE"),
-    "BESS1h":           ("Battery",     "STORAGE"),
-    "BESS2h":           ("Battery",     "STORAGE"),
-    "BESS3h":           ("Battery",     "STORAGE"),
-    "Battery":          ("Battery",     "STORAGE"),
-
-    # ── Biomass ───────────────────────────────────────────────────────────────
-    "Woodchip":         ("Biomass",     "BiomassPlant"),
-    "Biomass":          ("Biomass",     "BiomassPlant"),
-    "Bagasse":          ("Biomass",     "BiomassPlant"),
-    "Biomas":           ("Biomass",     "BiomassPlant"),   # note: case differs in tech audit
-    "Biomass_CCS":      ("Biomass",     "BiomassPlant"),
-
-    # ── Coal ─────────────────────────────────────────────────────────────────
-    "Coal":             ("Coal",        "ICE"),
-    "CoalEx":           ("Coal",        "ICE"),
-    "CoalNew":          ("Coal",        "ICE"),
-    "DomesticCoal":     ("Coal",        "ICE"),
-    "ImportedCoal":     ("Coal",        "ICE"),
-
-    # ── Coal CCS ─────────────────────────────────────────────────────────────
-    "CoalCCS":          ("CoalCCS",     "ICE"),
-    "Coal_CCS":         ("CoalCCS",     "ICE"),
-
-    # ── Custom / Nuclear / Geothermal ────────────────────────────────────────
-    "Uranium":          ("CustomFuel",  "NUC"),
-    "Nuclear":          ("CustomFuel",  "NUC"),
-    "Geothermal":       ("CustomFuel",  "GEO"),      # also appears under Geothermal fuel_type
-
-    # ── Diesel ───────────────────────────────────────────────────────────────
-    "Diesel":           ("Diesel",      "ICE"),
-
-    # ── Gas ──────────────────────────────────────────────────────────────────
-    "CCGTEx":           ("Gas",         "CCGT"),
-    "CCGTNew":          ("Gas",         "CCGT"),
-    "OCGTEx":           ("Gas",         "OCGT"),
-    "OCGTNew":          ("Gas",         "OCGT"),
-    "Gas":              ("Gas",         "CCGT"),     # verify: could also be GT depending on country
-    "LNG":              ("Gas",         "CCGT"),
-
-    # ── Gas CCS ──────────────────────────────────────────────────────────────
-    "CCGT_CCS":         ("GasCCS",      "CCGT"),
-    "GasCCS":           ("GasCCS",      "GasCCS"),
-
-    # ── Geothermal ───────────────────────────────────────────────────────────
-    "Geothermal":       ("Geothermal",  "GEO"),      # fuel_type=Geothermal (Tanzania, Turkiye)
-
-    # ── HFO ──────────────────────────────────────────────────────────────────
-    "HFO":              ("HFO",         "ICE"),
-    "FuelOil":          ("HFO",         "ICE"),
-
-    # ── Hydro ────────────────────────────────────────────────────────────────
-    "Hydro":            ("Hydro",       "STO HY"),   # verify: generic — could be ROR or reservoir
-    "HydroStorEx":      ("Hydro",       "STO HY"),
-    "HydroStorNew":     ("Hydro",       "STO HY"),
-    "MPA_Main":         ("Hydro",       "ReservoirHydro"),
-    "MPA_Opt":          ("Hydro",       "ReservoirHydro"),
-    "MPA_Reg":          ("Hydro",       "ReservoirHydro"),
-    "PHP":              ("Hydro",       "ReservoirHydro"),
-    "RoREx":            ("Hydro",       "ROR"),
-    "RoRNew":           ("Hydro",       "ROR"),
-    "Water":            ("Hydro",       "STO HY"),   # verify: generic — confirm ROR vs reservoir
-    "PumpedHy":         ("Hydro",       "STO HY"),
-
-    # ── Hydrogen ─────────────────────────────────────────────────────────────
-    "GreenHydrogen":    ("Hydrogen",    "CCGTH2"),
-    "Hydrogen":         ("Hydrogen",    "CCGTH2"),
-
-    # ── Import ───────────────────────────────────────────────────────────────
-    "Imports":          ("Import",      "ImportTransmission"),
-    "Import_SAR":       ("Import",      "ImportTransmission"),
-    "Import_SAPP":      ("Import",      "ImportTransmission"),
-    "Import_EDM":       ("Import",      "ImportTransmission"),
-    "Import":           ("Import",      "ImportTransmission"),
-
-    # ── Solar ────────────────────────────────────────────────────────────────
-    "CSP":              ("Solar",       "CSPPlant"),
-    "PV":               ("Solar",       "PV"),
-    "PVEx":             ("Solar",       "PV"),
-    "PVNew":            ("Solar",       "PV"),
-    "Rooftop":          ("Solar",       "PV"),       # verify: could be PVwSTO if co-located storage
-
-    # ── Wind ─────────────────────────────────────────────────────────────────
-    "Offshore":         ("Wind",        "OffshoreWind"),
-    "OffshoreWind":     ("Wind",        "OffshoreWind"),
-    "OnshoreWind":      ("Wind",        "OnshoreWind"),
-    "Wind":             ("Wind",        "Wind"),     # verify: onshore vs offshore
-    "WindEx":           ("Wind",        "Wind"),
-    "WindNew":          ("Wind",        "Wind"),
-}
-
-# Aliases from the GAMS `tech` set (as seen in gmap / pVREProfile) to the
-# tech_label vocabulary produced by FUEL_NAME_MAP for pGenDataInputCustom.
-# Only values that differ are listed; anything already matching a
-# FUEL_NAME_MAP tech_label (PV, CCGT, OCGT, ICE, BiomassPlant, CSPPlant,
-# OffshoreWind, OnshoreWind, ROR, ReservoirHydro, ImportTransmission, ...)
-# passes through unchanged.
-TECH_SET_ALIAS = {
-    "Storage":    "STORAGE",
-    "STO HY":     "STORAGE",  # pumped-hydro storage, named as a hydro tech in some regions
-    "Geothermal": "GEO",
-    "Nuclear":    "NUC",
-    "CCGT_CCS":   "GasCCS",
-    "OCGT_CCS":   "GasCCS",
-    "Methane":    "CCGT",
-    "RPV":        "PV",
-    "Rooftop":    "PV",
-    "ST":         "ICE",
-}
-
-# Aliases for storage carrier (fuel) names, applied only to rows whose tech is/aliases to
-# STORAGE -- "Water"/"Pumped"/"Hydro" all mean the same thing (pumped-hydro storage) across
-# different regions' raw gdx. Battery is already spelled consistently everywhere.
-STORAGE_CARRIER_ALIAS = {
-    "Water":  "PumpedHydro",
-    "Pumped": "PumpedHydro",
-    "Hydro":  "PumpedHydro",
-}
-
-
-def normalize_storage_tech(df):
-    """Align storage tech/fuel naming in a pGenDataInputCustom-shaped dataframe (columns
-    tech, fuel) to fixed canonical values: tech "STORAGE", fuel/carrier "Battery" or
-    "PumpedHydro" -- so downstream code (e.g. default lifetime lookups) can use fixed keys
-    instead of pattern-matching plant names."""
-    if "tech" not in df.columns:
-        return df
-    df = df.copy()
-    # gamspy returns dimension columns as pandas Categorical -- cast to plain strings so
-    # assigning a new value ("STORAGE") doesn't fail for not being an existing category
-    df["tech"] = df["tech"].astype(str)
-    if "fuel" in df.columns:
-        df["fuel"] = df["fuel"].astype(str)
-    resolved_tech = df["tech"].map(TECH_SET_ALIAS).fillna(df["tech"])
-    is_storage = resolved_tech.eq("STORAGE")
-    df.loc[is_storage, "tech"] = "STORAGE"
-    if "fuel" in df.columns:
-        df.loc[is_storage, "fuel"] = df.loc[is_storage, "fuel"].replace(STORAGE_CARRIER_ALIAS)
-    return df
 
 # Aliases for pStorageDataInput parameter names (the "parameters" column values) that vary
 # across regions/vintages of the raw pStorDataExcel symbol -- e.g. some regions use plain
@@ -179,35 +45,53 @@ def _strip_ordinal_prefix(name) -> str:
 
 def build_fuel_id_lookup(ftf):
     """
-    Build a {fuel_id: (fuel_label, tech_label)} dict from a country's ftfindex.
-    For each country, maps the numeric fuel_id in pGenDataExcel to (fuel_label, tech_label)
-    via FUEL_NAME_MAP
+    Build a {fuel_id: (fuel_name, tech_name)} dict from a country's ftfindex: the raw,
+    un-standardized names associated with each numeric fuel_id in pGenDataExcel.
 
-    Returns and empty dict if the structure is not recognized
+    ftfindex's declared column order (see gdx/data/symbol_mapping.csv) is (fuel, tech,
+    value) -- a broader category (e.g. "Hydro") and a more specific label (e.g. "Water").
+    This is called on the *raw* gamspy-loaded frame, before symbol-mapping has renamed its
+    columns to those real names (they're still generic, e.g. "uni_0"/"uni_1"/"value") -- so
+    columns are read positionally when they aren't already literally named "fuel"/"tech".
+
+    Both fuel_name and tech_name are kept rather than collapsed to one, since either can be
+    blank for a given row (some regions only populate one of the two) and losing whichever
+    one IS populated would silently drop real information; when one side is blank, the
+    other's value is used for both placeholders. Standardizing these raw names to a
+    canonical tech/fuel vocabulary happens downstream, in seer.inputs.utils (see this
+    module's docstring for why).
+
+    Returns an empty dict if the structure is not recognized.
     """
 
     ftf = ftf.copy()
     ftf.columns = ftf.columns.str.strip().str.lower()
 
-    if len(ftf.columns) < 2:
+    def _clean(value):
+        stripped = _strip_ordinal_prefix(value) if pd.notna(value) else ""
+        return stripped if stripped.strip() else None
+
+    if "fuel" in ftf.columns and "tech" in ftf.columns:
+        fuel_col, tech_col = "fuel", "tech"
+        id_col = next((c for c in ftf.columns if c not in ("fuel", "tech")), None)
+    elif len(ftf.columns) >= 3:
+        fuel_col, tech_col, id_col = ftf.columns[0], ftf.columns[1], ftf.columns[2]
+    elif len(ftf.columns) == 2:
+        fuel_col = tech_col = ftf.columns[0]
+        id_col = ftf.columns[1]
+    else:
         return {}
 
-    if len(ftf.columns) >= 3:
-        name_col = ftf.columns[1]
-        id_col = ftf.columns[2]
-    else:
-        name_col = None
-        id_col = ftf.columns[1]
+    if id_col is None:
+        return {}
 
     lookup = {}
     for _, row in ftf.iterrows():
         fuel_id = row[id_col]
-        fuel_name = _strip_ordinal_prefix(row[name_col]) if name_col else None
-        mapped = FUEL_NAME_MAP.get(fuel_name)
-        if mapped:
-            lookup[fuel_id] = mapped
-        elif fuel_name:
-            print(f"  [warn] no mapping found for fuel_name: '{fuel_name}'")
+        fuel_name = _clean(row[fuel_col])
+        tech_name = _clean(row[tech_col])
+        if fuel_name or tech_name:
+            lookup[fuel_id] = (fuel_name or tech_name, tech_name or fuel_name)
 
     return lookup
 
@@ -279,6 +163,9 @@ def enrich_gen_data(region, country_data, country_data_raw):
         fuel_id_series = fuel_id_series.fillna(fuel2) if fuel_id_series is not None else fuel2
 
     if fuel_id_series is not None and fuel_id_lookup:
+        # fuel_id_lookup gives (fuel_name, tech_name) raw placeholders per fuel_id --
+        # standardizing them into canonical tech/fuel values happens downstream, in
+        # seer.inputs.utils
         gen_wide["_fuel"] = fuel_id_series.map({k: v[0] for k, v in fuel_id_lookup.items()})
         gen_wide["_tech"] = fuel_id_series.map({k: v[1] for k, v in fuel_id_lookup.items()})
     else:
@@ -312,21 +199,16 @@ def enrich_gen_data(region, country_data, country_data_raw):
 
 
 def map_vre_tech(region, symbol_name, df):
-    """Normalize df['tech'] against TECH_SET_ALIAS, falling back to the
-    FUEL_NAME_MAP tech_label. Strips any leading GAMS UEL ordinal prefix
-    (e.g. "18.WindNew") before either lookup, since raw tech/fuel set
-    labels from some regions' GDX files retain it. Leaves values
-    unrecognized by both tables as their stripped-but-unmapped form.
+    """Strip any leading GAMS UEL ordinal prefix (e.g. "18.WindNew" -> "WindNew") from
+    df['tech'] -- a raw GDX artifact, not a naming choice. Standardizing the resulting raw
+    tech spelling to a canonical vocabulary happens downstream, in seer.inputs.utils (see
+    this module's docstring for why).
     """
 
     if "tech" not in df.columns:
         return df
     df = df.copy()
-    stripped = df["tech"].map(_strip_ordinal_prefix)
-    alias = stripped.map(TECH_SET_ALIAS)
-    fuel_map_tech = stripped.map(lambda name: FUEL_NAME_MAP[name][1] if name in FUEL_NAME_MAP else np.nan)
-    df["tech"] = alias.fillna(fuel_map_tech).fillna(stripped)
-
+    df["tech"] = df["tech"].map(_strip_ordinal_prefix)
     return df
 
 
@@ -409,9 +291,9 @@ def enrich_vre_zone_tech(region: str, country_data: dict) -> pd.DataFrame | None
 def enrich_gen_vre_data(region: str, country_data: dict, country_data_raw: dict) -> dict:
     """
     Populate missing zone, fuel, and tech columns in pGenDataInputCustom using
-    pZoneIndex, ftfindex, and FUEL_NAME_MAP. Also populate zone/tech in
-    pVREgenProfile via gmap, and normalize tech values in pVREProfile /
-    pVREgenProfile against TECH_SET_ALIAS.
+    pZoneIndex and ftfindex (raw, un-standardized fuel names -- see this module's
+    docstring). Also populate zone/tech in pVREgenProfile via gmap, and strip GAMS UEL
+    ordinal prefixes from tech values in pVREProfile / pVREgenProfile.
 
     Returns
     -------
@@ -467,9 +349,10 @@ def normalize_gen_params(df):
 
 def reconcile_data(all_data, all_data_raw):
     """
-    Apply enrich_gen_vre_data() to every country/region  — enriching
-    pGenDataInputCustom and standardizing the pVREProfile / pVREgenProfile
-    tech columns against FUEL_NAME_MAP and merge the results back in.
+    Apply enrich_gen_vre_data() to every country/region — enriching pGenDataInputCustom and
+    (for pVREProfile/pVREgenProfile) stripping GAMS UEL ordinal prefixes from tech values,
+    then merging the results back in. Tech/fuel *value* standardization (raw spelling ->
+    canonical name) is not done here -- see this module's docstring.
 
     Apply standardize_all_profiles to ensure demand and VRE generation
     profiles are all standardized for ingestion into SEER schema
@@ -491,7 +374,7 @@ def reconcile_data(all_data, all_data_raw):
         for gen_symbol in ("pGenDataInputCustom", "pGenDataInputDefault"):
             gen_df = updated.get(gen_symbol)
             if gen_df is not None and not gen_df.empty:
-                updated[gen_symbol] = normalize_storage_tech(normalize_gen_params(gen_df))
+                updated[gen_symbol] = normalize_gen_params(gen_df)
 
         updated.update(standardize_all_profiles(region, updated))
         reconciled[region] = updated
