@@ -5,7 +5,7 @@ ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,16.0
 ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 ExistingSmallHydro2000_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -19,7 +19,7 @@ AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,Zone,9.0
 AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,Capacity,195.0
 AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,VOM,0.55
 AH_Cambambe_C1,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -33,7 +33,7 @@ AH_Capanda,Angola,STORAGE,PumpedHydro,Zone,9.0
 AH_Capanda,Angola,STORAGE,PumpedHydro,Capacity,520.0
 AH_Capanda,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 AH_Capanda,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-AH_Capanda,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+AH_Capanda,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 AH_Capanda,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 AH_Capanda,Angola,STORAGE,PumpedHydro,VOM,0.55
 AH_Capanda,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -47,7 +47,7 @@ ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,135.4
 ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 ExistingSmallHydro2012_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -61,14 +61,14 @@ AH_Matala,Angola,STORAGE,PumpedHydro,Zone,9.0
 AH_Matala,Angola,STORAGE,PumpedHydro,Capacity,40.8
 AH_Matala,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 AH_Matala,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-AH_Matala,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+AH_Matala,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 AH_Matala,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 AH_Matala,Angola,STORAGE,PumpedHydro,VOM,0.55
 AH_Matala,Angola,STORAGE,PumpedHydro,Life,50.0
 AH_Matala,Angola,STORAGE,PumpedHydro,Type,12.0
 AH_Matala,Angola,STORAGE,PumpedHydro,fuel1,3.0
 AH_Matala,Angola,STORAGE,PumpedHydro,Status,1.0
-AH_Matala,Angola,STORAGE,PumpedHydro,Error,50637.471826135756
+AH_Matala,Angola,STORAGE,PumpedHydro,Error,50637.47182613576
 LuandaOCGT_TH_AGO,Angola,CCGT,Gas,StYr,1980.0
 LuandaOCGT_TH_AGO,Angola,CCGT,Gas,RetrYr,2019.0
 LuandaOCGT_TH_AGO,Angola,CCGT,Gas,Zone,9.0
@@ -120,7 +120,7 @@ CIF_TH_AGO,Angola,CCGT,Gas,Life,30.0
 CIF_TH_AGO,Angola,CCGT,Gas,Type,1.0
 CIF_TH_AGO,Angola,CCGT,Gas,fuel1,2.0
 CIF_TH_AGO,Angola,CCGT,Gas,Status,1.0
-CIF_TH_AGO,Angola,CCGT,Gas,Error,21152.699312599998
+CIF_TH_AGO,Angola,CCGT,Gas,Error,21152.6993126
 CIF_TH_AGO,Angola,CCGT,Gas,MinLimitShare,0.2
 CIF_TH_AGO,Angola,CCGT,Gas,HeatRate,13.1746563
 CIF_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
@@ -235,7 +235,7 @@ SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,Zone,11.0
 SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,Capacity,187.0
 SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,RampUpRate,1.0
 SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,RampDnRate,1.0
-SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.19343517249130504
+SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.193435172491305
 SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,FOMperMW,46500.0
 SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,VOM,0.55
 SmallHydro_HY_ZAR,DRC,STORAGE,PumpedHydro,Life,50.0
@@ -361,7 +361,7 @@ Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,Zone,11.0
 Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,Capacity,108.4
 Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,RampUpRate,1.0
 Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,RampDnRate,1.0
-Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.19343517249130504
+Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.193435172491305
 Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,FOMperMW,46500.0
 Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,VOM,0.55
 Nzoro_HY_ZAR,DRC,STORAGE,PumpedHydro,Life,50.0
@@ -445,7 +445,7 @@ Mzuzu_Luwinga_ICE_MWI,Malawi,ICE,Diesel,fuel1,11.0
 Mzuzu_Luwinga_ICE_MWI,Malawi,ICE,Diesel,Status,1.0
 Mzuzu_Luwinga_ICE_MWI,Malawi,ICE,Diesel,Error,50695.76433841981
 Mzuzu_Luwinga_ICE_MWI,Malawi,ICE,Diesel,MinLimitShare,0.2
-Mzuzu_Luwinga_ICE_MWI,Malawi,ICE,Diesel,HeatRate,10.989338419810295
+Mzuzu_Luwinga_ICE_MWI,Malawi,ICE,Diesel,HeatRate,10.989338419810297
 Lilongwe,Malawi,ICE,Diesel,StYr,2000.0
 Lilongwe,Malawi,ICE,Diesel,RetrYr,2060.0
 Lilongwe,Malawi,ICE,Diesel,Zone,12.0
@@ -461,7 +461,7 @@ Lilongwe,Malawi,ICE,Diesel,fuel1,11.0
 Lilongwe,Malawi,ICE,Diesel,Status,1.0
 Lilongwe,Malawi,ICE,Diesel,Error,50696.66433841981
 Lilongwe,Malawi,ICE,Diesel,MinLimitShare,0.2
-Lilongwe,Malawi,ICE,Diesel,HeatRate,10.989338419810295
+Lilongwe,Malawi,ICE,Diesel,HeatRate,10.989338419810297
 CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,StYr,2000.0
 CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
@@ -475,14 +475,14 @@ CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
 CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Type,12.0
 CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,fuel1,3.0
 CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Status,1.0
-CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Error,51332.950000000004
+CahoraBassa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Error,51332.95
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,StYr,2000.0
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Capacity,117.0
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.55
 Existing_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -569,7 +569,7 @@ RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,Life,30.0
 RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,Type,1.0
 RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,fuel1,2.0
 RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,Status,1.0
-RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,Error,12325.041877994001
+RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,Error,12325.041877994
 RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,MinLimitShare,0.06
 RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,HeatRate,9.990938997
 RessanoGarciaEDM/Sasol_TH_MOZ,Mozambique,CCGT,Gas,fuel2,7.0
@@ -597,7 +597,7 @@ RessanoGarciaGigawatt_TH_MOZ,Mozambique,CCGT,Gas,MinUtilization,0.5
 Temane_TH_MOZ,Mozambique,CCGT,Gas,StYr,2000.0
 Temane_TH_MOZ,Mozambique,CCGT,Gas,RetrYr,2055.0
 Temane_TH_MOZ,Mozambique,CCGT,Gas,Zone,4.0
-Temane_TH_MOZ,Mozambique,CCGT,Gas,Capacity,1.8599999999999999
+Temane_TH_MOZ,Mozambique,CCGT,Gas,Capacity,1.86
 Temane_TH_MOZ,Mozambique,CCGT,Gas,RampUpRate,1.0
 Temane_TH_MOZ,Mozambique,CCGT,Gas,RampDnRate,1.0
 Temane_TH_MOZ,Mozambique,CCGT,Gas,ResLimShare,0.4
@@ -675,7 +675,7 @@ Paratus_TH_NAM,Namibia,ICE,HFO,Life,30.0
 Paratus_TH_NAM,Namibia,ICE,HFO,Type,10.0
 Paratus_TH_NAM,Namibia,ICE,HFO,fuel1,7.0
 Paratus_TH_NAM,Namibia,ICE,HFO,Status,1.0
-Paratus_TH_NAM,Namibia,ICE,HFO,Error,12092.875447274959
+Paratus_TH_NAM,Namibia,ICE,HFO,Error,12092.87544727496
 Paratus_TH_NAM,Namibia,ICE,HFO,MinLimitShare,0.06
 Paratus_TH_NAM,Namibia,ICE,HFO,HeatRate,10.41544727496
 VanEck_TH_NAM,Namibia,ICE,Coal,StYr,1972.0
@@ -853,7 +853,7 @@ Avon_TH_ZAF,South_Africa,ICE,HFO,Life,30.0
 Avon_TH_ZAF,South_Africa,ICE,HFO,Type,1.0
 Avon_TH_ZAF,South_Africa,ICE,HFO,fuel1,7.0
 Avon_TH_ZAF,South_Africa,ICE,HFO,Status,1.0
-Avon_TH_ZAF,South_Africa,ICE,HFO,Error,21977.521078106998
+Avon_TH_ZAF,South_Africa,ICE,HFO,Error,21977.521078107
 Avon_TH_ZAF,South_Africa,ICE,HFO,MinLimitShare,0.2
 Avon_TH_ZAF,South_Africa,ICE,HFO,HeatRate,13.621078107
 Dedisa_TH_ZAF,South_Africa,ICE,HFO,StYr,2015.0
@@ -869,7 +869,7 @@ Dedisa_TH_ZAF,South_Africa,ICE,HFO,Life,30.0
 Dedisa_TH_ZAF,South_Africa,ICE,HFO,Type,1.0
 Dedisa_TH_ZAF,South_Africa,ICE,HFO,fuel1,7.0
 Dedisa_TH_ZAF,South_Africa,ICE,HFO,Status,1.0
-Dedisa_TH_ZAF,South_Africa,ICE,HFO,Error,21475.021078106998
+Dedisa_TH_ZAF,South_Africa,ICE,HFO,Error,21475.021078107
 Dedisa_TH_ZAF,South_Africa,ICE,HFO,MinLimitShare,0.2
 Dedisa_TH_ZAF,South_Africa,ICE,HFO,HeatRate,13.621078107
 Gourikwa_TH_ZAF,South_Africa,ICE,HFO,StYr,2007.0
@@ -917,7 +917,7 @@ Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,Life,30.0
 Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,Type,1.0
 Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,fuel1,2.0
 Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,Status,1.0
-Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,Error,12320.191877993999
+Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,Error,12320.191877994
 Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,MinLimitShare,0.06
 Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,9.990938997
 Sasolburg_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
@@ -1011,7 +1011,7 @@ Camden_TH_ZAF,South_Africa,ICE,Coal,fuel1,1.0
 Camden_TH_ZAF,South_Africa,ICE,Coal,Status,1.0
 Camden_TH_ZAF,South_Africa,ICE,Coal,Error,50530.605571626
 Camden_TH_ZAF,South_Africa,ICE,Coal,MinLimitShare,0.5
-Camden_TH_ZAF,South_Africa,ICE,Coal,HeatRate,10.215571626000001
+Camden_TH_ZAF,South_Africa,ICE,Coal,HeatRate,10.215571626
 Camden_TH_ZAF,South_Africa,ICE,Coal,MinUtilization,0.05
 Camden_TH_ZAF,South_Africa,ICE,Coal,UnitSize,185.125
 Duvha_TH_ZAF,South_Africa,ICE,Coal,StYr,1980.0
@@ -1049,7 +1049,7 @@ Grootvlei_TH_ZAF,South_Africa,ICE,Coal,Error,50172.761013614
 Grootvlei_TH_ZAF,South_Africa,ICE,Coal,MinLimitShare,0.5
 Grootvlei_TH_ZAF,South_Africa,ICE,Coal,HeatRate,10.371013614
 Grootvlei_TH_ZAF,South_Africa,ICE,Coal,MinUtilization,0.05
-Grootvlei_TH_ZAF,South_Africa,ICE,Coal,UnitSize,186.66666666666666
+Grootvlei_TH_ZAF,South_Africa,ICE,Coal,UnitSize,186.66666666666663
 Hendrina_TH_ZAF,South_Africa,ICE,Coal,StYr,1976.0
 Hendrina_TH_ZAF,South_Africa,ICE,Coal,RetrYr,2025.0
 Hendrina_TH_ZAF,South_Africa,ICE,Coal,Zone,1.0
@@ -1083,7 +1083,7 @@ KelvinA_TH_ZAF,South_Africa,ICE,Coal,fuel1,1.0
 KelvinA_TH_ZAF,South_Africa,ICE,Coal,Status,1.0
 KelvinA_TH_ZAF,South_Africa,ICE,Coal,Error,49224.211120559
 KelvinA_TH_ZAF,South_Africa,ICE,Coal,MinLimitShare,0.5
-KelvinA_TH_ZAF,South_Africa,ICE,Coal,HeatRate,12.821120558999999
+KelvinA_TH_ZAF,South_Africa,ICE,Coal,HeatRate,12.821120559
 KelvinA_TH_ZAF,South_Africa,ICE,Coal,MinUtilization,0.05
 KelvinA_TH_ZAF,South_Africa,ICE,Coal,UnitSize,180.0
 KelvinB_TH_ZAF,South_Africa,ICE,Coal,StYr,1964.0
@@ -1119,7 +1119,7 @@ Kendal_TH_ZAF,South_Africa,ICE,Coal,fuel1,1.0
 Kendal_TH_ZAF,South_Africa,ICE,Coal,Status,1.0
 Kendal_TH_ZAF,South_Africa,ICE,Coal,Error,52924.055837766
 Kendal_TH_ZAF,South_Africa,ICE,Coal,MinLimitShare,0.5
-Kendal_TH_ZAF,South_Africa,ICE,Coal,HeatRate,9.665837766000001
+Kendal_TH_ZAF,South_Africa,ICE,Coal,HeatRate,9.665837766
 Kendal_TH_ZAF,South_Africa,ICE,Coal,MinUtilization,0.05
 Kendal_TH_ZAF,South_Africa,ICE,Coal,UnitSize,640.0
 Khanyisa_TH_ZAF,South_Africa,ICE,Coal,StYr,2021.0
@@ -1189,9 +1189,9 @@ Kriel_TH_ZAF,South_Africa,ICE,Coal,Life,30.0
 Kriel_TH_ZAF,South_Africa,ICE,Coal,Type,13.0
 Kriel_TH_ZAF,South_Africa,ICE,Coal,fuel1,1.0
 Kriel_TH_ZAF,South_Africa,ICE,Coal,Status,1.0
-Kriel_TH_ZAF,South_Africa,ICE,Coal,Error,51913.636902652004
+Kriel_TH_ZAF,South_Africa,ICE,Coal,Error,51913.636902652
 Kriel_TH_ZAF,South_Africa,ICE,Coal,MinLimitShare,0.5
-Kriel_TH_ZAF,South_Africa,ICE,Coal,HeatRate,9.246902652000001
+Kriel_TH_ZAF,South_Africa,ICE,Coal,HeatRate,9.246902652
 Kriel_TH_ZAF,South_Africa,ICE,Coal,MinUtilization,0.05
 Kriel_TH_ZAF,South_Africa,ICE,Coal,UnitSize,950.0
 Kusile_I_TH_ZAF,South_Africa,ICE,Coal,StYr,2020.0
@@ -1233,7 +1233,7 @@ Lethabo_TH_ZAF,South_Africa,ICE,Coal,UnitSize,593.0
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,StYr,1990.0
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,RetrYr,2051.0
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,Zone,1.0
-MajubaI_TH_ZAF,South_Africa,ICE,Coal,Capacity,1865.3999999999999
+MajubaI_TH_ZAF,South_Africa,ICE,Coal,Capacity,1865.4
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,RampUpRate,0.33
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,RampDnRate,0.33
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,ResLimShare,0.05
@@ -1245,7 +1245,7 @@ MajubaI_TH_ZAF,South_Africa,ICE,Coal,fuel1,1.0
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,Status,1.0
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,Error,50963.455837766
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,MinLimitShare,0.5
-MajubaI_TH_ZAF,South_Africa,ICE,Coal,HeatRate,9.665837766000001
+MajubaI_TH_ZAF,South_Africa,ICE,Coal,HeatRate,9.665837766
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,MinUtilization,0.05
 MajubaI_TH_ZAF,South_Africa,ICE,Coal,UnitSize,621.8
 MajubaII_TH_ZAF,South_Africa,ICE,Coal,StYr,1985.0
@@ -1404,9 +1404,9 @@ Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,Life,50.0
 Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,Type,13.0
 Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,fuel1,8.0
 Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,Status,1.0
-Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,Error,105917.33119468701
+Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,Error,105917.331194687
 Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,MinLimitShare,0.7
-Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,HeatRate,10.531194687000001
+Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,HeatRate,10.531194687
 Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,MinUtilization,0.6
 Koeberg_NU_ZAF,South_Africa,NUC,CustomFuel,UnitSize,1800.0
 Edwaleni1_HY_SWZ,Eswatini,STORAGE,PumpedHydro,StYr,2000.0
@@ -1535,7 +1535,7 @@ Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,Zone,10.0
 Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,Capacity,204.0
 Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampUpRate,1.0
 Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampDnRate,1.0
-Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.24996964511611097
+Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.2499696451161109
 Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,FOMperMW,46500.0
 Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,VOM,0.55
 Kidatu_HY_TZA,Tanzania,STORAGE,PumpedHydro,Life,50.0
@@ -1563,7 +1563,7 @@ EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,Zone,10.0
 EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,Capacity,20.0
 EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampUpRate,1.0
 EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampDnRate,1.0
-EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.21527649726809853
+EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.2152764972680985
 EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,FOMperMW,46500.0
 EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,VOM,0.55
 EAPower&Mapembasi_HY_TZA,Tanzania,STORAGE,PumpedHydro,Life,50.0
@@ -1605,7 +1605,7 @@ Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,Zone,10.0
 Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,Capacity,4.0
 Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampUpRate,1.0
 Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampDnRate,1.0
-Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.24383560547875063
+Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.2438356054787506
 Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,FOMperMW,46500.0
 Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,VOM,0.55
 Mwenga_HY_TZA,Tanzania,STORAGE,PumpedHydro,Life,50.0
@@ -1619,7 +1619,7 @@ NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,Zone,10.0
 NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,Capacity,8.0
 NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampUpRate,1.0
 NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampDnRate,1.0
-NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.19364672672384364
+NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.1936467267238436
 NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,FOMperMW,46500.0
 NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,VOM,0.55
 NyumbaYaMungu_HY_TZA,Tanzania,STORAGE,PumpedHydro,Life,50.0
@@ -1693,7 +1693,7 @@ Songas_TH_TZA,Tanzania,CCGT,Gas,Error,21165.35
 Songas_TH_TZA,Tanzania,CCGT,Gas,MinLimitShare,0.2
 Songas_TH_TZA,Tanzania,CCGT,Gas,HeatRate,9.6
 Songas_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
-Songas_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.299999999999999
+Songas_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.3
 Songas_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
 SongasII_TH_TZA,Tanzania,CCGT,Gas,StYr,2005.0
 SongasII_TH_TZA,Tanzania,CCGT,Gas,RetrYr,2055.0
@@ -1712,7 +1712,7 @@ SongasII_TH_TZA,Tanzania,CCGT,Gas,Error,21257.35
 SongasII_TH_TZA,Tanzania,CCGT,Gas,MinLimitShare,0.2
 SongasII_TH_TZA,Tanzania,CCGT,Gas,HeatRate,9.6
 SongasII_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
-SongasII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.299999999999999
+SongasII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.3
 SongasII_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
 SongasIII_TH_TZA,Tanzania,CCGT,Gas,StYr,2006.0
 SongasIII_TH_TZA,Tanzania,CCGT,Gas,RetrYr,2056.0
@@ -1731,7 +1731,7 @@ SongasIII_TH_TZA,Tanzania,CCGT,Gas,Error,21169.35
 SongasIII_TH_TZA,Tanzania,CCGT,Gas,MinLimitShare,0.2
 SongasIII_TH_TZA,Tanzania,CCGT,Gas,HeatRate,9.6
 SongasIII_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
-SongasIII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.299999999999999
+SongasIII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.3
 SongasIII_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
 SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,StYr,2007.0
 SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,RetrYr,2057.0
@@ -1750,7 +1750,7 @@ SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,Error,21238.106
 SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,MinLimitShare,0.2
 SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,HeatRate,8.978
 SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
-SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,9.677999999999999
+SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,9.678
 SymbionUbongo_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
 Tegeta_TH_TZA,Tanzania,CCGT,Gas,StYr,2009.0
 Tegeta_TH_TZA,Tanzania,CCGT,Gas,RetrYr,2059.0
@@ -1798,11 +1798,11 @@ UbungoI_TH_TZA,Tanzania,CCGT,Gas,Life,30.0
 UbungoI_TH_TZA,Tanzania,CCGT,Gas,Type,1.0
 UbungoI_TH_TZA,Tanzania,CCGT,Gas,fuel1,2.0
 UbungoI_TH_TZA,Tanzania,CCGT,Gas,Status,1.0
-UbungoI_TH_TZA,Tanzania,CCGT,Gas,Error,21271.613999999998
+UbungoI_TH_TZA,Tanzania,CCGT,Gas,Error,21271.614
 UbungoI_TH_TZA,Tanzania,CCGT,Gas,MinLimitShare,0.2
 UbungoI_TH_TZA,Tanzania,CCGT,Gas,HeatRate,10.232
 UbungoI_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
-UbungoI_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.931999999999999
+UbungoI_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.932
 UbungoI_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,StYr,2022.0
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,RetrYr,2055.0
@@ -1817,11 +1817,11 @@ UbungoII_TH_TZA,Tanzania,CCGT,Gas,Life,30.0
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,Type,1.0
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,fuel1,2.0
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,Status,1.0
-UbungoII_TH_TZA,Tanzania,CCGT,Gas,Error,21267.613999999998
+UbungoII_TH_TZA,Tanzania,CCGT,Gas,Error,21267.614
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,MinLimitShare,0.2
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,HeatRate,10.232
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
-UbungoII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.931999999999999
+UbungoII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,10.932
 UbungoII_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,StYr,2004.0
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RetrYr,2060.0
@@ -1829,7 +1829,7 @@ ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,6.0
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.10737499999999998
+ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.1073749999999999
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 ChishimbaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -1843,7 +1843,7 @@ ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,120.0
 ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.29014459665144593
+ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2901445966514459
 ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 ItheziThezi_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -1857,7 +1857,7 @@ KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,990.0
 KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.34592500345925004
+KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.34592500345925
 KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 KafueGorge_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -1871,7 +1871,7 @@ KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,720.0
 KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.25262134280399123
+KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2526213428039912
 KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 KaribaNB_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -1885,7 +1885,7 @@ KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,360.0
 KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.25262134280399123
+KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2526213428039912
 KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 KaribaNBE_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -1958,7 +1958,7 @@ Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,56.0
 Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 Lunsemfwa+Mulungushi_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -1972,21 +1972,21 @@ MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,10.0
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.18062499999999998
+MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.1806249999999999
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Type,12.0
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,fuel1,3.0
 MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Status,1.0
-MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Error,50618.730625000004
+MusondaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Error,50618.730625
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,StYr,1968.0
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RetrYr,2060.0
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,108.0
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.43614683119105346
+VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.4361468311910534
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 VictoriaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -2018,7 +2018,7 @@ KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Zone,5.0
 KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Capacity,750.0
 KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampUpRate,1.0
 KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampDnRate,1.0
-KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.27534246575342236
+KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.2753424657534223
 KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,FOMperMW,46500.0
 KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,VOM,0.55
 KaribaSouth1_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Life,50.0
@@ -2174,7 +2174,7 @@ AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,Zone,9.0
 AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,Capacity,700.0
 AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,VOM,0.55
 AH_Cambambe_C2,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -2201,7 +2201,7 @@ SoyoII_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 SoyoII_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 SoyoII_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 SoyoII_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-SoyoII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+SoyoII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 SoyoII_TH_AGO,Angola,CCGT,Gas,BuildLimitperYear,750.0
 SoyoII_TH_AGO,Angola,CCGT,Gas,MaxTotalBuild,5000.0
 AH_Lauca,Angola,STORAGE,PumpedHydro,StYr,2017.0
@@ -2282,7 +2282,7 @@ AngolaCCGTNG_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 AngolaCCGTNG_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 AngolaCCGTNG_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 AngolaCCGTNG_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-AngolaCCGTNG_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+AngolaCCGTNG_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 AngolaCCGTNG_TH_AGO,Angola,CCGT,Gas,BuildLimitperYear,400.0
 AngolaDiesel_TH_AGO,Angola,ICE,HFO,StYr,2024.0
 AngolaDiesel_TH_AGO,Angola,ICE,HFO,RetrYr,2054.0
@@ -2300,14 +2300,14 @@ AngolaDiesel_TH_AGO,Angola,ICE,HFO,Error,12157.26925765063
 AngolaDiesel_TH_AGO,Angola,ICE,HFO,MinLimitShare,0.06
 AngolaDiesel_TH_AGO,Angola,ICE,HFO,HeatRate,10.41544727496
 AngolaDiesel_TH_AGO,Angola,ICE,HFO,MinUtilization,0.06
-AngolaDiesel_TH_AGO,Angola,ICE,HFO,Capex,0.9338103756708409
+AngolaDiesel_TH_AGO,Angola,ICE,HFO,Capex,0.9338103756708408
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,StYr,2055.0
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,RetrYr,2060.0
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,300.0
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 Cutato1-3_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -2341,7 +2341,7 @@ Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,160.0
 Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 Lomaum2_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -2375,7 +2375,7 @@ Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,210.0
 Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 Quilengues_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -2426,7 +2426,7 @@ Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,430.0
 Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 Baynes(Angola)_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -2604,7 +2604,7 @@ Kanengo,Malawi,ICE,Diesel,fuel1,11.0
 Kanengo,Malawi,ICE,Diesel,Status,1.0
 Kanengo,Malawi,ICE,Diesel,Error,50706.76433841981
 Kanengo,Malawi,ICE,Diesel,MinLimitShare,0.2
-Kanengo,Malawi,ICE,Diesel,HeatRate,10.989338419810295
+Kanengo,Malawi,ICE,Diesel,HeatRate,10.989338419810297
 Mapanga_ICE_MWI,Malawi,ICE,Diesel,StYr,2000.0
 Mapanga_ICE_MWI,Malawi,ICE,Diesel,RetrYr,2060.0
 Mapanga_ICE_MWI,Malawi,ICE,Diesel,Zone,12.0
@@ -2620,7 +2620,7 @@ Mapanga_ICE_MWI,Malawi,ICE,Diesel,fuel1,11.0
 Mapanga_ICE_MWI,Malawi,ICE,Diesel,Status,1.0
 Mapanga_ICE_MWI,Malawi,ICE,Diesel,Error,50707.26433841981
 Mapanga_ICE_MWI,Malawi,ICE,Diesel,MinLimitShare,0.2
-Mapanga_ICE_MWI,Malawi,ICE,Diesel,HeatRate,10.989338419810295
+Mapanga_ICE_MWI,Malawi,ICE,Diesel,HeatRate,10.989338419810297
 Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,StYr,2000.0
 Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,RetrYr,2019.0
 Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,Zone,12.0
@@ -2635,14 +2635,14 @@ Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,fuel1,11.0
 Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,Status,1.0
 Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,Error,50650.26433841981
 Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,MinLimitShare,0.2
-Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,HeatRate,10.989338419810295
+Aggreko_IPP_ICE_MWI,Malawi,ICE,Diesel,HeatRate,10.989338419810297
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,StYr,2000.0
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,RetrYr,2060.0
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,Zone,12.0
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,Capacity,102.0
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-"Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+"Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,VOM,0.55
 "Tedzani_I,_II,_III_HY_MWI",Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2670,7 +2670,7 @@ NzongoII_HY_ZAR,DRC,STORAGE,PumpedHydro,Error,50811.985
 "Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,Capacity,136.0
 "Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 "Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-"Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+"Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 "Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 "Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,VOM,0.55
 "Nkula_(A,B)_+_upgrade_HY_MWI",Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2684,7 +2684,7 @@ Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,4.35
 Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Wovwe_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2705,7 +2705,7 @@ Kapichira_parts_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
 Kapichira_parts_HY_MWI,Malawi,STORAGE,PumpedHydro,Type,4.0
 Kapichira_parts_HY_MWI,Malawi,STORAGE,PumpedHydro,fuel1,3.0
 Kapichira_parts_HY_MWI,Malawi,STORAGE,PumpedHydro,Status,1.0
-Kapichira_parts_HY_MWI,Malawi,STORAGE,PumpedHydro,Error,44948.215000000004
+Kapichira_parts_HY_MWI,Malawi,STORAGE,PumpedHydro,Error,44948.215
 Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,StYr,2013.0
 Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,RetrYr,2060.0
 Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
@@ -2719,14 +2719,14 @@ Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
 Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,Type,4.0
 Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,fuel1,3.0
 Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,Status,1.0
-Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,Error,44948.215000000004
+Kapichira_HY_MWI,Malawi,STORAGE,PumpedHydro,Error,44948.215
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,StYr,2021.0
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,RetrYr,2060.0
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,19.1
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Tedzani_IV_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2740,7 +2740,7 @@ Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,87.0
 Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Hamilton_Falls_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2773,7 +2773,7 @@ Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,4.5
 Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Wovwe_additional_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2790,7 +2790,7 @@ Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,41.0
 Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Mbongozi_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2807,7 +2807,7 @@ Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,Zone,12.0
 Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,Capacity,301.0
 Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,RampUpRate,1.0
 Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,RampDnRate,1.0
-Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,ResLimShare,0.32507730616715724
+Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,ResLimShare,0.3250773061671572
 Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,FOMperMW,40000.0
 Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,VOM,0.5
 Mpatamanga_HY_Main,Malawi,ReservoirHydro,Hydro,Life,50.0
@@ -2825,7 +2825,7 @@ Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,261.0
 Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,39715.551143853714
 Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Lower_Fufu_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2842,7 +2842,7 @@ Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,90.0
 Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,39715.551143853714
 Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Lower_Songwe_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -2872,7 +2872,7 @@ MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,HeatRate,6.4
 MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,fuel2,7.0
 MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,HeatRate2,7.1
 MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,MinUtilization,0.05
-MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,Capex,1.2450805008944545
+MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,Capex,1.2450805008944543
 MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,BuildLimitperYear,500.0
 MozCCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,MaxTotalBuild,5000.0
 MozCEnginesNG_TH_MOZ,Mozambique,CCGT,Gas,StYr,2026.0
@@ -2902,7 +2902,7 @@ Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.55
 Massingir_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -2930,7 +2930,7 @@ MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,HeatRate,6.4
 MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,fuel2,7.0
 MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,HeatRate2,7.1
 MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,MinUtilization,0.05
-MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,Capex,1.2450805008944545
+MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,Capex,1.2450805008944543
 MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,BuildLimitperYear,500.0
 MozNCCGTNG_TH_MOZ,Mozambique,CCGT,Gas,MaxTotalBuild,5000.0
 MozCoal_TH_MOZ,Mozambique,ICE,Coal,StYr,2025.0
@@ -3001,7 +3001,7 @@ MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,Error,12902.26925765063
 MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,MinLimitShare,0.06
 MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,HeatRate,10.41544727496
 MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,MinUtilization,0.06
-MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,Capex,0.9338103756708409
+MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,Capex,0.9338103756708408
 MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,BuildLimitperYear,250.0
 MozNEnginesNG_TH_MOZ,Mozambique,ICE,HFO,MaxTotalBuild,250.0
 LubumbashiSolar_REN_ZAR,DRC_South,PV,Solar,StYr,2025.0
@@ -3026,7 +3026,7 @@ Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,Zone,13.0
 Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,Capacity,240.0
 Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,RampUpRate,1.0
 Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,RampDnRate,1.0
-Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,ResLimShare,0.19343517249130504
+Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,ResLimShare,0.193435172491305
 Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,FOMperMW,46500.0
 Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,VOM,0.55
 Busanga_HY_ZAR,DRC_South,STORAGE,PumpedHydro,Life,50.0
@@ -3056,7 +3056,7 @@ Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.55
 Lurio_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -3071,7 +3071,7 @@ Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,Zone,11.0
 Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,Capacity,300.0
 Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,RampUpRate,1.0
 Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,RampDnRate,1.0
-Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.19343517249130504
+Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.193435172491305
 Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,FOMperMW,46500.0
 Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,VOM,0.55
 Sombwe_HY_ZAR,DRC,STORAGE,PumpedHydro,Life,50.0
@@ -3087,7 +3087,7 @@ WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,RetrYr,2060.0
 WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,Zone,11.0
 WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,RampUpRate,1.0
 WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,RampDnRate,1.0
-WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.19343517249130504
+WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,ResLimShare,0.193435172491305
 WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,FOMperMW,46500.0
 WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,VOM,0.55
 WanieRukula_HY_ZAR,DRC,STORAGE,PumpedHydro,Life,50.0
@@ -3135,7 +3135,7 @@ Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.55
 Tsate_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -3149,7 +3149,7 @@ Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.5500023502007254
 Quedas&Ocua_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -3176,7 +3176,7 @@ MozSEnginesNG_TH_MOZ,Mozambique,ICE,HFO,Error,12152.26925765063
 MozSEnginesNG_TH_MOZ,Mozambique,ICE,HFO,MinLimitShare,0.06
 MozSEnginesNG_TH_MOZ,Mozambique,ICE,HFO,HeatRate,10.41544727496
 MozSEnginesNG_TH_MOZ,Mozambique,ICE,HFO,MinUtilization,0.06
-MozSEnginesNG_TH_MOZ,Mozambique,ICE,HFO,Capex,0.9338103756708409
+MozSEnginesNG_TH_MOZ,Mozambique,ICE,HFO,Capex,0.9338103756708408
 LesothoSolar_REN_LSO,Lesotho,PV,Solar,StYr,2023.0
 LesothoSolar_REN_LSO,Lesotho,PV,Solar,RetrYr,2060.0
 LesothoSolar_REN_LSO,Lesotho,PV,Solar,Zone,2.0
@@ -3196,7 +3196,7 @@ Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,213.0
 Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,39715.551143853714
 Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.5500023502007254
 Kholombizo_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -3213,7 +3213,7 @@ Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,40.4
 Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,39715.551143853714
 Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.5500023502007254
 Chizuma_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -3315,7 +3315,7 @@ CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,315.0
 CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 CandidateHydro_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -3358,7 +3358,7 @@ Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,30.0
 Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 Luchenene_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -3374,7 +3374,7 @@ MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.55
 MoambaMajor_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -3389,7 +3389,7 @@ MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Capacity,1500.0
 MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.000521863534
 MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.5500097707387729
 MphandaNkuwa_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -3406,7 +3406,7 @@ Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Capacity,650.0
 Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.55
 Lupata_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -3423,14 +3423,14 @@ MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Zone,5.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Capacity,600.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampUpRate,1.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampDnRate,1.0
-MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.27534246575342236
+MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.2753424657534223
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,FOMperMW,46500.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,VOM,0.55
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Life,50.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Type,12.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,fuel1,3.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Status,3.0
-MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Error,52470.076342465756
+MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Error,52470.07634246576
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Capex,4.251
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,BuildLimitperYear,600.0
 MupataGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,MaxTotalBuild,600.0
@@ -3440,7 +3440,7 @@ MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,600.0
 MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 MupataGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -3457,7 +3457,7 @@ MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,301.0
 MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 MumbotutaFalls_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -3489,7 +3489,7 @@ Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RetrYr,2060.0
 Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Zone,4.0
 Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampUpRate,1.0
 Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,RampDnRate,1.0
-Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.40644013791681777
+Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,ResLimShare,0.4064401379168177
 Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,FOMperMW,46500.0
 Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,VOM,0.55
 Boroma_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
@@ -3513,7 +3513,7 @@ NacalaJICA_TH_MOZ,Mozambique,ICE,HFO,fuel1,7.0
 NacalaJICA_TH_MOZ,Mozambique,ICE,HFO,Status,1.0
 NacalaJICA_TH_MOZ,Mozambique,ICE,HFO,Error,12203.285987
 NacalaJICA_TH_MOZ,Mozambique,ICE,HFO,MinLimitShare,0.06
-NacalaJICA_TH_MOZ,Mozambique,ICE,HFO,HeatRate,10.425987000000001
+NacalaJICA_TH_MOZ,Mozambique,ICE,HFO,HeatRate,10.425987
 NacalaJICA_TH_MOZ,Mozambique,ICE,HFO,UnitSize,40.0
 CandidateCoal_TH_ZWE,Zimbabwe,ICE,Coal,StYr,2025.0
 CandidateCoal_TH_ZWE,Zimbabwe,ICE,Coal,RetrYr,2075.0
@@ -3549,7 +3549,7 @@ Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,Error,52190.48361359571
 Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,MinLimitShare,0.3
 Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,HeatRate,10.0
 Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,UnitSize,4.0
-Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,Capex,2.7236135957066194
+Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,Capex,2.723613595706619
 Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,BuildLimitperYear,4.0
 Chisumbanje_BIO_ZWE,Zimbabwe,BiomassPlant,Biomass,MaxTotalBuild,4.0
 ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,StYr,2024.0
@@ -3569,7 +3569,7 @@ ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,Error,13653.26925765063
 ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,MinLimitShare,0.06
 ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,HeatRate,10.41544727496
 ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,MinUtilization,0.06
-ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,Capex,0.9338103756708409
+ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,Capex,0.9338103756708408
 ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,BuildLimitperYear,500.0
 ZimbabweNG_TH_ZWE,Zimbabwe,ICE,HFO,MaxTotalBuild,500.0
 CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,StYr,2018.0
@@ -3587,7 +3587,7 @@ CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,fuel1,2.0
 CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,Status,1.0
 CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,Error,21265.451974
 CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,MinLimitShare,0.2
-CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,HeatRate,10.425987000000001
+CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,HeatRate,10.425987
 CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,fuel2,7.0
 CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,HeatRate2,11.125987
 CTMJICA1_TH_MOZ,Mozambique,CCGT,Gas,MinUtilization,0.5
@@ -3714,7 +3714,7 @@ SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,fuel1,8.0
 SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,Status,3.0
 SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,Error,122202.3845636662
 SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,MinLimitShare,0.7
-SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,HeatRate,9.288606600000001
+SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,HeatRate,9.2886066
 SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,MinUtilization,0.6
 SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,Capex,6.295957066189625
 SANuclear_NU_ZAF,South_Africa,NUC,CustomFuel,BuildLimitperYear,2000.0
@@ -3738,7 +3738,7 @@ SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,937.5
 SACCGTNG_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,1875.0
 SACoal(Large)_TH_ZAF,South_Africa,ICE,Coal,StYr,2025.0
@@ -3838,7 +3838,7 @@ SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,1875.0
 SACCGTNGcan_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,3750.0
 SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,StYr,2025.0
@@ -3854,7 +3854,7 @@ SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,Life,30.0
 SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,Type,13.0
 SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,fuel1,1.0
 SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,Status,3.0
-SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,Error,61662.406923076924
+SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,Error,61662.40692307693
 SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,MinLimitShare,0.5
 SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,HeatRate,8.6
 SACoal(Medium)can_TH_ZAF,South_Africa,ICE,Coal,MinUtilization,0.05
@@ -3885,7 +3885,7 @@ Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,Zone,10.0
 Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,Capacity,300.0
 Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampUpRate,1.0
 Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampDnRate,1.0
-Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.21527649726809853
+Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.2152764972680985
 Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,FOMperMW,46500.0
 Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,VOM,0.55
 Kikonge_HY_TZA,Tanzania,STORAGE,PumpedHydro,Life,50.0
@@ -3985,7 +3985,7 @@ TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,Life,30.0
 TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,Type,13.0
 TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,fuel1,13.0
 TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,Status,3.0
-TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,Error,25284.132999999998
+TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,Error,25284.133
 TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,Capex,4.263
 TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,BuildLimitperYear,100.0
 TanzaniaGeothermal_TH_TZA,Tanzania,GEO,Geothermal,MaxTotalBuild,500.0
@@ -4006,7 +4006,7 @@ KinyereziII_TH_TZA,Tanzania,CCGT,Gas,Error,21387.79
 KinyereziII_TH_TZA,Tanzania,CCGT,Gas,MinLimitShare,0.2
 KinyereziII_TH_TZA,Tanzania,CCGT,Gas,HeatRate,6.82
 KinyereziII_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
-KinyereziII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,7.5200000000000005
+KinyereziII_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,7.52
 KinyereziII_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
 KinyereziIV_TH_TZA,Tanzania,CCGT,Gas,StYr,2029.0
 KinyereziIV_TH_TZA,Tanzania,CCGT,Gas,RetrYr,2079.0
@@ -4036,7 +4036,7 @@ Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,Zone,10.0
 Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,Capacity,49.5
 Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampUpRate,1.0
 Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,RampDnRate,1.0
-Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.21527649726809853
+Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,ResLimShare,0.2152764972680985
 Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,FOMperMW,46500.0
 Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,VOM,0.55
 Malagaresi_HY_TZA,Tanzania,STORAGE,PumpedHydro,Life,50.0
@@ -4251,7 +4251,7 @@ FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,HeatRate,6.4
 FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,fuel2,7.0
 FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,HeatRate2,7.1
 FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,MinUtilization,0.05
-FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,Capex,1.2450805008944545
+FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,Capex,1.2450805008944543
 FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,BuildLimitperYear,500.0
 FutureCGT3_TH_TZA,Tanzania,CCGT,Gas,MaxTotalBuild,5000.0
 Rusumo_HY_TZA,Tanzania,STORAGE,PumpedHydro,StYr,2024.0
@@ -4362,7 +4362,7 @@ Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,600.0
 Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 Devil'sGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -4379,7 +4379,7 @@ KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,750.0
 KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.34592500345925004
+KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.34592500345925
 KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 KafueGorgeLower_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -4393,7 +4393,7 @@ KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,101.0
 KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 KalungwishiI_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -4440,7 +4440,7 @@ NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,HeatRate,6.4
 NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,fuel2,7.0
 NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,HeatRate2,7.1
 NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,MinUtilization,0.05
-NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,Capex,1.2450805008944545
+NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,Capex,1.2450805008944543
 NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,BuildLimitperYear,500.0
 NamibiaCCGTNG_TH_NAM,Namibia,CCGT,Gas,MaxTotalBuild,4000.0
 NamibiaCoal_TH_NAM,Namibia,ICE,Coal,StYr,2035.0
@@ -4522,7 +4522,7 @@ MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,124.0
 MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 MambilimbaFallsI_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -4539,7 +4539,7 @@ BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,1200.0
 BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.27807048354993563
+BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.2780704835499356
 BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 BatokaGorgeNorth_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -4556,7 +4556,7 @@ Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Zone,5.0
 Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Capacity,600.0
 Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampUpRate,1.0
 Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampDnRate,1.0
-Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.27534246575342236
+Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.2753424657534223
 Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,FOMperMW,46500.0
 Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,VOM,0.55
 Devil'sGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Life,50.0
@@ -4573,7 +4573,7 @@ BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Zone,5.0
 BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Capacity,1200.0
 BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampUpRate,1.0
 BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampDnRate,1.0
-BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.27534246575342236
+BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.2753424657534223
 BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,FOMperMW,46500.0
 BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,VOM,0.55
 BatokaGorgeSouth_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Life,50.0
@@ -4590,7 +4590,7 @@ Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Zone,5.0
 Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Capacity,30.0
 Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampUpRate,1.0
 Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,RampDnRate,1.0
-Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.27534246575342236
+Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,ResLimShare,0.2753424657534223
 Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,FOMperMW,46500.0
 Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,VOM,0.55
 Gairezi_HY_ZWE,Zimbabwe,STORAGE,PumpedHydro,Life,50.0
@@ -4613,7 +4613,7 @@ Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,fuel1,1.0
 Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,Status,1.0
 Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,Error,49756.61225941
 Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,MinLimitShare,0.5
-Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,HeatRate,9.222259410000001
+Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,HeatRate,9.22225941
 Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,MinUtilization,0.05
 Hwange3Extension_TH_ZWE,Zimbabwe,ICE,Coal,UnitSize,300.0
 Ruzizi4_HY_ZAR,DRC,STORAGE,PumpedHydro,StYr,2024.0
@@ -4661,7 +4661,7 @@ SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,fuel1,1.0
 SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,Status,3.0
 SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,Error,49157.07876388227
 SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,MinLimitShare,0.5
-SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,HeatRate,9.222259410000001
+SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,HeatRate,9.22225941
 SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,MinUtilization,0.05
 SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,UnitSize,150.0
 SouthernEnergy_TH_ZWE,Zimbabwe,ICE,Coal,Capex,2.466504472271914
@@ -5080,7 +5080,7 @@ Sto_SWZ,Eswatini,STORAGE,Battery,Life,20.0
 Sto_SWZ,Eswatini,STORAGE,Battery,Type,17.0
 Sto_SWZ,Eswatini,STORAGE,Battery,fuel1,10.0
 Sto_SWZ,Eswatini,STORAGE,Battery,Status,3.0
-Sto_SWZ,Eswatini,STORAGE,Battery,Error,20096.100000000002
+Sto_SWZ,Eswatini,STORAGE,Battery,Error,20096.1
 Sto_SWZ,Eswatini,STORAGE,Battery,Capex,0.2
 Sto_SWZ,Eswatini,STORAGE,Battery,BuildLimitperYear,100.0
 Sto_SWZ,Eswatini,STORAGE,Battery,MaxTotalBuild,1000.0
@@ -5128,7 +5128,7 @@ Sto_BWA,Botswana,STORAGE,Battery,Life,20.0
 Sto_BWA,Botswana,STORAGE,Battery,Type,17.0
 Sto_BWA,Botswana,STORAGE,Battery,fuel1,10.0
 Sto_BWA,Botswana,STORAGE,Battery,Status,3.0
-Sto_BWA,Botswana,STORAGE,Battery,Error,26404.100000000002
+Sto_BWA,Botswana,STORAGE,Battery,Error,26404.1
 Sto_BWA,Botswana,STORAGE,Battery,Capex,0.2
 Sto_BWA,Botswana,STORAGE,Battery,BuildLimitperYear,400.0
 Sto_BWA,Botswana,STORAGE,Battery,MaxTotalBuild,4000.0
@@ -5144,7 +5144,7 @@ Sto_NAM,Namibia,STORAGE,Battery,Life,20.0
 Sto_NAM,Namibia,STORAGE,Battery,Type,17.0
 Sto_NAM,Namibia,STORAGE,Battery,fuel1,10.0
 Sto_NAM,Namibia,STORAGE,Battery,Status,3.0
-Sto_NAM,Namibia,STORAGE,Battery,Error,26403.100000000002
+Sto_NAM,Namibia,STORAGE,Battery,Error,26403.1
 Sto_NAM,Namibia,STORAGE,Battery,Capex,0.2
 Sto_NAM,Namibia,STORAGE,Battery,BuildLimitperYear,400.0
 Sto_NAM,Namibia,STORAGE,Battery,MaxTotalBuild,4000.0
@@ -5218,7 +5218,7 @@ Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,Capacity,40.4
 Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,FOMperMW,39715.551143853714
 Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Chasombo_HY_MWI,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -5305,7 +5305,7 @@ New_CSP_BWA,Botswana,CSPPlant,Solar,Life,30.0
 New_CSP_BWA,Botswana,CSPPlant,Solar,Type,14.0
 New_CSP_BWA,Botswana,CSPPlant,Solar,fuel1,9.0
 New_CSP_BWA,Botswana,CSPPlant,Solar,Status,3.0
-New_CSP_BWA,Botswana,CSPPlant,Solar,Error,42659.715000000004
+New_CSP_BWA,Botswana,CSPPlant,Solar,Error,42659.715
 New_CSP_BWA,Botswana,CSPPlant,Solar,Capex,1.915
 New_CSP_BWA,Botswana,CSPPlant,Solar,BuildLimitperYear,500.0
 New_CSP_BWA,Botswana,CSPPlant,Solar,MaxTotalBuild,8000.0
@@ -5322,7 +5322,7 @@ New_CSP_NAM,Namibia,CSPPlant,Solar,Life,30.0
 New_CSP_NAM,Namibia,CSPPlant,Solar,Type,14.0
 New_CSP_NAM,Namibia,CSPPlant,Solar,fuel1,9.0
 New_CSP_NAM,Namibia,CSPPlant,Solar,Status,3.0
-New_CSP_NAM,Namibia,CSPPlant,Solar,Error,26907.649999999998
+New_CSP_NAM,Namibia,CSPPlant,Solar,Error,26907.65
 New_CSP_NAM,Namibia,CSPPlant,Solar,Capex,1.85
 New_CSP_NAM,Namibia,CSPPlant,Solar,BuildLimitperYear,250.0
 New_CSP_NAM,Namibia,CSPPlant,Solar,MaxTotalBuild,250.0
@@ -5889,7 +5889,7 @@ SA_CahoraBassa29_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Life,50.0
 SA_CahoraBassa29_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Type,12.0
 SA_CahoraBassa29_HY_MOZ,Mozambique,STORAGE,PumpedHydro,fuel1,3.0
 SA_CahoraBassa29_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Status,1.0
-SA_CahoraBassa29_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Error,52007.950000000004
+SA_CahoraBassa29_HY_MOZ,Mozambique,STORAGE,PumpedHydro,Error,52007.95
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,StYr,2026.0
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,RetrYr,2076.0
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,Zone,4.0
@@ -5909,7 +5909,7 @@ MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,HeatRate,6.4
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,fuel2,7.0
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,HeatRate2,7.1
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,MinUtilization,0.05
-MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,Capex,1.2450805008944545
+MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,Capex,1.2450805008944543
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,BuildLimitperYear,400.0
 MozMGTPEDMSasolCTTemane_TH_MOZ,Mozambique,CCGT,Gas,MaxTotalBuild,400.0
 SA_CahoraBassa30_HY_MOZ,Mozambique,STORAGE,PumpedHydro,StYr,2034.0
@@ -5993,7 +5993,7 @@ Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,fuel1,8.0
 Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,Status,3.0
 Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,Error,111698.3845636662
 Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,MinLimitShare,0.7
-Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,HeatRate,9.288606600000001
+Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,HeatRate,9.2886066
 Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,MinUtilization,0.6
 Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,Capex,6.295957066189625
 Duynefontein_NU_ZAF,South_Africa,NUC,CustomFuel,BuildLimitperYear,2500.0
@@ -6092,7 +6092,7 @@ NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,HeatRate,6.4
 NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,fuel2,7.0
 NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,HeatRate2,7.1
 NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,MinUtilization,0.05
-NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,Capex,1.2450805008944545
+NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,Capex,1.2450805008944543
 NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,BuildLimitperYear,500.0
 NewCCGTNG_TH_SWZ,Eswatini,CCGT,Gas,MaxTotalBuild,500.0
 Diaz_Wind_NAM,Namibia,OnshoreWind,Wind,StYr,2027.0
@@ -6152,7 +6152,7 @@ CommittedCSP1_NAM,Namibia,CSPPlant,Solar,Life,30.0
 CommittedCSP1_NAM,Namibia,CSPPlant,Solar,Type,14.0
 CommittedCSP1_NAM,Namibia,CSPPlant,Solar,fuel1,9.0
 CommittedCSP1_NAM,Namibia,CSPPlant,Solar,Status,2.0
-CommittedCSP1_NAM,Namibia,CSPPlant,Solar,Error,26143.649999999998
+CommittedCSP1_NAM,Namibia,CSPPlant,Solar,Error,26143.65
 CommittedCSP1_NAM,Namibia,CSPPlant,Solar,Capex,1.85
 RoshPinah_PV_NAM,Namibia,PV,Solar,StYr,2025.0
 RoshPinah_PV_NAM,Namibia,PV,Solar,RetrYr,2060.0
@@ -6263,7 +6263,7 @@ Lithops_BESS_NAM,Namibia,STORAGE,Battery,Life,20.0
 Lithops_BESS_NAM,Namibia,STORAGE,Battery,Type,17.0
 Lithops_BESS_NAM,Namibia,STORAGE,Battery,fuel1,10.0
 Lithops_BESS_NAM,Namibia,STORAGE,Battery,Status,2.0
-Lithops_BESS_NAM,Namibia,STORAGE,Battery,Error,18135.100000000002
+Lithops_BESS_NAM,Namibia,STORAGE,Battery,Error,18135.1
 Lithops_BESS_NAM,Namibia,STORAGE,Battery,Capex,0.2
 Lithops_BESS_NAM,Namibia,STORAGE,Battery,BuildLimitperYear,45.0
 Lithops_BESS_NAM,Namibia,STORAGE,Battery,MaxTotalBuild,45.0
@@ -6279,7 +6279,7 @@ Omburru_BESS_NAM,Namibia,STORAGE,Battery,Life,20.0
 Omburru_BESS_NAM,Namibia,STORAGE,Battery,Type,17.0
 Omburru_BESS_NAM,Namibia,STORAGE,Battery,fuel1,10.0
 Omburru_BESS_NAM,Namibia,STORAGE,Battery,Status,2.0
-Omburru_BESS_NAM,Namibia,STORAGE,Battery,Error,18091.100000000002
+Omburru_BESS_NAM,Namibia,STORAGE,Battery,Error,18091.1
 Omburru_BESS_NAM,Namibia,STORAGE,Battery,Capex,0.2
 Omburru_BESS_NAM,Namibia,STORAGE,Battery,BuildLimitperYear,31.0
 Omburru_BESS_NAM,Namibia,STORAGE,Battery,MaxTotalBuild,31.0
@@ -6488,7 +6488,7 @@ NEWSto_BWA,Botswana,STORAGE,Battery,Life,20.0
 NEWSto_BWA,Botswana,STORAGE,Battery,Type,17.0
 NEWSto_BWA,Botswana,STORAGE,Battery,fuel1,10.0
 NEWSto_BWA,Botswana,STORAGE,Battery,Status,3.0
-NEWSto_BWA,Botswana,STORAGE,Battery,Error,18150.100000000002
+NEWSto_BWA,Botswana,STORAGE,Battery,Error,18150.1
 NEWSto_BWA,Botswana,STORAGE,Battery,Capex,0.2
 NEWSto_BWA,Botswana,STORAGE,Battery,BuildLimitperYear,50.0
 NEWSto_BWA,Botswana,STORAGE,Battery,MaxTotalBuild,50.0
@@ -6658,7 +6658,7 @@ NewCCGTNG_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 NewCCGTNG_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 NewCCGTNG_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 NewCCGTNG_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-NewCCGTNG_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+NewCCGTNG_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,StYr,2024.0
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,RetrYr,2054.0
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,Zone,1.0
@@ -6676,7 +6676,7 @@ GenericDieselCan_ZAF,South_Africa,ICE,HFO,Error,18149.273810375675
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,MinLimitShare,0.06
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,HeatRate,10.42
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,MinUtilization,0.06
-GenericDieselCan_ZAF,South_Africa,ICE,HFO,Capex,0.9338103756708409
+GenericDieselCan_ZAF,South_Africa,ICE,HFO,Capex,0.9338103756708408
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,BuildLimitperYear,2000.0
 GenericDieselCan_ZAF,South_Africa,ICE,HFO,MaxTotalBuild,2000.0
 GenericDieselCan_NAM,Namibia,ICE,HFO,StYr,2024.0
@@ -6696,7 +6696,7 @@ GenericDieselCan_NAM,Namibia,ICE,HFO,Error,13655.313810375672
 GenericDieselCan_NAM,Namibia,ICE,HFO,MinLimitShare,0.06
 GenericDieselCan_NAM,Namibia,ICE,HFO,HeatRate,10.42
 GenericDieselCan_NAM,Namibia,ICE,HFO,MinUtilization,0.1
-GenericDieselCan_NAM,Namibia,ICE,HFO,Capex,0.9338103756708409
+GenericDieselCan_NAM,Namibia,ICE,HFO,Capex,0.9338103756708408
 GenericDieselCan_NAM,Namibia,ICE,HFO,BuildLimitperYear,500.0
 GenericDieselCan_NAM,Namibia,ICE,HFO,MaxTotalBuild,500.0
 GenericDieselCan_BWA,Botswana,ICE,HFO,StYr,2024.0
@@ -6712,11 +6712,11 @@ GenericDieselCan_BWA,Botswana,ICE,HFO,Life,30.0
 GenericDieselCan_BWA,Botswana,ICE,HFO,Type,10.0
 GenericDieselCan_BWA,Botswana,ICE,HFO,fuel1,7.0
 GenericDieselCan_BWA,Botswana,ICE,HFO,Status,3.0
-GenericDieselCan_BWA,Botswana,ICE,HFO,Error,13654.273810375671
+GenericDieselCan_BWA,Botswana,ICE,HFO,Error,13654.273810375673
 GenericDieselCan_BWA,Botswana,ICE,HFO,MinLimitShare,0.06
 GenericDieselCan_BWA,Botswana,ICE,HFO,HeatRate,10.42
 GenericDieselCan_BWA,Botswana,ICE,HFO,MinUtilization,0.06
-GenericDieselCan_BWA,Botswana,ICE,HFO,Capex,0.9338103756708409
+GenericDieselCan_BWA,Botswana,ICE,HFO,Capex,0.9338103756708408
 GenericDieselCan_BWA,Botswana,ICE,HFO,BuildLimitperYear,500.0
 GenericDieselCan_BWA,Botswana,ICE,HFO,MaxTotalBuild,500.0
 GenericDieselCan_TZA,Tanzania,ICE,HFO,StYr,2024.0
@@ -6732,11 +6732,11 @@ GenericDieselCan_TZA,Tanzania,ICE,HFO,Life,30.0
 GenericDieselCan_TZA,Tanzania,ICE,HFO,Type,10.0
 GenericDieselCan_TZA,Tanzania,ICE,HFO,fuel1,7.0
 GenericDieselCan_TZA,Tanzania,ICE,HFO,Status,3.0
-GenericDieselCan_TZA,Tanzania,ICE,HFO,Error,13658.273810375671
+GenericDieselCan_TZA,Tanzania,ICE,HFO,Error,13658.273810375673
 GenericDieselCan_TZA,Tanzania,ICE,HFO,MinLimitShare,0.06
 GenericDieselCan_TZA,Tanzania,ICE,HFO,HeatRate,10.42
 GenericDieselCan_TZA,Tanzania,ICE,HFO,MinUtilization,0.06
-GenericDieselCan_TZA,Tanzania,ICE,HFO,Capex,0.9338103756708409
+GenericDieselCan_TZA,Tanzania,ICE,HFO,Capex,0.9338103756708408
 GenericDieselCan_TZA,Tanzania,ICE,HFO,BuildLimitperYear,500.0
 GenericDieselCan_TZA,Tanzania,ICE,HFO,MaxTotalBuild,500.0
 GenericDieselCan_DRC,DRC,ICE,HFO,StYr,2024.0
@@ -6752,11 +6752,11 @@ GenericDieselCan_DRC,DRC,ICE,HFO,Life,30.0
 GenericDieselCan_DRC,DRC,ICE,HFO,Type,10.0
 GenericDieselCan_DRC,DRC,ICE,HFO,fuel1,7.0
 GenericDieselCan_DRC,DRC,ICE,HFO,Status,3.0
-GenericDieselCan_DRC,DRC,ICE,HFO,Error,13659.273810375671
+GenericDieselCan_DRC,DRC,ICE,HFO,Error,13659.273810375673
 GenericDieselCan_DRC,DRC,ICE,HFO,MinLimitShare,0.06
 GenericDieselCan_DRC,DRC,ICE,HFO,HeatRate,10.42
 GenericDieselCan_DRC,DRC,ICE,HFO,MinUtilization,0.06
-GenericDieselCan_DRC,DRC,ICE,HFO,Capex,0.9338103756708409
+GenericDieselCan_DRC,DRC,ICE,HFO,Capex,0.9338103756708408
 GenericDieselCan_DRC,DRC,ICE,HFO,BuildLimitperYear,500.0
 GenericDieselCan_DRC,DRC,ICE,HFO,MaxTotalBuild,500.0
 GenericDieselCan_SWL,Eswatini,ICE,HFO,StYr,2024.0
@@ -6772,11 +6772,11 @@ GenericDieselCan_SWL,Eswatini,ICE,HFO,Life,30.0
 GenericDieselCan_SWL,Eswatini,ICE,HFO,Type,10.0
 GenericDieselCan_SWL,Eswatini,ICE,HFO,fuel1,7.0
 GenericDieselCan_SWL,Eswatini,ICE,HFO,Status,3.0
-GenericDieselCan_SWL,Eswatini,ICE,HFO,Error,12751.273810375671
+GenericDieselCan_SWL,Eswatini,ICE,HFO,Error,12751.273810375673
 GenericDieselCan_SWL,Eswatini,ICE,HFO,MinLimitShare,0.06
 GenericDieselCan_SWL,Eswatini,ICE,HFO,HeatRate,10.42
 GenericDieselCan_SWL,Eswatini,ICE,HFO,MinUtilization,0.06
-GenericDieselCan_SWL,Eswatini,ICE,HFO,Capex,0.9338103756708409
+GenericDieselCan_SWL,Eswatini,ICE,HFO,Capex,0.9338103756708408
 GenericDieselCan_SWL,Eswatini,ICE,HFO,BuildLimitperYear,200.0
 GenericDieselCan_SWL,Eswatini,ICE,HFO,MaxTotalBuild,200.0
 GenericDieselCan_LSO,Lesotho,ICE,HFO,StYr,2024.0
@@ -6792,11 +6792,11 @@ GenericDieselCan_LSO,Lesotho,ICE,HFO,Life,30.0
 GenericDieselCan_LSO,Lesotho,ICE,HFO,Type,10.0
 GenericDieselCan_LSO,Lesotho,ICE,HFO,fuel1,7.0
 GenericDieselCan_LSO,Lesotho,ICE,HFO,Status,3.0
-GenericDieselCan_LSO,Lesotho,ICE,HFO,Error,12750.273810375671
+GenericDieselCan_LSO,Lesotho,ICE,HFO,Error,12750.273810375673
 GenericDieselCan_LSO,Lesotho,ICE,HFO,MinLimitShare,0.06
 GenericDieselCan_LSO,Lesotho,ICE,HFO,HeatRate,10.42
 GenericDieselCan_LSO,Lesotho,ICE,HFO,MinUtilization,0.06
-GenericDieselCan_LSO,Lesotho,ICE,HFO,Capex,0.9338103756708409
+GenericDieselCan_LSO,Lesotho,ICE,HFO,Capex,0.9338103756708408
 GenericDieselCan_LSO,Lesotho,ICE,HFO,BuildLimitperYear,200.0
 GenericDieselCan_LSO,Lesotho,ICE,HFO,MaxTotalBuild,200.0
 GenericDieselCan_ZMB,Zambia,ICE,HFO,StYr,2026.0
@@ -7201,7 +7201,7 @@ Sto_MWI_2027,Malawi,STORAGE,Battery,Life,20.0
 Sto_MWI_2027,Malawi,STORAGE,Battery,Type,17.0
 Sto_MWI_2027,Malawi,STORAGE,Battery,fuel1,10.0
 Sto_MWI_2027,Malawi,STORAGE,Battery,Status,3.0
-Sto_MWI_2027,Malawi,STORAGE,Battery,Error,18707.100000000002
+Sto_MWI_2027,Malawi,STORAGE,Battery,Error,18707.1
 Sto_MWI_2027,Malawi,STORAGE,Battery,Capex,0.2
 Sto_MWI_2027,Malawi,STORAGE,Battery,BuildLimitperYear,100.0
 Sto_MWI_2027,Malawi,STORAGE,Battery,MaxTotalBuild,300.0
@@ -7240,7 +7240,7 @@ ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,Zone,8.0
 ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,Capacity,9.0
 ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampUpRate,1.0
 ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,RampDnRate,1.0
-ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.10737499999999998
+ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,ResLimShare,0.1073749999999999
 ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,FOMperMW,46500.0
 ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,VOM,0.55
 ChishimbaFallsExt_HY_ZMB,Zambia,STORAGE,PumpedHydro,Life,50.0
@@ -7495,7 +7495,7 @@ LobitoI_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 LobitoI_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 LobitoI_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 LobitoI_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-LobitoI_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+LobitoI_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 LobitoI_TH_AGO,Angola,CCGT,Gas,BuildLimitperYear,750.0
 LobitoI_TH_AGO,Angola,CCGT,Gas,MaxTotalBuild,5000.0
 LobitoII_TH_AGO,Angola,CCGT,Gas,StYr,2055.0
@@ -7517,7 +7517,7 @@ LobitoII_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 LobitoII_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 LobitoII_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 LobitoII_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-LobitoII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+LobitoII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 LobitoII_TH_AGO,Angola,CCGT,Gas,BuildLimitperYear,750.0
 LobitoII_TH_AGO,Angola,CCGT,Gas,MaxTotalBuild,5000.0
 LobitoIII_TH_AGO,Angola,CCGT,Gas,StYr,2055.0
@@ -7539,7 +7539,7 @@ LobitoIII_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 LobitoIII_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 LobitoIII_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 LobitoIII_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-LobitoIII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+LobitoIII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 LobitoIII_TH_AGO,Angola,CCGT,Gas,BuildLimitperYear,375.0
 LobitoIII_TH_AGO,Angola,CCGT,Gas,MaxTotalBuild,5000.0
 Namibe_TH_AGO,Angola,CCGT,Gas,StYr,2030.0
@@ -7561,7 +7561,7 @@ Namibe_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 Namibe_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 Namibe_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 Namibe_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-Namibe_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+Namibe_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 Namibe_TH_AGO,Angola,CCGT,Gas,BuildLimitperYear,750.0
 Namibe_TH_AGO,Angola,CCGT,Gas,MaxTotalBuild,5000.0
 SoyoIII_TH_AGO,Angola,CCGT,Gas,StYr,2055.0
@@ -7583,7 +7583,7 @@ SoyoIII_TH_AGO,Angola,CCGT,Gas,HeatRate,6.4
 SoyoIII_TH_AGO,Angola,CCGT,Gas,fuel2,7.0
 SoyoIII_TH_AGO,Angola,CCGT,Gas,HeatRate2,7.1
 SoyoIII_TH_AGO,Angola,CCGT,Gas,MinUtilization,0.05
-SoyoIII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944545
+SoyoIII_TH_AGO,Angola,CCGT,Gas,Capex,1.2450805008944543
 SoyoIII_TH_AGO,Angola,CCGT,Gas,BuildLimitperYear,375.0
 SoyoIII_TH_AGO,Angola,CCGT,Gas,MaxTotalBuild,5000.0
 Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,StYr,2032.0
@@ -7592,7 +7592,7 @@ Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,121.0
 Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 Vuka_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -7609,7 +7609,7 @@ JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,180.0
 JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 JambaMina_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -7626,7 +7626,7 @@ JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,75.0
 JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 JambaOma_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -7643,7 +7643,7 @@ Genga_HY_AGO,Angola,STORAGE,PumpedHydro,Zone,9.0
 Genga_HY_AGO,Angola,STORAGE,PumpedHydro,Capacity,900.0
 Genga_HY_AGO,Angola,STORAGE,PumpedHydro,RampUpRate,1.0
 Genga_HY_AGO,Angola,STORAGE,PumpedHydro,RampDnRate,1.0
-Genga_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.12182613575007187
+Genga_HY_AGO,Angola,STORAGE,PumpedHydro,ResLimShare,0.1218261357500718
 Genga_HY_AGO,Angola,STORAGE,PumpedHydro,FOMperMW,46500.0
 Genga_HY_AGO,Angola,STORAGE,PumpedHydro,VOM,0.55
 Genga_HY_AGO,Angola,STORAGE,PumpedHydro,Life,50.0
@@ -7721,7 +7721,7 @@ SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,1220.0
 SACCGTNG2025_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,1220.0
 SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,StYr,2027.0
@@ -7743,7 +7743,7 @@ SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,1000.0
 SACCGTNG2027_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,1000.0
 SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,StYr,2028.0
@@ -7765,7 +7765,7 @@ SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,4000.0
 SACCGTNG2028_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,4000.0
 SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,StYr,2030.0
@@ -7787,7 +7787,7 @@ SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,7500.0
 SACCGTNG2029_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,7500.0
 New_CSP_ZAF_2024,South_Africa,CSPPlant,Solar,StYr,2024.0
@@ -7890,7 +7890,7 @@ SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,7500.0
 SACCGTNG2035_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,7500.0
 SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,StYr,2040.0
@@ -7912,7 +7912,7 @@ SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,7500.0
 SACCGTNG2040_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,7500.0
 SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,StYr,2045.0
@@ -7934,7 +7934,7 @@ SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,HeatRate,6.4
 SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,fuel2,7.0
 SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,HeatRate2,7.1
 SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,MinUtilization,0.05
-SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,BuildLimitperYear,7500.0
 SACCGTNG2045_TH_ZAF,South_Africa,CCGT,Gas,MaxTotalBuild,7500.0
 AnixasII_TH_NAM,Namibia,ICE,HFO,StYr,2024.0
@@ -7953,7 +7953,7 @@ AnixasII_TH_NAM,Namibia,ICE,HFO,Status,2.0
 AnixasII_TH_NAM,Namibia,ICE,HFO,Error,12215.209257650631
 AnixasII_TH_NAM,Namibia,ICE,HFO,MinLimitShare,0.06
 AnixasII_TH_NAM,Namibia,ICE,HFO,HeatRate,10.41544727496
-AnixasII_TH_NAM,Namibia,ICE,HFO,Capex,0.9338103756708409
+AnixasII_TH_NAM,Namibia,ICE,HFO,Capex,0.9338103756708408
 SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,StYr,2031.0
 SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,RetrYr,2081.0
 SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,Zone,1.0
@@ -7972,7 +7972,7 @@ SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2031,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,StYr,2032.0
 SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,RetrYr,2082.0
 SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,Zone,1.0
@@ -7991,7 +7991,7 @@ SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2032,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,StYr,2033.0
 SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,RetrYr,2083.0
 SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,Zone,1.0
@@ -8010,7 +8010,7 @@ SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2033,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,StYr,2034.0
 SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,RetrYr,2084.0
 SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,Zone,1.0
@@ -8029,7 +8029,7 @@ SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2034,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,StYr,2035.0
 SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,RetrYr,2085.0
 SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,Zone,1.0
@@ -8048,7 +8048,7 @@ SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2035,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,StYr,2036.0
 SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,RetrYr,2086.0
 SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,Zone,1.0
@@ -8067,7 +8067,7 @@ SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2036,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,StYr,2037.0
 SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,RetrYr,2087.0
 SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,Zone,1.0
@@ -8086,7 +8086,7 @@ SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2037,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,StYr,2038.0
 SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,RetrYr,2088.0
 SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,Zone,1.0
@@ -8105,7 +8105,7 @@ SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2038,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,StYr,2039.0
 SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,RetrYr,2089.0
 SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,Zone,1.0
@@ -8124,7 +8124,7 @@ SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2039,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,StYr,2040.0
 SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,RetrYr,2090.0
 SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,Zone,1.0
@@ -8143,7 +8143,7 @@ SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2040,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,StYr,2041.0
 SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,RetrYr,2091.0
 SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,Zone,1.0
@@ -8162,7 +8162,7 @@ SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2041,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,StYr,2042.0
 SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,RetrYr,2092.0
 SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,Zone,1.0
@@ -8181,7 +8181,7 @@ SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2042,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,StYr,2043.0
 SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,RetrYr,2093.0
 SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,Zone,1.0
@@ -8200,7 +8200,7 @@ SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2043,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,StYr,2044.0
 SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,RetrYr,2094.0
 SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,Zone,1.0
@@ -8219,7 +8219,7 @@ SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2044,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,StYr,2045.0
 SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,RetrYr,2095.0
 SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,Zone,1.0
@@ -8238,7 +8238,7 @@ SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2045,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,StYr,2046.0
 SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,RetrYr,2096.0
 SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,Zone,1.0
@@ -8257,7 +8257,7 @@ SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2046,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,StYr,2047.0
 SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,RetrYr,2097.0
 SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,Zone,1.0
@@ -8276,7 +8276,7 @@ SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2047,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,StYr,2048.0
 SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,RetrYr,2098.0
 SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,Zone,1.0
@@ -8295,7 +8295,7 @@ SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2048,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,StYr,2049.0
 SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,RetrYr,2099.0
 SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,Zone,1.0
@@ -8314,7 +8314,7 @@ SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2049,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,StYr,2050.0
 SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,RetrYr,2100.0
 SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,Zone,1.0
@@ -8333,7 +8333,7 @@ SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,HeatRate,6.4
 SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,fuel2,7.0
 SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,HeatRate2,7.1
 SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,MinUtilization,0.05
-SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,Capex,1.2450805008944545
+SA_IRP_New_Gas_CCGT_2050,South_Africa,CCGT,Gas,Capex,1.2450805008944543
 SA_IRP_New_Gas_GT_2031,South_Africa,CCGT,Gas,StYr,2031.0
 SA_IRP_New_Gas_GT_2031,South_Africa,CCGT,Gas,RetrYr,2081.0
 SA_IRP_New_Gas_GT_2031,South_Africa,CCGT,Gas,Zone,1.0
@@ -9516,7 +9516,7 @@ Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,Zone,12.0
 Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,Capacity,57.5
 Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,RampUpRate,1.0
 Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,RampDnRate,1.0
-Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,ResLimShare,0.32507730616715724
+Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,ResLimShare,0.3250773061671572
 Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,FOMperMW,40000.0
 Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,VOM,0.5
 Mpatamanga_HY_Reg,Malawi,ReservoirHydro,Hydro,Life,50.0
@@ -9533,7 +9533,7 @@ Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,RetrYr,2060.0
 Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,Zone,12.0
 Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,RampUpRate,1.0
 Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,RampDnRate,1.0
-Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,ResLimShare,0.32507730616715724
+Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,ResLimShare,0.3250773061671572
 Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,FOMperMW,40000.0
 Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,VOM,0.5
 Mpatamanga_Opt,Malawi,ReservoirHydro,Hydro,Life,50.0
@@ -9571,7 +9571,7 @@ Sto_MWI_2030,Malawi,STORAGE,Battery,Life,20.0
 Sto_MWI_2030,Malawi,STORAGE,Battery,Type,17.0
 Sto_MWI_2030,Malawi,STORAGE,Battery,fuel1,10.0
 Sto_MWI_2030,Malawi,STORAGE,Battery,Status,3.0
-Sto_MWI_2030,Malawi,STORAGE,Battery,Error,24160.100000000002
+Sto_MWI_2030,Malawi,STORAGE,Battery,Error,24160.1
 Sto_MWI_2030,Malawi,STORAGE,Battery,Capex,0.2
 Sto_MWI_2030,Malawi,STORAGE,Battery,BuildLimitperYear,150.0
 Sto_MWI_2030,Malawi,STORAGE,Battery,MaxTotalBuild,3000.0
@@ -9597,7 +9597,7 @@ Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,Capacity,9.8
 Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Mulanje_Ruo_Ndiza,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -9611,7 +9611,7 @@ Cedar_Muloza,Malawi,STORAGE,PumpedHydro,Zone,12.0
 Cedar_Muloza,Malawi,STORAGE,PumpedHydro,Capacity,3.3
 Cedar_Muloza,Malawi,STORAGE,PumpedHydro,RampUpRate,1.0
 Cedar_Muloza,Malawi,STORAGE,PumpedHydro,RampDnRate,1.0
-Cedar_Muloza,Malawi,STORAGE,PumpedHydro,ResLimShare,0.32507730616715724
+Cedar_Muloza,Malawi,STORAGE,PumpedHydro,ResLimShare,0.3250773061671572
 Cedar_Muloza,Malawi,STORAGE,PumpedHydro,FOMperMW,40737.535999184445
 Cedar_Muloza,Malawi,STORAGE,PumpedHydro,VOM,0.55
 Cedar_Muloza,Malawi,STORAGE,PumpedHydro,Life,50.0
@@ -9632,3 +9632,42 @@ Serengeti_Nkhotakota,Malawi,PV,Solar,fuel1,4.0
 Serengeti_Nkhotakota,Malawi,PV,Solar,Status,1.0
 Serengeti_Nkhotakota,Malawi,PV,Solar,Error,19154.0
 Serengeti_Nkhotakota,Malawi,PV,Solar,RETech,1.0
+Sto_AGO_new,Angola,STORAGE,Battery,Capacity,250000.0
+Sto_AGO_new,Angola,STORAGE,Battery,UnitSize,5.0
+Sto_AGO_new,Angola,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_BWA_new,Botswana,STORAGE,Battery,Capacity,250000.0
+Sto_BWA_new,Botswana,STORAGE,Battery,UnitSize,5.0
+Sto_BWA_new,Botswana,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_DRC_new,DRC,STORAGE,Battery,Capacity,250000.0
+Sto_DRC_new,DRC,STORAGE,Battery,UnitSize,5.0
+Sto_DRC_new,DRC,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_DRCSouth_new,DRC_South,STORAGE,Battery,Capacity,250000.0
+Sto_DRCSouth_new,DRC_South,STORAGE,Battery,UnitSize,5.0
+Sto_DRCSouth_new,DRC_South,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_LSO_new,Lesotho,STORAGE,Battery,Capacity,250000.0
+Sto_LSO_new,Lesotho,STORAGE,Battery,UnitSize,5.0
+Sto_LSO_new,Lesotho,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_MOZ_new,Mozambique,STORAGE,Battery,Capacity,250000.0
+Sto_MOZ_new,Mozambique,STORAGE,Battery,UnitSize,5.0
+Sto_MOZ_new,Mozambique,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_MWI_new,Malawi,STORAGE,Battery,Capacity,250000.0
+Sto_MWI_new,Malawi,STORAGE,Battery,UnitSize,5.0
+Sto_MWI_new,Malawi,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_NAM_new,Namibia,STORAGE,Battery,Capacity,250000.0
+Sto_NAM_new,Namibia,STORAGE,Battery,UnitSize,5.0
+Sto_NAM_new,Namibia,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_SWE_new,Zimbabwe,STORAGE,Battery,Capacity,250000.0
+Sto_SWE_new,Zimbabwe,STORAGE,Battery,UnitSize,5.0
+Sto_SWE_new,Zimbabwe,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_SWZ_new,Eswatini,STORAGE,Battery,Capacity,250000.0
+Sto_SWZ_new,Eswatini,STORAGE,Battery,UnitSize,5.0
+Sto_SWZ_new,Eswatini,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_TZA_new,Tanzania,STORAGE,Battery,Capacity,250000.0
+Sto_TZA_new,Tanzania,STORAGE,Battery,UnitSize,5.0
+Sto_TZA_new,Tanzania,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_ZAF_new,South_Africa,STORAGE,Battery,Capacity,1250000.0
+Sto_ZAF_new,South_Africa,STORAGE,Battery,UnitSize,5.0
+Sto_ZAF_new,South_Africa,STORAGE,Battery,BuildLimitperYear,100000.0
+Sto_ZMB_new,Zambia,STORAGE,Battery,Capacity,250000.0
+Sto_ZMB_new,Zambia,STORAGE,Battery,UnitSize,5.0
+Sto_ZMB_new,Zambia,STORAGE,Battery,BuildLimitperYear,100000.0

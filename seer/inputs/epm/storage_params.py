@@ -1,4 +1,6 @@
 """Build storage_constants.csv and storage_costs.csv from EPM input data."""
+import warnings
+
 import pandas as pd
 
 from .generator_params import NO_RETIREMENT_YEAR
@@ -55,11 +57,17 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     )
     storage_constants = storage_constants.merge(zone_tech, on="storage", how="left")
 
+    # a storage plant with no matching pGenDataInputCustom row at all has no zone/tech
+    # this should be dropped with a warning
+    missing_zone = storage_constants["zone"].isna()
+    if missing_zone.any():
+        warnings.warn(
+            f"No pGenDataInputCustom.csv entry at all for storage plant(s) in {data_path!r} "
+            f"(no zone/tech to attach them with): {sorted(storage_constants.loc[missing_zone, 'storage'])}"
+        )
+
     # fill missing lifetimes (some regions have no "Life" value at all for any storage
-    # plant) with a default by tech. Battery figure is the standard utility-scale
-    # Li-ion assumption (matches the Life=15 value already present for battery plants
-    # elsewhere in this dataset, e.g. Guinea's BESS). Pumped hydro is civil infrastructure,
-    # comparable to conventional hydro, and gets a much longer default.
+    # plant) with a default by tech.
     default_lifetime = {
         "Battery": 15,
         "PumpedHydro": 50,

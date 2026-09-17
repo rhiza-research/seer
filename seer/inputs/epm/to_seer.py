@@ -58,6 +58,29 @@ def _drop_unknown_zones(df, valid_zones, label, costs_df=None, id_col=None):
     return df
 
 
+def _read_network(data_path, valid_zones):
+    """network.csv: inter-zone transfer capacity. Sourced from pTransferLimit.csv (from, to,
+    season, year, value) -- but the seer schema's network.csv is a single static capacity per
+    line, not time-varying, so each (from, to) pair's capacity is the average of its raw value
+    across every season/year row. Optional -- some regions (single-zone models, no inter-zone
+    lines) have no pTransferLimit.csv at all, matching network.csv's own optional status (see
+    seer/inputs/README.md).
+    """
+    path = Path(f"{data_path}pTransferLimit.csv")
+    if not path.exists():
+        return pd.DataFrame(columns=["from", "to", "capacity"])
+    df = pd.read_csv(path)
+    network = df.groupby(["from", "to"])["value"].mean().reset_index().rename(columns={"value": "capacity"})
+    bad = ~(network["from"].isin(valid_zones) & network["to"].isin(valid_zones))
+    if bad.any():
+        bad_pairs = list(network.loc[bad, ["from", "to"]].itertuples(index=False, name=None))
+        warnings.warn(
+            f"network.csv: dropping {bad.sum()} line(s) referencing zone(s) not in zones.csv: {bad_pairs}"
+        )
+        network = network[~bad]
+    return network
+
+
 def _match_renewable_profiles(generator_constants, profiles_raw, times):
     """Keep only renewable_profiles rows that actually match something real: a generic (zone,
     tech) row is kept only if some generator actually has that (zone, tech); a
@@ -122,6 +145,7 @@ def epm_to_seer(input_path, output_path):
     valid_zones = set(zones["zone"])
     demand_forecast = _drop_unknown_zones(demand_forecast, valid_zones, "demand_forecast.csv")
     demand_profile = _drop_unknown_zones(demand_profile, valid_zones, "demand_profile.csv")
+    network = _read_network(input_dir, valid_zones)
 
     generator_constants, generator_costs = build_generator_params(input_dir, model_years=years["year"].tolist())
     generator_constants, generator_costs = _drop_unknown_zones(
@@ -152,6 +176,7 @@ def epm_to_seer(input_path, output_path):
         "years": years,
         "times": times,
         "zones": zones,
+        "network": network,
         "demand_forecast": demand_forecast,
         "demand_profile": demand_profile,
     }
