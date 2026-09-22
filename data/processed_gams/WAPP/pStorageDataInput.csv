@@ -11,9 +11,6 @@ BESS Yekepa / Buchanan 15 /60,,CapacityMWh,60.0
 BESS Yekepa / Buchanan 15 /60,,Life,20.0
 BESS Yekepa / Buchanan 15 /60,,CapexMWh,250.0
 BESS Yekepa / Buchanan 15 /60,,Efficiency,0.85
-Storage_CAND_2026_Senegal,,Life,20.0
-Storage_CAND_2026_Senegal,,CapexMWh,250.0
-Storage_CAND_2026_Senegal,,Efficiency,0.85
 Storage_CAND_2027_Benin,,CapacityMWh,30000.0
 Storage_CAND_2027_Benin,,Life,20.0
 Storage_CAND_2027_Benin,,CapexMWh,250.0

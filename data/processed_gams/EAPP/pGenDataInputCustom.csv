@@ -88,7 +88,6 @@ Kabu16,Burundi,ROR,Water,StYr,2027.0
 Kabu16,Burundi,ROR,Water,Life,50.0
 Kabu16,Burundi,ROR,Water,VOM,0.5
 Kabu16,Burundi,ROR,Water,Status,1.0
-Kabu16,Burundi,ROR,Water,BuildLimitperYear,20.0
 Kabu16,Burundi,ROR,Water,Capex,2.8
 Kabu16,Burundi,ROR,Water,MaxTotalBuild,20.0
 Kabu16,Burundi,ROR,Water,MinUtilization,0.05
@@ -565,7 +564,6 @@ Akuo,Djibouti,PV,Solar,StYr,2026.0
 Akuo,Djibouti,PV,Solar,Life,30.0
 Akuo,Djibouti,PV,Solar,VOM,65.0
 Akuo,Djibouti,PV,Solar,Status,2.0
-Akuo,Djibouti,PV,Solar,BuildLimitperYear,30.0
 Akuo,Djibouti,PV,Solar,Capex,0.8
 Akuo,Djibouti,PV,Solar,MaxTotalBuild,30.0
 Akuo,Djibouti,PV,Solar,RETech,1.0
@@ -578,7 +576,6 @@ Battery_5MW_DJI,Djibouti,Storage,Battery,RetrYr,2046.0
 Battery_5MW_DJI,Djibouti,Storage,Battery,StYr,2026.0
 Battery_5MW_DJI,Djibouti,Storage,Battery,Life,20.0
 Battery_5MW_DJI,Djibouti,Storage,Battery,Status,2.0
-Battery_5MW_DJI,Djibouti,Storage,Battery,BuildLimitperYear,5.0
 Battery_5MW_DJI,Djibouti,Storage,Battery,Capex,0.3
 Battery_5MW_DJI,Djibouti,Storage,Battery,MaxTotalBuild,5.0
 HFO_Project_01_DJI,Djibouti,ICE,HFO,Capacity,20.0
@@ -592,7 +589,6 @@ HFO_Project_01_DJI,Djibouti,ICE,HFO,Life,30.0
 HFO_Project_01_DJI,Djibouti,ICE,HFO,HeatRate,10.42
 HFO_Project_01_DJI,Djibouti,ICE,HFO,VOM,6.4
 HFO_Project_01_DJI,Djibouti,ICE,HFO,Status,2.0
-HFO_Project_01_DJI,Djibouti,ICE,HFO,BuildLimitperYear,20.0
 HFO_Project_01_DJI,Djibouti,ICE,HFO,Capex,1.09
 HFO_Project_01_DJI,Djibouti,ICE,HFO,MaxTotalBuild,20.0
 HFO_Project_02_DJI,Djibouti,ICE,HFO,Capacity,20.0
@@ -606,7 +602,6 @@ HFO_Project_02_DJI,Djibouti,ICE,HFO,Life,30.0
 HFO_Project_02_DJI,Djibouti,ICE,HFO,HeatRate,10.42
 HFO_Project_02_DJI,Djibouti,ICE,HFO,VOM,6.4
 HFO_Project_02_DJI,Djibouti,ICE,HFO,Status,2.0
-HFO_Project_02_DJI,Djibouti,ICE,HFO,BuildLimitperYear,20.0
 HFO_Project_02_DJI,Djibouti,ICE,HFO,Capex,1.09
 HFO_Project_02_DJI,Djibouti,ICE,HFO,MaxTotalBuild,20.0
 HFO_Project_03_DJI,Djibouti,ICE,HFO,Capacity,20.0
@@ -620,7 +615,6 @@ HFO_Project_03_DJI,Djibouti,ICE,HFO,Life,30.0
 HFO_Project_03_DJI,Djibouti,ICE,HFO,HeatRate,10.42
 HFO_Project_03_DJI,Djibouti,ICE,HFO,VOM,6.4
 HFO_Project_03_DJI,Djibouti,ICE,HFO,Status,2.0
-HFO_Project_03_DJI,Djibouti,ICE,HFO,BuildLimitperYear,20.0
 HFO_Project_03_DJI,Djibouti,ICE,HFO,Capex,1.09
 HFO_Project_03_DJI,Djibouti,ICE,HFO,MaxTotalBuild,20.0
 HFO_Project_04_DJI,Djibouti,ICE,HFO,Capacity,20.0
@@ -634,7 +628,6 @@ HFO_Project_04_DJI,Djibouti,ICE,HFO,Life,30.0
 HFO_Project_04_DJI,Djibouti,ICE,HFO,HeatRate,10.42
 HFO_Project_04_DJI,Djibouti,ICE,HFO,VOM,6.4
 HFO_Project_04_DJI,Djibouti,ICE,HFO,Status,2.0
-HFO_Project_04_DJI,Djibouti,ICE,HFO,BuildLimitperYear,20.0
 HFO_Project_04_DJI,Djibouti,ICE,HFO,Capex,1.09
 HFO_Project_04_DJI,Djibouti,ICE,HFO,MaxTotalBuild,20.0
 HFO_Project_05_DJI,Djibouti,ICE,HFO,Capacity,20.0
@@ -648,7 +641,6 @@ HFO_Project_05_DJI,Djibouti,ICE,HFO,Life,30.0
 HFO_Project_05_DJI,Djibouti,ICE,HFO,HeatRate,10.42
 HFO_Project_05_DJI,Djibouti,ICE,HFO,VOM,6.4
 HFO_Project_05_DJI,Djibouti,ICE,HFO,Status,2.0
-HFO_Project_05_DJI,Djibouti,ICE,HFO,BuildLimitperYear,20.0
 HFO_Project_05_DJI,Djibouti,ICE,HFO,Capex,1.09
 HFO_Project_05_DJI,Djibouti,ICE,HFO,MaxTotalBuild,20.0
 PolyGCL1,Djibouti,CCGT,Gas,Capacity,70.0
@@ -757,7 +749,6 @@ Wind_on,Djibouti,OnshoreWind,Wind,StYr,2022.0
 Wind_on,Djibouti,OnshoreWind,Wind,Life,30.0
 Wind_on,Djibouti,OnshoreWind,Wind,VOM,75.0
 Wind_on,Djibouti,OnshoreWind,Wind,Status,1.0
-Wind_on,Djibouti,OnshoreWind,Wind,BuildLimitperYear,60.0
 Wind_on,Djibouti,OnshoreWind,Wind,Capex,1.3
 Wind_on,Djibouti,OnshoreWind,Wind,MaxTotalBuild,60.0
 Wind_on,Djibouti,OnshoreWind,Wind,RETech,1.0
@@ -1972,7 +1963,6 @@ ACWA-POWER_PV,Egypt,PV,Solar,RetrYr,2047.0
 ACWA-POWER_PV,Egypt,PV,Solar,StYr,2022.0
 ACWA-POWER_PV,Egypt,PV,Solar,Life,25.0
 ACWA-POWER_PV,Egypt,PV,Solar,Status,2.0
-ACWA-POWER_PV,Egypt,PV,Solar,BuildLimitperYear,200.0
 ACWA-POWER_PV,Egypt,PV,Solar,Capex,0.93
 ACWA-POWER_PV,Egypt,PV,Solar,MaxTotalBuild,200.0
 ACWA-POWER_PV,Egypt,PV,Solar,RETech,1.0
@@ -1982,7 +1972,6 @@ AMYA-POWER_PV,Egypt,PV,Solar,RetrYr,2047.0
 AMYA-POWER_PV,Egypt,PV,Solar,StYr,2022.0
 AMYA-POWER_PV,Egypt,PV,Solar,Life,25.0
 AMYA-POWER_PV,Egypt,PV,Solar,Status,2.0
-AMYA-POWER_PV,Egypt,PV,Solar,BuildLimitperYear,500.0
 AMYA-POWER_PV,Egypt,PV,Solar,Capex,0.93
 AMYA-POWER_PV,Egypt,PV,Solar,MaxTotalBuild,500.0
 AMYA-POWER_PV,Egypt,PV,Solar,RETech,1.0
@@ -1995,7 +1984,6 @@ El-Dabaa_NPP-1_NU,Egypt,Nuclear,Uranium,Life,50.0
 El-Dabaa_NPP-1_NU,Egypt,Nuclear,Uranium,HeatRate,10.4
 El-Dabaa_NPP-1_NU,Egypt,Nuclear,Uranium,VOM,2.3
 El-Dabaa_NPP-1_NU,Egypt,Nuclear,Uranium,Status,2.0
-El-Dabaa_NPP-1_NU,Egypt,Nuclear,Uranium,BuildLimitperYear,1200.0
 El-Dabaa_NPP-1_NU,Egypt,Nuclear,Uranium,Capex,5.5
 El-Dabaa_NPP-1_NU,Egypt,Nuclear,Uranium,MaxTotalBuild,1200.0
 El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,Capacity,1200.0
@@ -2007,7 +1995,6 @@ El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,Life,50.0
 El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,HeatRate,10.4
 El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,VOM,2.3
 El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,Status,2.0
-El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,BuildLimitperYear,1200.0
 El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,Capex,5.5
 El-Dabaa_NPP-2_NU,Egypt,Nuclear,Uranium,MaxTotalBuild,1200.0
 El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,Capacity,1200.0
@@ -2019,7 +2006,6 @@ El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,Life,50.0
 El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,HeatRate,10.4
 El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,VOM,2.3
 El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,Status,2.0
-El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,BuildLimitperYear,1200.0
 El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,Capex,5.5
 El-Dabaa_NPP-3_NU,Egypt,Nuclear,Uranium,MaxTotalBuild,1200.0
 El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,Capacity,1200.0
@@ -2031,7 +2017,6 @@ El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,Life,50.0
 El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,HeatRate,10.4
 El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,VOM,2.3
 El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,Status,2.0
-El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,BuildLimitperYear,1200.0
 El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,Capex,5.5
 El-Dabaa_NPP-4_NU,Egypt,Nuclear,Uranium,MaxTotalBuild,1200.0
 ACWA-Power_WI,Egypt,OnshoreWind,Wind,Capacity,1100.0
@@ -2040,7 +2025,6 @@ ACWA-Power_WI,Egypt,OnshoreWind,Wind,RetrYr,2054.0
 ACWA-Power_WI,Egypt,OnshoreWind,Wind,StYr,2024.0
 ACWA-Power_WI,Egypt,OnshoreWind,Wind,Life,30.0
 ACWA-Power_WI,Egypt,OnshoreWind,Wind,Status,2.0
-ACWA-Power_WI,Egypt,OnshoreWind,Wind,BuildLimitperYear,1100.0
 ACWA-Power_WI,Egypt,OnshoreWind,Wind,Capex,1.27
 ACWA-Power_WI,Egypt,OnshoreWind,Wind,MaxTotalBuild,1100.0
 ACWA-Power_WI,Egypt,OnshoreWind,Wind,RETech,1.0
@@ -2050,7 +2034,6 @@ AMYA-POWER_WI,Egypt,OnshoreWind,Wind,RetrYr,2052.0
 AMYA-POWER_WI,Egypt,OnshoreWind,Wind,StYr,2022.0
 AMYA-POWER_WI,Egypt,OnshoreWind,Wind,Life,30.0
 AMYA-POWER_WI,Egypt,OnshoreWind,Wind,Status,2.0
-AMYA-POWER_WI,Egypt,OnshoreWind,Wind,BuildLimitperYear,500.0
 AMYA-POWER_WI,Egypt,OnshoreWind,Wind,Capex,1.4
 AMYA-POWER_WI,Egypt,OnshoreWind,Wind,MaxTotalBuild,500.0
 AMYA-POWER_WI,Egypt,OnshoreWind,Wind,RETech,1.0
@@ -2060,7 +2043,6 @@ Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,RetrYr,2053.0
 Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,StYr,2023.0
 Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,Life,30.0
 Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,Status,2.0
-Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,BuildLimitperYear,500.0
 Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,Capex,1.4
 Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,MaxTotalBuild,500.0
 Engie-Orasco-Toyota_WI,Egypt,OnshoreWind,Wind,RETech,1.0
@@ -2070,7 +2052,6 @@ Masdar_WI,Egypt,OnshoreWind,Wind,RetrYr,2052.0
 Masdar_WI,Egypt,OnshoreWind,Wind,StYr,2022.0
 Masdar_WI,Egypt,OnshoreWind,Wind,Life,30.0
 Masdar_WI,Egypt,OnshoreWind,Wind,Status,2.0
-Masdar_WI,Egypt,OnshoreWind,Wind,BuildLimitperYear,200.0
 Masdar_WI,Egypt,OnshoreWind,Wind,Capex,1.4
 Masdar_WI,Egypt,OnshoreWind,Wind,MaxTotalBuild,200.0
 Masdar_WI,Egypt,OnshoreWind,Wind,RETech,1.0
@@ -2080,7 +2061,6 @@ Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,RetrYr,2053.0
 Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,StYr,2023.0
 Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,Life,30.0
 Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,Status,2.0
-Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,BuildLimitperYear,500.0
 Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,Capex,1.4
 Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,MaxTotalBuild,500.0
 Siemens-Gamesa_WI,Egypt,OnshoreWind,Wind,RETech,1.0
@@ -3029,7 +3009,6 @@ Genale_Dawa_III,Ethiopia,ReservoirHydro,Water,RetrYr,2071.0
 Genale_Dawa_III,Ethiopia,ReservoirHydro,Water,StYr,2021.0
 Genale_Dawa_III,Ethiopia,ReservoirHydro,Water,Life,50.0
 Genale_Dawa_III,Ethiopia,ReservoirHydro,Water,Status,1.0
-Genale_Dawa_III,Ethiopia,ReservoirHydro,Water,BuildLimitperYear,254.0
 Genale_Dawa_III,Ethiopia,ReservoirHydro,Water,Capex,1.97
 Genale_Dawa_III,Ethiopia,ReservoirHydro,Water,MaxTotalBuild,254.0
 GERD_1_HEP,Ethiopia,ReservoirHydro,Water,Capacity,250.0
@@ -3938,7 +3917,6 @@ Beles,Ethiopia,BiomassPlant,Biomass,Life,30.0
 Beles,Ethiopia,BiomassPlant,Biomass,HeatRate,9.54
 Beles,Ethiopia,BiomassPlant,Biomass,VOM,2.5
 Beles,Ethiopia,BiomassPlant,Biomass,Status,2.0
-Beles,Ethiopia,BiomassPlant,Biomass,BuildLimitperYear,60.0
 Beles,Ethiopia,BiomassPlant,Biomass,Capex,4.0
 Beles,Ethiopia,BiomassPlant,Biomass,MaxTotalBuild,60.0
 Beles,Ethiopia,BiomassPlant,Biomass,MinUtilization,0.05
@@ -3953,7 +3931,6 @@ Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,Life,30.0
 Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,HeatRate,9.54
 Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,VOM,2.5
 Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,Status,2.0
-Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,BuildLimitperYear,220.0
 Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,Capex,1.5
 Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,MaxTotalBuild,220.0
 Omo_Kuraz_BIO,Ethiopia,BiomassPlant,Biomass,MinUtilization,0.05
@@ -3985,7 +3962,6 @@ Aluto_Langano,Ethiopia,Geothermal,Geothermal,StYr,2022.0
 Aluto_Langano,Ethiopia,Geothermal,Geothermal,Life,30.0
 Aluto_Langano,Ethiopia,Geothermal,Geothermal,VOM,0.05
 Aluto_Langano,Ethiopia,Geothermal,Geothermal,Status,2.0
-Aluto_Langano,Ethiopia,Geothermal,Geothermal,BuildLimitperYear,7.0
 Aluto_Langano,Ethiopia,Geothermal,Geothermal,Capex,3.33
 Aluto_Langano,Ethiopia,Geothermal,Geothermal,MaxTotalBuild,7.0
 Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,FOMperMW,88400.0
@@ -3997,7 +3973,6 @@ Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,StYr,2023.0
 Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,Life,30.0
 Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,VOM,0.05
 Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,Status,2.0
-Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,BuildLimitperYear,2.5
 Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,Capex,3.33
 Aluto_Langano_I_(Rehabilitation),Ethiopia,Geothermal,Geothermal,MaxTotalBuild,2.5
 Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,Capacity,70.0
@@ -4010,7 +3985,6 @@ Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,StYr,2026.0
 Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,Life,30.0
 Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,VOM,0.05
 Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,Status,2.0
-Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,BuildLimitperYear,75.0
 Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,Capex,3.33
 Aluto_Langano_II,Ethiopia,Geothermal,Geothermal,MaxTotalBuild,75.0
 Asela-I,Ethiopia,OnshoreWind,Wind,Capacity,100.0
@@ -4021,7 +3995,6 @@ Asela-I,Ethiopia,OnshoreWind,Wind,RetrYr,2055.0
 Asela-I,Ethiopia,OnshoreWind,Wind,StYr,2025.0
 Asela-I,Ethiopia,OnshoreWind,Wind,Life,30.0
 Asela-I,Ethiopia,OnshoreWind,Wind,Status,2.0
-Asela-I,Ethiopia,OnshoreWind,Wind,BuildLimitperYear,100.0
 Asela-I,Ethiopia,OnshoreWind,Wind,Capex,1.3
 Asela-I,Ethiopia,OnshoreWind,Wind,MaxTotalBuild,100.0
 Asela-I,Ethiopia,OnshoreWind,Wind,RETech,1.0
@@ -4069,7 +4042,6 @@ Ayisha-II,Ethiopia,OnshoreWind,Wind,StYr,2025.0
 Ayisha-II,Ethiopia,OnshoreWind,Wind,Life,30.0
 Ayisha-II,Ethiopia,OnshoreWind,Wind,VOM,8.4
 Ayisha-II,Ethiopia,OnshoreWind,Wind,Status,2.0
-Ayisha-II,Ethiopia,OnshoreWind,Wind,BuildLimitperYear,120.0
 Ayisha-II,Ethiopia,OnshoreWind,Wind,Capex,1.9
 Ayisha-II,Ethiopia,OnshoreWind,Wind,MaxTotalBuild,120.0
 Ayisha-II,Ethiopia,OnshoreWind,Wind,RETech,1.0
@@ -4083,7 +4055,6 @@ Corbetti_I,Ethiopia,Geothermal,Geothermal,StYr,2026.0
 Corbetti_I,Ethiopia,Geothermal,Geothermal,Life,30.0
 Corbetti_I,Ethiopia,Geothermal,Geothermal,VOM,0.05
 Corbetti_I,Ethiopia,Geothermal,Geothermal,Status,2.0
-Corbetti_I,Ethiopia,Geothermal,Geothermal,BuildLimitperYear,120.0
 Corbetti_I,Ethiopia,Geothermal,Geothermal,Capex,3.33
 Corbetti_I,Ethiopia,Geothermal,Geothermal,MaxTotalBuild,120.0
 Corbetti_II,Ethiopia,Geothermal,Geothermal,Capacity,100.0
@@ -4096,7 +4067,6 @@ Corbetti_II,Ethiopia,Geothermal,Geothermal,StYr,2028.0
 Corbetti_II,Ethiopia,Geothermal,Geothermal,Life,30.0
 Corbetti_II,Ethiopia,Geothermal,Geothermal,VOM,0.05
 Corbetti_II,Ethiopia,Geothermal,Geothermal,Status,2.0
-Corbetti_II,Ethiopia,Geothermal,Geothermal,BuildLimitperYear,100.0
 Corbetti_II,Ethiopia,Geothermal,Geothermal,Capex,3.33
 Corbetti_II,Ethiopia,Geothermal,Geothermal,MaxTotalBuild,100.0
 Dabus_Wind,Ethiopia,OnshoreWind,Wind,Capacity,100.0
@@ -4155,7 +4125,6 @@ Dicheto_solar,Ethiopia,PV,Solar,RetrYr,2049.0
 Dicheto_solar,Ethiopia,PV,Solar,StYr,2026.0
 Dicheto_solar,Ethiopia,PV,Solar,Life,25.0
 Dicheto_solar,Ethiopia,PV,Solar,Status,2.0
-Dicheto_solar,Ethiopia,PV,Solar,BuildLimitperYear,125.0
 Dicheto_solar,Ethiopia,PV,Solar,Capex,0.8
 Dicheto_solar,Ethiopia,PV,Solar,MaxTotalBuild,125.0
 Dicheto_solar,Ethiopia,PV,Solar,RETech,1.0
@@ -4167,7 +4136,6 @@ Gad-I_solar,Ethiopia,PV,Solar,RetrYr,2049.0
 Gad-I_solar,Ethiopia,PV,Solar,StYr,2026.0
 Gad-I_solar,Ethiopia,PV,Solar,Life,25.0
 Gad-I_solar,Ethiopia,PV,Solar,Status,2.0
-Gad-I_solar,Ethiopia,PV,Solar,BuildLimitperYear,125.0
 Gad-I_solar,Ethiopia,PV,Solar,Capex,0.8
 Gad-I_solar,Ethiopia,PV,Solar,MaxTotalBuild,125.0
 Gad-I_solar,Ethiopia,PV,Solar,RETech,1.0
@@ -4180,7 +4148,6 @@ GERD_3_HEP,Ethiopia,ReservoirHydro,Water,RetrYr,2076.0
 GERD_3_HEP,Ethiopia,ReservoirHydro,Water,StYr,2026.0
 GERD_3_HEP,Ethiopia,ReservoirHydro,Water,Life,50.0
 GERD_3_HEP,Ethiopia,ReservoirHydro,Water,Status,2.0
-GERD_3_HEP,Ethiopia,ReservoirHydro,Water,BuildLimitperYear,1700.0
 GERD_3_HEP,Ethiopia,ReservoirHydro,Water,Capex,0.76
 GERD_3_HEP,Ethiopia,ReservoirHydro,Water,MaxTotalBuild,1700.0
 GERD_4_HEP,Ethiopia,ReservoirHydro,Water,Capacity,1600.0
@@ -4192,7 +4159,6 @@ GERD_4_HEP,Ethiopia,ReservoirHydro,Water,RetrYr,2077.0
 GERD_4_HEP,Ethiopia,ReservoirHydro,Water,StYr,2027.0
 GERD_4_HEP,Ethiopia,ReservoirHydro,Water,Life,50.0
 GERD_4_HEP,Ethiopia,ReservoirHydro,Water,Status,2.0
-GERD_4_HEP,Ethiopia,ReservoirHydro,Water,BuildLimitperYear,1700.0
 GERD_4_HEP,Ethiopia,ReservoirHydro,Water,Capex,0.76
 GERD_4_HEP,Ethiopia,ReservoirHydro,Water,MaxTotalBuild,1700.0
 GERD_5_HEP,Ethiopia,ReservoirHydro,Water,Capacity,800.0
@@ -4204,7 +4170,6 @@ GERD_5_HEP,Ethiopia,ReservoirHydro,Water,RetrYr,2078.0
 GERD_5_HEP,Ethiopia,ReservoirHydro,Water,StYr,2028.0
 GERD_5_HEP,Ethiopia,ReservoirHydro,Water,Life,50.0
 GERD_5_HEP,Ethiopia,ReservoirHydro,Water,Status,2.0
-GERD_5_HEP,Ethiopia,ReservoirHydro,Water,BuildLimitperYear,1000.0
 GERD_5_HEP,Ethiopia,ReservoirHydro,Water,Capex,0.76
 GERD_5_HEP,Ethiopia,ReservoirHydro,Water,MaxTotalBuild,1000.0
 Humera,Ethiopia,PV,Solar,Capacity,100.0
@@ -4240,7 +4205,6 @@ Koysha_(Gibe_IV),Ethiopia,ReservoirHydro,Water,RetrYr,2076.0
 Koysha_(Gibe_IV),Ethiopia,ReservoirHydro,Water,StYr,2026.0
 Koysha_(Gibe_IV),Ethiopia,ReservoirHydro,Water,Life,50.0
 Koysha_(Gibe_IV),Ethiopia,ReservoirHydro,Water,Status,2.0
-Koysha_(Gibe_IV),Ethiopia,ReservoirHydro,Water,BuildLimitperYear,2160.0
 Koysha_(Gibe_IV),Ethiopia,ReservoirHydro,Water,Capex,1.28
 Koysha_(Gibe_IV),Ethiopia,ReservoirHydro,Water,MaxTotalBuild,2160.0
 Mekele,Ethiopia,OnshoreWind,Wind,Capacity,100.0
@@ -4278,7 +4242,6 @@ Replacement_Koka_HEP,Ethiopia,ReservoirHydro,Water,RetrYr,2085.0
 Replacement_Koka_HEP,Ethiopia,ReservoirHydro,Water,StYr,2035.0
 Replacement_Koka_HEP,Ethiopia,ReservoirHydro,Water,Life,50.0
 Replacement_Koka_HEP,Ethiopia,ReservoirHydro,Water,Status,2.0
-Replacement_Koka_HEP,Ethiopia,ReservoirHydro,Water,BuildLimitperYear,42.9
 Replacement_Koka_HEP,Ethiopia,ReservoirHydro,Water,Capex,1.97
 Replacement_Koka_HEP,Ethiopia,ReservoirHydro,Water,MaxTotalBuild,42.9
 Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,Capacity,50.0
@@ -4291,7 +4254,6 @@ Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,StYr,2026.0
 Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,Life,30.0
 Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,VOM,0.05
 Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,Status,2.0
-Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,BuildLimitperYear,50.0
 Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,Capex,3.33
 Tulu_Moye_I,Ethiopia,Geothermal,Geothermal,MaxTotalBuild,50.0
 Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,Capacity,100.0
@@ -4304,7 +4266,6 @@ Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,StYr,2028.0
 Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,Life,30.0
 Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,VOM,0.05
 Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,Status,2.0
-Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,BuildLimitperYear,100.0
 Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,Capex,3.33
 Tulu_Moye_II,Ethiopia,Geothermal,Geothermal,MaxTotalBuild,100.0
 Tulumoya_Abaya,Ethiopia,Geothermal,Geothermal,Capacity,150.0
@@ -4446,7 +4407,6 @@ Addis_Ababa_EFW,Ethiopia,BiomassPlant,Biomass,Life,30.0
 Addis_Ababa_EFW,Ethiopia,BiomassPlant,Biomass,HeatRate,9.96
 Addis_Ababa_EFW,Ethiopia,BiomassPlant,Biomass,VOM,3.74
 Addis_Ababa_EFW,Ethiopia,BiomassPlant,Biomass,Status,1.0
-Addis_Ababa_EFW,Ethiopia,BiomassPlant,Biomass,BuildLimitperYear,25.0
 Addis_Ababa_EFW,Ethiopia,BiomassPlant,Biomass,Capex,4.8
 Addis_Ababa_EFW,Ethiopia,BiomassPlant,Biomass,MaxTotalBuild,25.0
 Kality,Ethiopia,ICE,Diesel,Capacity,14.0
@@ -4625,7 +4585,6 @@ GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,RetrYr,2074.0
 GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,StYr,2024.0
 GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,Life,50.0
 GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,Status,1.0
-GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,BuildLimitperYear,1700.0
 GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,Capex,0.76
 GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,MaxTotalBuild,1700.0
 GERD_3a_HEP,Ethiopia,ReservoirHydro,Water,MinUtilization,0.05
@@ -5908,7 +5867,6 @@ Menengai_I_Quantum,Kenya,Geothermal,Geothermal,StYr,2024.0
 Menengai_I_Quantum,Kenya,Geothermal,Geothermal,Life,30.0
 Menengai_I_Quantum,Kenya,Geothermal,Geothermal,VOM,0.05
 Menengai_I_Quantum,Kenya,Geothermal,Geothermal,Status,2.0
-Menengai_I_Quantum,Kenya,Geothermal,Geothermal,BuildLimitperYear,35.0
 Menengai_I_Quantum,Kenya,Geothermal,Geothermal,Capex,2.57
 Menengai_I_Quantum,Kenya,Geothermal,Geothermal,MaxTotalBuild,35.0
 Menengai_I_Sosian,Kenya,Geothermal,Geothermal,Capacity,35.0
@@ -5919,7 +5877,6 @@ Menengai_I_Sosian,Kenya,Geothermal,Geothermal,StYr,2024.0
 Menengai_I_Sosian,Kenya,Geothermal,Geothermal,Life,30.0
 Menengai_I_Sosian,Kenya,Geothermal,Geothermal,VOM,0.05
 Menengai_I_Sosian,Kenya,Geothermal,Geothermal,Status,2.0
-Menengai_I_Sosian,Kenya,Geothermal,Geothermal,BuildLimitperYear,35.0
 Menengai_I_Sosian,Kenya,Geothermal,Geothermal,Capex,2.26
 Menengai_I_Sosian,Kenya,Geothermal,Geothermal,MaxTotalBuild,35.0
 Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,Capacity,63.0
@@ -5930,7 +5887,6 @@ Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,StYr,2025.0
 Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,Life,30.0
 Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,VOM,0.05
 Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,Status,2.0
-Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,BuildLimitperYear,63.0
 Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,Capex,2.1
 Olkaria_1_B_(Rehabilitated),Kenya,Geothermal,Geothermal,MaxTotalBuild,63.0
 Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,Capacity,83.0
@@ -5941,7 +5897,6 @@ Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,StYr,2022.0
 Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,Life,30.0
 Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,VOM,0.05
 Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,Status,2.0
-Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,BuildLimitperYear,83.0
 Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,Capex,2.1
 Olkaria_1_Unit_6,Kenya,Geothermal,Geothermal,MaxTotalBuild,83.0
 Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,Capacity,40.0
@@ -5950,7 +5905,6 @@ Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,RetrYr,2054.0
 Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,StYr,2024.0
 Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,Life,25.0
 Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,Status,2.0
-Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,BuildLimitperYear,40.0
 Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,Capex,1.5
 Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,MaxTotalBuild,40.0
 Ergon_Solair_(Kisumu_SolarOne_Ltd),Kenya,PV,Solar,RETech,1.0
@@ -5960,7 +5914,6 @@ Marco_Borero,Kenya,PV,Solar,RetrYr,2052.0
 Marco_Borero,Kenya,PV,Solar,StYr,2022.0
 Marco_Borero,Kenya,PV,Solar,Life,25.0
 Marco_Borero,Kenya,PV,Solar,Status,2.0
-Marco_Borero,Kenya,PV,Solar,BuildLimitperYear,1.5
 Marco_Borero,Kenya,PV,Solar,Capex,1.5
 Marco_Borero,Kenya,PV,Solar,MaxTotalBuild,1.5
 Marco_Borero,Kenya,PV,Solar,RETech,1.0
@@ -5970,7 +5923,6 @@ Radiant-_Selenkei,Kenya,PV,Solar,RetrYr,2052.0
 Radiant-_Selenkei,Kenya,PV,Solar,StYr,2022.0
 Radiant-_Selenkei,Kenya,PV,Solar,Life,25.0
 Radiant-_Selenkei,Kenya,PV,Solar,Status,2.0
-Radiant-_Selenkei,Kenya,PV,Solar,BuildLimitperYear,40.0
 Radiant-_Selenkei,Kenya,PV,Solar,Capex,1.5
 Radiant-_Selenkei,Kenya,PV,Solar,MaxTotalBuild,40.0
 Radiant-_Selenkei,Kenya,PV,Solar,RETech,1.0
@@ -5984,7 +5936,6 @@ Small_Hydro_2021,Kenya,ROR,Water,StYr,2021.0
 Small_Hydro_2021,Kenya,ROR,Water,Life,50.0
 Small_Hydro_2021,Kenya,ROR,Water,VOM,0.5
 Small_Hydro_2021,Kenya,ROR,Water,Status,2.0
-Small_Hydro_2021,Kenya,ROR,Water,BuildLimitperYear,3.8
 Small_Hydro_2021,Kenya,ROR,Water,Capex,3.28
 Small_Hydro_2021,Kenya,ROR,Water,MaxTotalBuild,3.8
 Small_Hydro_2022,Kenya,ROR,Water,Capacity,10.0
@@ -5997,7 +5948,6 @@ Small_Hydro_2022,Kenya,ROR,Water,StYr,2022.0
 Small_Hydro_2022,Kenya,ROR,Water,Life,50.0
 Small_Hydro_2022,Kenya,ROR,Water,VOM,0.5
 Small_Hydro_2022,Kenya,ROR,Water,Status,2.0
-Small_Hydro_2022,Kenya,ROR,Water,BuildLimitperYear,10.2
 Small_Hydro_2022,Kenya,ROR,Water,Capex,3.28
 Small_Hydro_2022,Kenya,ROR,Water,MaxTotalBuild,10.2
 Small_Hydro_2023,Kenya,ROR,Water,Capacity,2.0
@@ -6010,7 +5960,6 @@ Small_Hydro_2023,Kenya,ROR,Water,StYr,2023.0
 Small_Hydro_2023,Kenya,ROR,Water,Life,50.0
 Small_Hydro_2023,Kenya,ROR,Water,VOM,0.5
 Small_Hydro_2023,Kenya,ROR,Water,Status,2.0
-Small_Hydro_2023,Kenya,ROR,Water,BuildLimitperYear,2.4
 Small_Hydro_2023,Kenya,ROR,Water,Capex,3.28
 Small_Hydro_2023,Kenya,ROR,Water,MaxTotalBuild,2.4
 Small_Hydro_2024,Kenya,ROR,Water,Capacity,6.0
@@ -6023,7 +5972,6 @@ Small_Hydro_2024,Kenya,ROR,Water,StYr,2024.0
 Small_Hydro_2024,Kenya,ROR,Water,Life,50.0
 Small_Hydro_2024,Kenya,ROR,Water,VOM,0.5
 Small_Hydro_2024,Kenya,ROR,Water,Status,2.0
-Small_Hydro_2024,Kenya,ROR,Water,BuildLimitperYear,6.2
 Small_Hydro_2024,Kenya,ROR,Water,Capex,3.28
 Small_Hydro_2024,Kenya,ROR,Water,MaxTotalBuild,6.2
 Small_Hydro_2025,Kenya,ROR,Water,Capacity,30.0
@@ -6036,7 +5984,6 @@ Small_Hydro_2025,Kenya,ROR,Water,StYr,2025.0
 Small_Hydro_2025,Kenya,ROR,Water,Life,50.0
 Small_Hydro_2025,Kenya,ROR,Water,VOM,0.5
 Small_Hydro_2025,Kenya,ROR,Water,Status,2.0
-Small_Hydro_2025,Kenya,ROR,Water,BuildLimitperYear,30.0
 Small_Hydro_2025,Kenya,ROR,Water,Capex,3.28
 Small_Hydro_2025,Kenya,ROR,Water,MaxTotalBuild,30.0
 Small_Hydro_2026,Kenya,ROR,Water,FOMperMW,27000.0
@@ -6055,7 +6002,6 @@ Generic_Rooftop_2021,Kenya,RPV,Solar,RetrYr,2041.0
 Generic_Rooftop_2021,Kenya,RPV,Solar,StYr,2021.0
 Generic_Rooftop_2021,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2021,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2021,Kenya,RPV,Solar,BuildLimitperYear,42.0
 Generic_Rooftop_2021,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2021,Kenya,RPV,Solar,MaxTotalBuild,42.0
 Generic_Rooftop_2021,Kenya,RPV,Solar,RETech,1.0
@@ -6065,7 +6011,6 @@ Generic_Rooftop_2022,Kenya,RPV,Solar,RetrYr,2042.0
 Generic_Rooftop_2022,Kenya,RPV,Solar,StYr,2022.0
 Generic_Rooftop_2022,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2022,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2022,Kenya,RPV,Solar,BuildLimitperYear,15.0
 Generic_Rooftop_2022,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2022,Kenya,RPV,Solar,MaxTotalBuild,15.0
 Generic_Rooftop_2022,Kenya,RPV,Solar,RETech,1.0
@@ -6075,7 +6020,6 @@ Generic_Rooftop_2023,Kenya,RPV,Solar,RetrYr,2043.0
 Generic_Rooftop_2023,Kenya,RPV,Solar,StYr,2023.0
 Generic_Rooftop_2023,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2023,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2023,Kenya,RPV,Solar,BuildLimitperYear,12.0
 Generic_Rooftop_2023,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2023,Kenya,RPV,Solar,MaxTotalBuild,12.0
 Generic_Rooftop_2023,Kenya,RPV,Solar,RETech,1.0
@@ -6085,7 +6029,6 @@ Generic_Rooftop_2024,Kenya,RPV,Solar,RetrYr,2044.0
 Generic_Rooftop_2024,Kenya,RPV,Solar,StYr,2024.0
 Generic_Rooftop_2024,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2024,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2024,Kenya,RPV,Solar,BuildLimitperYear,10.0
 Generic_Rooftop_2024,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2024,Kenya,RPV,Solar,MaxTotalBuild,10.0
 Generic_Rooftop_2024,Kenya,RPV,Solar,RETech,1.0
@@ -6095,7 +6038,6 @@ Generic_Rooftop_2025,Kenya,RPV,Solar,RetrYr,2045.0
 Generic_Rooftop_2025,Kenya,RPV,Solar,StYr,2025.0
 Generic_Rooftop_2025,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2025,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2025,Kenya,RPV,Solar,BuildLimitperYear,13.0
 Generic_Rooftop_2025,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2025,Kenya,RPV,Solar,MaxTotalBuild,13.0
 Generic_Rooftop_2025,Kenya,RPV,Solar,RETech,1.0
@@ -6105,7 +6047,6 @@ Generic_Rooftop_2026,Kenya,RPV,Solar,RetrYr,2046.0
 Generic_Rooftop_2026,Kenya,RPV,Solar,StYr,2026.0
 Generic_Rooftop_2026,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2026,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2026,Kenya,RPV,Solar,BuildLimitperYear,6.0
 Generic_Rooftop_2026,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2026,Kenya,RPV,Solar,MaxTotalBuild,6.0
 Generic_Rooftop_2026,Kenya,RPV,Solar,RETech,1.0
@@ -6115,7 +6056,6 @@ Generic_Rooftop_2027,Kenya,RPV,Solar,RetrYr,2047.0
 Generic_Rooftop_2027,Kenya,RPV,Solar,StYr,2027.0
 Generic_Rooftop_2027,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2027,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2027,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2027,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2027,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2027,Kenya,RPV,Solar,RETech,1.0
@@ -6125,7 +6065,6 @@ Generic_Rooftop_2028,Kenya,RPV,Solar,RetrYr,2048.0
 Generic_Rooftop_2028,Kenya,RPV,Solar,StYr,2028.0
 Generic_Rooftop_2028,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2028,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2028,Kenya,RPV,Solar,BuildLimitperYear,3.0
 Generic_Rooftop_2028,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2028,Kenya,RPV,Solar,MaxTotalBuild,3.0
 Generic_Rooftop_2028,Kenya,RPV,Solar,RETech,1.0
@@ -6135,7 +6074,6 @@ Generic_Rooftop_2029,Kenya,RPV,Solar,RetrYr,2049.0
 Generic_Rooftop_2029,Kenya,RPV,Solar,StYr,2029.0
 Generic_Rooftop_2029,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2029,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2029,Kenya,RPV,Solar,BuildLimitperYear,3.0
 Generic_Rooftop_2029,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2029,Kenya,RPV,Solar,MaxTotalBuild,3.0
 Generic_Rooftop_2029,Kenya,RPV,Solar,RETech,1.0
@@ -6145,7 +6083,6 @@ Generic_Rooftop_2030,Kenya,RPV,Solar,RetrYr,2050.0
 Generic_Rooftop_2030,Kenya,RPV,Solar,StYr,2030.0
 Generic_Rooftop_2030,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2030,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2030,Kenya,RPV,Solar,BuildLimitperYear,2.0
 Generic_Rooftop_2030,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2030,Kenya,RPV,Solar,MaxTotalBuild,2.0
 Generic_Rooftop_2030,Kenya,RPV,Solar,RETech,1.0
@@ -6155,7 +6092,6 @@ Generic_Rooftop_2031,Kenya,RPV,Solar,RetrYr,2051.0
 Generic_Rooftop_2031,Kenya,RPV,Solar,StYr,2031.0
 Generic_Rooftop_2031,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2031,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2031,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2031,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2031,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2031,Kenya,RPV,Solar,RETech,1.0
@@ -6165,7 +6101,6 @@ Generic_Rooftop_2032,Kenya,RPV,Solar,RetrYr,2052.0
 Generic_Rooftop_2032,Kenya,RPV,Solar,StYr,2032.0
 Generic_Rooftop_2032,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2032,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2032,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2032,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2032,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2032,Kenya,RPV,Solar,RETech,1.0
@@ -6175,7 +6110,6 @@ Generic_Rooftop_2033,Kenya,RPV,Solar,RetrYr,2053.0
 Generic_Rooftop_2033,Kenya,RPV,Solar,StYr,2033.0
 Generic_Rooftop_2033,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2033,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2033,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2033,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2033,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2033,Kenya,RPV,Solar,RETech,1.0
@@ -6185,7 +6119,6 @@ Generic_Rooftop_2034,Kenya,RPV,Solar,RetrYr,2054.0
 Generic_Rooftop_2034,Kenya,RPV,Solar,StYr,2034.0
 Generic_Rooftop_2034,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2034,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2034,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2034,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2034,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2034,Kenya,RPV,Solar,RETech,1.0
@@ -6195,7 +6128,6 @@ Generic_Rooftop_2035,Kenya,RPV,Solar,RetrYr,2055.0
 Generic_Rooftop_2035,Kenya,RPV,Solar,StYr,2035.0
 Generic_Rooftop_2035,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2035,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2035,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2035,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2035,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2035,Kenya,RPV,Solar,RETech,1.0
@@ -6205,7 +6137,6 @@ Generic_Rooftop_2036,Kenya,RPV,Solar,RetrYr,2056.0
 Generic_Rooftop_2036,Kenya,RPV,Solar,StYr,2036.0
 Generic_Rooftop_2036,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2036,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2036,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2036,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2036,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2036,Kenya,RPV,Solar,RETech,1.0
@@ -6216,7 +6147,6 @@ Generic_Rooftop_2037,Kenya,RPV,Solar,RetrYr,2057.0
 Generic_Rooftop_2037,Kenya,RPV,Solar,StYr,2037.0
 Generic_Rooftop_2037,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2037,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2037,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2037,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2037,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2037,Kenya,RPV,Solar,RETech,1.0
@@ -6227,7 +6157,6 @@ Generic_Rooftop_2038,Kenya,RPV,Solar,RetrYr,2058.0
 Generic_Rooftop_2038,Kenya,RPV,Solar,StYr,2038.0
 Generic_Rooftop_2038,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2038,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2038,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2038,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2038,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2038,Kenya,RPV,Solar,RETech,1.0
@@ -6238,7 +6167,6 @@ Generic_Rooftop_2039,Kenya,RPV,Solar,RetrYr,2059.0
 Generic_Rooftop_2039,Kenya,RPV,Solar,StYr,2039.0
 Generic_Rooftop_2039,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2039,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2039,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2039,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2039,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2039,Kenya,RPV,Solar,RETech,1.0
@@ -6249,7 +6177,6 @@ Generic_Rooftop_2040,Kenya,RPV,Solar,RetrYr,2060.0
 Generic_Rooftop_2040,Kenya,RPV,Solar,StYr,2040.0
 Generic_Rooftop_2040,Kenya,RPV,Solar,Life,20.0
 Generic_Rooftop_2040,Kenya,RPV,Solar,Status,2.0
-Generic_Rooftop_2040,Kenya,RPV,Solar,BuildLimitperYear,5.0
 Generic_Rooftop_2040,Kenya,RPV,Solar,Capex,1.3
 Generic_Rooftop_2040,Kenya,RPV,Solar,MaxTotalBuild,5.0
 Generic_Rooftop_2040,Kenya,RPV,Solar,RETech,1.0
@@ -6263,7 +6190,6 @@ BESS_1_2_3,Kenya,Storage,Battery,RetrYr,2052.0
 BESS_1_2_3,Kenya,Storage,Battery,StYr,2024.0
 BESS_1_2_3,Kenya,Storage,Battery,Life,20.0
 BESS_1_2_3,Kenya,Storage,Battery,Status,2.0
-BESS_1_2_3,Kenya,Storage,Battery,BuildLimitperYear,250.0
 BESS_1_2_3,Kenya,Storage,Battery,Capex,0.3
 BESS_1_2_3,Kenya,Storage,Battery,MaxTotalBuild,250.0
 BESS_1_2_3,Kenya,Storage,Battery,MinUtilization,0.05
@@ -6273,7 +6199,6 @@ Chania_green,Kenya,OnshoreWind,Wind,RetrYr,2057.0
 Chania_green,Kenya,OnshoreWind,Wind,StYr,2022.0
 Chania_green,Kenya,OnshoreWind,Wind,Life,30.0
 Chania_green,Kenya,OnshoreWind,Wind,Status,2.0
-Chania_green,Kenya,OnshoreWind,Wind,BuildLimitperYear,50.0
 Chania_green,Kenya,OnshoreWind,Wind,Capex,1.9
 Chania_green,Kenya,OnshoreWind,Wind,MaxTotalBuild,50.0
 Chania_green,Kenya,OnshoreWind,Wind,RETech,1.0
@@ -6704,7 +6629,6 @@ CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,Life,30.0
 CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,HeatRate,6.7
 CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,VOM,2.24
 CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,Status,2.0
-CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,BuildLimitperYear,250.0
 CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,Capex,0.9
 CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,MaxTotalBuild,250.0
 CC_CM_GAS_ALC_20_LIB,Libya,CCGT,Gas,MinUtilization,0.05
@@ -6719,7 +6643,6 @@ GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,Life,30.0
 GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,HeatRate,9.75
 GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,VOM,4.05
 GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,Status,2.0
-GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,BuildLimitperYear,2910.0
 GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,Capex,0.8
 GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,MaxTotalBuild,2910.0
 GT_CM_GAS_ALC_22_LIB,Libya,OCGT,Gas,MinUtilization,0.05
@@ -6731,7 +6654,6 @@ PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,RetrYr,2044.0
 PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,StYr,2019.0
 PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,Life,25.0
 PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,Status,2.0
-PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,BuildLimitperYear,15.0
 PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,Capex,0.8
 PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,MaxTotalBuild,15.0
 PV_CM_SPV_ALC_19_LIB,Libya,PV,Solar,RETech,1.0
@@ -6747,7 +6669,6 @@ ST_CM_GAS_ALC_25_LIB,Libya,ST,Gas,Life,30.0
 ST_CM_GAS_ALC_25_LIB,Libya,ST,Gas,HeatRate,9.42
 ST_CM_GAS_ALC_25_LIB,Libya,ST,Gas,VOM,4.61
 ST_CM_GAS_ALC_25_LIB,Libya,ST,Gas,Status,2.0
-ST_CM_GAS_ALC_25_LIB,Libya,ST,Gas,BuildLimitperYear,2800.0
 ST_CM_GAS_ALC_25_LIB,Libya,ST,Gas,Capex,2.0
 ST_CM_GAS_ALC_25_LIB,Libya,ST,Gas,MaxTotalBuild,2800.0
 WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,Capacity,28.0
@@ -6758,7 +6679,6 @@ WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,RetrYr,2048.0
 WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,StYr,2018.0
 WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,Life,30.0
 WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,Status,2.0
-WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,BuildLimitperYear,27.7
 WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,Capex,1.3
 WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,MaxTotalBuild,27.7
 WI_CM_WND_ALC_18_LIB,Libya,OnshoreWind,Wind,RETech,1.0
@@ -7497,20 +7417,6 @@ Power_Supply_GPS_Galimoow,SomaliaROC,ICE,Diesel,Life,30.0
 Power_Supply_GPS_Galimoow,SomaliaROC,ICE,Diesel,HeatRate,7.18
 Power_Supply_GPS_Galimoow,SomaliaROC,ICE,Diesel,VOM,3.5
 Power_Supply_GPS_Galimoow,SomaliaROC,ICE,Diesel,Status,1.0
-Daatax_Muxidiin,SomaliaROC,ICE,Diesel,FOMperMW,10906.0
-Daatax_Muxidiin,SomaliaROC,ICE,Diesel,RetrYr,2023.0
-Daatax_Muxidiin,SomaliaROC,ICE,Diesel,StYr,2010.0
-Daatax_Muxidiin,SomaliaROC,ICE,Diesel,Life,30.0
-Daatax_Muxidiin,SomaliaROC,ICE,Diesel,HeatRate,7.18
-Daatax_Muxidiin,SomaliaROC,ICE,Diesel,VOM,3.5
-Daatax_Muxidiin,SomaliaROC,ICE,Diesel,Status,1.0
-Llyas_electric,SomaliaROC,ICE,Diesel,FOMperMW,10906.0
-Llyas_electric,SomaliaROC,ICE,Diesel,RetrYr,2023.0
-Llyas_electric,SomaliaROC,ICE,Diesel,StYr,2010.0
-Llyas_electric,SomaliaROC,ICE,Diesel,Life,30.0
-Llyas_electric,SomaliaROC,ICE,Diesel,HeatRate,7.18
-Llyas_electric,SomaliaROC,ICE,Diesel,VOM,3.5
-Llyas_electric,SomaliaROC,ICE,Diesel,Status,1.0
 National_Electric_Power,Somaliland,ICE,Diesel,Capacity,13.0
 National_Electric_Power,Somaliland,ICE,Diesel,FOMperMW,10906.0
 National_Electric_Power,Somaliland,ICE,Diesel,RetrYr,2023.0
@@ -7964,7 +7870,6 @@ Juba_Solar_Power_Station,SouthSudan,PV,Solar,RetrYr,2052.0
 Juba_Solar_Power_Station,SouthSudan,PV,Solar,StYr,2027.0
 Juba_Solar_Power_Station,SouthSudan,PV,Solar,Life,25.0
 Juba_Solar_Power_Station,SouthSudan,PV,Solar,Status,2.0
-Juba_Solar_Power_Station,SouthSudan,PV,Solar,BuildLimitperYear,20.0
 Juba_Solar_Power_Station,SouthSudan,PV,Solar,Capex,0.8
 Juba_Solar_Power_Station,SouthSudan,PV,Solar,MaxTotalBuild,20.0
 Juba_Solar_Power_Station,SouthSudan,PV,Solar,RETech,1.0
@@ -8333,7 +8238,6 @@ SC_CO_25_SUD,Sudan,ST,Coal,Life,30.0
 SC_CO_25_SUD,Sudan,ST,Coal,HeatRate,8.74
 SC_CO_25_SUD,Sudan,ST,Coal,VOM,4.61
 SC_CO_25_SUD,Sudan,ST,Coal,Status,2.0
-SC_CO_25_SUD,Sudan,ST,Coal,BuildLimitperYear,600.0
 SC_CO_25_SUD,Sudan,ST,Coal,Capex,2.0
 SC_CO_25_SUD,Sudan,ST,Coal,MaxTotalBuild,600.0
 SC_CO_25_SUD,Sudan,ST,Coal,Overloadfactor,0.02
@@ -8348,7 +8252,6 @@ DG_DS_20_SUD,Sudan,OCGT,Gas,Life,30.0
 DG_DS_20_SUD,Sudan,OCGT,Gas,HeatRate,8.96
 DG_DS_20_SUD,Sudan,OCGT,Gas,VOM,4.0
 DG_DS_20_SUD,Sudan,OCGT,Gas,Status,2.0
-DG_DS_20_SUD,Sudan,OCGT,Gas,BuildLimitperYear,37.0
 DG_DS_20_SUD,Sudan,OCGT,Gas,Capex,0.8
 DG_DS_20_SUD,Sudan,OCGT,Gas,MaxTotalBuild,37.0
 DG_DS_20_SUD,Sudan,OCGT,Gas,Overloadfactor,0.02
@@ -8360,7 +8263,6 @@ HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,StYr,2025.0
 HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,Life,50.0
 HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,VOM,0.5
 HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,Status,2.0
-HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,BuildLimitperYear,500.0
 HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,Capex,3.3
 HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,MaxTotalBuild,500.0
 HYD_STOHY_25_SUD,Sudan,ReservoirHydro,Water,Overloadfactor,0.02
@@ -8372,7 +8274,6 @@ HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,StYr,2030.0
 HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,Life,50.0
 HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,VOM,0.5
 HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,Status,2.0
-HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,BuildLimitperYear,500.0
 HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,Capex,3.3
 HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,MaxTotalBuild,500.0
 HYD_STOHY_30_SUD,Sudan,ReservoirHydro,Water,Overloadfactor,0.02
@@ -8677,7 +8578,6 @@ JNHPP_2,Tanzania,ReservoirHydro,Water,StYr,2025.0
 JNHPP_2,Tanzania,ReservoirHydro,Water,Life,50.0
 JNHPP_2,Tanzania,ReservoirHydro,Water,VOM,0.5
 JNHPP_2,Tanzania,ReservoirHydro,Water,Status,2.0
-JNHPP_2,Tanzania,ReservoirHydro,Water,BuildLimitperYear,1175.0
 JNHPP_2,Tanzania,ReservoirHydro,Water,Capex,1.3
 Mtwara,Tanzania,OCGT,Gas,Capacity,31.0
 Mtwara,Tanzania,OCGT,Gas,FOMperMW,8200.0
@@ -8842,7 +8742,6 @@ Malagarasi,Tanzania,ROR,Water,StYr,2028.0
 Malagarasi,Tanzania,ROR,Water,Life,50.0
 Malagarasi,Tanzania,ROR,Water,VOM,0.5
 Malagarasi,Tanzania,ROR,Water,Status,2.0
-Malagarasi,Tanzania,ROR,Water,BuildLimitperYear,50.0
 Malagarasi,Tanzania,ROR,Water,Capex,2.9
 Kibo_Mining,Tanzania,ST,Coal,Capacity,300.0
 Kibo_Mining,Tanzania,ST,Coal,FOMperMW,60000.0
@@ -8963,7 +8862,6 @@ Kishapu_I,Tanzania,PV,Solar,RetrYr,2060.0
 Kishapu_I,Tanzania,PV,Solar,StYr,2025.0
 Kishapu_I,Tanzania,PV,Solar,Life,25.0
 Kishapu_I,Tanzania,PV,Solar,Status,2.0
-Kishapu_I,Tanzania,PV,Solar,BuildLimitperYear,50.0
 Kishapu_I,Tanzania,PV,Solar,Capex,0.9
 Kishapu_II,Tanzania,PV,Solar,Capacity,50.0
 Kishapu_II,Tanzania,PV,Solar,FOMperMW,15000.0
@@ -8973,7 +8871,6 @@ Kishapu_II,Tanzania,PV,Solar,RetrYr,2060.0
 Kishapu_II,Tanzania,PV,Solar,StYr,2026.0
 Kishapu_II,Tanzania,PV,Solar,Life,25.0
 Kishapu_II,Tanzania,PV,Solar,Status,2.0
-Kishapu_II,Tanzania,PV,Solar,BuildLimitperYear,50.0
 Kishapu_II,Tanzania,PV,Solar,Capex,0.9
 Kishapu_III,Tanzania,PV,Solar,Capacity,50.0
 Kishapu_III,Tanzania,PV,Solar,FOMperMW,15000.0
@@ -8983,7 +8880,6 @@ Kishapu_III,Tanzania,PV,Solar,RetrYr,2060.0
 Kishapu_III,Tanzania,PV,Solar,StYr,2027.0
 Kishapu_III,Tanzania,PV,Solar,Life,25.0
 Kishapu_III,Tanzania,PV,Solar,Status,2.0
-Kishapu_III,Tanzania,PV,Solar,BuildLimitperYear,50.0
 Kishapu_III,Tanzania,PV,Solar,Capex,0.9
 Kiwira_I,Tanzania,ST,Coal,Capacity,200.0
 Kiwira_I,Tanzania,ST,Coal,FOMperMW,60000.0
@@ -9382,7 +9278,6 @@ Rumakali,Tanzania,ReservoirHydro,Water,StYr,2030.0
 Rumakali,Tanzania,ReservoirHydro,Water,Life,50.0
 Rumakali,Tanzania,ReservoirHydro,Water,VOM,0.5
 Rumakali,Tanzania,ReservoirHydro,Water,Status,2.0
-Rumakali,Tanzania,ReservoirHydro,Water,BuildLimitperYear,222.0
 Rumakali,Tanzania,ReservoirHydro,Water,Capex,2.2
 SmallPV_2025,Tanzania,PV,Solar,Capacity,70.0
 SmallPV_2025,Tanzania,PV,Solar,FOMperMW,15000.0
@@ -9392,7 +9287,6 @@ SmallPV_2025,Tanzania,PV,Solar,RetrYr,2060.0
 SmallPV_2025,Tanzania,PV,Solar,StYr,2025.0
 SmallPV_2025,Tanzania,PV,Solar,Life,25.0
 SmallPV_2025,Tanzania,PV,Solar,Status,2.0
-SmallPV_2025,Tanzania,PV,Solar,BuildLimitperYear,70.0
 SmallPV_2025,Tanzania,PV,Solar,Capex,0.9
 SmallPV_2026,Tanzania,PV,Solar,Capacity,48.0
 SmallPV_2026,Tanzania,PV,Solar,FOMperMW,15000.0
@@ -9402,7 +9296,6 @@ SmallPV_2026,Tanzania,PV,Solar,RetrYr,2060.0
 SmallPV_2026,Tanzania,PV,Solar,StYr,2026.0
 SmallPV_2026,Tanzania,PV,Solar,Life,25.0
 SmallPV_2026,Tanzania,PV,Solar,Status,2.0
-SmallPV_2026,Tanzania,PV,Solar,BuildLimitperYear,48.0
 SmallPV_2026,Tanzania,PV,Solar,Capex,0.9
 Somanga_Mtama,Tanzania,CCGT,Gas,Capacity,345.0
 Somanga_Mtama,Tanzania,CCGT,Gas,FOMperMW,30000.0
@@ -9459,7 +9352,6 @@ Rusumo_HY_TZA,Tanzania,ROR,Water,StYr,2025.0
 Rusumo_HY_TZA,Tanzania,ROR,Water,Life,50.0
 Rusumo_HY_TZA,Tanzania,ROR,Water,VOM,0.5
 Rusumo_HY_TZA,Tanzania,ROR,Water,Status,2.0
-Rusumo_HY_TZA,Tanzania,ROR,Water,BuildLimitperYear,27.0
 Rusumo_HY_TZA,Tanzania,ROR,Water,Capex,4.2
 SmallHydro_2025,Tanzania,ReservoirHydro,Water,Capacity,14.0
 SmallHydro_2025,Tanzania,ReservoirHydro,Water,FOMperMW,15800.0
@@ -9471,7 +9363,6 @@ SmallHydro_2025,Tanzania,ReservoirHydro,Water,StYr,2025.0
 SmallHydro_2025,Tanzania,ReservoirHydro,Water,Life,50.0
 SmallHydro_2025,Tanzania,ReservoirHydro,Water,VOM,0.5
 SmallHydro_2025,Tanzania,ReservoirHydro,Water,Status,2.0
-SmallHydro_2025,Tanzania,ReservoirHydro,Water,BuildLimitperYear,14.0
 SmallHydro_2025,Tanzania,ReservoirHydro,Water,Capex,4.2
 SmallHydro_2026,Tanzania,ReservoirHydro,Water,Capacity,15.0
 SmallHydro_2026,Tanzania,ReservoirHydro,Water,FOMperMW,15800.0
@@ -9483,7 +9374,6 @@ SmallHydro_2026,Tanzania,ReservoirHydro,Water,StYr,2026.0
 SmallHydro_2026,Tanzania,ReservoirHydro,Water,Life,50.0
 SmallHydro_2026,Tanzania,ReservoirHydro,Water,VOM,0.5
 SmallHydro_2026,Tanzania,ReservoirHydro,Water,Status,2.0
-SmallHydro_2026,Tanzania,ReservoirHydro,Water,BuildLimitperYear,15.0
 SmallHydro_2026,Tanzania,ReservoirHydro,Water,Capex,4.2
 BESS_TZA_Candidate,Tanzania,Storage,Battery,Capacity,50000.0
 BESS_TZA_Candidate,Tanzania,Storage,Battery,FOMperMW,40000.0
@@ -9506,7 +9396,6 @@ Karum_HPP,Uganda,ROR,Water,StYr,2023.0
 Karum_HPP,Uganda,ROR,Water,Life,50.0
 Karum_HPP,Uganda,ROR,Water,VOM,0.5
 Karum_HPP,Uganda,ROR,Water,Status,1.0
-Karum_HPP,Uganda,ROR,Water,BuildLimitperYear,480.0
 Karum_HPP,Uganda,ROR,Water,Capex,2.72
 Karum_HPP,Uganda,ROR,Water,MaxTotalBuild,480.0
 Eskom_(Nalubaale_and_Kiira)_,Uganda,ReservoirHydro,Water,Capacity,380.0
@@ -10299,7 +10188,6 @@ Katooke_HPP,Uganda,ROR,Water,StYr,2024.0
 Katooke_HPP,Uganda,ROR,Water,Life,50.0
 Katooke_HPP,Uganda,ROR,Water,VOM,0.5
 Katooke_HPP,Uganda,ROR,Water,Status,2.0
-Katooke_HPP,Uganda,ROR,Water,BuildLimitperYear,0.3
 Katooke_HPP,Uganda,ROR,Water,Capex,2.8
 Katooke_HPP,Uganda,ROR,Water,MaxTotalBuild,0.3
 Simu_HPP,Uganda,ROR,Water,Capacity,10.0
@@ -10312,7 +10200,6 @@ Simu_HPP,Uganda,ROR,Water,StYr,2024.0
 Simu_HPP,Uganda,ROR,Water,Life,50.0
 Simu_HPP,Uganda,ROR,Water,VOM,0.5
 Simu_HPP,Uganda,ROR,Water,Status,2.0
-Simu_HPP,Uganda,ROR,Water,BuildLimitperYear,9.5
 Simu_HPP,Uganda,ROR,Water,Capex,2.8
 Simu_HPP,Uganda,ROR,Water,MaxTotalBuild,9.5
 Sironko_HPP,Uganda,ROR,Water,Capacity,0.4
@@ -10325,7 +10212,6 @@ Sironko_HPP,Uganda,ROR,Water,StYr,2025.0
 Sironko_HPP,Uganda,ROR,Water,Life,50.0
 Sironko_HPP,Uganda,ROR,Water,VOM,0.5
 Sironko_HPP,Uganda,ROR,Water,Status,2.0
-Sironko_HPP,Uganda,ROR,Water,BuildLimitperYear,0.4
 Sironko_HPP,Uganda,ROR,Water,Capex,2.8
 Sironko_HPP,Uganda,ROR,Water,MaxTotalBuild,0.4
 Sisi_HPP,Uganda,ROR,Water,Capacity,6.0
@@ -10338,7 +10224,6 @@ Sisi_HPP,Uganda,ROR,Water,StYr,2024.0
 Sisi_HPP,Uganda,ROR,Water,Life,50.0
 Sisi_HPP,Uganda,ROR,Water,VOM,0.5
 Sisi_HPP,Uganda,ROR,Water,Status,2.0
-Sisi_HPP,Uganda,ROR,Water,BuildLimitperYear,6.0
 Sisi_HPP,Uganda,ROR,Water,Capex,2.8
 Sisi_HPP,Uganda,ROR,Water,MaxTotalBuild,6.0
 Tokwe_HPP,Uganda,ROR,Water,Capacity,0.3
@@ -10351,7 +10236,6 @@ Tokwe_HPP,Uganda,ROR,Water,StYr,2024.0
 Tokwe_HPP,Uganda,ROR,Water,Life,50.0
 Tokwe_HPP,Uganda,ROR,Water,VOM,0.5
 Tokwe_HPP,Uganda,ROR,Water,Status,2.0
-Tokwe_HPP,Uganda,ROR,Water,BuildLimitperYear,0.3
 Tokwe_HPP,Uganda,ROR,Water,Capex,2.8
 Tokwe_HPP,Uganda,ROR,Water,MaxTotalBuild,0.3
 Warugo_HPP,Uganda,ROR,Water,Capacity,1.0
@@ -10364,7 +10248,6 @@ Warugo_HPP,Uganda,ROR,Water,StYr,2024.0
 Warugo_HPP,Uganda,ROR,Water,Life,50.0
 Warugo_HPP,Uganda,ROR,Water,VOM,0.5
 Warugo_HPP,Uganda,ROR,Water,Status,2.0
-Warugo_HPP,Uganda,ROR,Water,BuildLimitperYear,0.5
 Warugo_HPP,Uganda,ROR,Water,Capex,2.8
 Warugo_HPP,Uganda,ROR,Water,MaxTotalBuild,0.5
 SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,Capacity,10.0
@@ -10378,7 +10261,6 @@ SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,Life,30.0
 SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,HeatRate,12.5
 SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,VOM,2.5
 SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,Status,2.0
-SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,BuildLimitperYear,9.5
 SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,Capex,1.5
 SCOUL_Bagasse_Plant,Uganda,BiomassPlant,Biomass,MaxTotalBuild,9.5
 Atari_HPP,Uganda,ROR,Water,Capacity,3.0
@@ -10391,7 +10273,6 @@ Atari_HPP,Uganda,ROR,Water,StYr,2022.0
 Atari_HPP,Uganda,ROR,Water,Life,50.0
 Atari_HPP,Uganda,ROR,Water,VOM,0.5
 Atari_HPP,Uganda,ROR,Water,Status,2.0
-Atari_HPP,Uganda,ROR,Water,BuildLimitperYear,3.3
 Atari_HPP,Uganda,ROR,Water,Capex,2.8
 Atari_HPP,Uganda,ROR,Water,MaxTotalBuild,3.3
 Hoimo_HPP,Uganda,ROR,Water,Capacity,3.0
@@ -10404,7 +10285,6 @@ Hoimo_HPP,Uganda,ROR,Water,StYr,2024.0
 Hoimo_HPP,Uganda,ROR,Water,Life,50.0
 Hoimo_HPP,Uganda,ROR,Water,VOM,0.5
 Hoimo_HPP,Uganda,ROR,Water,Status,2.0
-Hoimo_HPP,Uganda,ROR,Water,BuildLimitperYear,3.3
 Hoimo_HPP,Uganda,ROR,Water,Capex,2.8
 Hoimo_HPP,Uganda,ROR,Water,MaxTotalBuild,3.3
 Igassa_HPP,Uganda,ROR,Water,Capacity,0.3
@@ -10417,7 +10297,6 @@ Igassa_HPP,Uganda,ROR,Water,StYr,2024.0
 Igassa_HPP,Uganda,ROR,Water,Life,50.0
 Igassa_HPP,Uganda,ROR,Water,VOM,0.5
 Igassa_HPP,Uganda,ROR,Water,Status,2.0
-Igassa_HPP,Uganda,ROR,Water,BuildLimitperYear,0.3
 Igassa_HPP,Uganda,ROR,Water,Capex,2.8
 Igassa_HPP,Uganda,ROR,Water,MaxTotalBuild,0.3
 Kabasanja_HPP,Uganda,ROR,Water,Capacity,0.4
@@ -10430,7 +10309,6 @@ Kabasanja_HPP,Uganda,ROR,Water,StYr,2024.0
 Kabasanja_HPP,Uganda,ROR,Water,Life,50.0
 Kabasanja_HPP,Uganda,ROR,Water,VOM,0.5
 Kabasanja_HPP,Uganda,ROR,Water,Status,2.0
-Kabasanja_HPP,Uganda,ROR,Water,BuildLimitperYear,0.4
 Kabasanja_HPP,Uganda,ROR,Water,Capex,2.8
 Kabasanja_HPP,Uganda,ROR,Water,MaxTotalBuild,0.4
 Kabeywa_1_HPP,Uganda,ROR,Water,Capacity,7.0
@@ -10443,7 +10321,6 @@ Kabeywa_1_HPP,Uganda,ROR,Water,StYr,2022.0
 Kabeywa_1_HPP,Uganda,ROR,Water,Life,50.0
 Kabeywa_1_HPP,Uganda,ROR,Water,VOM,0.5
 Kabeywa_1_HPP,Uganda,ROR,Water,Status,2.0
-Kabeywa_1_HPP,Uganda,ROR,Water,BuildLimitperYear,6.5
 Kabeywa_1_HPP,Uganda,ROR,Water,Capex,2.8
 Kabeywa_1_HPP,Uganda,ROR,Water,MaxTotalBuild,6.5
 Kabeywa_2_HPP,Uganda,ROR,Water,Capacity,2.0
@@ -10456,7 +10333,6 @@ Kabeywa_2_HPP,Uganda,ROR,Water,StYr,2023.0
 Kabeywa_2_HPP,Uganda,ROR,Water,Life,50.0
 Kabeywa_2_HPP,Uganda,ROR,Water,VOM,0.5
 Kabeywa_2_HPP,Uganda,ROR,Water,Status,2.0
-Kabeywa_2_HPP,Uganda,ROR,Water,BuildLimitperYear,2.0
 Kabeywa_2_HPP,Uganda,ROR,Water,Capex,2.8
 Kabeywa_2_HPP,Uganda,ROR,Water,MaxTotalBuild,2.0
 Kigwabya_HPP,Uganda,ROR,Water,Capacity,4.0
@@ -10469,7 +10345,6 @@ Kigwabya_HPP,Uganda,ROR,Water,StYr,2025.0
 Kigwabya_HPP,Uganda,ROR,Water,Life,50.0
 Kigwabya_HPP,Uganda,ROR,Water,VOM,0.5
 Kigwabya_HPP,Uganda,ROR,Water,Status,2.0
-Kigwabya_HPP,Uganda,ROR,Water,BuildLimitperYear,4.2
 Kigwabya_HPP,Uganda,ROR,Water,Capex,2.8
 Kigwabya_HPP,Uganda,ROR,Water,MaxTotalBuild,4.2
 Nchwera_HPP,Uganda,ROR,Water,Capacity,1.0
@@ -10482,7 +10357,6 @@ Nchwera_HPP,Uganda,ROR,Water,StYr,2024.0
 Nchwera_HPP,Uganda,ROR,Water,Life,50.0
 Nchwera_HPP,Uganda,ROR,Water,VOM,0.5
 Nchwera_HPP,Uganda,ROR,Water,Status,2.0
-Nchwera_HPP,Uganda,ROR,Water,BuildLimitperYear,0.5
 Nchwera_HPP,Uganda,ROR,Water,Capex,2.8
 Nchwera_HPP,Uganda,ROR,Water,MaxTotalBuild,0.5
 Nsongya_HPP,Uganda,ROR,Water,Capacity,1.0
@@ -10495,7 +10369,6 @@ Nsongya_HPP,Uganda,ROR,Water,StYr,2024.0
 Nsongya_HPP,Uganda,ROR,Water,Life,50.0
 Nsongya_HPP,Uganda,ROR,Water,VOM,0.5
 Nsongya_HPP,Uganda,ROR,Water,Status,2.0
-Nsongya_HPP,Uganda,ROR,Water,BuildLimitperYear,0.7
 Nsongya_HPP,Uganda,ROR,Water,Capex,2.8
 Nsongya_HPP,Uganda,ROR,Water,MaxTotalBuild,0.7
 Nyabuhuka_HPP,Uganda,ROR,Water,Capacity,3.0
@@ -10508,7 +10381,6 @@ Nyabuhuka_HPP,Uganda,ROR,Water,StYr,2023.0
 Nyabuhuka_HPP,Uganda,ROR,Water,Life,50.0
 Nyabuhuka_HPP,Uganda,ROR,Water,VOM,0.5
 Nyabuhuka_HPP,Uganda,ROR,Water,Status,2.0
-Nyabuhuka_HPP,Uganda,ROR,Water,BuildLimitperYear,3.2
 Nyabuhuka_HPP,Uganda,ROR,Water,Capex,2.8
 Nyabuhuka_HPP,Uganda,ROR,Water,MaxTotalBuild,3.2
 Nyamabuye_HPP,Uganda,ROR,Water,Capacity,7.0
@@ -10521,7 +10393,6 @@ Nyamabuye_HPP,Uganda,ROR,Water,StYr,2025.0
 Nyamabuye_HPP,Uganda,ROR,Water,Life,50.0
 Nyamabuye_HPP,Uganda,ROR,Water,VOM,0.5
 Nyamabuye_HPP,Uganda,ROR,Water,Status,2.0
-Nyamabuye_HPP,Uganda,ROR,Water,BuildLimitperYear,7.0
 Nyamabuye_HPP,Uganda,ROR,Water,Capex,2.8
 Nyamabuye_HPP,Uganda,ROR,Water,MaxTotalBuild,7.0
 Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,Capacity,20.0
@@ -10532,7 +10403,6 @@ Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,RetrYr,2053.0
 Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,StYr,2023.0
 Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,Life,30.0
 Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,Status,2.0
-Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,BuildLimitperYear,20.0
 Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,Capex,1.3
 Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,MaxTotalBuild,20.0
 Rupa_Wind_Power_Project,Uganda,OnshoreWind,Wind,RETech,1.0
@@ -10885,7 +10755,6 @@ SmallHydro_2027,Tanzania,ReservoirHydro,Water,StYr,2027.0
 SmallHydro_2027,Tanzania,ReservoirHydro,Water,Life,50.0
 SmallHydro_2027,Tanzania,ReservoirHydro,Water,VOM,0.5
 SmallHydro_2027,Tanzania,ReservoirHydro,Water,Status,2.0
-SmallHydro_2027,Tanzania,ReservoirHydro,Water,BuildLimitperYear,27.0
 SmallHydro_2027,Tanzania,ReservoirHydro,Water,Capex,4.2
 SmallHydro_TZA,Tanzania,ROR,Water,Capacity,40.0
 SmallHydro_TZA,Tanzania,ROR,Water,FOMperMW,15800.0
@@ -11352,7 +11221,6 @@ Kavumu-Mwange,Rwanda,ROR,Water,StYr,2023.0
 Kavumu-Mwange,Rwanda,ROR,Water,Life,50.0
 Kavumu-Mwange,Rwanda,ROR,Water,VOM,0.5
 Kavumu-Mwange,Rwanda,ROR,Water,Status,1.0
-Kavumu-Mwange,Rwanda,ROR,Water,BuildLimitperYear,0.33
 Kavumu-Mwange,Rwanda,ROR,Water,Capex,3.3
 Kavumu-Mwange,Rwanda,ROR,Water,MaxTotalBuild,0.33
 Kavumu-Mwange,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11366,7 +11234,6 @@ Ntaruka_A,Rwanda,ROR,Water,StYr,2023.0
 Ntaruka_A,Rwanda,ROR,Water,Life,50.0
 Ntaruka_A,Rwanda,ROR,Water,VOM,0.5
 Ntaruka_A,Rwanda,ROR,Water,Status,1.0
-Ntaruka_A,Rwanda,ROR,Water,BuildLimitperYear,2.1
 Ntaruka_A,Rwanda,ROR,Water,Capex,2.8
 Ntaruka_A,Rwanda,ROR,Water,MaxTotalBuild,2.1
 Ntaruka_A,Rwanda,ROR,Water,MinUtilization,0.1
@@ -11525,7 +11392,6 @@ SPLK Phase_2 extension,Rwanda,ICE,Diesel,Life,30.0
 SPLK Phase_2 extension,Rwanda,ICE,Diesel,HeatRate,8.3
 SPLK Phase_2 extension,Rwanda,ICE,Diesel,VOM,10.0
 SPLK Phase_2 extension,Rwanda,ICE,Diesel,Status,2.0
-SPLK Phase_2 extension,Rwanda,ICE,Diesel,BuildLimitperYear,28.0
 SPLK Phase_2 extension,Rwanda,ICE,Diesel,Capex,1.68
 SPLK Phase_2 extension,Rwanda,ICE,Diesel,MaxTotalBuild,28.0
 SPLK Phase_2 extension,Rwanda,ICE,Diesel,MinUtilization,0.05
@@ -11552,7 +11418,6 @@ Nyirahindwe 1,Rwanda,ROR,Water,StYr,2025.0
 Nyirahindwe 1,Rwanda,ROR,Water,Life,50.0
 Nyirahindwe 1,Rwanda,ROR,Water,VOM,0.5
 Nyirahindwe 1,Rwanda,ROR,Water,Status,2.0
-Nyirahindwe 1,Rwanda,ROR,Water,BuildLimitperYear,0.91
 Nyirahindwe 1,Rwanda,ROR,Water,Capex,2.8
 Nyirahindwe 1,Rwanda,ROR,Water,MaxTotalBuild,0.91
 Nyirahindwe 1,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11566,7 +11431,6 @@ Nyirahindwe 2,Rwanda,ROR,Water,StYr,2027.0
 Nyirahindwe 2,Rwanda,ROR,Water,Life,50.0
 Nyirahindwe 2,Rwanda,ROR,Water,VOM,0.5
 Nyirahindwe 2,Rwanda,ROR,Water,Status,2.0
-Nyirahindwe 2,Rwanda,ROR,Water,BuildLimitperYear,0.36
 Nyirahindwe 2,Rwanda,ROR,Water,Capex,2.8
 Nyirahindwe 2,Rwanda,ROR,Water,MaxTotalBuild,0.36
 Nyirahindwe 2,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11592,7 +11456,6 @@ Ngororero,Rwanda,ROR,Water,StYr,2027.0
 Ngororero,Rwanda,ROR,Water,Life,50.0
 Ngororero,Rwanda,ROR,Water,VOM,0.5
 Ngororero,Rwanda,ROR,Water,Status,2.0
-Ngororero,Rwanda,ROR,Water,BuildLimitperYear,2.7
 Ngororero,Rwanda,ROR,Water,Capex,2.8
 Ngororero,Rwanda,ROR,Water,MaxTotalBuild,2.7
 Ngororero,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11606,7 +11469,6 @@ Nyundo,Rwanda,ROR,Water,StYr,2027.0
 Nyundo,Rwanda,ROR,Water,Life,50.0
 Nyundo,Rwanda,ROR,Water,VOM,0.5
 Nyundo,Rwanda,ROR,Water,Status,2.0
-Nyundo,Rwanda,ROR,Water,BuildLimitperYear,4.5
 Nyundo,Rwanda,ROR,Water,Capex,2.8
 Nyundo,Rwanda,ROR,Water,MaxTotalBuild,4.5
 Nyundo,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11620,7 +11482,6 @@ Rwondo,Rwanda,ROR,Water,StYr,2027.0
 Rwondo,Rwanda,ROR,Water,Life,50.0
 Rwondo,Rwanda,ROR,Water,VOM,0.5
 Rwondo,Rwanda,ROR,Water,Status,2.0
-Rwondo,Rwanda,ROR,Water,BuildLimitperYear,2.3
 Rwondo,Rwanda,ROR,Water,Capex,2.8
 Rwondo,Rwanda,ROR,Water,MaxTotalBuild,2.3
 Rwondo,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11646,7 +11507,6 @@ Kore,Rwanda,ROR,Water,StYr,2025.0
 Kore,Rwanda,ROR,Water,Life,50.0
 Kore,Rwanda,ROR,Water,VOM,0.5
 Kore,Rwanda,ROR,Water,Status,2.0
-Kore,Rwanda,ROR,Water,BuildLimitperYear,1.3
 Kore,Rwanda,ROR,Water,Capex,2.8
 Kore,Rwanda,ROR,Water,MaxTotalBuild,1.3
 Kore,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11660,7 +11520,6 @@ Rucanzogera,Rwanda,ROR,Water,StYr,2028.0
 Rucanzogera,Rwanda,ROR,Water,Life,50.0
 Rucanzogera,Rwanda,ROR,Water,VOM,0.5
 Rucanzogera,Rwanda,ROR,Water,Status,2.0
-Rucanzogera,Rwanda,ROR,Water,BuildLimitperYear,1.9
 Rucanzogera,Rwanda,ROR,Water,Capex,2.8
 Rucanzogera,Rwanda,ROR,Water,MaxTotalBuild,1.9
 Rucanzogera,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11674,7 +11533,6 @@ Rukore,Rwanda,ROR,Water,StYr,2028.0
 Rukore,Rwanda,ROR,Water,Life,50.0
 Rukore,Rwanda,ROR,Water,VOM,0.5
 Rukore,Rwanda,ROR,Water,Status,2.0
-Rukore,Rwanda,ROR,Water,BuildLimitperYear,2.0
 Rukore,Rwanda,ROR,Water,Capex,2.8
 Rukore,Rwanda,ROR,Water,MaxTotalBuild,2.0
 Rukore,Rwanda,ROR,Water,ReserveCost,5.0
@@ -11688,7 +11546,6 @@ Bihongore,Rwanda,ROR,Water,StYr,2030.0
 Bihongore,Rwanda,ROR,Water,Life,50.0
 Bihongore,Rwanda,ROR,Water,VOM,0.5
 Bihongore,Rwanda,ROR,Water,Status,2.0
-Bihongore,Rwanda,ROR,Water,BuildLimitperYear,4.22
 Bihongore,Rwanda,ROR,Water,Capex,2.8
 Bihongore,Rwanda,ROR,Water,MaxTotalBuild,4.22
 Bihongore,Rwanda,ROR,Water,MinUtilization,0.05
@@ -11715,7 +11572,6 @@ Nyabarongo II,Rwanda,ReservoirHydro,Water,StYr,2027.0
 Nyabarongo II,Rwanda,ReservoirHydro,Water,Life,50.0
 Nyabarongo II,Rwanda,ReservoirHydro,Water,VOM,0.5
 Nyabarongo II,Rwanda,ReservoirHydro,Water,Status,2.0
-Nyabarongo II,Rwanda,ReservoirHydro,Water,BuildLimitperYear,43.0
 Nyabarongo II,Rwanda,ReservoirHydro,Water,Capex,3.3
 Nyabarongo II,Rwanda,ReservoirHydro,Water,MaxTotalBuild,43.0
 Nyabarongo II,Rwanda,ReservoirHydro,Water,MinUtilization,0.06
@@ -11730,7 +11586,6 @@ Rusizi III,Rwanda,ReservoirHydro,Water,StYr,2031.0
 Rusizi III,Rwanda,ReservoirHydro,Water,Life,50.0
 Rusizi III,Rwanda,ReservoirHydro,Water,VOM,0.5
 Rusizi III,Rwanda,ReservoirHydro,Water,Status,2.0
-Rusizi III,Rwanda,ReservoirHydro,Water,BuildLimitperYear,48.0
 Rusizi III,Rwanda,ReservoirHydro,Water,Capex,3.3
 Rusizi III,Rwanda,ReservoirHydro,Water,MaxTotalBuild,48.0
 Rusizi III,Rwanda,ReservoirHydro,Water,ReserveCost,5.0
@@ -11744,7 +11599,6 @@ Rusizi IV,Rwanda,ReservoirHydro,Water,StYr,2030.0
 Rusizi IV,Rwanda,ReservoirHydro,Water,Life,50.0
 Rusizi IV,Rwanda,ReservoirHydro,Water,VOM,0.5
 Rusizi IV,Rwanda,ReservoirHydro,Water,Status,2.0
-Rusizi IV,Rwanda,ReservoirHydro,Water,BuildLimitperYear,200.0
 Rusizi IV,Rwanda,ReservoirHydro,Water,Capex,3.3
 Rusizi IV,Rwanda,ReservoirHydro,Water,MaxTotalBuild,200.0
 Rusizi IV,Rwanda,ReservoirHydro,Water,ReserveCost,5.0

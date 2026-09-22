@@ -10,7 +10,6 @@ MariaGleta,Benin,Diesel,Diesel,RampDnRate,0.9
 MariaGleta,Benin,Diesel,Diesel,ResLimShare,0.2
 MariaGleta,Benin,Diesel,Diesel,FOMperMW,7000.0
 MariaGleta,Benin,Diesel,Diesel,VOM,2.5
-MariaGleta,Benin,Diesel,Diesel,BuildLimitperYear,80.0
 MariaGleta,Benin,Diesel,Diesel,MaxTotalBuild,80.0
 MariaGleta,Benin,Diesel,Diesel,Type,1.0
 MariaGleta,Benin,Diesel,Diesel,fuel1,11.0
@@ -19,7 +18,7 @@ MariaGleta,Benin,Diesel,Diesel,Status,1.0
 MariaGleta,Benin,Diesel,Diesel,HeatRate2,13.3
 MariaGleta,Benin,Diesel,Diesel,UnitSize,80.0
 MariaGleta,Benin,Diesel,Diesel,CapacityCredit,1.0
-MariaGleta,Benin,Diesel,Diesel,Error,11387.349999999999
+MariaGleta,Benin,Diesel,Diesel,Error,11387.35
 Y\xe9ripao,Benin,Water,Hydro,StYr,2050.0
 Y\xe9ripao,Benin,Water,Hydro,RetrYr,2060.0
 Y\xe9ripao,Benin,Water,Hydro,Zone,1.0
@@ -28,7 +27,6 @@ Y\xe9ripao,Benin,Water,Hydro,RampUpRate,1.0
 Y\xe9ripao,Benin,Water,Hydro,RampDnRate,1.0
 Y\xe9ripao,Benin,Water,Hydro,ResLimShare,0.2
 Y\xe9ripao,Benin,Water,Hydro,FOMperMW,21246.717857142863
-Y\xe9ripao,Benin,Water,Hydro,BuildLimitperYear,0.5
 Y\xe9ripao,Benin,Water,Hydro,MaxTotalBuild,0.5
 Y\xe9ripao,Benin,Water,Hydro,Type,4.0
 Y\xe9ripao,Benin,Water,Hydro,fuel1,3.0
@@ -49,7 +47,6 @@ Akpakpa2,Benin,Diesel,Diesel,RampDnRate,1.0
 Akpakpa2,Benin,Diesel,Diesel,ResLimShare,0.2
 Akpakpa2,Benin,Diesel,Diesel,FOMperMW,8000.0
 Akpakpa2,Benin,Diesel,Diesel,VOM,10.0
-Akpakpa2,Benin,Diesel,Diesel,BuildLimitperYear,35.0
 Akpakpa2,Benin,Diesel,Diesel,MaxTotalBuild,35.0
 Akpakpa2,Benin,Diesel,Diesel,Type,10.0
 Akpakpa2,Benin,Diesel,Diesel,fuel1,11.0
@@ -68,7 +65,6 @@ Gbegamey,Benin,Diesel,Diesel,RampDnRate,1.0
 Gbegamey,Benin,Diesel,Diesel,ResLimShare,0.2
 Gbegamey,Benin,Diesel,Diesel,FOMperMW,8000.0
 Gbegamey,Benin,Diesel,Diesel,VOM,10.0
-Gbegamey,Benin,Diesel,Diesel,BuildLimitperYear,16.0
 Gbegamey,Benin,Diesel,Diesel,MaxTotalBuild,16.0
 Gbegamey,Benin,Diesel,Diesel,Type,10.0
 Gbegamey,Benin,Diesel,Diesel,fuel1,11.0
@@ -87,14 +83,13 @@ Natitingou,Benin,Diesel,Diesel,RampDnRate,1.0
 Natitingou,Benin,Diesel,Diesel,ResLimShare,0.2
 Natitingou,Benin,Diesel,Diesel,FOMperMW,8000.0
 Natitingou,Benin,Diesel,Diesel,VOM,10.0
-Natitingou,Benin,Diesel,Diesel,BuildLimitperYear,12.0
 Natitingou,Benin,Diesel,Diesel,MaxTotalBuild,12.0
 Natitingou,Benin,Diesel,Diesel,Type,10.0
 Natitingou,Benin,Diesel,Diesel,fuel1,11.0
 Natitingou,Benin,Diesel,Diesel,Status,1.0
 Natitingou,Benin,Diesel,Diesel,UnitSize,12.0
 Natitingou,Benin,Diesel,Diesel,CapacityCredit,1.0
-Natitingou,Benin,Diesel,Diesel,Error,12184.560000000001
+Natitingou,Benin,Diesel,Diesel,Error,12184.56
 Parakou1,Benin,Diesel,Diesel,StYr,2050.0
 Parakou1,Benin,Diesel,Diesel,RetrYr,2050.0
 Parakou1,Benin,Diesel,Diesel,Zone,1.0
@@ -106,14 +101,13 @@ Parakou1,Benin,Diesel,Diesel,RampDnRate,1.0
 Parakou1,Benin,Diesel,Diesel,ResLimShare,0.2
 Parakou1,Benin,Diesel,Diesel,FOMperMW,8000.0
 Parakou1,Benin,Diesel,Diesel,VOM,10.0
-Parakou1,Benin,Diesel,Diesel,BuildLimitperYear,14.0
 Parakou1,Benin,Diesel,Diesel,MaxTotalBuild,14.0
 Parakou1,Benin,Diesel,Diesel,Type,10.0
 Parakou1,Benin,Diesel,Diesel,fuel1,11.0
 Parakou1,Benin,Diesel,Diesel,Status,1.0
 Parakou1,Benin,Diesel,Diesel,UnitSize,14.0
 Parakou1,Benin,Diesel,Diesel,CapacityCredit,1.0
-Parakou1,Benin,Diesel,Diesel,Error,12190.560000000001
+Parakou1,Benin,Diesel,Diesel,Error,12190.56
 Porto-Novo,Benin,Diesel,Diesel,StYr,2050.0
 Porto-Novo,Benin,Diesel,Diesel,RetrYr,2050.0
 Porto-Novo,Benin,Diesel,Diesel,Zone,1.0
@@ -125,14 +119,13 @@ Porto-Novo,Benin,Diesel,Diesel,RampDnRate,1.0
 Porto-Novo,Benin,Diesel,Diesel,ResLimShare,0.2
 Porto-Novo,Benin,Diesel,Diesel,FOMperMW,8000.0
 Porto-Novo,Benin,Diesel,Diesel,VOM,10.0
-Porto-Novo,Benin,Diesel,Diesel,BuildLimitperYear,12.0
 Porto-Novo,Benin,Diesel,Diesel,MaxTotalBuild,12.0
 Porto-Novo,Benin,Diesel,Diesel,Type,10.0
 Porto-Novo,Benin,Diesel,Diesel,fuel1,11.0
 Porto-Novo,Benin,Diesel,Diesel,Status,1.0
 Porto-Novo,Benin,Diesel,Diesel,UnitSize,12.0
 Porto-Novo,Benin,Diesel,Diesel,CapacityCredit,1.0
-Porto-Novo,Benin,Diesel,Diesel,Error,12184.560000000001
+Porto-Novo,Benin,Diesel,Diesel,Error,12184.56
 Akpakpa1,Benin,HFO,HFO,StYr,2050.0
 Akpakpa1,Benin,HFO,HFO,RetrYr,2050.0
 Akpakpa1,Benin,HFO,HFO,Zone,1.0
@@ -144,7 +137,6 @@ Akpakpa1,Benin,HFO,HFO,RampDnRate,1.0
 Akpakpa1,Benin,HFO,HFO,ResLimShare,0.2
 Akpakpa1,Benin,HFO,HFO,FOMperMW,17000.0
 Akpakpa1,Benin,HFO,HFO,VOM,9.999999999999998
-Akpakpa1,Benin,HFO,HFO,BuildLimitperYear,36.0
 Akpakpa1,Benin,HFO,HFO,MaxTotalBuild,36.0
 Akpakpa1,Benin,HFO,HFO,Type,10.0
 Akpakpa1,Benin,HFO,HFO,fuel1,7.0
@@ -163,7 +155,6 @@ MariaGleta2_IPP,Benin,HFO,HFO,RampDnRate,0.9
 MariaGleta2_IPP,Benin,HFO,HFO,ResLimShare,0.2
 MariaGleta2_IPP,Benin,HFO,HFO,FOMperMW,2.0
 MariaGleta2_IPP,Benin,HFO,HFO,VOM,2.5
-MariaGleta2_IPP,Benin,HFO,HFO,BuildLimitperYear,137.0
 MariaGleta2_IPP,Benin,HFO,HFO,MaxTotalBuild,137.0
 MariaGleta2_IPP,Benin,HFO,HFO,Type,1.0
 MariaGleta2_IPP,Benin,HFO,HFO,fuel1,7.0
@@ -182,7 +173,6 @@ Solaire_Pobe,Benin,PV,Solar,Capacity,25.0
 Solaire_Pobe,Benin,PV,Solar,RampUpRate,1.0
 Solaire_Pobe,Benin,PV,Solar,RampDnRate,1.0
 Solaire_Pobe,Benin,PV,Solar,FOMperMW,17000.0
-Solaire_Pobe,Benin,PV,Solar,BuildLimitperYear,25.0
 Solaire_Pobe,Benin,PV,Solar,MaxTotalBuild,25.0
 Solaire_Pobe,Benin,PV,Solar,Type,6.0
 Solaire_Pobe,Benin,PV,Solar,fuel1,4.0
@@ -201,7 +191,6 @@ Groupes secours SBEE,Benin,PV,Solar,Capacity,12.0
 Groupes secours SBEE,Benin,PV,Solar,RampUpRate,1.0
 Groupes secours SBEE,Benin,PV,Solar,RampDnRate,1.0
 Groupes secours SBEE,Benin,PV,Solar,FOMperMW,17000.0
-Groupes secours SBEE,Benin,PV,Solar,BuildLimitperYear,12.0
 Groupes secours SBEE,Benin,PV,Solar,MaxTotalBuild,12.0
 Groupes secours SBEE,Benin,PV,Solar,Type,6.0
 Groupes secours SBEE,Benin,PV,Solar,fuel1,4.0
@@ -224,7 +213,6 @@ MariaGleta3,Benin,Gas,Gas,RampDnRate,0.83
 MariaGleta3,Benin,Gas,Gas,ResLimShare,0.07
 MariaGleta3,Benin,Gas,Gas,FOMperMW,20420.72
 MariaGleta3,Benin,Gas,Gas,VOM,1.8
-MariaGleta3,Benin,Gas,Gas,BuildLimitperYear,42.0
 MariaGleta3,Benin,Gas,Gas,MaxTotalBuild,42.0
 MariaGleta3,Benin,Gas,Gas,Type,2.0
 MariaGleta3,Benin,Gas,Gas,fuel1,2.0
@@ -242,7 +230,6 @@ SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,Capacity,225.0
 SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,RampUpRate,1.0
 SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,RampDnRate,1.0
 SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,FOMperMW,17000.0
-SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,BuildLimitperYear,225.0
 SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,MaxTotalBuild,225.0
 SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,Type,6.0
 SOLEN : Glo-Djigb\xe9 225 MW :,Benin,PV,Solar,fuel1,4.0
@@ -261,7 +248,6 @@ Solaire_Pobe_ext,Benin,PV,Solar,Capacity,50.0
 Solaire_Pobe_ext,Benin,PV,Solar,RampUpRate,1.0
 Solaire_Pobe_ext,Benin,PV,Solar,RampDnRate,1.0
 Solaire_Pobe_ext,Benin,PV,Solar,FOMperMW,17000.0
-Solaire_Pobe_ext,Benin,PV,Solar,BuildLimitperYear,50.0
 Solaire_Pobe_ext,Benin,PV,Solar,MaxTotalBuild,50.0
 Solaire_Pobe_ext,Benin,PV,Solar,Type,6.0
 Solaire_Pobe_ext,Benin,PV,Solar,fuel1,4.0
@@ -280,7 +266,6 @@ IPP 50 mW,Benin,PV,Solar,Capacity,50.0
 IPP 50 mW,Benin,PV,Solar,RampUpRate,1.0
 IPP 50 mW,Benin,PV,Solar,RampDnRate,1.0
 IPP 50 mW,Benin,PV,Solar,FOMperMW,17000.0
-IPP 50 mW,Benin,PV,Solar,BuildLimitperYear,50.0
 IPP 50 mW,Benin,PV,Solar,MaxTotalBuild,50.0
 IPP 50 mW,Benin,PV,Solar,Type,6.0
 IPP 50 mW,Benin,PV,Solar,fuel1,4.0
@@ -299,35 +284,16 @@ Storage_Pobe,Benin,Battery,Battery,Capacity,5.0
 Storage_Pobe,Benin,Battery,Battery,RampUpRate,1.0
 Storage_Pobe,Benin,Battery,Battery,RampDnRate,1.0
 Storage_Pobe,Benin,Battery,Battery,ResLimShare,0.5
-Storage_Pobe,Benin,Battery,Battery,FOMperMW,13873.859999999999
-Storage_Pobe,Benin,Battery,Battery,BuildLimitperYear,5.0
+Storage_Pobe,Benin,Battery,Battery,FOMperMW,13873.86
 Storage_Pobe,Benin,Battery,Battery,MaxTotalBuild,5.0
 Storage_Pobe,Benin,Battery,Battery,Type,17.0
 Storage_Pobe,Benin,Battery,Battery,fuel1,10.0
 Storage_Pobe,Benin,Battery,Battery,Status,2.0
 Storage_Pobe,Benin,Battery,Battery,UnitSize,5.0
 Storage_Pobe,Benin,Battery,Battery,CapacityCredit,1.0
-Storage_Pobe,Benin,Battery,Battery,Error,18018.760000000002
+Storage_Pobe,Benin,Battery,Battery,Error,18018.76
 Storage_Pobe,Benin,Battery,Battery,Life,20.0
 Storage_Pobe,Benin,Battery,Battery,Capex,0.4
-GT_Benin,Benin,Gas,Gas,StYr,2030.0
-GT_Benin,Benin,Gas,Gas,RetrYr,2054.0
-GT_Benin,Benin,Gas,Gas,Zone,1.0
-GT_Benin,Benin,Gas,Gas,MinLimitShare,0.3
-GT_Benin,Benin,Gas,Gas,HeatRate,9.0
-GT_Benin,Benin,Gas,Gas,RampUpRate,0.85
-GT_Benin,Benin,Gas,Gas,RampDnRate,0.9
-GT_Benin,Benin,Gas,Gas,ResLimShare,0.2
-GT_Benin,Benin,Gas,Gas,FOMperMW,26342.72
-GT_Benin,Benin,Gas,Gas,VOM,2.5
-GT_Benin,Benin,Gas,Gas,Type,1.0
-GT_Benin,Benin,Gas,Gas,fuel1,2.0
-GT_Benin,Benin,Gas,Gas,Status,3.0
-GT_Benin,Benin,Gas,Gas,HeatRate2,9.8
-GT_Benin,Benin,Gas,Gas,CapacityCredit,1.0
-GT_Benin,Benin,Gas,Gas,Error,30488.16
-GT_Benin,Benin,Gas,Gas,Life,30.0
-GT_Benin,Benin,Gas,Gas,Capex,0.89
 Beterou,Benin,Water,Hydro,StYr,2050.0
 Beterou,Benin,Water,Hydro,RetrYr,2072.0
 Beterou,Benin,Water,Hydro,Zone,1.0
@@ -335,7 +301,7 @@ Beterou,Benin,Water,Hydro,Capacity,23.2
 Beterou,Benin,Water,Hydro,RampUpRate,1.0
 Beterou,Benin,Water,Hydro,RampDnRate,1.0
 Beterou,Benin,Water,Hydro,ResLimShare,0.07
-Beterou,Benin,Water,Hydro,FOMperMW,42198.275862068964
+Beterou,Benin,Water,Hydro,FOMperMW,42198.27586206896
 Beterou,Benin,Water,Hydro,BuildLimitperYear,23.2
 Beterou,Benin,Water,Hydro,MaxTotalBuild,23.2
 Beterou,Benin,Water,Hydro,Type,4.0
@@ -404,25 +370,6 @@ Vossa,Benin,Water,Hydro,Error,46787.63212121211
 Vossa,Benin,Water,Hydro,Life,50.0
 Vossa,Benin,Water,Hydro,RE_Flag,1.0
 Vossa,Benin,Water,Hydro,Capex,3.8510101010101008
-CC_GAS_LNG_BEN,Benin,Gas,Gas,StYr,2030.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,RetrYr,2060.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,Zone,1.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,MinLimitShare,0.6
-CC_GAS_LNG_BEN,Benin,Gas,Gas,HeatRate,6.4
-CC_GAS_LNG_BEN,Benin,Gas,Gas,RampUpRate,0.5
-CC_GAS_LNG_BEN,Benin,Gas,Gas,RampDnRate,0.83
-CC_GAS_LNG_BEN,Benin,Gas,Gas,ResLimShare,0.07
-CC_GAS_LNG_BEN,Benin,Gas,Gas,FOMperMW,20420.72
-CC_GAS_LNG_BEN,Benin,Gas,Gas,VOM,1.8
-CC_GAS_LNG_BEN,Benin,Gas,Gas,Type,2.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,fuel1,2.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,fuel2,12.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,Status,3.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,HeatRate2,6.8
-CC_GAS_LNG_BEN,Benin,Gas,Gas,CapacityCredit,1.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,Error,24578.716
-CC_GAS_LNG_BEN,Benin,Gas,Gas,Life,30.0
-CC_GAS_LNG_BEN,Benin,Gas,Gas,Capex,0.996
 OFSHORE_WIND_BEN,Benin,Offshore,Wind,StYr,2035.0
 OFSHORE_WIND_BEN,Benin,Offshore,Wind,RetrYr,2055.0
 OFSHORE_WIND_BEN,Benin,Offshore,Wind,Zone,1.0
@@ -462,21 +409,6 @@ HYD_CAND_BEN,Benin,Water,Hydro,Error,49576.07
 HYD_CAND_BEN,Benin,Water,Hydro,Life,50.0
 HYD_CAND_BEN,Benin,Water,Hydro,RE_Flag,1.0
 HYD_CAND_BEN,Benin,Water,Hydro,Capex,4.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,StYr,2030.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,RetrYr,2055.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,Zone,1.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,RampUpRate,1.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,RampDnRate,1.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,FOMperMW,32000.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,Type,5.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,fuel1,5.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,Status,3.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,CapacityCredit,1.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,Error,36133.6
-ONSHORE_WIND_BEN,Benin,Wind,Wind,Life,30.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,RE_Flag,1.0
-ONSHORE_WIND_BEN,Benin,Wind,Wind,Capex,1.6
-ONSHORE_WIND_BEN,Benin,Wind,Wind,RETech,1.0
 BAGRE,Burkina,Water,Hydro,StYr,1993.0
 BAGRE,Burkina,Water,Hydro,RetrYr,2060.0
 BAGRE,Burkina,Water,Hydro,Zone,2.0
@@ -485,7 +417,6 @@ BAGRE,Burkina,Water,Hydro,RampUpRate,1.0
 BAGRE,Burkina,Water,Hydro,RampDnRate,1.0
 BAGRE,Burkina,Water,Hydro,ResLimShare,0.2
 BAGRE,Burkina,Water,Hydro,FOMperMW,19043.25187969925
-BAGRE,Burkina,Water,Hydro,BuildLimitperYear,16.72
 BAGRE,Burkina,Water,Hydro,MaxTotalBuild,16.72
 BAGRE,Burkina,Water,Hydro,Type,4.0
 BAGRE,Burkina,Water,Hydro,fuel1,3.0
@@ -502,7 +433,6 @@ KOMPIENGA,Burkina,Water,Hydro,RampUpRate,1.0
 KOMPIENGA,Burkina,Water,Hydro,RampDnRate,1.0
 KOMPIENGA,Burkina,Water,Hydro,ResLimShare,0.2
 KOMPIENGA,Burkina,Water,Hydro,FOMperMW,18077.33655962385
-KOMPIENGA,Burkina,Water,Hydro,BuildLimitperYear,14.28
 KOMPIENGA,Burkina,Water,Hydro,MaxTotalBuild,14.28
 KOMPIENGA,Burkina,Water,Hydro,Type,4.0
 KOMPIENGA,Burkina,Water,Hydro,fuel1,3.0
@@ -519,7 +449,6 @@ NIOFILA,Burkina,Water,Hydro,RampUpRate,1.0
 NIOFILA,Burkina,Water,Hydro,RampDnRate,1.0
 NIOFILA,Burkina,Water,Hydro,ResLimShare,0.15
 NIOFILA,Burkina,Water,Hydro,FOMperMW,17699.780952380956
-NIOFILA,Burkina,Water,Hydro,BuildLimitperYear,1.5
 NIOFILA,Burkina,Water,Hydro,MaxTotalBuild,1.5
 NIOFILA,Burkina,Water,Hydro,Type,4.0
 NIOFILA,Burkina,Water,Hydro,fuel1,3.0
@@ -536,7 +465,6 @@ Samendini,Burkina,Water,Hydro,RampUpRate,1.0
 Samendini,Burkina,Water,Hydro,RampDnRate,1.0
 Samendini,Burkina,Water,Hydro,ResLimShare,0.1
 Samendini,Burkina,Water,Hydro,FOMperMW,17523.55892857143
-Samendini,Burkina,Water,Hydro,BuildLimitperYear,2.6
 Samendini,Burkina,Water,Hydro,MaxTotalBuild,2.6
 Samendini,Burkina,Water,Hydro,Type,4.0
 Samendini,Burkina,Water,Hydro,fuel1,3.0
@@ -553,7 +481,6 @@ TOURNI,Burkina,Water,Hydro,RampUpRate,1.0
 TOURNI,Burkina,Water,Hydro,RampDnRate,1.0
 TOURNI,Burkina,Water,Hydro,ResLimShare,0.1
 TOURNI,Burkina,Water,Hydro,FOMperMW,17523.55892857143
-TOURNI,Burkina,Water,Hydro,BuildLimitperYear,0.5
 TOURNI,Burkina,Water,Hydro,MaxTotalBuild,0.5
 TOURNI,Burkina,Water,Hydro,Type,4.0
 TOURNI,Burkina,Water,Hydro,fuel1,3.0
@@ -573,7 +500,6 @@ DEDOUGOU,Burkina,Diesel,Diesel,RampDnRate,1.0
 DEDOUGOU,Burkina,Diesel,Diesel,ResLimShare,0.2
 DEDOUGOU,Burkina,Diesel,Diesel,FOMperMW,8000.0
 DEDOUGOU,Burkina,Diesel,Diesel,VOM,10.0
-DEDOUGOU,Burkina,Diesel,Diesel,BuildLimitperYear,5.68
 DEDOUGOU,Burkina,Diesel,Diesel,MaxTotalBuild,5.68
 DEDOUGOU,Burkina,Diesel,Diesel,Type,10.0
 DEDOUGOU,Burkina,Diesel,Diesel,fuel1,11.0
@@ -592,7 +518,6 @@ DORI,Burkina,Diesel,Diesel,RampDnRate,1.0
 DORI,Burkina,Diesel,Diesel,ResLimShare,0.2
 DORI,Burkina,Diesel,Diesel,FOMperMW,8000.0
 DORI,Burkina,Diesel,Diesel,VOM,10.0
-DORI,Burkina,Diesel,Diesel,BuildLimitperYear,4.37
 DORI,Burkina,Diesel,Diesel,MaxTotalBuild,4.37
 DORI,Burkina,Diesel,Diesel,Type,10.0
 DORI,Burkina,Diesel,Diesel,fuel1,11.0
@@ -611,7 +536,6 @@ FADA,Burkina,Diesel,Diesel,RampDnRate,1.0
 FADA,Burkina,Diesel,Diesel,ResLimShare,0.2
 FADA,Burkina,Diesel,Diesel,FOMperMW,8000.0
 FADA,Burkina,Diesel,Diesel,VOM,10.0
-FADA,Burkina,Diesel,Diesel,BuildLimitperYear,2.0
 FADA,Burkina,Diesel,Diesel,MaxTotalBuild,2.0
 FADA,Burkina,Diesel,Diesel,Type,10.0
 FADA,Burkina,Diesel,Diesel,fuel1,11.0
@@ -630,7 +554,6 @@ GAOUA,Burkina,Diesel,Diesel,RampDnRate,1.0
 GAOUA,Burkina,Diesel,Diesel,ResLimShare,0.2
 GAOUA,Burkina,Diesel,Diesel,FOMperMW,8000.0
 GAOUA,Burkina,Diesel,Diesel,VOM,10.0
-GAOUA,Burkina,Diesel,Diesel,BuildLimitperYear,2.4
 GAOUA,Burkina,Diesel,Diesel,MaxTotalBuild,2.4
 GAOUA,Burkina,Diesel,Diesel,Type,10.0
 GAOUA,Burkina,Diesel,Diesel,fuel1,11.0
@@ -649,7 +572,6 @@ OUAGAI,Burkina,Diesel,Diesel,RampDnRate,1.0
 OUAGAI,Burkina,Diesel,Diesel,ResLimShare,0.2
 OUAGAI,Burkina,Diesel,Diesel,FOMperMW,8000.0
 OUAGAI,Burkina,Diesel,Diesel,VOM,10.0
-OUAGAI,Burkina,Diesel,Diesel,BuildLimitperYear,5.4
 OUAGAI,Burkina,Diesel,Diesel,MaxTotalBuild,5.4
 OUAGAI,Burkina,Diesel,Diesel,Type,10.0
 OUAGAI,Burkina,Diesel,Diesel,fuel1,11.0
@@ -668,7 +590,6 @@ OUAHIGOUYA,Burkina,Diesel,Diesel,RampDnRate,1.0
 OUAHIGOUYA,Burkina,Diesel,Diesel,ResLimShare,0.2
 OUAHIGOUYA,Burkina,Diesel,Diesel,FOMperMW,8000.0
 OUAHIGOUYA,Burkina,Diesel,Diesel,VOM,10.0
-OUAHIGOUYA,Burkina,Diesel,Diesel,BuildLimitperYear,5.2
 OUAHIGOUYA,Burkina,Diesel,Diesel,MaxTotalBuild,5.2
 OUAHIGOUYA,Burkina,Diesel,Diesel,Type,10.0
 OUAHIGOUYA,Burkina,Diesel,Diesel,fuel1,11.0
@@ -687,7 +608,6 @@ BOBOII,Burkina,HFO,HFO,RampDnRate,1.0
 BOBOII,Burkina,HFO,HFO,ResLimShare,0.2
 BOBOII,Burkina,HFO,HFO,FOMperMW,17000.0
 BOBOII,Burkina,HFO,HFO,VOM,9.999999999999998
-BOBOII,Burkina,HFO,HFO,BuildLimitperYear,68.0
 BOBOII,Burkina,HFO,HFO,MaxTotalBuild,68.0
 BOBOII,Burkina,HFO,HFO,Type,10.0
 BOBOII,Burkina,HFO,HFO,fuel1,7.0
@@ -708,7 +628,6 @@ KOMSILGA,Burkina,HFO,HFO,RampDnRate,1.0
 KOMSILGA,Burkina,HFO,HFO,ResLimShare,0.2
 KOMSILGA,Burkina,HFO,HFO,FOMperMW,17000.0
 KOMSILGA,Burkina,HFO,HFO,VOM,9.999999999999998
-KOMSILGA,Burkina,HFO,HFO,BuildLimitperYear,94.0
 KOMSILGA,Burkina,HFO,HFO,MaxTotalBuild,94.0
 KOMSILGA,Burkina,HFO,HFO,Type,10.0
 KOMSILGA,Burkina,HFO,HFO,fuel1,7.0
@@ -729,7 +648,6 @@ KOSSODO1,Burkina,HFO,HFO,RampDnRate,1.0
 KOSSODO1,Burkina,HFO,HFO,ResLimShare,0.2
 KOSSODO1,Burkina,HFO,HFO,FOMperMW,17000.0
 KOSSODO1,Burkina,HFO,HFO,VOM,9.999999999999998
-KOSSODO1,Burkina,HFO,HFO,BuildLimitperYear,64.0
 KOSSODO1,Burkina,HFO,HFO,MaxTotalBuild,64.0
 KOSSODO1,Burkina,HFO,HFO,Type,10.0
 KOSSODO1,Burkina,HFO,HFO,fuel1,7.0
@@ -750,7 +668,6 @@ OUAGAII,Burkina,HFO,HFO,RampDnRate,1.0
 OUAGAII,Burkina,HFO,HFO,ResLimShare,0.2
 OUAGAII,Burkina,HFO,HFO,FOMperMW,17000.0
 OUAGAII,Burkina,HFO,HFO,VOM,9.999999999999998
-OUAGAII,Burkina,HFO,HFO,BuildLimitperYear,35.08
 OUAGAII,Burkina,HFO,HFO,MaxTotalBuild,35.08
 OUAGAII,Burkina,HFO,HFO,Type,10.0
 OUAGAII,Burkina,HFO,HFO,fuel1,7.0
@@ -759,7 +676,7 @@ OUAGAII,Burkina,HFO,HFO,Status,1.0
 OUAGAII,Burkina,HFO,HFO,HeatRate2,9.6
 OUAGAII,Burkina,HFO,HFO,UnitSize,35.08
 OUAGAII,Burkina,HFO,HFO,CapacityCredit,1.0
-OUAGAII,Burkina,HFO,HFO,Error,21208.100000000002
+OUAGAII,Burkina,HFO,HFO,Error,21208.1
 Zagtouli,Burkina,PV,Solar,StYr,2017.0
 Zagtouli,Burkina,PV,Solar,RetrYr,2087.0
 Zagtouli,Burkina,PV,Solar,Zone,2.0
@@ -767,7 +684,6 @@ Zagtouli,Burkina,PV,Solar,Capacity,34.0
 Zagtouli,Burkina,PV,Solar,RampUpRate,1.0
 Zagtouli,Burkina,PV,Solar,RampDnRate,1.0
 Zagtouli,Burkina,PV,Solar,FOMperMW,17000.0
-Zagtouli,Burkina,PV,Solar,BuildLimitperYear,34.0
 Zagtouli,Burkina,PV,Solar,MaxTotalBuild,34.0
 Zagtouli,Burkina,PV,Solar,Type,6.0
 Zagtouli,Burkina,PV,Solar,fuel1,4.0
@@ -784,7 +700,6 @@ Ziga,Burkina,PV,Solar,Capacity,1.1
 Ziga,Burkina,PV,Solar,RampUpRate,1.0
 Ziga,Burkina,PV,Solar,RampDnRate,1.0
 Ziga,Burkina,PV,Solar,FOMperMW,17000.0
-Ziga,Burkina,PV,Solar,BuildLimitperYear,1.1
 Ziga,Burkina,PV,Solar,MaxTotalBuild,1.1
 Ziga,Burkina,PV,Solar,Type,6.0
 Ziga,Burkina,PV,Solar,fuel1,4.0
@@ -805,7 +720,6 @@ FIESS,Burkina,HFO,HFO,RampDnRate,1.0
 FIESS,Burkina,HFO,HFO,ResLimShare,0.2
 FIESS,Burkina,HFO,HFO,FOMperMW,17000.0
 FIESS,Burkina,HFO,HFO,VOM,9.999999999999998
-FIESS,Burkina,HFO,HFO,BuildLimitperYear,50.0
 FIESS,Burkina,HFO,HFO,MaxTotalBuild,50.0
 FIESS,Burkina,HFO,HFO,Type,10.0
 FIESS,Burkina,HFO,HFO,fuel1,7.0
@@ -822,7 +736,6 @@ Ziga/Gaoua,Burkina,PV,Solar,Capacity,2.0
 Ziga/Gaoua,Burkina,PV,Solar,RampUpRate,1.0
 Ziga/Gaoua,Burkina,PV,Solar,RampDnRate,1.0
 Ziga/Gaoua,Burkina,PV,Solar,FOMperMW,17000.0
-Ziga/Gaoua,Burkina,PV,Solar,BuildLimitperYear,2.0
 Ziga/Gaoua,Burkina,PV,Solar,MaxTotalBuild,2.0
 Ziga/Gaoua,Burkina,PV,Solar,Type,6.0
 Ziga/Gaoua,Burkina,PV,Solar,fuel1,4.0
@@ -841,7 +754,6 @@ Ouaga NO,Burkina,PV,Solar,Capacity,42.0
 Ouaga NO,Burkina,PV,Solar,RampUpRate,1.0
 Ouaga NO,Burkina,PV,Solar,RampDnRate,1.0
 Ouaga NO,Burkina,PV,Solar,FOMperMW,17000.0
-Ouaga NO,Burkina,PV,Solar,BuildLimitperYear,42.0
 Ouaga NO,Burkina,PV,Solar,MaxTotalBuild,42.0
 Ouaga NO,Burkina,PV,Solar,Type,6.0
 Ouaga NO,Burkina,PV,Solar,fuel1,4.0
@@ -860,7 +772,6 @@ Nagreongo,Burkina,PV,Solar,Capacity,30.0
 Nagreongo,Burkina,PV,Solar,RampUpRate,1.0
 Nagreongo,Burkina,PV,Solar,RampDnRate,1.0
 Nagreongo,Burkina,PV,Solar,FOMperMW,17000.0
-Nagreongo,Burkina,PV,Solar,BuildLimitperYear,30.0
 Nagreongo,Burkina,PV,Solar,MaxTotalBuild,30.0
 Nagreongo,Burkina,PV,Solar,Type,6.0
 Nagreongo,Burkina,PV,Solar,fuel1,4.0
@@ -879,7 +790,6 @@ Zano,Burkina,PV,Solar,Capacity,24.0
 Zano,Burkina,PV,Solar,RampUpRate,1.0
 Zano,Burkina,PV,Solar,RampDnRate,1.0
 Zano,Burkina,PV,Solar,FOMperMW,17000.0
-Zano,Burkina,PV,Solar,BuildLimitperYear,24.0
 Zano,Burkina,PV,Solar,MaxTotalBuild,24.0
 Zano,Burkina,PV,Solar,Type,6.0
 Zano,Burkina,PV,Solar,fuel1,4.0
@@ -898,7 +808,6 @@ Zina Solaire,Burkina,PV,Solar,Capacity,26.0
 Zina Solaire,Burkina,PV,Solar,RampUpRate,1.0
 Zina Solaire,Burkina,PV,Solar,RampDnRate,1.0
 Zina Solaire,Burkina,PV,Solar,FOMperMW,17000.0
-Zina Solaire,Burkina,PV,Solar,BuildLimitperYear,26.0
 Zina Solaire,Burkina,PV,Solar,MaxTotalBuild,26.0
 Zina Solaire,Burkina,PV,Solar,Type,6.0
 Zina Solaire,Burkina,PV,Solar,fuel1,4.0
@@ -921,14 +830,13 @@ FADA2,Burkina,Diesel,Diesel,RampDnRate,1.0
 FADA2,Burkina,Diesel,Diesel,ResLimShare,0.2
 FADA2,Burkina,Diesel,Diesel,FOMperMW,18500.0
 FADA2,Burkina,Diesel,Diesel,VOM,6.5
-FADA2,Burkina,Diesel,Diesel,BuildLimitperYear,7.5
 FADA2,Burkina,Diesel,Diesel,MaxTotalBuild,7.5
 FADA2,Burkina,Diesel,Diesel,Type,10.0
 FADA2,Burkina,Diesel,Diesel,fuel1,11.0
 FADA2,Burkina,Diesel,Diesel,Status,1.0
 FADA2,Burkina,Diesel,Diesel,UnitSize,7.5
 FADA2,Burkina,Diesel,Diesel,CapacityCredit,1.0
-FADA2,Burkina,Diesel,Diesel,Error,22681.260000000002
+FADA2,Burkina,Diesel,Diesel,Error,22681.26
 FADA2,Burkina,Diesel,Diesel,Life,30.0
 FADA2,Burkina,Diesel,Diesel,Capex,0.9
 KOSSODO2,Burkina,HFO,HFO,StYr,2022.0
@@ -942,14 +850,13 @@ KOSSODO2,Burkina,HFO,HFO,RampDnRate,1.0
 KOSSODO2,Burkina,HFO,HFO,ResLimShare,0.2
 KOSSODO2,Burkina,HFO,HFO,FOMperMW,18500.0
 KOSSODO2,Burkina,HFO,HFO,VOM,6.5
-KOSSODO2,Burkina,HFO,HFO,BuildLimitperYear,50.0
 KOSSODO2,Burkina,HFO,HFO,MaxTotalBuild,50.0
 KOSSODO2,Burkina,HFO,HFO,Type,10.0
 KOSSODO2,Burkina,HFO,HFO,fuel1,7.0
 KOSSODO2,Burkina,HFO,HFO,Status,1.0
 KOSSODO2,Burkina,HFO,HFO,UnitSize,50.0
 KOSSODO2,Burkina,HFO,HFO,CapacityCredit,1.0
-KOSSODO2,Burkina,HFO,HFO,Error,22810.260000000002
+KOSSODO2,Burkina,HFO,HFO,Error,22810.26
 KOSSODO2,Burkina,HFO,HFO,Life,30.0
 KOSSODO2,Burkina,HFO,HFO,Capex,0.9
 GT_Burkina,Burkina,Diesel,Diesel,StYr,2024.0
@@ -1081,14 +988,13 @@ Ouaga-NordOuest,Burkina,Diesel,Diesel,RampDnRate,1.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,ResLimShare,0.2
 Ouaga-NordOuest,Burkina,Diesel,Diesel,FOMperMW,18500.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,VOM,6.5
-Ouaga-NordOuest,Burkina,Diesel,Diesel,BuildLimitperYear,70.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,MaxTotalBuild,70.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,Type,10.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,fuel1,11.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,Status,2.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,UnitSize,70.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,CapacityCredit,1.0
-Ouaga-NordOuest,Burkina,Diesel,Diesel,Error,22861.260000000002
+Ouaga-NordOuest,Burkina,Diesel,Diesel,Error,22861.26
 Ouaga-NordOuest,Burkina,Diesel,Diesel,Life,30.0
 Ouaga-NordOuest,Burkina,Diesel,Diesel,Capex,0.9
 Kodeni_PV,Burkina,PV,Solar,StYr,2023.0
@@ -1098,7 +1004,6 @@ Kodeni_PV,Burkina,PV,Solar,Capacity,38.0
 Kodeni_PV,Burkina,PV,Solar,RampUpRate,1.0
 Kodeni_PV,Burkina,PV,Solar,RampDnRate,1.0
 Kodeni_PV,Burkina,PV,Solar,FOMperMW,17000.0
-Kodeni_PV,Burkina,PV,Solar,BuildLimitperYear,38.0
 Kodeni_PV,Burkina,PV,Solar,MaxTotalBuild,38.0
 Kodeni_PV,Burkina,PV,Solar,Type,6.0
 Kodeni_PV,Burkina,PV,Solar,fuel1,4.0
@@ -1117,7 +1022,6 @@ Pa_PV,Burkina,PV,Solar,Capacity,30.0
 Pa_PV,Burkina,PV,Solar,RampUpRate,1.0
 Pa_PV,Burkina,PV,Solar,RampDnRate,1.0
 Pa_PV,Burkina,PV,Solar,FOMperMW,17000.0
-Pa_PV,Burkina,PV,Solar,BuildLimitperYear,30.0
 Pa_PV,Burkina,PV,Solar,MaxTotalBuild,30.0
 Pa_PV,Burkina,PV,Solar,Type,6.0
 Pa_PV,Burkina,PV,Solar,fuel1,4.0
@@ -1178,7 +1082,6 @@ Karpower_IPP,Gambia,HFO,HFO,RampDnRate,1.0
 Karpower_IPP,Gambia,HFO,HFO,ResLimShare,0.2
 Karpower_IPP,Gambia,HFO,HFO,FOMperMW,17000.0
 Karpower_IPP,Gambia,HFO,HFO,VOM,9.999999999999998
-Karpower_IPP,Gambia,HFO,HFO,BuildLimitperYear,36.0
 Karpower_IPP,Gambia,HFO,HFO,MaxTotalBuild,36.0
 Karpower_IPP,Gambia,HFO,HFO,Type,10.0
 Karpower_IPP,Gambia,HFO,HFO,fuel1,7.0
@@ -1197,7 +1100,6 @@ Brikama,Gambia,HFO,HFO,RampDnRate,1.0
 Brikama,Gambia,HFO,HFO,ResLimShare,0.2
 Brikama,Gambia,HFO,HFO,FOMperMW,17000.0
 Brikama,Gambia,HFO,HFO,VOM,9.999999999999998
-Brikama,Gambia,HFO,HFO,BuildLimitperYear,53.8
 Brikama,Gambia,HFO,HFO,MaxTotalBuild,53.8
 Brikama,Gambia,HFO,HFO,Type,10.0
 Brikama,Gambia,HFO,HFO,fuel1,7.0
@@ -1216,14 +1118,13 @@ Brikama3,Gambia,HFO,HFO,RampDnRate,1.0
 Brikama3,Gambia,HFO,HFO,ResLimShare,0.2
 Brikama3,Gambia,HFO,HFO,FOMperMW,18500.0
 Brikama3,Gambia,HFO,HFO,VOM,6.5
-Brikama3,Gambia,HFO,HFO,BuildLimitperYear,20.0
 Brikama3,Gambia,HFO,HFO,MaxTotalBuild,20.0
 Brikama3,Gambia,HFO,HFO,Type,10.0
 Brikama3,Gambia,HFO,HFO,fuel1,7.0
 Brikama3,Gambia,HFO,HFO,Status,1.0
 Brikama3,Gambia,HFO,HFO,UnitSize,20.0
 Brikama3,Gambia,HFO,HFO,CapacityCredit,1.0
-Brikama3,Gambia,HFO,HFO,Error,22718.260000000002
+Brikama3,Gambia,HFO,HFO,Error,22718.26
 Brikama3,Gambia,HFO,HFO,Life,30.0
 Brikama3,Gambia,HFO,HFO,Capex,0.9
 DualFuel_CAND_Gambia,Gambia,HFO,HFO,StYr,2026.0
@@ -1296,7 +1197,6 @@ TAPCO_IPP,Ghana,Gas,Gas,RampDnRate,0.434
 TAPCO_IPP,Ghana,Gas,Gas,ResLimShare,0.07
 TAPCO_IPP,Ghana,Gas,Gas,FOMperMW,35000.0
 TAPCO_IPP,Ghana,Gas,Gas,VOM,2.0
-TAPCO_IPP,Ghana,Gas,Gas,BuildLimitperYear,315.0
 TAPCO_IPP,Ghana,Gas,Gas,MaxTotalBuild,315.0
 TAPCO_IPP,Ghana,Gas,Gas,Type,2.0
 TAPCO_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1317,7 +1217,6 @@ SUNSONASOGLI_IPP,Ghana,Gas,Gas,RampDnRate,0.434
 SUNSONASOGLI_IPP,Ghana,Gas,Gas,ResLimShare,0.07
 SUNSONASOGLI_IPP,Ghana,Gas,Gas,FOMperMW,35000.0
 SUNSONASOGLI_IPP,Ghana,Gas,Gas,VOM,2.0
-SUNSONASOGLI_IPP,Ghana,Gas,Gas,BuildLimitperYear,200.0
 SUNSONASOGLI_IPP,Ghana,Gas,Gas,MaxTotalBuild,200.0
 SUNSONASOGLI_IPP,Ghana,Gas,Gas,Type,2.0
 SUNSONASOGLI_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1338,7 +1237,6 @@ SUNSONASOGLI2_IPP,Ghana,Gas,Gas,RampDnRate,0.434
 SUNSONASOGLI2_IPP,Ghana,Gas,Gas,ResLimShare,0.07
 SUNSONASOGLI2_IPP,Ghana,Gas,Gas,FOMperMW,35000.0
 SUNSONASOGLI2_IPP,Ghana,Gas,Gas,VOM,2.0
-SUNSONASOGLI2_IPP,Ghana,Gas,Gas,BuildLimitperYear,360.0
 SUNSONASOGLI2_IPP,Ghana,Gas,Gas,MaxTotalBuild,360.0
 SUNSONASOGLI2_IPP,Ghana,Gas,Gas,Type,2.0
 SUNSONASOGLI2_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1359,7 +1257,6 @@ KTPP1_IPP,Ghana,Diesel,Diesel,RampDnRate,0.9
 KTPP1_IPP,Ghana,Diesel,Diesel,ResLimShare,0.07
 KTPP1_IPP,Ghana,Diesel,Diesel,FOMperMW,7000.0
 KTPP1_IPP,Ghana,Diesel,Diesel,VOM,2.5
-KTPP1_IPP,Ghana,Diesel,Diesel,BuildLimitperYear,220.0
 KTPP1_IPP,Ghana,Diesel,Diesel,MaxTotalBuild,220.0
 KTPP1_IPP,Ghana,Diesel,Diesel,Type,1.0
 KTPP1_IPP,Ghana,Diesel,Diesel,fuel1,11.0
@@ -1368,7 +1265,7 @@ KTPP1_IPP,Ghana,Diesel,Diesel,Status,1.0
 KTPP1_IPP,Ghana,Diesel,Diesel,HeatRate2,10.8
 KTPP1_IPP,Ghana,Diesel,Diesel,UnitSize,220.0
 KTPP1_IPP,Ghana,Diesel,Diesel,CapacityCredit,1.0
-KTPP1_IPP,Ghana,Diesel,Diesel,Error,11789.119999999999
+KTPP1_IPP,Ghana,Diesel,Diesel,Error,11789.12
 CENIT_IPP,Ghana,Diesel,Diesel,StYr,2012.0
 CENIT_IPP,Ghana,Diesel,Diesel,RetrYr,2042.0
 CENIT_IPP,Ghana,Diesel,Diesel,Zone,4.0
@@ -1380,7 +1277,6 @@ CENIT_IPP,Ghana,Diesel,Diesel,RampDnRate,0.9
 CENIT_IPP,Ghana,Diesel,Diesel,ResLimShare,0.2
 CENIT_IPP,Ghana,Diesel,Diesel,FOMperMW,7000.0
 CENIT_IPP,Ghana,Diesel,Diesel,VOM,2.5
-CENIT_IPP,Ghana,Diesel,Diesel,BuildLimitperYear,110.0
 CENIT_IPP,Ghana,Diesel,Diesel,MaxTotalBuild,110.0
 CENIT_IPP,Ghana,Diesel,Diesel,Type,1.0
 CENIT_IPP,Ghana,Diesel,Diesel,fuel1,11.0
@@ -1401,7 +1297,6 @@ AMERI_6units_IPP,Ghana,Gas,Gas,RampDnRate,0.9
 AMERI_6units_IPP,Ghana,Gas,Gas,ResLimShare,0.2
 AMERI_6units_IPP,Ghana,Gas,Gas,FOMperMW,7000.0
 AMERI_6units_IPP,Ghana,Gas,Gas,VOM,2.5
-AMERI_6units_IPP,Ghana,Gas,Gas,BuildLimitperYear,150.0
 AMERI_6units_IPP,Ghana,Gas,Gas,MaxTotalBuild,150.0
 AMERI_6units_IPP,Ghana,Gas,Gas,Type,1.0
 AMERI_6units_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1420,7 +1315,6 @@ AKSA_IPP,Ghana,HFO,HFO,RampDnRate,0.9
 AKSA_IPP,Ghana,HFO,HFO,ResLimShare,0.2
 AKSA_IPP,Ghana,HFO,HFO,FOMperMW,7000.0
 AKSA_IPP,Ghana,HFO,HFO,VOM,2.5
-AKSA_IPP,Ghana,HFO,HFO,BuildLimitperYear,370.0
 AKSA_IPP,Ghana,HFO,HFO,MaxTotalBuild,370.0
 AKSA_IPP,Ghana,HFO,HFO,Type,1.0
 AKSA_IPP,Ghana,HFO,HFO,fuel1,7.0
@@ -1429,24 +1323,6 @@ AKSA_IPP,Ghana,HFO,HFO,UnitSize,370.0
 AKSA_IPP,Ghana,HFO,HFO,CapacityCredit,1.0
 AKSA_IPP,Ghana,HFO,HFO,Error,12184.65
 AKSA_IPP,Ghana,HFO,HFO,DescreteCap,1.0
-Genser,Ghana,Gas,Gas,StYr,2020.0
-Genser,Ghana,Gas,Gas,RetrYr,2046.0
-Genser,Ghana,Gas,Gas,Zone,4.0
-Genser,Ghana,Gas,Gas,MinLimitShare,0.5
-Genser,Ghana,Gas,Gas,HeatRate,12.7
-Genser,Ghana,Gas,Gas,RampUpRate,0.85
-Genser,Ghana,Gas,Gas,RampDnRate,0.9
-Genser,Ghana,Gas,Gas,ResLimShare,0.2
-Genser,Ghana,Gas,Gas,FOMperMW,7000.0
-Genser,Ghana,Gas,Gas,VOM,2.5
-Genser,Ghana,Gas,Gas,BuildLimitperYear,450.0
-Genser,Ghana,Gas,Gas,MaxTotalBuild,450.0
-Genser,Ghana,Gas,Gas,Type,1.0
-Genser,Ghana,Gas,Gas,fuel1,2.0
-Genser,Ghana,Gas,Gas,Status,1.0
-Genser,Ghana,Gas,Gas,UnitSize,450.0
-Genser,Ghana,Gas,Gas,CapacityCredit,1.0
-Genser,Ghana,Gas,Gas,Error,11991.65
 KARPOWERIII_IPP,Ghana,Gas,Gas,StYr,2016.0
 KARPOWERIII_IPP,Ghana,Gas,Gas,RetrYr,2046.0
 KARPOWERIII_IPP,Ghana,Gas,Gas,Zone,4.0
@@ -1458,7 +1334,6 @@ KARPOWERIII_IPP,Ghana,Gas,Gas,RampDnRate,0.9
 KARPOWERIII_IPP,Ghana,Gas,Gas,ResLimShare,0.2
 KARPOWERIII_IPP,Ghana,Gas,Gas,FOMperMW,7000.0
 KARPOWERIII_IPP,Ghana,Gas,Gas,VOM,2.5
-KARPOWERIII_IPP,Ghana,Gas,Gas,BuildLimitperYear,450.0
 KARPOWERIII_IPP,Ghana,Gas,Gas,MaxTotalBuild,450.0
 KARPOWERIII_IPP,Ghana,Gas,Gas,Type,1.0
 KARPOWERIII_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1474,7 +1349,6 @@ Bui_IPP,Ghana,Water,Hydro,RampUpRate,1.0
 Bui_IPP,Ghana,Water,Hydro,RampDnRate,1.0
 Bui_IPP,Ghana,Water,Hydro,ResLimShare,0.1
 Bui_IPP,Ghana,Water,Hydro,FOMperMW,17882.251984126986
-Bui_IPP,Ghana,Water,Hydro,BuildLimitperYear,400.0
 Bui_IPP,Ghana,Water,Hydro,MaxTotalBuild,400.0
 Bui_IPP,Ghana,Water,Hydro,Type,4.0
 Bui_IPP,Ghana,Water,Hydro,fuel1,3.0
@@ -1490,7 +1364,6 @@ Winneba (BXC solar)_IPP,Ghana,PV,Solar,Capacity,20.0
 Winneba (BXC solar)_IPP,Ghana,PV,Solar,RampUpRate,1.0
 Winneba (BXC solar)_IPP,Ghana,PV,Solar,RampDnRate,1.0
 Winneba (BXC solar)_IPP,Ghana,PV,Solar,FOMperMW,17000.0
-Winneba (BXC solar)_IPP,Ghana,PV,Solar,BuildLimitperYear,20.0
 Winneba (BXC solar)_IPP,Ghana,PV,Solar,MaxTotalBuild,20.0
 Winneba (BXC solar)_IPP,Ghana,PV,Solar,Type,6.0
 Winneba (BXC solar)_IPP,Ghana,PV,Solar,fuel1,4.0
@@ -1511,7 +1384,6 @@ TICO,Ghana,Gas,Gas,RampDnRate,0.434
 TICO,Ghana,Gas,Gas,ResLimShare,0.07
 TICO,Ghana,Gas,Gas,FOMperMW,35000.0
 TICO,Ghana,Gas,Gas,VOM,2.0
-TICO,Ghana,Gas,Gas,BuildLimitperYear,320.0
 TICO,Ghana,Gas,Gas,MaxTotalBuild,320.0
 TICO,Ghana,Gas,Gas,Type,2.0
 TICO,Ghana,Gas,Gas,fuel1,2.0
@@ -1532,7 +1404,6 @@ TT1PP,Ghana,Diesel,Diesel,RampDnRate,0.9
 TT1PP,Ghana,Diesel,Diesel,ResLimShare,0.2
 TT1PP,Ghana,Diesel,Diesel,FOMperMW,7000.0
 TT1PP,Ghana,Diesel,Diesel,VOM,2.5
-TT1PP,Ghana,Diesel,Diesel,BuildLimitperYear,100.0
 TT1PP,Ghana,Diesel,Diesel,MaxTotalBuild,100.0
 TT1PP,Ghana,Diesel,Diesel,Type,1.0
 TT1PP,Ghana,Diesel,Diesel,fuel1,11.0
@@ -1553,7 +1424,6 @@ TT2PP,Ghana,Gas,Gas,RampDnRate,0.9
 TT2PP,Ghana,Gas,Gas,ResLimShare,0.2
 TT2PP,Ghana,Gas,Gas,FOMperMW,7000.0
 TT2PP,Ghana,Gas,Gas,VOM,2.5
-TT2PP,Ghana,Gas,Gas,BuildLimitperYear,70.0
 TT2PP,Ghana,Gas,Gas,MaxTotalBuild,70.0
 TT2PP,Ghana,Gas,Gas,Type,1.0
 TT2PP,Ghana,Gas,Gas,fuel1,2.0
@@ -1571,7 +1441,6 @@ Akosombo,Ghana,Water,Hydro,RampUpRate,1.0
 Akosombo,Ghana,Water,Hydro,RampDnRate,1.0
 Akosombo,Ghana,Water,Hydro,ResLimShare,0.15
 Akosombo,Ghana,Water,Hydro,FOMperMW,18926.461210317462
-Akosombo,Ghana,Water,Hydro,BuildLimitperYear,1020.0
 Akosombo,Ghana,Water,Hydro,MaxTotalBuild,1020.0
 Akosombo,Ghana,Water,Hydro,Type,4.0
 Akosombo,Ghana,Water,Hydro,fuel1,3.0
@@ -1587,7 +1456,6 @@ Navrongo,Ghana,PV,Solar,Capacity,2.5
 Navrongo,Ghana,PV,Solar,RampUpRate,1.0
 Navrongo,Ghana,PV,Solar,RampDnRate,1.0
 Navrongo,Ghana,PV,Solar,FOMperMW,17000.0
-Navrongo,Ghana,PV,Solar,BuildLimitperYear,2.5
 Navrongo,Ghana,PV,Solar,MaxTotalBuild,2.5
 Navrongo,Ghana,PV,Solar,Type,6.0
 Navrongo,Ghana,PV,Solar,fuel1,4.0
@@ -1605,7 +1473,6 @@ Kpong,Ghana,Water,Hydro,RampUpRate,1.0
 Kpong,Ghana,Water,Hydro,RampDnRate,1.0
 Kpong,Ghana,Water,Hydro,ResLimShare,0.1
 Kpong,Ghana,Water,Hydro,FOMperMW,19855.153061224497
-Kpong,Ghana,Water,Hydro,BuildLimitperYear,160.0
 Kpong,Ghana,Water,Hydro,MaxTotalBuild,160.0
 Kpong,Ghana,Water,Hydro,Type,12.0
 Kpong,Ghana,Water,Hydro,fuel1,3.0
@@ -1625,7 +1492,6 @@ EarlyPower_U1_IPP,Ghana,Gas,Gas,RampDnRate,0.434
 EarlyPower_U1_IPP,Ghana,Gas,Gas,ResLimShare,0.07
 EarlyPower_U1_IPP,Ghana,Gas,Gas,FOMperMW,20420.72
 EarlyPower_U1_IPP,Ghana,Gas,Gas,VOM,1.8
-EarlyPower_U1_IPP,Ghana,Gas,Gas,BuildLimitperYear,194.0
 EarlyPower_U1_IPP,Ghana,Gas,Gas,MaxTotalBuild,194.0
 EarlyPower_U1_IPP,Ghana,Gas,Gas,Type,2.0
 EarlyPower_U1_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1648,7 +1514,6 @@ CENPOWER_IPP,Ghana,Gas,Gas,RampDnRate,0.434
 CENPOWER_IPP,Ghana,Gas,Gas,ResLimShare,0.07
 CENPOWER_IPP,Ghana,Gas,Gas,FOMperMW,20420.72
 CENPOWER_IPP,Ghana,Gas,Gas,VOM,1.8
-CENPOWER_IPP,Ghana,Gas,Gas,BuildLimitperYear,351.0
 CENPOWER_IPP,Ghana,Gas,Gas,MaxTotalBuild,351.0
 CENPOWER_IPP,Ghana,Gas,Gas,Type,2.0
 CENPOWER_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1671,7 +1536,6 @@ Amandi_IPP,Ghana,Gas,Gas,RampDnRate,0.434
 Amandi_IPP,Ghana,Gas,Gas,ResLimShare,0.07
 Amandi_IPP,Ghana,Gas,Gas,FOMperMW,20420.72
 Amandi_IPP,Ghana,Gas,Gas,VOM,1.8
-Amandi_IPP,Ghana,Gas,Gas,BuildLimitperYear,203.0
 Amandi_IPP,Ghana,Gas,Gas,MaxTotalBuild,203.0
 Amandi_IPP,Ghana,Gas,Gas,Type,2.0
 Amandi_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -1690,7 +1554,6 @@ Meinenergy_IPP,Ghana,PV,Solar,Capacity,20.0
 Meinenergy_IPP,Ghana,PV,Solar,RampUpRate,1.0
 Meinenergy_IPP,Ghana,PV,Solar,RampDnRate,1.0
 Meinenergy_IPP,Ghana,PV,Solar,FOMperMW,17000.0
-Meinenergy_IPP,Ghana,PV,Solar,BuildLimitperYear,20.0
 Meinenergy_IPP,Ghana,PV,Solar,MaxTotalBuild,20.0
 Meinenergy_IPP,Ghana,PV,Solar,Type,6.0
 Meinenergy_IPP,Ghana,PV,Solar,fuel1,4.0
@@ -1700,22 +1563,6 @@ Meinenergy_IPP,Ghana,PV,Solar,CapacityCredit,1.0
 Meinenergy_IPP,Ghana,PV,Solar,Error,21183.0
 Meinenergy_IPP,Ghana,PV,Solar,RE_Flag,1.0
 Meinenergy_IPP,Ghana,PV,Solar,RETech,1.0
-Ghana_PV,Ghana,PV,Solar,StYr,2022.0
-Ghana_PV,Ghana,PV,Solar,RetrYr,2086.0
-Ghana_PV,Ghana,PV,Solar,Zone,4.0
-Ghana_PV,Ghana,PV,Solar,RampUpRate,1.0
-Ghana_PV,Ghana,PV,Solar,RampDnRate,1.0
-Ghana_PV,Ghana,PV,Solar,FOMperMW,17000.0
-Ghana_PV,Ghana,PV,Solar,BuildLimitperYear,20.0
-Ghana_PV,Ghana,PV,Solar,MaxTotalBuild,20.0
-Ghana_PV,Ghana,PV,Solar,Type,6.0
-Ghana_PV,Ghana,PV,Solar,fuel1,4.0
-Ghana_PV,Ghana,PV,Solar,Status,1.0
-Ghana_PV,Ghana,PV,Solar,UnitSize,20.0
-Ghana_PV,Ghana,PV,Solar,CapacityCredit,1.0
-Ghana_PV,Ghana,PV,Solar,Error,21166.0
-Ghana_PV,Ghana,PV,Solar,RE_Flag,1.0
-Ghana_PV,Ghana,PV,Solar,RETech,1.0
 CENPOWER2_IPP,Ghana,Gas,Gas,StYr,2050.0
 CENPOWER2_IPP,Ghana,Gas,Gas,RetrYr,2068.0
 CENPOWER2_IPP,Ghana,Gas,Gas,Zone,4.0
@@ -2381,7 +2228,6 @@ Amaria,Guinea,Water,Hydro,RampUpRate,1.0
 Amaria,Guinea,Water,Hydro,RampDnRate,1.0
 Amaria,Guinea,Water,Hydro,ResLimShare,0.1
 Amaria,Guinea,Water,Hydro,FOMperMW,71060.0
-Amaria,Guinea,Water,Hydro,BuildLimitperYear,300.0
 Amaria,Guinea,Water,Hydro,MaxTotalBuild,300.0
 Amaria,Guinea,Water,Hydro,Type,4.0
 Amaria,Guinea,Water,Hydro,fuel1,3.0
@@ -2400,7 +2246,6 @@ Fomi,Guinea,Water,Hydro,RampUpRate,1.0
 Fomi,Guinea,Water,Hydro,RampDnRate,1.0
 Fomi,Guinea,Water,Hydro,ResLimShare,0.1
 Fomi,Guinea,Water,Hydro,FOMperMW,71340.0
-Fomi,Guinea,Water,Hydro,BuildLimitperYear,90.0
 Fomi,Guinea,Water,Hydro,MaxTotalBuild,90.0
 Fomi,Guinea,Water,Hydro,Type,4.0
 Fomi,Guinea,Water,Hydro,fuel1,3.0
@@ -2419,7 +2264,6 @@ Koukoutamba,Guinea,Water,Hydro,RampUpRate,1.0
 Koukoutamba,Guinea,Water,Hydro,RampDnRate,1.0
 Koukoutamba,Guinea,Water,Hydro,ResLimShare,0.1
 Koukoutamba,Guinea,Water,Hydro,FOMperMW,68020.0
-Koukoutamba,Guinea,Water,Hydro,BuildLimitperYear,280.0
 Koukoutamba,Guinea,Water,Hydro,MaxTotalBuild,280.0
 Koukoutamba,Guinea,Water,Hydro,Type,4.0
 Koukoutamba,Guinea,Water,Hydro,fuel1,3.0
@@ -2438,7 +2282,6 @@ Grand Chutes,Guinea,Water,Hydro,RampUpRate,1.0
 Grand Chutes,Guinea,Water,Hydro,RampDnRate,1.0
 Grand Chutes,Guinea,Water,Hydro,ResLimShare,0.1
 Grand Chutes,Guinea,Water,Hydro,FOMperMW,20000.0
-Grand Chutes,Guinea,Water,Hydro,BuildLimitperYear,28.0
 Grand Chutes,Guinea,Water,Hydro,MaxTotalBuild,28.0
 Grand Chutes,Guinea,Water,Hydro,Type,4.0
 Grand Chutes,Guinea,Water,Hydro,fuel1,3.0
@@ -2457,7 +2300,6 @@ Donkea,Guinea,Water,Hydro,RampUpRate,1.0
 Donkea,Guinea,Water,Hydro,RampDnRate,1.0
 Donkea,Guinea,Water,Hydro,ResLimShare,0.1
 Donkea,Guinea,Water,Hydro,FOMperMW,20000.0
-Donkea,Guinea,Water,Hydro,BuildLimitperYear,15.0
 Donkea,Guinea,Water,Hydro,MaxTotalBuild,15.0
 Donkea,Guinea,Water,Hydro,Type,4.0
 Donkea,Guinea,Water,Hydro,fuel1,3.0
@@ -2476,7 +2318,6 @@ Baneah,Guinea,Water,Hydro,RampUpRate,1.0
 Baneah,Guinea,Water,Hydro,RampDnRate,1.0
 Baneah,Guinea,Water,Hydro,ResLimShare,0.1
 Baneah,Guinea,Water,Hydro,FOMperMW,20000.0
-Baneah,Guinea,Water,Hydro,BuildLimitperYear,5.0
 Baneah,Guinea,Water,Hydro,MaxTotalBuild,5.0
 Baneah,Guinea,Water,Hydro,Type,4.0
 Baneah,Guinea,Water,Hydro,fuel1,3.0
@@ -2495,7 +2336,6 @@ Garafiri,Guinea,Water,Hydro,RampUpRate,1.0
 Garafiri,Guinea,Water,Hydro,RampDnRate,1.0
 Garafiri,Guinea,Water,Hydro,ResLimShare,0.1
 Garafiri,Guinea,Water,Hydro,FOMperMW,20000.0
-Garafiri,Guinea,Water,Hydro,BuildLimitperYear,75.0
 Garafiri,Guinea,Water,Hydro,MaxTotalBuild,75.0
 Garafiri,Guinea,Water,Hydro,Type,4.0
 Garafiri,Guinea,Water,Hydro,fuel1,3.0
@@ -2514,7 +2354,6 @@ Kaleta,Guinea,Water,Hydro,RampUpRate,1.0
 Kaleta,Guinea,Water,Hydro,RampDnRate,1.0
 Kaleta,Guinea,Water,Hydro,ResLimShare,0.1
 Kaleta,Guinea,Water,Hydro,FOMperMW,43840.0
-Kaleta,Guinea,Water,Hydro,BuildLimitperYear,240.0
 Kaleta,Guinea,Water,Hydro,MaxTotalBuild,240.0
 Kaleta,Guinea,Water,Hydro,Type,4.0
 Kaleta,Guinea,Water,Hydro,fuel1,3.0
@@ -2533,7 +2372,6 @@ Souapiti,Guinea,Water,Hydro,RampUpRate,1.0
 Souapiti,Guinea,Water,Hydro,RampDnRate,1.0
 Souapiti,Guinea,Water,Hydro,ResLimShare,0.1
 Souapiti,Guinea,Water,Hydro,FOMperMW,68320.0
-Souapiti,Guinea,Water,Hydro,BuildLimitperYear,475.0
 Souapiti,Guinea,Water,Hydro,MaxTotalBuild,475.0
 Souapiti,Guinea,Water,Hydro,Type,4.0
 Souapiti,Guinea,Water,Hydro,fuel1,3.0
@@ -2554,7 +2392,6 @@ Karpowership_IPP,Guinea,HFO,HFO,RampUpRate,1.0
 Karpowership_IPP,Guinea,HFO,HFO,RampDnRate,1.0
 Karpowership_IPP,Guinea,HFO,HFO,ResLimShare,0.2
 Karpowership_IPP,Guinea,HFO,HFO,VOM,250.0
-Karpowership_IPP,Guinea,HFO,HFO,BuildLimitperYear,115.0
 Karpowership_IPP,Guinea,HFO,HFO,MaxTotalBuild,115.0
 Karpowership_IPP,Guinea,HFO,HFO,Type,10.0
 Karpowership_IPP,Guinea,HFO,HFO,fuel1,7.0
@@ -2572,7 +2409,6 @@ Kipe_IPP,Guinea,HFO,HFO,RampUpRate,1.0
 Kipe_IPP,Guinea,HFO,HFO,RampDnRate,1.0
 Kipe_IPP,Guinea,HFO,HFO,ResLimShare,0.2
 Kipe_IPP,Guinea,HFO,HFO,VOM,50.0
-Kipe_IPP,Guinea,HFO,HFO,BuildLimitperYear,50.0
 Kipe_IPP,Guinea,HFO,HFO,MaxTotalBuild,50.0
 Kipe_IPP,Guinea,HFO,HFO,Type,10.0
 Kipe_IPP,Guinea,HFO,HFO,fuel1,7.0
@@ -2590,7 +2426,6 @@ GDE_IPP,Guinea,HFO,HFO,RampUpRate,1.0
 GDE_IPP,Guinea,HFO,HFO,RampDnRate,1.0
 GDE_IPP,Guinea,HFO,HFO,ResLimShare,0.2
 GDE_IPP,Guinea,HFO,HFO,VOM,280.0
-GDE_IPP,Guinea,HFO,HFO,BuildLimitperYear,42.5
 GDE_IPP,Guinea,HFO,HFO,MaxTotalBuild,42.5
 GDE_IPP,Guinea,HFO,HFO,Type,10.0
 GDE_IPP,Guinea,HFO,HFO,fuel1,7.0
@@ -2609,7 +2444,6 @@ Kaloum5,Guinea,HFO,HFO,RampDnRate,1.0
 Kaloum5,Guinea,HFO,HFO,ResLimShare,0.2
 Kaloum5,Guinea,HFO,HFO,FOMperMW,17000.0
 Kaloum5,Guinea,HFO,HFO,VOM,7.0
-Kaloum5,Guinea,HFO,HFO,BuildLimitperYear,30.0
 Kaloum5,Guinea,HFO,HFO,MaxTotalBuild,30.0
 Kaloum5,Guinea,HFO,HFO,Type,10.0
 Kaloum5,Guinea,HFO,HFO,fuel1,7.0
@@ -2628,7 +2462,6 @@ Kaloum3_IPP,Guinea,HFO,HFO,RampUpRate,1.0
 Kaloum3_IPP,Guinea,HFO,HFO,RampDnRate,1.0
 Kaloum3_IPP,Guinea,HFO,HFO,ResLimShare,0.2
 Kaloum3_IPP,Guinea,HFO,HFO,VOM,100.0
-Kaloum3_IPP,Guinea,HFO,HFO,BuildLimitperYear,24.0
 Kaloum3_IPP,Guinea,HFO,HFO,MaxTotalBuild,24.0
 Kaloum3_IPP,Guinea,HFO,HFO,Type,10.0
 Kaloum3_IPP,Guinea,HFO,HFO,fuel1,7.0
@@ -2646,7 +2479,6 @@ Kaloum1_IPP,Guinea,HFO,HFO,RampUpRate,1.0
 Kaloum1_IPP,Guinea,HFO,HFO,RampDnRate,1.0
 Kaloum1_IPP,Guinea,HFO,HFO,ResLimShare,0.2
 Kaloum1_IPP,Guinea,HFO,HFO,VOM,50.0
-Kaloum1_IPP,Guinea,HFO,HFO,BuildLimitperYear,22.0
 Kaloum1_IPP,Guinea,HFO,HFO,MaxTotalBuild,22.0
 Kaloum1_IPP,Guinea,HFO,HFO,Type,10.0
 Kaloum1_IPP,Guinea,HFO,HFO,fuel1,7.0
@@ -2664,7 +2496,6 @@ Kaloum2_IPP,Guinea,HFO,HFO,RampUpRate,1.0
 Kaloum2_IPP,Guinea,HFO,HFO,RampDnRate,1.0
 Kaloum2_IPP,Guinea,HFO,HFO,ResLimShare,0.2
 Kaloum2_IPP,Guinea,HFO,HFO,VOM,50.0
-Kaloum2_IPP,Guinea,HFO,HFO,BuildLimitperYear,22.0
 Kaloum2_IPP,Guinea,HFO,HFO,MaxTotalBuild,22.0
 Kaloum2_IPP,Guinea,HFO,HFO,Type,10.0
 Kaloum2_IPP,Guinea,HFO,HFO,fuel1,7.0
@@ -2682,7 +2513,6 @@ Te_IPP,Guinea,HFO,HFO,RampUpRate,1.0
 Te_IPP,Guinea,HFO,HFO,RampDnRate,1.0
 Te_IPP,Guinea,HFO,HFO,ResLimShare,0.2
 Te_IPP,Guinea,HFO,HFO,VOM,100.0
-Te_IPP,Guinea,HFO,HFO,BuildLimitperYear,50.0
 Te_IPP,Guinea,HFO,HFO,MaxTotalBuild,50.0
 Te_IPP,Guinea,HFO,HFO,Type,10.0
 Te_IPP,Guinea,HFO,HFO,fuel1,7.0
@@ -2700,7 +2530,6 @@ Powership1_IPP,GuineaBissau,HFO,HFO,RampDnRate,1.0
 Powership1_IPP,GuineaBissau,HFO,HFO,ResLimShare,0.2
 Powership1_IPP,GuineaBissau,HFO,HFO,FOMperMW,18500.0
 Powership1_IPP,GuineaBissau,HFO,HFO,VOM,6.5
-Powership1_IPP,GuineaBissau,HFO,HFO,BuildLimitperYear,17.0
 Powership1_IPP,GuineaBissau,HFO,HFO,MaxTotalBuild,17.0
 Powership1_IPP,GuineaBissau,HFO,HFO,Type,10.0
 Powership1_IPP,GuineaBissau,HFO,HFO,fuel1,7.0
@@ -2720,7 +2549,6 @@ Powership2_IPP,GuineaBissau,HFO,HFO,RampDnRate,1.0
 Powership2_IPP,GuineaBissau,HFO,HFO,ResLimShare,0.2
 Powership2_IPP,GuineaBissau,HFO,HFO,FOMperMW,18500.0
 Powership2_IPP,GuineaBissau,HFO,HFO,VOM,6.5
-Powership2_IPP,GuineaBissau,HFO,HFO,BuildLimitperYear,13.0
 Powership2_IPP,GuineaBissau,HFO,HFO,MaxTotalBuild,13.0
 Powership2_IPP,GuineaBissau,HFO,HFO,Type,10.0
 Powership2_IPP,GuineaBissau,HFO,HFO,fuel1,7.0
@@ -2738,7 +2566,6 @@ Saltinho,GuineaBissau,Water,Hydro,RampUpRate,1.0
 Saltinho,GuineaBissau,Water,Hydro,RampDnRate,1.0
 Saltinho,GuineaBissau,Water,Hydro,ResLimShare,0.07
 Saltinho,GuineaBissau,Water,Hydro,FOMperMW,44000.0
-Saltinho,GuineaBissau,Water,Hydro,BuildLimitperYear,25.0
 Saltinho,GuineaBissau,Water,Hydro,MaxTotalBuild,25.0
 Saltinho,GuineaBissau,Water,Hydro,Type,12.0
 Saltinho,GuineaBissau,Water,Hydro,fuel1,3.0
@@ -2760,7 +2587,6 @@ Bor(BOAD),GuineaBissau,HFO,HFO,RampDnRate,1.0
 Bor(BOAD),GuineaBissau,HFO,HFO,ResLimShare,0.2
 Bor(BOAD),GuineaBissau,HFO,HFO,FOMperMW,18500.0
 Bor(BOAD),GuineaBissau,HFO,HFO,VOM,6.5
-Bor(BOAD),GuineaBissau,HFO,HFO,BuildLimitperYear,15.0
 Bor(BOAD),GuineaBissau,HFO,HFO,MaxTotalBuild,15.0
 Bor(BOAD),GuineaBissau,HFO,HFO,Type,10.0
 Bor(BOAD),GuineaBissau,HFO,HFO,fuel1,7.0
@@ -2778,7 +2604,6 @@ Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,Capacity,67.5
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,RampUpRate,1.0
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,RampDnRate,1.0
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,FOMperMW,17000.0
-Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,BuildLimitperYear,67.5
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,MaxTotalBuild,67.5
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,Type,6.0
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,fuel1,4.0
@@ -2790,40 +2615,6 @@ Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,Life,25.0
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,RE_Flag,1.0
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,Capex,0.97
 Bissau_Bafata_Cacheu,GuineaBissau,PV,Solar,RETech,1.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,StYr,2030.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,RetrYr,2055.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,Zone,6.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,RampUpRate,1.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,RampDnRate,1.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,FOMperMW,32000.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,Type,5.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,fuel1,5.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,Status,3.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,UnitSize,50.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,CapacityCredit,1.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,Error,36138.6
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,Life,30.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,RE_Flag,1.0
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,Capex,1.6
-WIND_CAND_GBI,GuineaBissau,Wind,Wind,RETech,1.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,StYr,2035.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RetrYr,2055.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Zone,6.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RampUpRate,1.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RampDnRate,1.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,FOMperMW,65000.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,VOM,7.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,MaxTotalBuild,5000.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Type,5.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,fuel1,14.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Status,3.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,UnitSize,50.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,CapacityCredit,1.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Error,74162.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Life,30.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RE_Flag,1.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Capex,4.0
-OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RETech,1.0
 Azito_IPP,IvoryCoast,Gas,Gas,StYr,2000.0
 Azito_IPP,IvoryCoast,Gas,Gas,RetrYr,2050.0
 Azito_IPP,IvoryCoast,Gas,Gas,Zone,7.0
@@ -2835,7 +2626,6 @@ Azito_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.434
 Azito_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.07
 Azito_IPP,IvoryCoast,Gas,Gas,FOMperMW,35000.0
 Azito_IPP,IvoryCoast,Gas,Gas,VOM,2.0
-Azito_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,474.0
 Azito_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,474.0
 Azito_IPP,IvoryCoast,Gas,Gas,Type,2.0
 Azito_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2855,7 +2645,6 @@ Ciprel3_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.434
 Ciprel3_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.07
 Ciprel3_IPP,IvoryCoast,Gas,Gas,FOMperMW,35000.0
 Ciprel3_IPP,IvoryCoast,Gas,Gas,VOM,2.0
-Ciprel3_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,115.0
 Ciprel3_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,115.0
 Ciprel3_IPP,IvoryCoast,Gas,Gas,Type,2.0
 Ciprel3_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2875,7 +2664,6 @@ Ciprel4_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.434
 Ciprel4_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.07
 Ciprel4_IPP,IvoryCoast,Gas,Gas,FOMperMW,35000.0
 Ciprel4_IPP,IvoryCoast,Gas,Gas,VOM,2.0
-Ciprel4_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,115.0
 Ciprel4_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,115.0
 Ciprel4_IPP,IvoryCoast,Gas,Gas,Type,2.0
 Ciprel4_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2895,7 +2683,6 @@ Ciprel5_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.434
 Ciprel5_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.07
 Ciprel5_IPP,IvoryCoast,Gas,Gas,FOMperMW,35000.0
 Ciprel5_IPP,IvoryCoast,Gas,Gas,VOM,2.0
-Ciprel5_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,115.0
 Ciprel5_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,115.0
 Ciprel5_IPP,IvoryCoast,Gas,Gas,Type,2.0
 Ciprel5_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2915,7 +2702,6 @@ Ciprel1_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.9
 Ciprel1_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.2
 Ciprel1_IPP,IvoryCoast,Gas,Gas,FOMperMW,7000.0
 Ciprel1_IPP,IvoryCoast,Gas,Gas,VOM,2.5
-Ciprel1_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,105.0
 Ciprel1_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,105.0
 Ciprel1_IPP,IvoryCoast,Gas,Gas,Type,1.0
 Ciprel1_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2936,7 +2722,6 @@ Ciprel2_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.9
 Ciprel2_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.2
 Ciprel2_IPP,IvoryCoast,Gas,Gas,FOMperMW,7000.0
 Ciprel2_IPP,IvoryCoast,Gas,Gas,VOM,2.5
-Ciprel2_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,115.0
 Ciprel2_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,115.0
 Ciprel2_IPP,IvoryCoast,Gas,Gas,Type,1.0
 Ciprel2_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2956,7 +2741,6 @@ Aggreko_cot_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.9
 Aggreko_cot_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.2
 Aggreko_cot_IPP,IvoryCoast,Gas,Gas,FOMperMW,7000.0
 Aggreko_cot_IPP,IvoryCoast,Gas,Gas,VOM,2.5
-Aggreko_cot_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,211.0
 Aggreko_cot_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,211.0
 Aggreko_cot_IPP,IvoryCoast,Gas,Gas,Type,1.0
 Aggreko_cot_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2976,7 +2760,6 @@ Aggreko_ext_cot,IvoryCoast,Gas,Gas,RampDnRate,0.9
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,ResLimShare,0.2
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,FOMperMW,7000.0
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,VOM,2.5
-Aggreko_ext_cot,IvoryCoast,Gas,Gas,BuildLimitperYear,40.0
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,MaxTotalBuild,40.0
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,Type,1.0
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -2984,7 +2767,7 @@ Aggreko_ext_cot,IvoryCoast,Gas,Gas,Status,1.0
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,HeatRate2,10.5
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,UnitSize,40.0
 Aggreko_ext_cot,IvoryCoast,Gas,Gas,CapacityCredit,1.0
-Aggreko_ext_cot,IvoryCoast,Gas,Gas,Error,11202.349999999999
+Aggreko_ext_cot,IvoryCoast,Gas,Gas,Error,11202.35
 Vridi,IvoryCoast,HFO,HFO,StYr,1984.0
 Vridi,IvoryCoast,HFO,HFO,RetrYr,2050.0
 Vridi,IvoryCoast,HFO,HFO,Zone,7.0
@@ -2996,14 +2779,13 @@ Vridi,IvoryCoast,HFO,HFO,RampDnRate,0.9
 Vridi,IvoryCoast,HFO,HFO,ResLimShare,0.2
 Vridi,IvoryCoast,HFO,HFO,FOMperMW,7000.0
 Vridi,IvoryCoast,HFO,HFO,VOM,2.5
-Vridi,IvoryCoast,HFO,HFO,BuildLimitperYear,100.0
 Vridi,IvoryCoast,HFO,HFO,MaxTotalBuild,100.0
 Vridi,IvoryCoast,HFO,HFO,Type,1.0
 Vridi,IvoryCoast,HFO,HFO,fuel1,7.0
 Vridi,IvoryCoast,HFO,HFO,Status,1.0
 Vridi,IvoryCoast,HFO,HFO,UnitSize,100.0
 Vridi,IvoryCoast,HFO,HFO,CapacityCredit,1.0
-Vridi,IvoryCoast,HFO,HFO,Error,11365.202247133173
+Vridi,IvoryCoast,HFO,HFO,Error,11365.202247133171
 Ayam\xe91,IvoryCoast,Water,Hydro,StYr,1959.0
 Ayam\xe91,IvoryCoast,Water,Hydro,RetrYr,2060.0
 Ayam\xe91,IvoryCoast,Water,Hydro,Zone,7.0
@@ -3012,7 +2794,6 @@ Ayam\xe91,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Ayam\xe91,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Ayam\xe91,IvoryCoast,Water,Hydro,ResLimShare,0.15
 Ayam\xe91,IvoryCoast,Water,Hydro,FOMperMW,21350.178932142862
-Ayam\xe91,IvoryCoast,Water,Hydro,BuildLimitperYear,20.0
 Ayam\xe91,IvoryCoast,Water,Hydro,MaxTotalBuild,20.0
 Ayam\xe91,IvoryCoast,Water,Hydro,Type,4.0
 Ayam\xe91,IvoryCoast,Water,Hydro,fuel1,3.0
@@ -3029,7 +2810,6 @@ Buyo,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Buyo,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Buyo,IvoryCoast,Water,Hydro,ResLimShare,0.15
 Buyo,IvoryCoast,Water,Hydro,FOMperMW,21685.195746428577
-Buyo,IvoryCoast,Water,Hydro,BuildLimitperYear,164.7
 Buyo,IvoryCoast,Water,Hydro,MaxTotalBuild,164.7
 Buyo,IvoryCoast,Water,Hydro,Type,4.0
 Buyo,IvoryCoast,Water,Hydro,fuel1,3.0
@@ -3046,7 +2826,6 @@ Kossou,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Kossou,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Kossou,IvoryCoast,Water,Hydro,ResLimShare,0.05
 Kossou,IvoryCoast,Water,Hydro,FOMperMW,17256.076392857143
-Kossou,IvoryCoast,Water,Hydro,BuildLimitperYear,174.0
 Kossou,IvoryCoast,Water,Hydro,MaxTotalBuild,174.0
 Kossou,IvoryCoast,Water,Hydro,Type,4.0
 Kossou,IvoryCoast,Water,Hydro,fuel1,3.0
@@ -3063,14 +2842,13 @@ Soubr\xe9,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Soubr\xe9,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Soubr\xe9,IvoryCoast,Water,Hydro,ResLimShare,0.15
 Soubr\xe9,IvoryCoast,Water,Hydro,FOMperMW,21241.79113928572
-Soubr\xe9,IvoryCoast,Water,Hydro,BuildLimitperYear,275.0
 Soubr\xe9,IvoryCoast,Water,Hydro,MaxTotalBuild,275.0
 Soubr\xe9,IvoryCoast,Water,Hydro,Type,4.0
 Soubr\xe9,IvoryCoast,Water,Hydro,fuel1,3.0
 Soubr\xe9,IvoryCoast,Water,Hydro,Status,1.0
 Soubr\xe9,IvoryCoast,Water,Hydro,UnitSize,275.0
 Soubr\xe9,IvoryCoast,Water,Hydro,CapacityCredit,1.0
-Soubr\xe9,IvoryCoast,Water,Hydro,Error,26187.941139285722
+Soubr\xe9,IvoryCoast,Water,Hydro,Error,26187.94113928572
 Soubr\xe9,IvoryCoast,Water,Hydro,RE_Flag,1.0
 Taabo,IvoryCoast,Water,Hydro,StYr,1979.0
 Taabo,IvoryCoast,Water,Hydro,RetrYr,2060.0
@@ -3080,12 +2858,11 @@ Taabo,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Taabo,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Taabo,IvoryCoast,Water,Hydro,ResLimShare,0.1
 Taabo,IvoryCoast,Water,Hydro,FOMperMW,20315.568182142862
-Taabo,IvoryCoast,Water,Hydro,BuildLimitperYear,210.60000000000002
-Taabo,IvoryCoast,Water,Hydro,MaxTotalBuild,210.60000000000002
+Taabo,IvoryCoast,Water,Hydro,MaxTotalBuild,210.6
 Taabo,IvoryCoast,Water,Hydro,Type,4.0
 Taabo,IvoryCoast,Water,Hydro,fuel1,3.0
 Taabo,IvoryCoast,Water,Hydro,Status,1.0
-Taabo,IvoryCoast,Water,Hydro,UnitSize,210.60000000000002
+Taabo,IvoryCoast,Water,Hydro,UnitSize,210.6
 Taabo,IvoryCoast,Water,Hydro,CapacityCredit,1.0
 Taabo,IvoryCoast,Water,Hydro,Error,25002.86818214286
 Taabo,IvoryCoast,Water,Hydro,RE_Flag,1.0
@@ -3096,8 +2873,7 @@ Ayam\xe92,IvoryCoast,Water,Hydro,Capacity,30.4
 Ayam\xe92,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Ayam\xe92,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Ayam\xe92,IvoryCoast,Water,Hydro,ResLimShare,0.14
-Ayam\xe92,IvoryCoast,Water,Hydro,FOMperMW,19670.168142857146
-Ayam\xe92,IvoryCoast,Water,Hydro,BuildLimitperYear,30.4
+Ayam\xe92,IvoryCoast,Water,Hydro,FOMperMW,19670.168142857143
 Ayam\xe92,IvoryCoast,Water,Hydro,MaxTotalBuild,30.4
 Ayam\xe92,IvoryCoast,Water,Hydro,Type,12.0
 Ayam\xe92,IvoryCoast,Water,Hydro,fuel1,3.0
@@ -3113,8 +2889,7 @@ Faye,IvoryCoast,Water,Hydro,Capacity,5.0
 Faye,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Faye,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Faye,IvoryCoast,Water,Hydro,ResLimShare,0.15
-Faye,IvoryCoast,Water,Hydro,FOMperMW,16359.413742857143
-Faye,IvoryCoast,Water,Hydro,BuildLimitperYear,5.0
+Faye,IvoryCoast,Water,Hydro,FOMperMW,16359.413742857145
 Faye,IvoryCoast,Water,Hydro,MaxTotalBuild,5.0
 Faye,IvoryCoast,Water,Hydro,Type,12.0
 Faye,IvoryCoast,Water,Hydro,fuel1,3.0
@@ -3134,7 +2909,6 @@ AzitoIV1_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.434
 AzitoIV1_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.07
 AzitoIV1_IPP,IvoryCoast,Gas,Gas,FOMperMW,20420.72
 AzitoIV1_IPP,IvoryCoast,Gas,Gas,VOM,1.8
-AzitoIV1_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,180.0
 AzitoIV1_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,180.0
 AzitoIV1_IPP,IvoryCoast,Gas,Gas,Type,2.0
 AzitoIV1_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -3156,7 +2930,6 @@ AzitoIV2_IPP,IvoryCoast,Gas,Gas,RampDnRate,0.434
 AzitoIV2_IPP,IvoryCoast,Gas,Gas,ResLimShare,0.07
 AzitoIV2_IPP,IvoryCoast,Gas,Gas,FOMperMW,20420.72
 AzitoIV2_IPP,IvoryCoast,Gas,Gas,VOM,1.8
-AzitoIV2_IPP,IvoryCoast,Gas,Gas,BuildLimitperYear,72.0
 AzitoIV2_IPP,IvoryCoast,Gas,Gas,MaxTotalBuild,72.0
 AzitoIV2_IPP,IvoryCoast,Gas,Gas,Type,2.0
 AzitoIV2_IPP,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -3178,7 +2951,6 @@ Atinkou - TAG,IvoryCoast,Gas,Gas,RampDnRate,0.9
 Atinkou - TAG,IvoryCoast,Gas,Gas,ResLimShare,0.2
 Atinkou - TAG,IvoryCoast,Gas,Gas,FOMperMW,7000.0
 Atinkou - TAG,IvoryCoast,Gas,Gas,VOM,2.5
-Atinkou - TAG,IvoryCoast,Gas,Gas,BuildLimitperYear,115.0
 Atinkou - TAG,IvoryCoast,Gas,Gas,MaxTotalBuild,115.0
 Atinkou - TAG,IvoryCoast,Gas,Gas,Type,1.0
 Atinkou - TAG,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -3197,7 +2969,6 @@ Atinkou -  TAV,IvoryCoast,Gas,Gas,RampDnRate,0.434
 Atinkou -  TAV,IvoryCoast,Gas,Gas,ResLimShare,0.07
 Atinkou -  TAV,IvoryCoast,Gas,Gas,FOMperMW,20420.72
 Atinkou -  TAV,IvoryCoast,Gas,Gas,VOM,1.8
-Atinkou -  TAV,IvoryCoast,Gas,Gas,BuildLimitperYear,180.0
 Atinkou -  TAV,IvoryCoast,Gas,Gas,MaxTotalBuild,180.0
 Atinkou -  TAV,IvoryCoast,Gas,Gas,Type,2.0
 Atinkou -  TAV,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -3276,7 +3047,6 @@ Gribo-Popoli,IvoryCoast,Water,Hydro,RampUpRate,1.0
 Gribo-Popoli,IvoryCoast,Water,Hydro,RampDnRate,1.0
 Gribo-Popoli,IvoryCoast,Water,Hydro,ResLimShare,0.2
 Gribo-Popoli,IvoryCoast,Water,Hydro,FOMperMW,45000.0
-Gribo-Popoli,IvoryCoast,Water,Hydro,BuildLimitperYear,112.0
 Gribo-Popoli,IvoryCoast,Water,Hydro,MaxTotalBuild,112.0
 Gribo-Popoli,IvoryCoast,Water,Hydro,Type,4.0
 Gribo-Popoli,IvoryCoast,Water,Hydro,fuel1,3.0
@@ -3320,7 +3090,6 @@ KarPower_IPP_Cot,IvoryCoast,Gas,Gas,RampDnRate,0.9
 KarPower_IPP_Cot,IvoryCoast,Gas,Gas,ResLimShare,0.2
 KarPower_IPP_Cot,IvoryCoast,Gas,Gas,FOMperMW,7000.0
 KarPower_IPP_Cot,IvoryCoast,Gas,Gas,VOM,2.5
-KarPower_IPP_Cot,IvoryCoast,Gas,Gas,BuildLimitperYear,100.0
 KarPower_IPP_Cot,IvoryCoast,Gas,Gas,MaxTotalBuild,100.0
 KarPower_IPP_Cot,IvoryCoast,Gas,Gas,Type,1.0
 KarPower_IPP_Cot,IvoryCoast,Gas,Gas,fuel1,2.0
@@ -3783,7 +3552,6 @@ Aboisso(Biokala),IvoryCoast,Biomas,Biomass,HeatRate,13.5
 Aboisso(Biokala),IvoryCoast,Biomas,Biomass,RampUpRate,1.0
 Aboisso(Biokala),IvoryCoast,Biomas,Biomass,RampDnRate,1.0
 Aboisso(Biokala),IvoryCoast,Biomas,Biomass,FOMperMW,136000.0
-Aboisso(Biokala),IvoryCoast,Biomas,Biomass,BuildLimitperYear,46.0
 Aboisso(Biokala),IvoryCoast,Biomas,Biomass,MaxTotalBuild,46.0
 Aboisso(Biokala),IvoryCoast,Biomas,Biomass,Type,13.0
 Aboisso(Biokala),IvoryCoast,Biomas,Biomass,fuel1,13.0
@@ -3830,7 +3598,7 @@ SanPedroI1,IvoryCoast,Coal,Coal,fuel1,1.0
 SanPedroI1,IvoryCoast,Coal,Coal,Status,3.0
 SanPedroI1,IvoryCoast,Coal,Coal,UnitSize,250.0
 SanPedroI1,IvoryCoast,Coal,Coal,CapacityCredit,1.0
-SanPedroI1,IvoryCoast,Coal,Coal,Error,36924.198000000004
+SanPedroI1,IvoryCoast,Coal,Coal,Error,36924.198
 SanPedroI1,IvoryCoast,Coal,Coal,Life,30.0
 SanPedroI1,IvoryCoast,Coal,Coal,Capex,2.5
 SanPedroI1,IvoryCoast,Coal,Coal,OverLoadFactor,0.02
@@ -3852,7 +3620,7 @@ SanPedroI2,IvoryCoast,Coal,Coal,fuel1,1.0
 SanPedroI2,IvoryCoast,Coal,Coal,Status,3.0
 SanPedroI2,IvoryCoast,Coal,Coal,UnitSize,250.0
 SanPedroI2,IvoryCoast,Coal,Coal,CapacityCredit,1.0
-SanPedroI2,IvoryCoast,Coal,Coal,Error,36927.198000000004
+SanPedroI2,IvoryCoast,Coal,Coal,Error,36927.198
 SanPedroI2,IvoryCoast,Coal,Coal,Life,30.0
 SanPedroI2,IvoryCoast,Coal,Coal,Capex,2.5
 SanPedroI2,IvoryCoast,Coal,Coal,OverLoadFactor,0.02
@@ -3901,7 +3669,6 @@ MountCoffeeReservoir,Liberia,Water,Hydro,RampDnRate,1.0
 MountCoffeeReservoir,Liberia,Water,Hydro,ResLimShare,0.15
 MountCoffeeReservoir,Liberia,Water,Hydro,FOMperMW,6000.0
 MountCoffeeReservoir,Liberia,Water,Hydro,VOM,1.124821429
-MountCoffeeReservoir,Liberia,Water,Hydro,BuildLimitperYear,88.0
 MountCoffeeReservoir,Liberia,Water,Hydro,MaxTotalBuild,88.0
 MountCoffeeReservoir,Liberia,Water,Hydro,Type,12.0
 MountCoffeeReservoir,Liberia,Water,Hydro,fuel1,3.0
@@ -3919,7 +3686,6 @@ Bushrod,Liberia,HFO,HFO,RampDnRate,1.0
 Bushrod,Liberia,HFO,HFO,ResLimShare,0.15
 Bushrod,Liberia,HFO,HFO,FOMperMW,18500.0
 Bushrod,Liberia,HFO,HFO,VOM,20.0
-Bushrod,Liberia,HFO,HFO,BuildLimitperYear,28.0
 Bushrod,Liberia,HFO,HFO,MaxTotalBuild,28.0
 Bushrod,Liberia,HFO,HFO,Type,10.0
 Bushrod,Liberia,HFO,HFO,fuel1,7.0
@@ -3935,7 +3701,6 @@ MTCoffee_ext,Liberia,Water,Hydro,RampDnRate,1.0
 MTCoffee_ext,Liberia,Water,Hydro,ResLimShare,0.15
 MTCoffee_ext,Liberia,Water,Hydro,FOMperMW,6000.0
 MTCoffee_ext,Liberia,Water,Hydro,VOM,1.124821429
-MTCoffee_ext,Liberia,Water,Hydro,BuildLimitperYear,60.0
 MTCoffee_ext,Liberia,Water,Hydro,MaxTotalBuild,60.0
 MTCoffee_ext,Liberia,Water,Hydro,Type,12.0
 MTCoffee_ext,Liberia,Water,Hydro,fuel1,3.0
@@ -3952,7 +3717,6 @@ SP2_150,Liberia,Water,Hydro,RampDnRate,1.0
 SP2_150,Liberia,Water,Hydro,ResLimShare,0.15
 SP2_150,Liberia,Water,Hydro,FOMperMW,7431.818181818182
 SP2_150,Liberia,Water,Hydro,VOM,1.1248214285714284
-SP2_150,Liberia,Water,Hydro,BuildLimitperYear,150.0
 SP2_150,Liberia,Water,Hydro,MaxTotalBuild,150.0
 SP2_150,Liberia,Water,Hydro,Type,12.0
 SP2_150,Liberia,Water,Hydro,fuel1,3.0
@@ -3971,7 +3735,6 @@ SP2_161,Liberia,Water,Hydro,RampDnRate,1.0
 SP2_161,Liberia,Water,Hydro,ResLimShare,0.15
 SP2_161,Liberia,Water,Hydro,FOMperMW,7431.818181818182
 SP2_161,Liberia,Water,Hydro,VOM,1.1248214285714284
-SP2_161,Liberia,Water,Hydro,BuildLimitperYear,154.0
 SP2_161,Liberia,Water,Hydro,MaxTotalBuild,154.0
 SP2_161,Liberia,Water,Hydro,Type,4.0
 SP2_161,Liberia,Water,Hydro,fuel1,3.0
@@ -3991,7 +3754,6 @@ Existing_gen_lib,Liberia,Diesel,Diesel,RampDnRate,1.0
 Existing_gen_lib,Liberia,Diesel,Diesel,ResLimShare,0.15
 Existing_gen_lib,Liberia,Diesel,Diesel,FOMperMW,6980.0
 Existing_gen_lib,Liberia,Diesel,Diesel,VOM,10.0
-Existing_gen_lib,Liberia,Diesel,Diesel,BuildLimitperYear,9.0
 Existing_gen_lib,Liberia,Diesel,Diesel,MaxTotalBuild,9.0
 Existing_gen_lib,Liberia,Diesel,Diesel,Type,10.0
 Existing_gen_lib,Liberia,Diesel,Diesel,fuel1,11.0
@@ -4005,7 +3767,6 @@ Respite_PV,Liberia,PV,Solar,Capacity,16.0
 Respite_PV,Liberia,PV,Solar,RampUpRate,1.0
 Respite_PV,Liberia,PV,Solar,RampDnRate,1.0
 Respite_PV,Liberia,PV,Solar,FOMperMW,10000.0
-Respite_PV,Liberia,PV,Solar,BuildLimitperYear,16.0
 Respite_PV,Liberia,PV,Solar,MaxTotalBuild,16.0
 Respite_PV,Liberia,PV,Solar,Type,6.0
 Respite_PV,Liberia,PV,Solar,fuel1,4.0
@@ -4023,7 +3784,6 @@ Solar Yekepa / Buchanan,Liberia,PV,Solar,Capacity,160.0
 Solar Yekepa / Buchanan,Liberia,PV,Solar,RampUpRate,1.0
 Solar Yekepa / Buchanan,Liberia,PV,Solar,RampDnRate,1.0
 Solar Yekepa / Buchanan,Liberia,PV,Solar,FOMperMW,10000.0
-Solar Yekepa / Buchanan,Liberia,PV,Solar,BuildLimitperYear,160.0
 Solar Yekepa / Buchanan,Liberia,PV,Solar,MaxTotalBuild,160.0
 Solar Yekepa / Buchanan,Liberia,PV,Solar,Type,6.0
 Solar Yekepa / Buchanan,Liberia,PV,Solar,fuel1,4.0
@@ -4041,15 +3801,14 @@ BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,Capacity,15.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,RampUpRate,1.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,RampDnRate,1.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,ResLimShare,0.5
-BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,FOMperMW,13873.859999999999
-BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,BuildLimitperYear,1000.0
+BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,FOMperMW,13873.86
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,MaxTotalBuild,15.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,Type,17.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,fuel1,10.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,Status,2.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,UnitSize,15.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,CapacityCredit,1.0
-BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,Error,19041.760000000002
+BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,Error,19041.76
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,Life,20.0
 BESS Yekepa / Buchanan 15 /60,Liberia,Battery,Battery,Capex,0.4
 OFSHORE_WIND_LIB,Liberia,Offshore,Wind,StYr,2035.0
@@ -4082,7 +3841,6 @@ Loc. BDK Kati,Mali,Diesel,Diesel,RampDnRate,1.0
 Loc. BDK Kati,Mali,Diesel,Diesel,ResLimShare,0.2
 Loc. BDK Kati,Mali,Diesel,Diesel,FOMperMW,8000.0
 Loc. BDK Kati,Mali,Diesel,Diesel,VOM,10.0
-Loc. BDK Kati,Mali,Diesel,Diesel,BuildLimitperYear,50.0
 Loc. BDK Kati,Mali,Diesel,Diesel,MaxTotalBuild,50.0
 Loc. BDK Kati,Mali,Diesel,Diesel,Type,10.0
 Loc. BDK Kati,Mali,Diesel,Diesel,fuel1,11.0
@@ -4101,7 +3859,6 @@ SES Darsalam - 10 MW,Mali,Diesel,Diesel,RampDnRate,0.9
 SES Darsalam - 10 MW,Mali,Diesel,Diesel,ResLimShare,0.2
 SES Darsalam - 10 MW,Mali,Diesel,Diesel,FOMperMW,7000.0
 SES Darsalam - 10 MW,Mali,Diesel,Diesel,VOM,2.5
-SES Darsalam - 10 MW,Mali,Diesel,Diesel,BuildLimitperYear,10.0
 SES Darsalam - 10 MW,Mali,Diesel,Diesel,MaxTotalBuild,12.0
 SES Darsalam - 10 MW,Mali,Diesel,Diesel,Type,1.0
 SES Darsalam - 10 MW,Mali,Diesel,Diesel,fuel1,11.0
@@ -4116,8 +3873,7 @@ MANANTALI_mali,Mali,Water,Hydro,Capacity,70.0
 MANANTALI_mali,Mali,Water,Hydro,RampUpRate,1.0
 MANANTALI_mali,Mali,Water,Hydro,RampDnRate,1.0
 MANANTALI_mali,Mali,Water,Hydro,ResLimShare,0.2
-MANANTALI_mali,Mali,Water,Hydro,FOMperMW,20646.452575549458
-MANANTALI_mali,Mali,Water,Hydro,BuildLimitperYear,70.0
+MANANTALI_mali,Mali,Water,Hydro,FOMperMW,20646.452575549454
 MANANTALI_mali,Mali,Water,Hydro,MaxTotalBuild,200.0
 MANANTALI_mali,Mali,Water,Hydro,Type,4.0
 MANANTALI_mali,Mali,Water,Hydro,fuel1,3.0
@@ -4134,7 +3890,6 @@ SELINGUE,Mali,Water,Hydro,RampUpRate,1.0
 SELINGUE,Mali,Water,Hydro,RampDnRate,1.0
 SELINGUE,Mali,Water,Hydro,ResLimShare,0.02
 SELINGUE,Mali,Water,Hydro,FOMperMW,16771.31723985891
-SELINGUE,Mali,Water,Hydro,BuildLimitperYear,47.0
 SELINGUE,Mali,Water,Hydro,MaxTotalBuild,48.6
 SELINGUE,Mali,Water,Hydro,Type,4.0
 SELINGUE,Mali,Water,Hydro,fuel1,3.0
@@ -4154,7 +3909,6 @@ SES(Lafia_Badala),Mali,Diesel,Diesel,RampDnRate,1.0
 SES(Lafia_Badala),Mali,Diesel,Diesel,ResLimShare,0.2
 SES(Lafia_Badala),Mali,Diesel,Diesel,FOMperMW,8000.0
 SES(Lafia_Badala),Mali,Diesel,Diesel,VOM,10.0
-SES(Lafia_Badala),Mali,Diesel,Diesel,BuildLimitperYear,54.0
 SES(Lafia_Badala),Mali,Diesel,Diesel,MaxTotalBuild,20.0
 SES(Lafia_Badala),Mali,Diesel,Diesel,Type,10.0
 SES(Lafia_Badala),Mali,Diesel,Diesel,fuel1,11.0
@@ -4173,7 +3927,6 @@ Aska Balkou,Mali,HFO,HFO,RampDnRate,1.0
 Aska Balkou,Mali,HFO,HFO,ResLimShare,0.2
 Aska Balkou,Mali,HFO,HFO,FOMperMW,17000.0
 Aska Balkou,Mali,HFO,HFO,VOM,9.999999999999998
-Aska Balkou,Mali,HFO,HFO,BuildLimitperYear,20.0
 Aska Balkou,Mali,HFO,HFO,MaxTotalBuild,92.0
 Aska Balkou,Mali,HFO,HFO,Type,10.0
 Aska Balkou,Mali,HFO,HFO,fuel1,7.0
@@ -4192,7 +3945,6 @@ Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,RampDnRate,1.0
 Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,ResLimShare,0.2
 Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,FOMperMW,17000.0
 Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,VOM,9.999999999999998
-Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,BuildLimitperYear,100.0
 Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,MaxTotalBuild,92.0
 Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,Type,10.0
 Centrale BID \xe0 Sirakoro (100 MW),Mali,HFO,HFO,fuel1,7.0
@@ -4211,7 +3963,6 @@ Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,RampDnRate,1.0
 Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,ResLimShare,0.2
 Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,FOMperMW,17000.0
 Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,VOM,9.999999999999998
-Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,BuildLimitperYear,30.0
 Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,MaxTotalBuild,92.0
 Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,Type,10.0
 Loc. AKSA Sirakoro - 30 MW,Mali,HFO,HFO,fuel1,7.0
@@ -4230,7 +3981,6 @@ Darsalam,Mali,HFO,HFO,RampDnRate,1.0
 Darsalam,Mali,HFO,HFO,ResLimShare,0.2
 Darsalam,Mali,HFO,HFO,FOMperMW,17000.0
 Darsalam,Mali,HFO,HFO,VOM,9.999999999999998
-Darsalam,Mali,HFO,HFO,BuildLimitperYear,37.0
 Darsalam,Mali,HFO,HFO,MaxTotalBuild,12.0
 Darsalam,Mali,HFO,HFO,Type,10.0
 Darsalam,Mali,HFO,HFO,fuel1,7.0
@@ -4249,7 +3999,6 @@ Balingu\xe9 Deutz,Mali,HFO,HFO,RampDnRate,1.0
 Balingu\xe9 Deutz,Mali,HFO,HFO,ResLimShare,0.2
 Balingu\xe9 Deutz,Mali,HFO,HFO,FOMperMW,17000.0
 Balingu\xe9 Deutz,Mali,HFO,HFO,VOM,9.999999999999998
-Balingu\xe9 Deutz,Mali,HFO,HFO,BuildLimitperYear,16.0
 Balingu\xe9 Deutz,Mali,HFO,HFO,MaxTotalBuild,16.0
 Balingu\xe9 Deutz,Mali,HFO,HFO,Type,10.0
 Balingu\xe9 Deutz,Mali,HFO,HFO,fuel1,7.0
@@ -4268,7 +4017,6 @@ Balingu\xe9BID,Mali,HFO,HFO,RampDnRate,1.0
 Balingu\xe9BID,Mali,HFO,HFO,ResLimShare,0.2
 Balingu\xe9BID,Mali,HFO,HFO,FOMperMW,17000.0
 Balingu\xe9BID,Mali,HFO,HFO,VOM,9.999999999999998
-Balingu\xe9BID,Mali,HFO,HFO,BuildLimitperYear,72.0
 Balingu\xe9BID,Mali,HFO,HFO,MaxTotalBuild,48.61
 Balingu\xe9BID,Mali,HFO,HFO,Type,10.0
 Balingu\xe9BID,Mali,HFO,HFO,fuel1,7.0
@@ -4284,7 +4032,6 @@ Sotuba,Mali,Water,Hydro,RampUpRate,1.0
 Sotuba,Mali,Water,Hydro,RampDnRate,1.0
 Sotuba,Mali,Water,Hydro,ResLimShare,0.2
 Sotuba,Mali,Water,Hydro,FOMperMW,21179.922905643747
-Sotuba,Mali,Water,Hydro,BuildLimitperYear,5.7
 Sotuba,Mali,Water,Hydro,MaxTotalBuild,5.7
 Sotuba,Mali,Water,Hydro,Type,12.0
 Sotuba,Mali,Water,Hydro,fuel1,3.0
@@ -4304,7 +4051,6 @@ Albatros,Mali,HFO,HFO,RampDnRate,1.0
 Albatros,Mali,HFO,HFO,ResLimShare,0.2
 Albatros,Mali,HFO,HFO,FOMperMW,17000.0
 Albatros,Mali,HFO,HFO,VOM,9.999999999999998
-Albatros,Mali,HFO,HFO,BuildLimitperYear,92.0
 Albatros,Mali,HFO,HFO,MaxTotalBuild,92.0
 Albatros,Mali,HFO,HFO,Type,10.0
 Albatros,Mali,HFO,HFO,fuel1,7.0
@@ -4323,7 +4069,6 @@ Balingu\xe9,Mali,HFO,HFO,RampDnRate,1.0
 Balingu\xe9,Mali,HFO,HFO,ResLimShare,0.2
 Balingu\xe9,Mali,HFO,HFO,FOMperMW,17000.0
 Balingu\xe9,Mali,HFO,HFO,VOM,9.999999999999998
-Balingu\xe9,Mali,HFO,HFO,BuildLimitperYear,24.32
 Balingu\xe9,Mali,HFO,HFO,MaxTotalBuild,24.32
 Balingu\xe9,Mali,HFO,HFO,Type,10.0
 Balingu\xe9,Mali,HFO,HFO,fuel1,7.0
@@ -4339,7 +4084,6 @@ FELOU_MAL,Mali,Water,Hydro,RampUpRate,1.0
 FELOU_MAL,Mali,Water,Hydro,RampDnRate,1.0
 FELOU_MAL,Mali,Water,Hydro,ResLimShare,0.2
 FELOU_MAL,Mali,Water,Hydro,FOMperMW,21179.922905643747
-FELOU_MAL,Mali,Water,Hydro,BuildLimitperYear,60.0
 FELOU_MAL,Mali,Water,Hydro,MaxTotalBuild,60.0
 FELOU_MAL,Mali,Water,Hydro,Type,12.0
 FELOU_MAL,Mali,Water,Hydro,fuel1,3.0
@@ -4356,7 +4100,6 @@ Gouina_mali,Mali,Water,Hydro,RampUpRate,1.0
 Gouina_mali,Mali,Water,Hydro,RampDnRate,1.0
 Gouina_mali,Mali,Water,Hydro,ResLimShare,0.1
 Gouina_mali,Mali,Water,Hydro,FOMperMW,45000.0
-Gouina_mali,Mali,Water,Hydro,BuildLimitperYear,49.0
 Gouina_mali,Mali,Water,Hydro,MaxTotalBuild,46.0
 Gouina_mali,Mali,Water,Hydro,Type,12.0
 Gouina_mali,Mali,Water,Hydro,fuel1,3.0
@@ -4373,7 +4116,6 @@ PV_Akuo \x96 50 MWp,Mali,PV,Solar,Capacity,50.0
 PV_Akuo \x96 50 MWp,Mali,PV,Solar,RampUpRate,1.0
 PV_Akuo \x96 50 MWp,Mali,PV,Solar,RampDnRate,1.0
 PV_Akuo \x96 50 MWp,Mali,PV,Solar,FOMperMW,17000.0
-PV_Akuo \x96 50 MWp,Mali,PV,Solar,BuildLimitperYear,50.0
 PV_Akuo \x96 50 MWp,Mali,PV,Solar,MaxTotalBuild,50.0
 PV_Akuo \x96 50 MWp,Mali,PV,Solar,Type,6.0
 PV_Akuo \x96 50 MWp,Mali,PV,Solar,fuel1,4.0
@@ -4393,7 +4135,6 @@ Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,RampUpRate,1.0
 Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,RampDnRate,1.0
 Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,ResLimShare,0.15
 Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,FOMperMW,45000.0
-Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,BuildLimitperYear,7.0
 Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,MaxTotalBuild,10.0
 Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,Type,4.0
 Djenn\xe9(CentreMali\x96Noconnect\xe9RI),Mali,Water,Hydro,fuel1,3.0
@@ -4476,7 +4217,6 @@ AGGREKO_ngr_IPP,Niger,Diesel,Diesel,RampDnRate,1.0
 AGGREKO_ngr_IPP,Niger,Diesel,Diesel,ResLimShare,0.2
 AGGREKO_ngr_IPP,Niger,Diesel,Diesel,FOMperMW,8000.0
 AGGREKO_ngr_IPP,Niger,Diesel,Diesel,VOM,10.0
-AGGREKO_ngr_IPP,Niger,Diesel,Diesel,BuildLimitperYear,30.0
 AGGREKO_ngr_IPP,Niger,Diesel,Diesel,MaxTotalBuild,30.0
 AGGREKO_ngr_IPP,Niger,Diesel,Diesel,Type,10.0
 AGGREKO_ngr_IPP,Niger,Diesel,Diesel,fuel1,11.0
@@ -4495,7 +4235,6 @@ DIFFA,Niger,Diesel,Diesel,RampDnRate,1.0
 DIFFA,Niger,Diesel,Diesel,ResLimShare,0.2
 DIFFA,Niger,Diesel,Diesel,FOMperMW,8000.0
 DIFFA,Niger,Diesel,Diesel,VOM,10.0
-DIFFA,Niger,Diesel,Diesel,BuildLimitperYear,4.2
 DIFFA,Niger,Diesel,Diesel,MaxTotalBuild,4.2
 DIFFA,Niger,Diesel,Diesel,Type,10.0
 DIFFA,Niger,Diesel,Diesel,fuel1,11.0
@@ -4514,7 +4253,6 @@ GAYA1,Niger,Diesel,Diesel,RampDnRate,1.0
 GAYA1,Niger,Diesel,Diesel,ResLimShare,0.2
 GAYA1,Niger,Diesel,Diesel,FOMperMW,8000.0
 GAYA1,Niger,Diesel,Diesel,VOM,10.0
-GAYA1,Niger,Diesel,Diesel,BuildLimitperYear,0.292
 GAYA1,Niger,Diesel,Diesel,MaxTotalBuild,0.292
 GAYA1,Niger,Diesel,Diesel,Type,10.0
 GAYA1,Niger,Diesel,Diesel,fuel1,11.0
@@ -4533,7 +4271,6 @@ GAYA2,Niger,Diesel,Diesel,RampDnRate,1.0
 GAYA2,Niger,Diesel,Diesel,ResLimShare,0.2
 GAYA2,Niger,Diesel,Diesel,FOMperMW,8000.0
 GAYA2,Niger,Diesel,Diesel,VOM,10.0
-GAYA2,Niger,Diesel,Diesel,BuildLimitperYear,0.504
 GAYA2,Niger,Diesel,Diesel,MaxTotalBuild,0.504
 GAYA2,Niger,Diesel,Diesel,Type,10.0
 GAYA2,Niger,Diesel,Diesel,fuel1,11.0
@@ -4552,7 +4289,6 @@ GOROUBANDA,Niger,Diesel,Diesel,RampDnRate,1.0
 GOROUBANDA,Niger,Diesel,Diesel,ResLimShare,0.2
 GOROUBANDA,Niger,Diesel,Diesel,FOMperMW,8000.0
 GOROUBANDA,Niger,Diesel,Diesel,VOM,10.0
-GOROUBANDA,Niger,Diesel,Diesel,BuildLimitperYear,84.0
 GOROUBANDA,Niger,Diesel,Diesel,MaxTotalBuild,84.0
 GOROUBANDA,Niger,Diesel,Diesel,Type,10.0
 GOROUBANDA,Niger,Diesel,Diesel,fuel1,11.0
@@ -4573,7 +4309,6 @@ GOUDEL1,Niger,Diesel,Diesel,RampDnRate,1.0
 GOUDEL1,Niger,Diesel,Diesel,ResLimShare,0.2
 GOUDEL1,Niger,Diesel,Diesel,FOMperMW,8000.0
 GOUDEL1,Niger,Diesel,Diesel,VOM,10.0
-GOUDEL1,Niger,Diesel,Diesel,BuildLimitperYear,9.0
 GOUDEL1,Niger,Diesel,Diesel,MaxTotalBuild,9.0
 GOUDEL1,Niger,Diesel,Diesel,Type,10.0
 GOUDEL1,Niger,Diesel,Diesel,fuel1,11.0
@@ -4592,7 +4327,6 @@ GOUDEL2,Niger,Diesel,Diesel,RampDnRate,1.0
 GOUDEL2,Niger,Diesel,Diesel,ResLimShare,0.2
 GOUDEL2,Niger,Diesel,Diesel,FOMperMW,8000.0
 GOUDEL2,Niger,Diesel,Diesel,VOM,10.0
-GOUDEL2,Niger,Diesel,Diesel,BuildLimitperYear,15.4
 GOUDEL2,Niger,Diesel,Diesel,MaxTotalBuild,15.4
 GOUDEL2,Niger,Diesel,Diesel,Type,10.0
 GOUDEL2,Niger,Diesel,Diesel,fuel1,11.0
@@ -4611,7 +4345,6 @@ MALBAZA,Niger,Diesel,Diesel,RampDnRate,1.0
 MALBAZA,Niger,Diesel,Diesel,ResLimShare,0.2
 MALBAZA,Niger,Diesel,Diesel,FOMperMW,8000.0
 MALBAZA,Niger,Diesel,Diesel,VOM,10.0
-MALBAZA,Niger,Diesel,Diesel,BuildLimitperYear,7.7
 MALBAZA,Niger,Diesel,Diesel,MaxTotalBuild,7.7
 MALBAZA,Niger,Diesel,Diesel,Type,10.0
 MALBAZA,Niger,Diesel,Diesel,fuel1,11.0
@@ -4630,7 +4363,6 @@ MARADI,Niger,Diesel,Diesel,RampDnRate,1.0
 MARADI,Niger,Diesel,Diesel,ResLimShare,0.2
 MARADI,Niger,Diesel,Diesel,FOMperMW,8000.0
 MARADI,Niger,Diesel,Diesel,VOM,10.0
-MARADI,Niger,Diesel,Diesel,BuildLimitperYear,1.4
 MARADI,Niger,Diesel,Diesel,MaxTotalBuild,1.4
 MARADI,Niger,Diesel,Diesel,Type,10.0
 MARADI,Niger,Diesel,Diesel,fuel1,11.0
@@ -4649,7 +4381,6 @@ NIAMEY,Niger,Diesel,Diesel,RampDnRate,1.0
 NIAMEY,Niger,Diesel,Diesel,ResLimShare,0.2
 NIAMEY,Niger,Diesel,Diesel,FOMperMW,8000.0
 NIAMEY,Niger,Diesel,Diesel,VOM,10.0
-NIAMEY,Niger,Diesel,Diesel,BuildLimitperYear,23.5
 NIAMEY,Niger,Diesel,Diesel,MaxTotalBuild,23.5
 NIAMEY,Niger,Diesel,Diesel,Type,10.0
 NIAMEY,Niger,Diesel,Diesel,fuel1,11.0
@@ -4668,7 +4399,6 @@ TAHOUA1,Niger,Diesel,Diesel,RampDnRate,1.0
 TAHOUA1,Niger,Diesel,Diesel,ResLimShare,0.2
 TAHOUA1,Niger,Diesel,Diesel,FOMperMW,8000.0
 TAHOUA1,Niger,Diesel,Diesel,VOM,10.0
-TAHOUA1,Niger,Diesel,Diesel,BuildLimitperYear,2.0
 TAHOUA1,Niger,Diesel,Diesel,MaxTotalBuild,2.0
 TAHOUA1,Niger,Diesel,Diesel,Type,10.0
 TAHOUA1,Niger,Diesel,Diesel,fuel1,11.0
@@ -4687,7 +4417,6 @@ TAHOUA2,Niger,Diesel,Diesel,RampDnRate,1.0
 TAHOUA2,Niger,Diesel,Diesel,ResLimShare,0.2
 TAHOUA2,Niger,Diesel,Diesel,FOMperMW,8000.0
 TAHOUA2,Niger,Diesel,Diesel,VOM,10.0
-TAHOUA2,Niger,Diesel,Diesel,BuildLimitperYear,1.0
 TAHOUA2,Niger,Diesel,Diesel,MaxTotalBuild,1.0
 TAHOUA2,Niger,Diesel,Diesel,Type,10.0
 TAHOUA2,Niger,Diesel,Diesel,fuel1,11.0
@@ -4706,14 +4435,13 @@ ZINDER,Niger,Diesel,Diesel,RampDnRate,1.0
 ZINDER,Niger,Diesel,Diesel,ResLimShare,0.2
 ZINDER,Niger,Diesel,Diesel,FOMperMW,8000.0
 ZINDER,Niger,Diesel,Diesel,VOM,10.0
-ZINDER,Niger,Diesel,Diesel,BuildLimitperYear,2.6
 ZINDER,Niger,Diesel,Diesel,MaxTotalBuild,2.6
 ZINDER,Niger,Diesel,Diesel,Type,10.0
 ZINDER,Niger,Diesel,Diesel,fuel1,11.0
 ZINDER,Niger,Diesel,Diesel,Status,1.0
 ZINDER,Niger,Diesel,Diesel,UnitSize,2.6
 ZINDER,Niger,Diesel,Diesel,CapacityCredit,1.0
-ZINDER,Niger,Diesel,Diesel,Error,12094.648148902661
+ZINDER,Niger,Diesel,Diesel,Error,12094.64814890266
 SONICHAR Phase I,Niger,Coal,Coal,StYr,1981.0
 SONICHAR Phase I,Niger,Coal,Coal,RetrYr,2050.0
 SONICHAR Phase I,Niger,Coal,Coal,Zone,10.0
@@ -4725,7 +4453,6 @@ SONICHAR Phase I,Niger,Coal,Coal,RampDnRate,0.6
 SONICHAR Phase I,Niger,Coal,Coal,ResLimShare,0.1
 SONICHAR Phase I,Niger,Coal,Coal,FOMperMW,32100.0
 SONICHAR Phase I,Niger,Coal,Coal,VOM,4.61
-SONICHAR Phase I,Niger,Coal,Coal,BuildLimitperYear,32.0
 SONICHAR Phase I,Niger,Coal,Coal,MaxTotalBuild,32.0
 SONICHAR Phase I,Niger,Coal,Coal,Type,13.0
 SONICHAR Phase I,Niger,Coal,Coal,fuel1,1.0
@@ -4744,7 +4471,6 @@ SONICHAR Phase II,Niger,Coal,Coal,RampDnRate,0.6
 SONICHAR Phase II,Niger,Coal,Coal,ResLimShare,0.1
 SONICHAR Phase II,Niger,Coal,Coal,FOMperMW,32100.0
 SONICHAR Phase II,Niger,Coal,Coal,VOM,4.61
-SONICHAR Phase II,Niger,Coal,Coal,BuildLimitperYear,32.0
 SONICHAR Phase II,Niger,Coal,Coal,MaxTotalBuild,32.0
 SONICHAR Phase II,Niger,Coal,Coal,Type,13.0
 SONICHAR Phase II,Niger,Coal,Coal,fuel1,1.0
@@ -4787,7 +4513,7 @@ GOROUBANDA2,Niger,Diesel,Diesel,fuel1,11.0
 GOROUBANDA2,Niger,Diesel,Diesel,Status,3.0
 GOROUBANDA2,Niger,Diesel,Diesel,UnitSize,20.0
 GOROUBANDA2,Niger,Diesel,Diesel,CapacityCredit,1.0
-GOROUBANDA2,Niger,Diesel,Diesel,Error,22729.260000000002
+GOROUBANDA2,Niger,Diesel,Diesel,Error,22729.26
 GOROUBANDA2,Niger,Diesel,Diesel,Life,30.0
 GOROUBANDA2,Niger,Diesel,Diesel,Capex,0.9
 AGADEZ,Niger,Diesel,Diesel,StYr,2024.0
@@ -4801,14 +4527,13 @@ AGADEZ,Niger,Diesel,Diesel,RampDnRate,1.0
 AGADEZ,Niger,Diesel,Diesel,ResLimShare,0.2
 AGADEZ,Niger,Diesel,Diesel,FOMperMW,18500.0
 AGADEZ,Niger,Diesel,Diesel,VOM,6.5
-AGADEZ,Niger,Diesel,Diesel,BuildLimitperYear,6.0
 AGADEZ,Niger,Diesel,Diesel,MaxTotalBuild,6.0
 AGADEZ,Niger,Diesel,Diesel,Type,10.0
 AGADEZ,Niger,Diesel,Diesel,fuel1,11.0
 AGADEZ,Niger,Diesel,Diesel,Status,1.0
 AGADEZ,Niger,Diesel,Diesel,UnitSize,6.0
 AGADEZ,Niger,Diesel,Diesel,CapacityCredit,1.0
-AGADEZ,Niger,Diesel,Diesel,Error,22667.260000000002
+AGADEZ,Niger,Diesel,Diesel,Error,22667.26
 AGADEZ,Niger,Diesel,Diesel,Life,30.0
 AGADEZ,Niger,Diesel,Diesel,Capex,0.9
 agadezpv,Niger,PV,Solar,StYr,2024.0
@@ -4818,7 +4543,6 @@ agadezpv,Niger,PV,Solar,Capacity,13.0
 agadezpv,Niger,PV,Solar,RampUpRate,1.0
 agadezpv,Niger,PV,Solar,RampDnRate,1.0
 agadezpv,Niger,PV,Solar,FOMperMW,17000.0
-agadezpv,Niger,PV,Solar,BuildLimitperYear,13.0
 agadezpv,Niger,PV,Solar,MaxTotalBuild,13.0
 agadezpv,Niger,PV,Solar,Type,6.0
 agadezpv,Niger,PV,Solar,fuel1,4.0
@@ -4837,7 +4561,6 @@ GorouBanda1,Niger,PV,Solar,Capacity,20.0
 GorouBanda1,Niger,PV,Solar,RampUpRate,1.0
 GorouBanda1,Niger,PV,Solar,RampDnRate,1.0
 GorouBanda1,Niger,PV,Solar,FOMperMW,17000.0
-GorouBanda1,Niger,PV,Solar,BuildLimitperYear,20.0
 GorouBanda1,Niger,PV,Solar,MaxTotalBuild,20.0
 GorouBanda1,Niger,PV,Solar,Type,6.0
 GorouBanda1,Niger,PV,Solar,fuel1,4.0
@@ -4849,24 +4572,6 @@ GorouBanda1,Niger,PV,Solar,Life,25.0
 GorouBanda1,Niger,PV,Solar,RE_Flag,1.0
 GorouBanda1,Niger,PV,Solar,Capex,0.97
 GorouBanda1,Niger,PV,Solar,RETech,1.0
-SONICHAR2,Niger,Coal,Coal,StYr,2018.0
-SONICHAR2,Niger,Coal,Coal,RetrYr,2068.0
-SONICHAR2,Niger,Coal,Coal,Zone,10.0
-SONICHAR2,Niger,Coal,Coal,MinLimitShare,0.5
-SONICHAR2,Niger,Coal,Coal,HeatRate,8.6
-SONICHAR2,Niger,Coal,Coal,RampUpRate,0.6
-SONICHAR2,Niger,Coal,Coal,RampDnRate,0.6
-SONICHAR2,Niger,Coal,Coal,ResLimShare,0.1
-SONICHAR2,Niger,Coal,Coal,FOMperMW,32100.0
-SONICHAR2,Niger,Coal,Coal,VOM,4.61
-SONICHAR2,Niger,Coal,Coal,Type,13.0
-SONICHAR2,Niger,Coal,Coal,fuel1,1.0
-SONICHAR2,Niger,Coal,Coal,Status,2.0
-SONICHAR2,Niger,Coal,Coal,HeatRate2,8.6
-SONICHAR2,Niger,Coal,Coal,CapacityCredit,1.0
-SONICHAR2,Niger,Coal,Coal,Error,36267.61
-SONICHAR2,Niger,Coal,Coal,Life,30.0
-SONICHAR2,Niger,Coal,Coal,Capex,2.0
 GT_Niger,Niger,Diesel,Diesel,StYr,2025.0
 GT_Niger,Niger,Diesel,Diesel,RetrYr,2054.0
 GT_Niger,Niger,Diesel,Diesel,Zone,10.0
@@ -5040,7 +4745,6 @@ Tobene_IPP,Senegal,HFO,HFO,RampDnRate,0.9
 Tobene_IPP,Senegal,HFO,HFO,ResLimShare,0.5
 Tobene_IPP,Senegal,HFO,HFO,FOMperMW,28000.0
 Tobene_IPP,Senegal,HFO,HFO,VOM,4.4
-Tobene_IPP,Senegal,HFO,HFO,BuildLimitperYear,117.772
 Tobene_IPP,Senegal,HFO,HFO,MaxTotalBuild,117.772
 Tobene_IPP,Senegal,HFO,HFO,Type,10.0
 Tobene_IPP,Senegal,HFO,HFO,fuel1,7.0
@@ -5059,7 +4763,6 @@ HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,RampDnRate,1.0
 HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,ResLimShare,0.5
 HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,FOMperMW,25000.0
 HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,VOM,4.0
-HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,BuildLimitperYear,117.772
 HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,MaxTotalBuild,117.772
 HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,Type,10.0
 HFO IPP_Tobene Power_GNL ELTON,Senegal,LNG,Gas,fuel1,12.0
@@ -5082,7 +4785,6 @@ Tobene - Dual,Senegal,Gas,Gas,RampDnRate,1.0
 Tobene - Dual,Senegal,Gas,Gas,ResLimShare,0.5
 Tobene - Dual,Senegal,Gas,Gas,FOMperMW,25000.0
 Tobene - Dual,Senegal,Gas,Gas,VOM,4.0
-Tobene - Dual,Senegal,Gas,Gas,BuildLimitperYear,117.772
 Tobene - Dual,Senegal,Gas,Gas,MaxTotalBuild,117.772
 Tobene - Dual,Senegal,Gas,Gas,Type,10.0
 Tobene - Dual,Senegal,Gas,Gas,fuel1,2.0
@@ -5105,7 +4807,6 @@ Contour Global_IPP,Senegal,HFO,HFO,RampDnRate,0.9
 Contour Global_IPP,Senegal,HFO,HFO,ResLimShare,0.5
 Contour Global_IPP,Senegal,HFO,HFO,FOMperMW,28000.0
 Contour Global_IPP,Senegal,HFO,HFO,VOM,0.53
-Contour Global_IPP,Senegal,HFO,HFO,BuildLimitperYear,89.2
 Contour Global_IPP,Senegal,HFO,HFO,MaxTotalBuild,89.2
 Contour Global_IPP,Senegal,HFO,HFO,Type,10.0
 Contour Global_IPP,Senegal,HFO,HFO,fuel1,7.0
@@ -5124,7 +4825,6 @@ HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,RampDnRate,1.0
 HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,ResLimShare,0.5
 HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,FOMperMW,25000.0
 HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,VOM,4.0
-HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,BuildLimitperYear,89.2
 HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,MaxTotalBuild,89.2
 HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,Type,10.0
 HFO IPP_Contour Global_GNL ELTON,Senegal,LNG,Gas,fuel1,12.0
@@ -5147,7 +4847,6 @@ CONTOURGLGlo-Dual,Senegal,Gas,Gas,RampDnRate,1.0
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,ResLimShare,0.5
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,FOMperMW,25000.0
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,VOM,7.2
-CONTOURGLGlo-Dual,Senegal,Gas,Gas,BuildLimitperYear,89.2
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,MaxTotalBuild,89.2
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,Type,10.0
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,fuel1,2.0
@@ -5156,7 +4855,7 @@ CONTOURGLGlo-Dual,Senegal,Gas,Gas,Status,2.0
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,HeatRate2,8.2
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,UnitSize,89.2
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,CapacityCredit,1.0
-CONTOURGLGlo-Dual,Senegal,Gas,Gas,Error,29445.600000000002
+CONTOURGLGlo-Dual,Senegal,Gas,Gas,Error,29445.6
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,Life,30.0
 CONTOURGLGlo-Dual,Senegal,Gas,Gas,Capex,1.0
 CCGT Saint Louis,Senegal,Gas,Gas,StYr,2027.0
@@ -5170,7 +4869,6 @@ CCGT Saint Louis,Senegal,Gas,Gas,RampDnRate,1.0
 CCGT Saint Louis,Senegal,Gas,Gas,ResLimShare,0.05
 CCGT Saint Louis,Senegal,Gas,Gas,FOMperMW,30000.0
 CCGT Saint Louis,Senegal,Gas,Gas,VOM,2.0
-CCGT Saint Louis,Senegal,Gas,Gas,BuildLimitperYear,165.76
 CCGT Saint Louis,Senegal,Gas,Gas,MaxTotalBuild,165.76
 CCGT Saint Louis,Senegal,Gas,Gas,Type,2.0
 CCGT Saint Louis,Senegal,Gas,Gas,fuel1,2.0
@@ -5192,7 +4890,6 @@ CCGT Saint Louis - ST,Senegal,Gas,Gas,RampDnRate,1.0
 CCGT Saint Louis - ST,Senegal,Gas,Gas,ResLimShare,0.05
 CCGT Saint Louis - ST,Senegal,Gas,Gas,FOMperMW,30000.0
 CCGT Saint Louis - ST,Senegal,Gas,Gas,VOM,2.0
-CCGT Saint Louis - ST,Senegal,Gas,Gas,BuildLimitperYear,94.0
 CCGT Saint Louis - ST,Senegal,Gas,Gas,MaxTotalBuild,94.0
 CCGT Saint Louis - ST,Senegal,Gas,Gas,Type,2.0
 CCGT Saint Louis - ST,Senegal,Gas,Gas,fuel1,2.0
@@ -5214,7 +4911,6 @@ CCGT Saint Louis - Extension,Senegal,Gas,Gas,RampDnRate,1.0
 CCGT Saint Louis - Extension,Senegal,Gas,Gas,ResLimShare,0.05
 CCGT Saint Louis - Extension,Senegal,Gas,Gas,FOMperMW,30000.0
 CCGT Saint Louis - Extension,Senegal,Gas,Gas,VOM,2.0
-CCGT Saint Louis - Extension,Senegal,Gas,Gas,BuildLimitperYear,260.0
 CCGT Saint Louis - Extension,Senegal,Gas,Gas,MaxTotalBuild,260.0
 CCGT Saint Louis - Extension,Senegal,Gas,Gas,Type,2.0
 CCGT Saint Louis - Extension,Senegal,Gas,Gas,fuel1,2.0
@@ -5236,7 +4932,6 @@ CCGT WAE,Senegal,Diesel,Diesel,RampDnRate,1.0
 CCGT WAE,Senegal,Diesel,Diesel,ResLimShare,0.06
 CCGT WAE,Senegal,Diesel,Diesel,FOMperMW,35000.0
 CCGT WAE,Senegal,Diesel,Diesel,VOM,4.0
-CCGT WAE,Senegal,Diesel,Diesel,BuildLimitperYear,129.0
 CCGT WAE,Senegal,Diesel,Diesel,MaxTotalBuild,129.0
 CCGT WAE,Senegal,Diesel,Diesel,Type,2.0
 CCGT WAE,Senegal,Diesel,Diesel,fuel1,11.0
@@ -5258,7 +4953,6 @@ CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,RampDnRate,1.0
 CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,ResLimShare,0.05
 CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,FOMperMW,30000.0
 CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,VOM,2.0
-CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,BuildLimitperYear,402.9
 CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,MaxTotalBuild,402.9
 CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,Type,2.0
 CCGT WAE Cap des Biches - LNG,Senegal,LNG,Gas,fuel1,12.0
@@ -5280,7 +4974,6 @@ CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,RampDnRate,1.0
 CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,ResLimShare,0.05
 CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,FOMperMW,30000.0
 CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,VOM,0.55
-CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,BuildLimitperYear,402.9
 CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,MaxTotalBuild,402.9
 CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,Type,2.0
 CCGT WAE Cap des Biches Ext- Dual,Senegal,Gas,Gas,fuel1,2.0
@@ -5303,7 +4996,6 @@ Mboro_IPP_AESA,Senegal,Gas,Gas,RampDnRate,1.0
 Mboro_IPP_AESA,Senegal,Gas,Gas,ResLimShare,0.05
 Mboro_IPP_AESA,Senegal,Gas,Gas,FOMperMW,30000.0
 Mboro_IPP_AESA,Senegal,Gas,Gas,VOM,2.0
-Mboro_IPP_AESA,Senegal,Gas,Gas,BuildLimitperYear,150.0
 Mboro_IPP_AESA,Senegal,Gas,Gas,MaxTotalBuild,150.0
 Mboro_IPP_AESA,Senegal,Gas,Gas,Type,2.0
 Mboro_IPP_AESA,Senegal,Gas,Gas,fuel1,2.0
@@ -5325,7 +5017,6 @@ Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,RampDnRate,1.0
 Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,ResLimShare,0.05
 Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,FOMperMW,30000.0
 Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,VOM,2.0
-Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,BuildLimitperYear,150.0
 Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,MaxTotalBuild,150.0
 Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,Type,2.0
 Mboro_IPP_AESA - Ext,Senegal,Gas,Gas,fuel1,2.0
@@ -5347,7 +5038,6 @@ EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,RampDnRate,1.0
 EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,ResLimShare,0.05
 EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,FOMperMW,30000.0
 EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,VOM,2.0
-EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,BuildLimitperYear,272.7
 EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,MaxTotalBuild,272.7
 EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,Type,2.0
 EPC CCGT GTI2_GNL ELTON,Senegal,LNG,Gas,fuel1,12.0
@@ -5369,7 +5059,6 @@ EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,RampDnRate,1.0
 EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,ResLimShare,0.05
 EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,FOMperMW,30000.0
 EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,VOM,1.1
-EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,BuildLimitperYear,272.7
 EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,MaxTotalBuild,272.7
 EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,Type,2.0
 EPC CCGT GTI2_Domestic Gas- Dual,Senegal,Gas,Gas,fuel1,2.0
@@ -5392,7 +5081,6 @@ Malicounda_IPP_HFO,Senegal,HFO,HFO,RampDnRate,0.9
 Malicounda_IPP_HFO,Senegal,HFO,HFO,ResLimShare,0.5
 Malicounda_IPP_HFO,Senegal,HFO,HFO,FOMperMW,28000.0
 Malicounda_IPP_HFO,Senegal,HFO,HFO,VOM,0.15
-Malicounda_IPP_HFO,Senegal,HFO,HFO,BuildLimitperYear,137.9
 Malicounda_IPP_HFO,Senegal,HFO,HFO,MaxTotalBuild,137.9
 Malicounda_IPP_HFO,Senegal,HFO,HFO,Type,10.0
 Malicounda_IPP_HFO,Senegal,HFO,HFO,fuel1,7.0
@@ -5411,7 +5099,6 @@ HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,RampDnRate,1.0
 HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,ResLimShare,0.5
 HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,FOMperMW,25000.0
 HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,VOM,4.0
-HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,BuildLimitperYear,137.9
 HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,MaxTotalBuild,137.9
 HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,Type,10.0
 HFO IPP_Malicounda_GNL ELTON,Senegal,LNG,Gas,fuel1,12.0
@@ -5434,7 +5121,6 @@ Malicounda - Dual,Senegal,Gas,Gas,RampDnRate,1.0
 Malicounda - Dual,Senegal,Gas,Gas,ResLimShare,0.5
 Malicounda - Dual,Senegal,Gas,Gas,FOMperMW,25000.0
 Malicounda - Dual,Senegal,Gas,Gas,VOM,6.7
-Malicounda - Dual,Senegal,Gas,Gas,BuildLimitperYear,137.9
 Malicounda - Dual,Senegal,Gas,Gas,MaxTotalBuild,137.9
 Malicounda - Dual,Senegal,Gas,Gas,Type,10.0
 Malicounda - Dual,Senegal,Gas,Gas,fuel1,2.0
@@ -5457,7 +5143,6 @@ Malicounda - Dual,Senegal,Gas,Gas,Capex,1.0
 "C6 Bel Air (120, 51\xa0\xa0)",Senegal,HFO,HFO,ResLimShare,0.5
 "C6 Bel Air (120, 51\xa0\xa0)",Senegal,HFO,HFO,FOMperMW,61035.64219912465
 "C6 Bel Air (120, 51\xa0\xa0)",Senegal,HFO,HFO,VOM,5.9
-"C6 Bel Air (120, 51\xa0\xa0)",Senegal,HFO,HFO,BuildLimitperYear,99.0
 "C6 Bel Air (120, 51\xa0\xa0)",Senegal,HFO,HFO,MaxTotalBuild,99.0
 "C6 Bel Air (120, 51\xa0\xa0)",Senegal,HFO,HFO,Type,10.0
 "C6 Bel Air (120, 51\xa0\xa0)",Senegal,HFO,HFO,fuel1,7.0
@@ -5476,7 +5161,6 @@ HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,RampDnRate,1.0
 HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,ResLimShare,0.5
 HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,FOMperMW,39353.32355314181
 HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,VOM,4.0
-HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,BuildLimitperYear,99.0
 HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,MaxTotalBuild,99.0
 HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,Type,10.0
 HFO Senelec_C-6_GNL ELTON,Senegal,LNG,Gas,fuel1,12.0
@@ -5499,7 +5183,6 @@ CVI- Dual,Senegal,Gas,Gas,RampDnRate,1.0
 CVI- Dual,Senegal,Gas,Gas,ResLimShare,0.5
 CVI- Dual,Senegal,Gas,Gas,FOMperMW,25000.0
 CVI- Dual,Senegal,Gas,Gas,VOM,4.0
-CVI- Dual,Senegal,Gas,Gas,BuildLimitperYear,99.0
 CVI- Dual,Senegal,Gas,Gas,MaxTotalBuild,99.0
 CVI- Dual,Senegal,Gas,Gas,Type,10.0
 CVI- Dual,Senegal,Gas,Gas,fuel1,2.0
@@ -5508,7 +5191,7 @@ CVI- Dual,Senegal,Gas,Gas,Status,2.0
 CVI- Dual,Senegal,Gas,Gas,HeatRate2,8.2
 CVI- Dual,Senegal,Gas,Gas,UnitSize,99.0
 CVI- Dual,Senegal,Gas,Gas,CapacityCredit,1.0
-CVI- Dual,Senegal,Gas,Gas,Error,29471.100000000002
+CVI- Dual,Senegal,Gas,Gas,Error,29471.1
 CVI- Dual,Senegal,Gas,Gas,Life,30.0
 CVI- Dual,Senegal,Gas,Gas,Capex,1.0
 Kahoune _ CVII_Diesel,Senegal,HFO,HFO,StYr,1990.0
@@ -5522,7 +5205,6 @@ Kahoune _ CVII_Diesel,Senegal,HFO,HFO,RampDnRate,1.0
 Kahoune _ CVII_Diesel,Senegal,HFO,HFO,ResLimShare,0.5
 Kahoune _ CVII_Diesel,Senegal,HFO,HFO,FOMperMW,17203.918333333884
 Kahoune _ CVII_Diesel,Senegal,HFO,HFO,VOM,0.6
-Kahoune _ CVII_Diesel,Senegal,HFO,HFO,BuildLimitperYear,101.4
 Kahoune _ CVII_Diesel,Senegal,HFO,HFO,MaxTotalBuild,101.4
 Kahoune _ CVII_Diesel,Senegal,HFO,HFO,Type,10.0
 Kahoune _ CVII_Diesel,Senegal,HFO,HFO,fuel1,7.0
@@ -5539,9 +5221,8 @@ Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,HeatRate,7.3
 Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,RampUpRate,1.0
 Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,RampDnRate,1.0
 Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,ResLimShare,0.5
-Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,FOMperMW,18821.829766172254
+Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,FOMperMW,18821.829766172257
 Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,VOM,4.0
-Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,BuildLimitperYear,101.4
 Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,MaxTotalBuild,101.4
 Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,Type,10.0
 Kahoune _HFO Senelec_C-7_GNL ELTON,Senegal,LNG,Gas,fuel1,12.0
@@ -5564,7 +5245,6 @@ Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,RampDnRate,1.0
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,ResLimShare,0.5
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,FOMperMW,17541.49339785601
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,VOM,2.4
-Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,BuildLimitperYear,101.4
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,MaxTotalBuild,101.4
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,Type,10.0
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,fuel1,2.0
@@ -5573,7 +5253,7 @@ Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,Status,2.0
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,HeatRate2,8.2
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,UnitSize,101.4
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,CapacityCredit,1.0
-Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,Error,22017.793397856014
+Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,Error,22017.793397856018
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,Life,30.0
 Kahoune _HFO Senelec_C-7_Domestic Gas,Senegal,Gas,Gas,Capex,1.0
 CIV_Diesel_E,Senegal,HFO,HFO,StYr,1990.0
@@ -5587,7 +5267,6 @@ CIV_Diesel_E,Senegal,HFO,HFO,RampDnRate,0.43
 CIV_Diesel_E,Senegal,HFO,HFO,ResLimShare,0.5
 CIV_Diesel_E,Senegal,HFO,HFO,FOMperMW,28000.0
 CIV_Diesel_E,Senegal,HFO,HFO,VOM,4.4
-CIV_Diesel_E,Senegal,HFO,HFO,BuildLimitperYear,81.0
 CIV_Diesel_E,Senegal,HFO,HFO,MaxTotalBuild,81.0
 CIV_Diesel_E,Senegal,HFO,HFO,Type,10.0
 CIV_Diesel_E,Senegal,HFO,HFO,fuel1,7.0
@@ -5606,7 +5285,6 @@ HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,RampDnRate,1.0
 HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,ResLimShare,0.5
 HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,FOMperMW,25000.0
 HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,VOM,4.0
-HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,BuildLimitperYear,81.0
 HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,MaxTotalBuild,81.0
 HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,Type,10.0
 HFO Senelec_C-4_Ext_GNL ELTON,Senegal,LNG,Gas,fuel1,12.0
@@ -5629,7 +5307,6 @@ CIV_Diesel_E_Glo,Senegal,Gas,Gas,RampDnRate,1.0
 CIV_Diesel_E_Glo,Senegal,Gas,Gas,ResLimShare,0.5
 CIV_Diesel_E_Glo,Senegal,Gas,Gas,FOMperMW,25000.0
 CIV_Diesel_E_Glo,Senegal,Gas,Gas,VOM,4.0
-CIV_Diesel_E_Glo,Senegal,Gas,Gas,BuildLimitperYear,81.0
 CIV_Diesel_E_Glo,Senegal,Gas,Gas,MaxTotalBuild,81.0
 CIV_Diesel_E_Glo,Senegal,Gas,Gas,Type,10.0
 CIV_Diesel_E_Glo,Senegal,Gas,Gas,fuel1,2.0
@@ -5651,7 +5328,6 @@ Cap-des-BichesTAG2,Senegal,Diesel,Diesel,RampDnRate,1.0
 Cap-des-BichesTAG2,Senegal,Diesel,Diesel,ResLimShare,0.2
 Cap-des-BichesTAG2,Senegal,Diesel,Diesel,FOMperMW,20000.0
 Cap-des-BichesTAG2,Senegal,Diesel,Diesel,VOM,4.4
-Cap-des-BichesTAG2,Senegal,Diesel,Diesel,BuildLimitperYear,20.0
 Cap-des-BichesTAG2,Senegal,Diesel,Diesel,MaxTotalBuild,20.0
 Cap-des-BichesTAG2,Senegal,Diesel,Diesel,Type,1.0
 Cap-des-BichesTAG2,Senegal,Diesel,Diesel,fuel1,11.0
@@ -5670,7 +5346,6 @@ HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,RampDnRate,1.0
 HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,ResLimShare,0.5
 HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,FOMperMW,25000.0
 HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,VOM,4.0
-HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,BuildLimitperYear,125.0
 HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,MaxTotalBuild,125.0
 HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,Type,10.0
 HFO/GAS Karpower 125 MW G\xf6khan Bey (KPS 22),Senegal,LNG,Gas,fuel1,12.0
@@ -5692,7 +5367,6 @@ HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,RampDnRate,1.
 HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,ResLimShare,0.5
 HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,FOMperMW,25000.0
 HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,VOM,4.0
-HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,BuildLimitperYear,220.0
 HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,MaxTotalBuild,220.0
 HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,Type,10.0
 HFO/GAS Karpower 220 MW Ayseg\xfcl Sultan (KPS 10),Senegal,LNG,Gas,fuel1,12.0
@@ -5714,14 +5388,13 @@ Karpower 125 MW,Senegal,HFO,HFO,RampDnRate,0.9
 Karpower 125 MW,Senegal,HFO,HFO,ResLimShare,0.5
 Karpower 125 MW,Senegal,HFO,HFO,FOMperMW,28000.0
 Karpower 125 MW,Senegal,HFO,HFO,VOM,4.4
-Karpower 125 MW,Senegal,HFO,HFO,BuildLimitperYear,125.0
 Karpower 125 MW,Senegal,HFO,HFO,MaxTotalBuild,125.0
 Karpower 125 MW,Senegal,HFO,HFO,Type,10.0
 Karpower 125 MW,Senegal,HFO,HFO,fuel1,7.0
 Karpower 125 MW,Senegal,HFO,HFO,Status,1.0
 Karpower 125 MW,Senegal,HFO,HFO,UnitSize,125.0
 Karpower 125 MW,Senegal,HFO,HFO,CapacityCredit,1.0
-Karpower 125 MW,Senegal,HFO,HFO,Error,32492.600000000002
+Karpower 125 MW,Senegal,HFO,HFO,Error,32492.6
 Karpower 125 MW,Senegal,HFO,HFO,Life,30.0
 Karpower 220 MW,Senegal,HFO,HFO,StYr,2019.0
 Karpower 220 MW,Senegal,HFO,HFO,RetrYr,2024.0
@@ -5734,7 +5407,6 @@ Karpower 220 MW,Senegal,HFO,HFO,RampDnRate,0.9
 Karpower 220 MW,Senegal,HFO,HFO,ResLimShare,0.5
 Karpower 220 MW,Senegal,HFO,HFO,FOMperMW,28000.0
 Karpower 220 MW,Senegal,HFO,HFO,VOM,4.4
-Karpower 220 MW,Senegal,HFO,HFO,BuildLimitperYear,220.0
 Karpower 220 MW,Senegal,HFO,HFO,MaxTotalBuild,220.0
 Karpower 220 MW,Senegal,HFO,HFO,Type,10.0
 Karpower 220 MW,Senegal,HFO,HFO,fuel1,7.0
@@ -5752,14 +5424,13 @@ Sendou1,Senegal,Coal,Coal,RampUpRate,0.6
 Sendou1,Senegal,Coal,Coal,RampDnRate,0.6
 Sendou1,Senegal,Coal,Coal,FOMperMW,32100.0
 Sendou1,Senegal,Coal,Coal,VOM,2.1
-Sendou1,Senegal,Coal,Coal,BuildLimitperYear,125.0
 Sendou1,Senegal,Coal,Coal,MaxTotalBuild,125.0
 Sendou1,Senegal,Coal,Coal,Type,13.0
 Sendou1,Senegal,Coal,Coal,fuel1,1.0
 Sendou1,Senegal,Coal,Coal,Status,1.0
 Sendou1,Senegal,Coal,Coal,UnitSize,125.0
 Sendou1,Senegal,Coal,Coal,CapacityCredit,1.0
-Sendou1,Senegal,Coal,Coal,Error,36614.799999999996
+Sendou1,Senegal,Coal,Coal,Error,36614.8
 Sendou1,Senegal,Coal,Coal,Life,30.0
 Boutoute G831_836,Senegal,Diesel,Diesel,StYr,1997.0
 Boutoute G831_836,Senegal,Diesel,Diesel,RetrYr,2029.0
@@ -5771,7 +5442,6 @@ Boutoute G831_836,Senegal,Diesel,Diesel,RampDnRate,1.0
 Boutoute G831_836,Senegal,Diesel,Diesel,ResLimShare,0.5
 Boutoute G831_836,Senegal,Diesel,Diesel,FOMperMW,28000.0
 Boutoute G831_836,Senegal,Diesel,Diesel,VOM,4.4
-Boutoute G831_836,Senegal,Diesel,Diesel,BuildLimitperYear,5.0
 Boutoute G831_836,Senegal,Diesel,Diesel,MaxTotalBuild,5.0
 Boutoute G831_836,Senegal,Diesel,Diesel,Type,10.0
 Boutoute G831_836,Senegal,Diesel,Diesel,fuel1,11.0
@@ -5789,7 +5459,6 @@ Boutoute (G805-806-807),Senegal,HFO,HFO,RampDnRate,1.0
 Boutoute (G805-806-807),Senegal,HFO,HFO,ResLimShare,0.5
 Boutoute (G805-806-807),Senegal,HFO,HFO,FOMperMW,28000.0
 Boutoute (G805-806-807),Senegal,HFO,HFO,VOM,4.4
-Boutoute (G805-806-807),Senegal,HFO,HFO,BuildLimitperYear,13.5
 Boutoute (G805-806-807),Senegal,HFO,HFO,MaxTotalBuild,13.5
 Boutoute (G805-806-807),Senegal,HFO,HFO,Type,10.0
 Boutoute (G805-806-807),Senegal,HFO,HFO,fuel1,7.0
@@ -5807,7 +5476,6 @@ Boutoute Ext (G805-806-807),Senegal,HFO,HFO,RampDnRate,1.0
 Boutoute Ext (G805-806-807),Senegal,HFO,HFO,ResLimShare,0.5
 Boutoute Ext (G805-806-807),Senegal,HFO,HFO,FOMperMW,28000.0
 Boutoute Ext (G805-806-807),Senegal,HFO,HFO,VOM,4.4
-Boutoute Ext (G805-806-807),Senegal,HFO,HFO,BuildLimitperYear,9.0
 Boutoute Ext (G805-806-807),Senegal,HFO,HFO,MaxTotalBuild,9.0
 Boutoute Ext (G805-806-807),Senegal,HFO,HFO,Type,10.0
 Boutoute Ext (G805-806-807),Senegal,HFO,HFO,fuel1,7.0
@@ -5826,7 +5494,6 @@ CIII_Vapeur,Senegal,HFO,HFO,RampDnRate,0.43
 CIII_Vapeur,Senegal,HFO,HFO,ResLimShare,0.07
 CIII_Vapeur,Senegal,HFO,HFO,FOMperMW,17000.0
 CIII_Vapeur,Senegal,HFO,HFO,VOM,4.4
-CIII_Vapeur,Senegal,HFO,HFO,BuildLimitperYear,19.0
 CIII_Vapeur,Senegal,HFO,HFO,MaxTotalBuild,19.0
 CIII_Vapeur,Senegal,HFO,HFO,Type,13.0
 CIII_Vapeur,Senegal,HFO,HFO,fuel1,7.0
@@ -5845,7 +5512,6 @@ Kounoune_IPP,Senegal,HFO,HFO,RampDnRate,1.0
 Kounoune_IPP,Senegal,HFO,HFO,ResLimShare,0.5
 Kounoune_IPP,Senegal,HFO,HFO,FOMperMW,28000.0
 Kounoune_IPP,Senegal,HFO,HFO,VOM,4.4
-Kounoune_IPP,Senegal,HFO,HFO,BuildLimitperYear,45.0
 Kounoune_IPP,Senegal,HFO,HFO,MaxTotalBuild,45.0
 Kounoune_IPP,Senegal,HFO,HFO,Type,10.0
 Kounoune_IPP,Senegal,HFO,HFO,fuel1,7.0
@@ -5863,7 +5529,6 @@ DO_Tamba,Senegal,Diesel,Diesel,RampDnRate,1.0
 DO_Tamba,Senegal,Diesel,Diesel,ResLimShare,0.5
 DO_Tamba,Senegal,Diesel,Diesel,FOMperMW,28000.0
 DO_Tamba,Senegal,Diesel,Diesel,VOM,4.4
-DO_Tamba,Senegal,Diesel,Diesel,BuildLimitperYear,6.0
 DO_Tamba,Senegal,Diesel,Diesel,MaxTotalBuild,6.0
 DO_Tamba,Senegal,Diesel,Diesel,Type,10.0
 DO_Tamba,Senegal,Diesel,Diesel,fuel1,11.0
@@ -5882,7 +5547,6 @@ Bel-airTAG4,Senegal,Diesel,Diesel,RampDnRate,1.0
 Bel-airTAG4,Senegal,Diesel,Diesel,ResLimShare,0.5
 Bel-airTAG4,Senegal,Diesel,Diesel,FOMperMW,28000.0
 Bel-airTAG4,Senegal,Diesel,Diesel,VOM,4.4
-Bel-airTAG4,Senegal,Diesel,Diesel,BuildLimitperYear,25.0
 Bel-airTAG4,Senegal,Diesel,Diesel,MaxTotalBuild,25.0
 Bel-airTAG4,Senegal,Diesel,Diesel,Type,10.0
 Bel-airTAG4,Senegal,Diesel,Diesel,fuel1,11.0
@@ -5901,7 +5565,6 @@ Kahone,Senegal,Diesel,Diesel,RampDnRate,1.0
 Kahone,Senegal,Diesel,Diesel,ResLimShare,0.5
 Kahone,Senegal,Diesel,Diesel,FOMperMW,28000.0
 Kahone,Senegal,Diesel,Diesel,VOM,4.4
-Kahone,Senegal,Diesel,Diesel,BuildLimitperYear,10.0
 Kahone,Senegal,Diesel,Diesel,MaxTotalBuild,10.0
 Kahone,Senegal,Diesel,Diesel,Type,10.0
 Kahone,Senegal,Diesel,Diesel,fuel1,11.0
@@ -5909,20 +5572,6 @@ Kahone,Senegal,Diesel,Diesel,Status,1.0
 Kahone,Senegal,Diesel,Diesel,UnitSize,10.0
 Kahone,Senegal,Diesel,Diesel,CapacityCredit,1.0
 Kahone,Senegal,Diesel,Diesel,Error,32092.960000000003
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,StYr,2026.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,RetrYr,2050.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Zone,12.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,RampUpRate,1.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,RampDnRate,1.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,FOMperMW,40000.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Type,17.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,fuel1,10.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Status,3.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,CapacityCredit,1.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Error,44140.8
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Life,20.0
-Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Capex,0.3
 Eolien sarreole,Senegal,Wind,Wind,StYr,2020.0
 Eolien sarreole,Senegal,Wind,Wind,RetrYr,2050.0
 Eolien sarreole,Senegal,Wind,Wind,Zone,12.0
@@ -5930,7 +5579,6 @@ Eolien sarreole,Senegal,Wind,Wind,Capacity,158.7
 Eolien sarreole,Senegal,Wind,Wind,RampUpRate,1.0
 Eolien sarreole,Senegal,Wind,Wind,RampDnRate,1.0
 Eolien sarreole,Senegal,Wind,Wind,FOMperMW,32000.0
-Eolien sarreole,Senegal,Wind,Wind,BuildLimitperYear,158.7
 Eolien sarreole,Senegal,Wind,Wind,MaxTotalBuild,158.7
 Eolien sarreole,Senegal,Wind,Wind,Type,5.0
 Eolien sarreole,Senegal,Wind,Wind,fuel1,5.0
@@ -5949,7 +5597,6 @@ CICAD_Diamiadio,Senegal,PV,Solar,Capacity,2.0
 CICAD_Diamiadio,Senegal,PV,Solar,RampUpRate,1.0
 CICAD_Diamiadio,Senegal,PV,Solar,RampDnRate,1.0
 CICAD_Diamiadio,Senegal,PV,Solar,FOMperMW,17000.0
-CICAD_Diamiadio,Senegal,PV,Solar,BuildLimitperYear,2.0
 CICAD_Diamiadio,Senegal,PV,Solar,MaxTotalBuild,2.0
 CICAD_Diamiadio,Senegal,PV,Solar,Type,6.0
 CICAD_Diamiadio,Senegal,PV,Solar,fuel1,4.0
@@ -5969,7 +5616,6 @@ CICAD_Diamiadio II,Senegal,PV,Solar,Capacity,2.0
 CICAD_Diamiadio II,Senegal,PV,Solar,RampUpRate,1.0
 CICAD_Diamiadio II,Senegal,PV,Solar,RampDnRate,1.0
 CICAD_Diamiadio II,Senegal,PV,Solar,FOMperMW,17000.0
-CICAD_Diamiadio II,Senegal,PV,Solar,BuildLimitperYear,2.0
 CICAD_Diamiadio II,Senegal,PV,Solar,MaxTotalBuild,2.0
 CICAD_Diamiadio II,Senegal,PV,Solar,Type,6.0
 CICAD_Diamiadio II,Senegal,PV,Solar,fuel1,4.0
@@ -5989,7 +5635,6 @@ Diass,Senegal,PV,Solar,Capacity,23.0
 Diass,Senegal,PV,Solar,RampUpRate,1.0
 Diass,Senegal,PV,Solar,RampDnRate,1.0
 Diass,Senegal,PV,Solar,FOMperMW,17000.0
-Diass,Senegal,PV,Solar,BuildLimitperYear,23.0
 Diass,Senegal,PV,Solar,MaxTotalBuild,23.0
 Diass,Senegal,PV,Solar,Type,6.0
 Diass,Senegal,PV,Solar,fuel1,4.0
@@ -6009,7 +5654,6 @@ Solaire IPP 1,Senegal,PV,Solar,Capacity,201.0
 Solaire IPP 1,Senegal,PV,Solar,RampUpRate,1.0
 Solaire IPP 1,Senegal,PV,Solar,RampDnRate,1.0
 Solaire IPP 1,Senegal,PV,Solar,FOMperMW,17000.0
-Solaire IPP 1,Senegal,PV,Solar,BuildLimitperYear,201.0
 Solaire IPP 1,Senegal,PV,Solar,MaxTotalBuild,201.0
 Solaire IPP 1,Senegal,PV,Solar,Type,6.0
 Solaire IPP 1,Senegal,PV,Solar,fuel1,4.0
@@ -6028,7 +5672,6 @@ Solaire IPP 2,Senegal,PV,Solar,Capacity,28.0
 Solaire IPP 2,Senegal,PV,Solar,RampUpRate,1.0
 Solaire IPP 2,Senegal,PV,Solar,RampDnRate,1.0
 Solaire IPP 2,Senegal,PV,Solar,FOMperMW,17000.0
-Solaire IPP 2,Senegal,PV,Solar,BuildLimitperYear,28.0
 Solaire IPP 2,Senegal,PV,Solar,MaxTotalBuild,28.0
 Solaire IPP 2,Senegal,PV,Solar,Type,6.0
 Solaire IPP 2,Senegal,PV,Solar,fuel1,4.0
@@ -6047,7 +5690,6 @@ Solaire IPP 3,Senegal,PV,Solar,Capacity,303.0
 Solaire IPP 3,Senegal,PV,Solar,RampUpRate,1.0
 Solaire IPP 3,Senegal,PV,Solar,RampDnRate,1.0
 Solaire IPP 3,Senegal,PV,Solar,FOMperMW,17000.0
-Solaire IPP 3,Senegal,PV,Solar,BuildLimitperYear,303.0
 Solaire IPP 3,Senegal,PV,Solar,MaxTotalBuild,303.0
 Solaire IPP 3,Senegal,PV,Solar,Type,6.0
 Solaire IPP 3,Senegal,PV,Solar,fuel1,4.0
@@ -6066,7 +5708,6 @@ Solaire IPP 4,Senegal,PV,Solar,Capacity,30.0
 Solaire IPP 4,Senegal,PV,Solar,RampUpRate,1.0
 Solaire IPP 4,Senegal,PV,Solar,RampDnRate,1.0
 Solaire IPP 4,Senegal,PV,Solar,FOMperMW,17000.0
-Solaire IPP 4,Senegal,PV,Solar,BuildLimitperYear,30.0
 Solaire IPP 4,Senegal,PV,Solar,MaxTotalBuild,30.0
 Solaire IPP 4,Senegal,PV,Solar,Type,6.0
 Solaire IPP 4,Senegal,PV,Solar,fuel1,4.0
@@ -6086,7 +5727,6 @@ FELOU_SEN,Senegal,Water,Hydro,RampUpRate,1.0
 FELOU_SEN,Senegal,Water,Hydro,RampDnRate,1.0
 FELOU_SEN,Senegal,Water,Hydro,ResLimShare,0.4
 FELOU_SEN,Senegal,Water,Hydro,FOMperMW,22667.0
-FELOU_SEN,Senegal,Water,Hydro,BuildLimitperYear,15.0
 FELOU_SEN,Senegal,Water,Hydro,MaxTotalBuild,15.0
 FELOU_SEN,Senegal,Water,Hydro,Type,12.0
 FELOU_SEN,Senegal,Water,Hydro,fuel1,3.0
@@ -6105,7 +5745,6 @@ Gouina_SEN,Senegal,Water,Hydro,RampUpRate,1.0
 Gouina_SEN,Senegal,Water,Hydro,RampDnRate,1.0
 Gouina_SEN,Senegal,Water,Hydro,ResLimShare,0.4
 Gouina_SEN,Senegal,Water,Hydro,FOMperMW,45000.0
-Gouina_SEN,Senegal,Water,Hydro,BuildLimitperYear,45.99
 Gouina_SEN,Senegal,Water,Hydro,MaxTotalBuild,45.99
 Gouina_SEN,Senegal,Water,Hydro,Type,12.0
 Gouina_SEN,Senegal,Water,Hydro,fuel1,3.0
@@ -6116,21 +5755,6 @@ Gouina_SEN,Senegal,Water,Hydro,Error,49334.369999999995
 Gouina_SEN,Senegal,Water,Hydro,Life,50.0
 Gouina_SEN,Senegal,Water,Hydro,RE_Flag,1.0
 Gouina_SEN,Senegal,Water,Hydro,Capex,3.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,StYr,2026.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RetrYr,2074.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Zone,12.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RampUpRate,1.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RampDnRate,1.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,ResLimShare,0.4
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,FOMperMW,42000.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Type,4.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,fuel1,3.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Status,2.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,CapacityCredit,1.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Error,46177.4
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Life,50.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RE_Flag,1.0
-Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Capex,4.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,StYr,2035.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,RetrYr,2076.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,Zone,12.0
@@ -6139,7 +5763,6 @@ Hydro_Koukoutamba,Senegal,Water,Hydro,RampUpRate,1.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,RampDnRate,1.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,ResLimShare,0.4
 Hydro_Koukoutamba,Senegal,Water,Hydro,FOMperMW,42000.0
-Hydro_Koukoutamba,Senegal,Water,Hydro,BuildLimitperYear,70.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,MaxTotalBuild,70.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,Type,4.0
 Hydro_Koukoutamba,Senegal,Water,Hydro,fuel1,3.0
@@ -6158,7 +5781,6 @@ MANANTALI_Sen,Senegal,Water,Hydro,RampUpRate,1.0
 MANANTALI_Sen,Senegal,Water,Hydro,RampDnRate,1.0
 MANANTALI_Sen,Senegal,Water,Hydro,ResLimShare,0.4
 MANANTALI_Sen,Senegal,Water,Hydro,FOMperMW,40000.0
-MANANTALI_Sen,Senegal,Water,Hydro,BuildLimitperYear,60.0
 MANANTALI_Sen,Senegal,Water,Hydro,MaxTotalBuild,60.0
 MANANTALI_Sen,Senegal,Water,Hydro,Type,4.0
 MANANTALI_Sen,Senegal,Water,Hydro,fuel1,3.0
@@ -6177,7 +5799,6 @@ Sambangalou_SEN_IPP,Senegal,Water,Hydro,RampUpRate,1.0
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,RampDnRate,1.0
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,ResLimShare,0.4
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,FOMperMW,42000.0
-Sambangalou_SEN_IPP,Senegal,Water,Hydro,BuildLimitperYear,61.0
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,MaxTotalBuild,61.0
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,Type,4.0
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,fuel1,3.0
@@ -6188,21 +5809,6 @@ Sambangalou_SEN_IPP,Senegal,Water,Hydro,Error,46380.4
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,Life,50.0
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,RE_Flag,1.0
 Sambangalou_SEN_IPP,Senegal,Water,Hydro,Capex,4.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,StYr,2026.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RetrYr,2074.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Zone,12.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RampUpRate,1.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RampDnRate,1.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,ResLimShare,0.4
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,FOMperMW,42000.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Type,4.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,fuel1,3.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Status,2.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,CapacityCredit,1.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Error,46177.4
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Life,50.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RE_Flag,1.0
-Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Capex,4.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,StYr,2018.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,RetrYr,2031.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,Zone,13.0
@@ -6214,7 +5820,6 @@ KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,RampDnRate,1.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,ResLimShare,0.2
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,FOMperMW,17000.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,VOM,9.999999999999998
-KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,BuildLimitperYear,50.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,MaxTotalBuild,50.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,Type,10.0
 KARPOWERSHIP_IC_IPP,SierraLeone,HFO,HFO,fuel1,7.0
@@ -6231,7 +5836,6 @@ BUMBUNA-I_HY,SierraLeone,Water,Hydro,RampUpRate,1.0
 BUMBUNA-I_HY,SierraLeone,Water,Hydro,RampDnRate,1.0
 BUMBUNA-I_HY,SierraLeone,Water,Hydro,ResLimShare,0.2
 BUMBUNA-I_HY,SierraLeone,Water,Hydro,FOMperMW,20844.594196428578
-BUMBUNA-I_HY,SierraLeone,Water,Hydro,BuildLimitperYear,50.0
 BUMBUNA-I_HY,SierraLeone,Water,Hydro,MaxTotalBuild,50.0
 BUMBUNA-I_HY,SierraLeone,Water,Hydro,Type,4.0
 BUMBUNA-I_HY,SierraLeone,Water,Hydro,fuel1,3.0
@@ -6252,7 +5856,6 @@ BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,RampDnRate,1.0
 BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,ResLimShare,0.2
 BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,FOMperMW,17000.0
 BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,VOM,9.999999999999998
-BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,BuildLimitperYear,15.0
 BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,MaxTotalBuild,15.0
 BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,Type,10.0
 BLACKHALL ROAD NEW_IC_HFO,SierraLeone,HFO,HFO,fuel1,7.0
@@ -6270,7 +5873,6 @@ Sunbird Bioenergy,SierraLeone,Biomas,Biomass,HeatRate,13.5
 Sunbird Bioenergy,SierraLeone,Biomas,Biomass,RampUpRate,1.0
 Sunbird Bioenergy,SierraLeone,Biomas,Biomass,RampDnRate,1.0
 Sunbird Bioenergy,SierraLeone,Biomas,Biomass,FOMperMW,136000.0
-Sunbird Bioenergy,SierraLeone,Biomas,Biomass,BuildLimitperYear,46.0
 Sunbird Bioenergy,SierraLeone,Biomas,Biomass,MaxTotalBuild,46.0
 Sunbird Bioenergy,SierraLeone,Biomas,Biomass,Type,13.0
 Sunbird Bioenergy,SierraLeone,Biomas,Biomass,fuel1,13.0
@@ -6352,7 +5954,7 @@ CAND_IC_Diesel,SierraLeone,Diesel,Diesel,fuel1,11.0
 CAND_IC_Diesel,SierraLeone,Diesel,Diesel,Status,3.0
 CAND_IC_Diesel,SierraLeone,Diesel,Diesel,UnitSize,200.0
 CAND_IC_Diesel,SierraLeone,Diesel,Diesel,CapacityCredit,1.0
-CAND_IC_Diesel,SierraLeone,Diesel,Diesel,Error,24864.260000000002
+CAND_IC_Diesel,SierraLeone,Diesel,Diesel,Error,24864.26
 CAND_IC_Diesel,SierraLeone,Diesel,Diesel,Life,30.0
 CAND_IC_Diesel,SierraLeone,Diesel,Diesel,Capex,0.9
 CAND_GT_HFO,SierraLeone,LNG,Gas,StYr,2026.0
@@ -6373,7 +5975,7 @@ CAND_GT_HFO,SierraLeone,LNG,Gas,Status,3.0
 CAND_GT_HFO,SierraLeone,LNG,Gas,HeatRate2,9.9
 CAND_GT_HFO,SierraLeone,LNG,Gas,UnitSize,200.0
 CAND_GT_HFO,SierraLeone,LNG,Gas,CapacityCredit,1.0
-CAND_GT_HFO,SierraLeone,LNG,Gas,Error,31713.010000000002
+CAND_GT_HFO,SierraLeone,LNG,Gas,Error,31713.01
 CAND_GT_HFO,SierraLeone,LNG,Gas,Life,30.0
 CAND_GT_HFO,SierraLeone,LNG,Gas,Capex,0.89
 WND_CAND_22_SIL,SierraLeone,Wind,Wind,StYr,2030.0
@@ -6423,7 +6025,6 @@ ContourGlobal_IPP,Togo,Gas,Gas,RampDnRate,0.9
 ContourGlobal_IPP,Togo,Gas,Gas,ResLimShare,0.2
 ContourGlobal_IPP,Togo,Gas,Gas,FOMperMW,7000.0
 ContourGlobal_IPP,Togo,Gas,Gas,VOM,2.5
-ContourGlobal_IPP,Togo,Gas,Gas,BuildLimitperYear,99.72
 ContourGlobal_IPP,Togo,Gas,Gas,MaxTotalBuild,99.72
 ContourGlobal_IPP,Togo,Gas,Gas,Type,1.0
 ContourGlobal_IPP,Togo,Gas,Gas,fuel1,2.0
@@ -6444,7 +6045,6 @@ Lome2,Togo,Diesel,Diesel,RampDnRate,0.9
 Lome2,Togo,Diesel,Diesel,ResLimShare,0.2
 Lome2,Togo,Diesel,Diesel,FOMperMW,7000.0
 Lome2,Togo,Diesel,Diesel,VOM,2.5
-Lome2,Togo,Diesel,Diesel,BuildLimitperYear,20.0
 Lome2,Togo,Diesel,Diesel,MaxTotalBuild,20.0
 Lome2,Togo,Diesel,Diesel,Type,1.0
 Lome2,Togo,Diesel,Diesel,fuel1,11.0
@@ -6460,7 +6060,6 @@ Nangbeto,Togo,Water,Hydro,RampUpRate,1.0
 Nangbeto,Togo,Water,Hydro,RampDnRate,1.0
 Nangbeto,Togo,Water,Hydro,ResLimShare,0.08
 Nangbeto,Togo,Water,Hydro,FOMperMW,17800.614792029617
-Nangbeto,Togo,Water,Hydro,BuildLimitperYear,65.6
 Nangbeto,Togo,Water,Hydro,MaxTotalBuild,65.6
 Nangbeto,Togo,Water,Hydro,Type,4.0
 Nangbeto,Togo,Water,Hydro,fuel1,3.0
@@ -6480,7 +6079,6 @@ Lome1,Togo,Diesel,Diesel,RampDnRate,1.0
 Lome1,Togo,Diesel,Diesel,ResLimShare,0.2
 Lome1,Togo,Diesel,Diesel,FOMperMW,8000.0
 Lome1,Togo,Diesel,Diesel,VOM,10.0
-Lome1,Togo,Diesel,Diesel,BuildLimitperYear,12.0
 Lome1,Togo,Diesel,Diesel,MaxTotalBuild,12.0
 Lome1,Togo,Diesel,Diesel,Type,10.0
 Lome1,Togo,Diesel,Diesel,fuel1,11.0
@@ -6499,7 +6097,6 @@ Sokod\xe9,Togo,Diesel,Diesel,RampDnRate,1.0
 Sokod\xe9,Togo,Diesel,Diesel,ResLimShare,0.2
 Sokod\xe9,Togo,Diesel,Diesel,FOMperMW,8000.0
 Sokod\xe9,Togo,Diesel,Diesel,VOM,10.0
-Sokod\xe9,Togo,Diesel,Diesel,BuildLimitperYear,4.0
 Sokod\xe9,Togo,Diesel,Diesel,MaxTotalBuild,4.0
 Sokod\xe9,Togo,Diesel,Diesel,Type,10.0
 Sokod\xe9,Togo,Diesel,Diesel,fuel1,11.0
@@ -6514,7 +6111,6 @@ K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,Capacity,65.0
 K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,RampUpRate,1.0
 K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,RampDnRate,1.0
 K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,FOMperMW,17000.0
-K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,BuildLimitperYear,1000.0
 K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,MaxTotalBuild,65.0
 K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,Type,6.0
 K\xe9k\xe9li Thermal Power Station,Togo,PV,Solar,fuel1,4.0
@@ -6533,7 +6129,6 @@ Blitta Solar Power Station,Togo,PV,Solar,Capacity,50.0
 Blitta Solar Power Station,Togo,PV,Solar,RampUpRate,1.0
 Blitta Solar Power Station,Togo,PV,Solar,RampDnRate,1.0
 Blitta Solar Power Station,Togo,PV,Solar,FOMperMW,17000.0
-Blitta Solar Power Station,Togo,PV,Solar,BuildLimitperYear,1000.0
 Blitta Solar Power Station,Togo,PV,Solar,MaxTotalBuild,50.0
 Blitta Solar Power Station,Togo,PV,Solar,Type,6.0
 Blitta Solar Power Station,Togo,PV,Solar,fuel1,4.0
@@ -6555,7 +6150,6 @@ Blitta Solar Power Station,Togo,PV,Solar,RETech,1.0
 250 MW gas-fired combined-cycle power plant,Togo,Gas,Gas,ResLimShare,0.2
 250 MW gas-fired combined-cycle power plant,Togo,Gas,Gas,FOMperMW,26342.72
 250 MW gas-fired combined-cycle power plant,Togo,Gas,Gas,VOM,2.5
-250 MW gas-fired combined-cycle power plant,Togo,Gas,Gas,BuildLimitperYear,200.0
 250 MW gas-fired combined-cycle power plant,Togo,Gas,Gas,MaxTotalBuild,1000.0
 250 MW gas-fired combined-cycle power plant,Togo,Gas,Gas,Type,2.0
 250 MW gas-fired combined-cycle power plant,Togo,Gas,Gas,fuel1,2.0
@@ -6574,7 +6168,6 @@ Sarakawa,Togo,Water,Hydro,RampUpRate,1.0
 Sarakawa,Togo,Water,Hydro,RampDnRate,1.0
 Sarakawa,Togo,Water,Hydro,ResLimShare,0.15
 Sarakawa,Togo,Water,Hydro,FOMperMW,34090.90909090909
-Sarakawa,Togo,Water,Hydro,BuildLimitperYear,24.2
 Sarakawa,Togo,Water,Hydro,MaxTotalBuild,24.2
 Sarakawa,Togo,Water,Hydro,Type,4.0
 Sarakawa,Togo,Water,Hydro,fuel1,3.0
@@ -6796,7 +6389,7 @@ T\xe9t\xe9tou,Togo,Water,Hydro,fuel1,3.0
 T\xe9t\xe9tou,Togo,Water,Hydro,Status,3.0
 T\xe9t\xe9tou,Togo,Water,Hydro,UnitSize,60.0
 T\xe9t\xe9tou,Togo,Water,Hydro,CapacityCredit,1.0
-T\xe9t\xe9tou,Togo,Water,Hydro,Error,47064.712332999996
+T\xe9t\xe9tou,Togo,Water,Hydro,Error,47064.712333
 T\xe9t\xe9tou,Togo,Water,Hydro,Life,50.0
 T\xe9t\xe9tou,Togo,Water,Hydro,RE_Flag,1.0
 T\xe9t\xe9tou,Togo,Water,Hydro,Capex,3.283333
@@ -6903,7 +6496,6 @@ Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,Capacity,50.0
 Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,RampUpRate,1.0
 Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,RampDnRate,1.0
 Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,FOMperMW,17000.0
-Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,BuildLimitperYear,50.0
 Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,MaxTotalBuild,50.0
 Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,Type,6.0
 Nouakchott_Est_Solar,Mauritania_grid,PV,Solar,fuel1,4.0
@@ -6921,7 +6513,6 @@ Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,Capacity,15.0
 Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,RampUpRate,1.0
 Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,RampDnRate,1.0
 Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,FOMperMW,17000.0
-Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,BuildLimitperYear,15.0
 Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,MaxTotalBuild,15.0
 Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,Type,6.0
 Nouakchott_Zayed_Solar,Mauritania_grid,PV,Solar,fuel1,4.0
@@ -6939,7 +6530,6 @@ Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,Capacity,30.0
 Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,RampUpRate,1.0
 Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,RampDnRate,1.0
 Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,FOMperMW,32000.0
-Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,BuildLimitperYear,30.0
 Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,MaxTotalBuild,30.0
 Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,Type,5.0
 Nouakchott_Wind_Plant,Mauritania_grid,Wind,Wind,fuel1,5.0
@@ -6958,7 +6548,6 @@ Boulenouar,Mauritania_grid,Wind,Wind,Capacity,100.0
 Boulenouar,Mauritania_grid,Wind,Wind,RampUpRate,1.0
 Boulenouar,Mauritania_grid,Wind,Wind,RampDnRate,1.0
 Boulenouar,Mauritania_grid,Wind,Wind,FOMperMW,32000.0
-Boulenouar,Mauritania_grid,Wind,Wind,BuildLimitperYear,100.0
 Boulenouar,Mauritania_grid,Wind,Wind,MaxTotalBuild,100.0
 Boulenouar,Mauritania_grid,Wind,Wind,Type,5.0
 Boulenouar,Mauritania_grid,Wind,Wind,fuel1,5.0
@@ -6977,7 +6566,6 @@ Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,Capacity,15.0
 Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,RampUpRate,1.0
 Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,RampDnRate,1.0
 Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,FOMperMW,17000.0
-Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,BuildLimitperYear,15.0
 Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,MaxTotalBuild,15.0
 Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,Type,6.0
 Solaire SNIM (15 MWc),Mauritania_grid,PV,Solar,fuel1,4.0
@@ -6996,7 +6584,6 @@ Boulenouar II,Mauritania_grid,Wind,Wind,Capacity,100.0
 Boulenouar II,Mauritania_grid,Wind,Wind,RampUpRate,1.0
 Boulenouar II,Mauritania_grid,Wind,Wind,RampDnRate,1.0
 Boulenouar II,Mauritania_grid,Wind,Wind,FOMperMW,32000.0
-Boulenouar II,Mauritania_grid,Wind,Wind,BuildLimitperYear,100.0
 Boulenouar II,Mauritania_grid,Wind,Wind,MaxTotalBuild,100.0
 Boulenouar II,Mauritania_grid,Wind,Wind,Type,5.0
 Boulenouar II,Mauritania_grid,Wind,Wind,fuel1,5.0
@@ -7072,15 +6659,14 @@ Projet BESS 2030,Mauritania_grid,Battery,Battery,Capacity,35.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,RampUpRate,1.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,RampDnRate,1.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,ResLimShare,0.5
-Projet BESS 2030,Mauritania_grid,Battery,Battery,FOMperMW,13873.859999999999
-Projet BESS 2030,Mauritania_grid,Battery,Battery,BuildLimitperYear,35.0
+Projet BESS 2030,Mauritania_grid,Battery,Battery,FOMperMW,13873.86
 Projet BESS 2030,Mauritania_grid,Battery,Battery,MaxTotalBuild,35.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,Type,6.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,fuel1,10.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,Status,2.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,UnitSize,35.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,CapacityCredit,1.0
-Projet BESS 2030,Mauritania_grid,Battery,Battery,Error,18111.004485714286
+Projet BESS 2030,Mauritania_grid,Battery,Battery,Error,18111.00448571429
 Projet BESS 2030,Mauritania_grid,Battery,Battery,Life,20.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,RE_Flag,1.0
 Projet BESS 2030,Mauritania_grid,Battery,Battery,Capex,0.6444857142857142
@@ -7172,7 +6758,6 @@ EarlyPower_U2_IPP,Ghana,Gas,Gas,RampDnRate,0.434
 EarlyPower_U2_IPP,Ghana,Gas,Gas,ResLimShare,0.07
 EarlyPower_U2_IPP,Ghana,Gas,Gas,FOMperMW,20420.72
 EarlyPower_U2_IPP,Ghana,Gas,Gas,VOM,1.8
-EarlyPower_U2_IPP,Ghana,Gas,Gas,BuildLimitperYear,300.0
 EarlyPower_U2_IPP,Ghana,Gas,Gas,MaxTotalBuild,300.0
 EarlyPower_U2_IPP,Ghana,Gas,Gas,Type,2.0
 EarlyPower_U2_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -7195,7 +6780,6 @@ TAPCO_T3,Ghana,Gas,Gas,RampDnRate,0.434
 TAPCO_T3,Ghana,Gas,Gas,ResLimShare,0.07
 TAPCO_T3,Ghana,Gas,Gas,FOMperMW,35000.0
 TAPCO_T3,Ghana,Gas,Gas,VOM,2.0
-TAPCO_T3,Ghana,Gas,Gas,BuildLimitperYear,132.0
 TAPCO_T3,Ghana,Gas,Gas,MaxTotalBuild,132.0
 TAPCO_T3,Ghana,Gas,Gas,Type,2.0
 TAPCO_T3,Ghana,Gas,Gas,fuel1,2.0
@@ -7216,7 +6800,6 @@ AMERI_4units_IPP,Ghana,Gas,Gas,RampDnRate,0.9
 AMERI_4units_IPP,Ghana,Gas,Gas,ResLimShare,0.2
 AMERI_4units_IPP,Ghana,Gas,Gas,FOMperMW,7000.0
 AMERI_4units_IPP,Ghana,Gas,Gas,VOM,2.5
-AMERI_4units_IPP,Ghana,Gas,Gas,BuildLimitperYear,100.0
 AMERI_4units_IPP,Ghana,Gas,Gas,MaxTotalBuild,100.0
 AMERI_4units_IPP,Ghana,Gas,Gas,Type,1.0
 AMERI_4units_IPP,Ghana,Gas,Gas,fuel1,2.0
@@ -7231,7 +6814,6 @@ Kaleo,Ghana,PV,Solar,Capacity,13.0
 Kaleo,Ghana,PV,Solar,RampUpRate,1.0
 Kaleo,Ghana,PV,Solar,RampDnRate,1.0
 Kaleo,Ghana,PV,Solar,FOMperMW,17000.0
-Kaleo,Ghana,PV,Solar,BuildLimitperYear,13.0
 Kaleo,Ghana,PV,Solar,MaxTotalBuild,13.0
 Kaleo,Ghana,PV,Solar,Type,6.0
 Kaleo,Ghana,PV,Solar,fuel1,4.0
@@ -7248,7 +6830,6 @@ Lawra,Ghana,PV,Solar,Capacity,6.5
 Lawra,Ghana,PV,Solar,RampUpRate,1.0
 Lawra,Ghana,PV,Solar,RampDnRate,1.0
 Lawra,Ghana,PV,Solar,FOMperMW,17000.0
-Lawra,Ghana,PV,Solar,BuildLimitperYear,6.5
 Lawra,Ghana,PV,Solar,MaxTotalBuild,6.5
 Lawra,Ghana,PV,Solar,Type,6.0
 Lawra,Ghana,PV,Solar,fuel1,4.0
@@ -7265,7 +6846,6 @@ BUI (BXC solar)_IPP,Ghana,PV,Solar,Capacity,50.0
 BUI (BXC solar)_IPP,Ghana,PV,Solar,RampUpRate,1.0
 BUI (BXC solar)_IPP,Ghana,PV,Solar,RampDnRate,1.0
 BUI (BXC solar)_IPP,Ghana,PV,Solar,FOMperMW,17000.0
-BUI (BXC solar)_IPP,Ghana,PV,Solar,BuildLimitperYear,50.0
 BUI (BXC solar)_IPP,Ghana,PV,Solar,MaxTotalBuild,50.0
 BUI (BXC solar)_IPP,Ghana,PV,Solar,Type,6.0
 BUI (BXC solar)_IPP,Ghana,PV,Solar,fuel1,4.0
@@ -7341,7 +6921,6 @@ PV_CAND_Burkina,Burkina,PV,Solar,RETech,1.0
 23 MWp Solar PV,Gambia,PV,Solar,RampUpRate,1.0
 23 MWp Solar PV,Gambia,PV,Solar,RampDnRate,1.0
 23 MWp Solar PV,Gambia,PV,Solar,FOMperMW,17000.0
-23 MWp Solar PV,Gambia,PV,Solar,BuildLimitperYear,1000.0
 23 MWp Solar PV,Gambia,PV,Solar,MaxTotalBuild,18.0
 23 MWp Solar PV,Gambia,PV,Solar,Type,6.0
 23 MWp Solar PV,Gambia,PV,Solar,fuel1,4.0
@@ -7531,7 +7110,7 @@ Storage_CAND_2027_Benin,Benin,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Benin,Benin,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Benin,Benin,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Benin,Benin,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Benin,Benin,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Benin,Benin,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Benin,Benin,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Benin,Benin,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Benin,Benin,Battery,Battery,Type,17.0
@@ -7549,7 +7128,7 @@ Storage_CAND_2027_Burkina,Burkina,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Burkina,Burkina,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Burkina,Burkina,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Burkina,Burkina,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Burkina,Burkina,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Burkina,Burkina,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Burkina,Burkina,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Burkina,Burkina,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Burkina,Burkina,Battery,Battery,Type,17.0
@@ -7567,7 +7146,7 @@ Storage_CAND_2027_Gambia,Gambia,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Gambia,Gambia,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Gambia,Gambia,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Gambia,Gambia,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Gambia,Gambia,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Gambia,Gambia,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Gambia,Gambia,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Gambia,Gambia,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Gambia,Gambia,Battery,Battery,Type,17.0
@@ -7585,7 +7164,7 @@ Storage_CAND_2027_Ghana,Ghana,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Ghana,Ghana,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Ghana,Ghana,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Ghana,Ghana,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Ghana,Ghana,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Ghana,Ghana,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Ghana,Ghana,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Ghana,Ghana,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Ghana,Ghana,Battery,Battery,Type,17.0
@@ -7603,7 +7182,7 @@ Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_GuineaBissau,GuineaBissau,Battery,Battery,Type,17.0
@@ -7621,7 +7200,7 @@ Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_IvoryCoast,IvoryCoast,Battery,Battery,Type,17.0
@@ -7639,7 +7218,7 @@ Storage_CAND_2027_Liberia,Liberia,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Liberia,Liberia,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Liberia,Liberia,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Liberia,Liberia,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Liberia,Liberia,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Liberia,Liberia,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Liberia,Liberia,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Liberia,Liberia,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Liberia,Liberia,Battery,Battery,Type,17.0
@@ -7657,7 +7236,7 @@ Storage_CAND_2027_Mali,Mali,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Mali,Mali,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Mali,Mali,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Mali,Mali,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Mali,Mali,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Mali,Mali,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Mali,Mali,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Mali,Mali,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Mali,Mali,Battery,Battery,Type,17.0
@@ -7675,7 +7254,7 @@ Storage_CAND_2027_Niger,Niger,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Niger,Niger,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Niger,Niger,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Niger,Niger,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Niger,Niger,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Niger,Niger,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Niger,Niger,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Niger,Niger,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Niger,Niger,Battery,Battery,Type,17.0
@@ -7693,7 +7272,7 @@ Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_SierraLeone,SierraLeone,Battery,Battery,Type,17.0
@@ -7711,7 +7290,7 @@ Storage_CAND_2027_Togo,Togo,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Togo,Togo,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Togo,Togo,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Togo,Togo,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Togo,Togo,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Togo,Togo,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Togo,Togo,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Togo,Togo,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Togo,Togo,Battery,Battery,Type,17.0
@@ -7729,7 +7308,7 @@ Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,Capacity,30000
 Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Mauritania_grid,Mauritania_grid,Battery,Battery,Type,17.0
@@ -7757,7 +7336,7 @@ HFO_NEW_Burkina,Burkina,HFO,HFO,fuel1,7.0
 HFO_NEW_Burkina,Burkina,HFO,HFO,Status,3.0
 HFO_NEW_Burkina,Burkina,HFO,HFO,UnitSize,200.0
 HFO_NEW_Burkina,Burkina,HFO,HFO,CapacityCredit,1.0
-HFO_NEW_Burkina,Burkina,HFO,HFO,Error,31681.260000000002
+HFO_NEW_Burkina,Burkina,HFO,HFO,Error,31681.26
 HFO_NEW_Burkina,Burkina,HFO,HFO,Life,30.0
 HFO_NEW_Burkina,Burkina,HFO,HFO,Capex,0.89
 8MWh_4h_Gambia,Gambia,Battery,Battery,StYr,2024.0
@@ -7767,15 +7346,14 @@ HFO_NEW_Burkina,Burkina,HFO,HFO,Capex,0.89
 8MWh_4h_Gambia,Gambia,Battery,Battery,RampUpRate,1.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,RampDnRate,1.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,ResLimShare,0.5
-8MWh_4h_Gambia,Gambia,Battery,Battery,FOMperMW,13873.859999999999
-8MWh_4h_Gambia,Gambia,Battery,Battery,BuildLimitperYear,1000.0
+8MWh_4h_Gambia,Gambia,Battery,Battery,FOMperMW,13873.86
 8MWh_4h_Gambia,Gambia,Battery,Battery,MaxTotalBuild,2.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,Type,17.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,fuel1,10.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,Status,1.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,UnitSize,2.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,CapacityCredit,1.0
-8MWh_4h_Gambia,Gambia,Battery,Battery,Error,19005.760000000002
+8MWh_4h_Gambia,Gambia,Battery,Battery,Error,19005.76
 8MWh_4h_Gambia,Gambia,Battery,Battery,Life,20.0
 8MWh_4h_Gambia,Gambia,Battery,Battery,Capex,0.4
 HFO_NEW_Gambia,Gambia,HFO,HFO,StYr,2026.0
@@ -7795,7 +7373,7 @@ HFO_NEW_Gambia,Gambia,HFO,HFO,fuel1,7.0
 HFO_NEW_Gambia,Gambia,HFO,HFO,Status,3.0
 HFO_NEW_Gambia,Gambia,HFO,HFO,UnitSize,200.0
 HFO_NEW_Gambia,Gambia,HFO,HFO,CapacityCredit,1.0
-HFO_NEW_Gambia,Gambia,HFO,HFO,Error,31682.260000000002
+HFO_NEW_Gambia,Gambia,HFO,HFO,Error,31682.26
 HFO_NEW_Gambia,Gambia,HFO,HFO,Life,30.0
 HFO_NEW_Gambia,Gambia,HFO,HFO,Capex,0.89
 HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,StYr,2026.0
@@ -7815,7 +7393,7 @@ HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,fuel1,7.0
 HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,Status,3.0
 HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,UnitSize,200.0
 HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,CapacityCredit,1.0
-HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,Error,31685.260000000002
+HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,Error,31685.26
 HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,Life,30.0
 HFO_NEW_GuineaBissau,GuineaBissau,HFO,HFO,Capex,0.89
 HFO_NEW_Liberia,Liberia,HFO,HFO,StYr,2026.0
@@ -7835,7 +7413,7 @@ HFO_NEW_Liberia,Liberia,HFO,HFO,fuel1,7.0
 HFO_NEW_Liberia,Liberia,HFO,HFO,Status,3.0
 HFO_NEW_Liberia,Liberia,HFO,HFO,UnitSize,200.0
 HFO_NEW_Liberia,Liberia,HFO,HFO,CapacityCredit,1.0
-HFO_NEW_Liberia,Liberia,HFO,HFO,Error,32687.260000000002
+HFO_NEW_Liberia,Liberia,HFO,HFO,Error,32687.26
 HFO_NEW_Liberia,Liberia,HFO,HFO,Life,30.0
 HFO_NEW_Liberia,Liberia,HFO,HFO,Capex,0.89
 HFO_NEW_Niger,Niger,HFO,HFO,StYr,2026.0
@@ -7855,7 +7433,7 @@ HFO_NEW_Niger,Niger,HFO,HFO,fuel1,7.0
 HFO_NEW_Niger,Niger,HFO,HFO,Status,3.0
 HFO_NEW_Niger,Niger,HFO,HFO,UnitSize,200.0
 HFO_NEW_Niger,Niger,HFO,HFO,CapacityCredit,1.0
-HFO_NEW_Niger,Niger,HFO,HFO,Error,31689.260000000002
+HFO_NEW_Niger,Niger,HFO,HFO,Error,31689.26
 HFO_NEW_Niger,Niger,HFO,HFO,Life,30.0
 HFO_NEW_Niger,Niger,HFO,HFO,Capex,0.89
 HFO_NEW_SierraLeone,SierraLeone,HFO,HFO,StYr,2026.0
@@ -7888,7 +7466,6 @@ DELTA,Nigeria,Gas,Gas,RampDnRate,0.9
 DELTA,Nigeria,Gas,Gas,ResLimShare,0.2
 DELTA,Nigeria,Gas,Gas,FOMperMW,7000.0
 DELTA,Nigeria,Gas,Gas,VOM,2.5
-DELTA,Nigeria,Gas,Gas,BuildLimitperYear,534.0
 DELTA,Nigeria,Gas,Gas,MaxTotalBuild,534.0
 DELTA,Nigeria,Gas,Gas,Type,1.0
 DELTA,Nigeria,Gas,Gas,fuel1,2.0
@@ -7908,7 +7485,6 @@ EGBIN,Nigeria,Gas,Gas,RampDnRate,0.6
 EGBIN,Nigeria,Gas,Gas,ResLimShare,0.1
 EGBIN,Nigeria,Gas,Gas,FOMperMW,31700.0
 EGBIN,Nigeria,Gas,Gas,VOM,5.3
-EGBIN,Nigeria,Gas,Gas,BuildLimitperYear,844.5
 EGBIN,Nigeria,Gas,Gas,MaxTotalBuild,844.5
 EGBIN,Nigeria,Gas,Gas,Type,13.0
 EGBIN,Nigeria,Gas,Gas,fuel1,2.0
@@ -7928,7 +7504,6 @@ GEREGU TTP,Nigeria,Gas,Gas,RampDnRate,0.9
 GEREGU TTP,Nigeria,Gas,Gas,ResLimShare,0.2
 GEREGU TTP,Nigeria,Gas,Gas,FOMperMW,7000.0
 GEREGU TTP,Nigeria,Gas,Gas,VOM,2.5
-GEREGU TTP,Nigeria,Gas,Gas,BuildLimitperYear,349.5
 GEREGU TTP,Nigeria,Gas,Gas,MaxTotalBuild,349.5
 GEREGU TTP,Nigeria,Gas,Gas,Type,1.0
 GEREGU TTP,Nigeria,Gas,Gas,fuel1,2.0
@@ -7948,14 +7523,13 @@ OKPAI TTP,Nigeria,Gas,Gas,RampDnRate,0.434
 OKPAI TTP,Nigeria,Gas,Gas,ResLimShare,0.07
 OKPAI TTP,Nigeria,Gas,Gas,FOMperMW,35000.0
 OKPAI TTP,Nigeria,Gas,Gas,VOM,2.0
-OKPAI TTP,Nigeria,Gas,Gas,BuildLimitperYear,394.5
 OKPAI TTP,Nigeria,Gas,Gas,MaxTotalBuild,394.5
 OKPAI TTP,Nigeria,Gas,Gas,Type,2.0
 OKPAI TTP,Nigeria,Gas,Gas,fuel1,2.0
 OKPAI TTP,Nigeria,Gas,Gas,Status,1.0
 OKPAI TTP,Nigeria,Gas,Gas,UnitSize,394.5
 OKPAI TTP,Nigeria,Gas,Gas,CapacityCredit,1.0
-OKPAI TTP,Nigeria,Gas,Gas,Error,40269.304000000004
+OKPAI TTP,Nigeria,Gas,Gas,Error,40269.304
 OKPAI TTP,Nigeria,Gas,Gas,OverLoadFactor,-0.2
 Alaoji TPP,Nigeria,Gas,Gas,StYr,2015.0
 Alaoji TPP,Nigeria,Gas,Gas,RetrYr,2043.0
@@ -7968,7 +7542,6 @@ Alaoji TPP,Nigeria,Gas,Gas,RampDnRate,0.434
 Alaoji TPP,Nigeria,Gas,Gas,ResLimShare,0.07
 Alaoji TPP,Nigeria,Gas,Gas,FOMperMW,35000.0
 Alaoji TPP,Nigeria,Gas,Gas,VOM,2.0
-Alaoji TPP,Nigeria,Gas,Gas,BuildLimitperYear,10.5
 Alaoji TPP,Nigeria,Gas,Gas,MaxTotalBuild,10.5
 Alaoji TPP,Nigeria,Gas,Gas,Type,1.0
 Alaoji TPP,Nigeria,Gas,Gas,fuel1,2.0
@@ -7988,7 +7561,6 @@ Ibom TPP,Nigeria,Gas,Gas,RampDnRate,0.9
 Ibom TPP,Nigeria,Gas,Gas,ResLimShare,0.2
 Ibom TPP,Nigeria,Gas,Gas,FOMperMW,7000.0
 Ibom TPP,Nigeria,Gas,Gas,VOM,2.5
-Ibom TPP,Nigeria,Gas,Gas,BuildLimitperYear,60.0
 Ibom TPP,Nigeria,Gas,Gas,MaxTotalBuild,60.0
 Ibom TPP,Nigeria,Gas,Gas,Type,1.0
 Ibom TPP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8005,7 +7577,6 @@ JEBBA_North,Nigeria,Water,Hydro,RampUpRate,1.0
 JEBBA_North,Nigeria,Water,Hydro,RampDnRate,1.0
 JEBBA_North,Nigeria,Water,Hydro,ResLimShare,0.2
 JEBBA_North,Nigeria,Water,Hydro,FOMperMW,19810.05858272163
-JEBBA_North,Nigeria,Water,Hydro,BuildLimitperYear,404.4
 JEBBA_North,Nigeria,Water,Hydro,MaxTotalBuild,404.4
 JEBBA_North,Nigeria,Water,Hydro,Type,4.0
 JEBBA_North,Nigeria,Water,Hydro,fuel1,3.0
@@ -8022,7 +7593,6 @@ KAINJI_North,Nigeria,Water,Hydro,RampUpRate,1.0
 KAINJI_North,Nigeria,Water,Hydro,RampDnRate,1.0
 KAINJI_North,Nigeria,Water,Hydro,ResLimShare,0.15
 KAINJI_North,Nigeria,Water,Hydro,FOMperMW,18762.046522556393
-KAINJI_North,Nigeria,Water,Hydro,BuildLimitperYear,582.0
 KAINJI_North,Nigeria,Water,Hydro,MaxTotalBuild,582.0
 KAINJI_North,Nigeria,Water,Hydro,Type,4.0
 KAINJI_North,Nigeria,Water,Hydro,fuel1,3.0
@@ -8042,7 +7612,6 @@ IHOVBOR NIP,Nigeria,Gas,Gas,RampDnRate,0.434
 IHOVBOR NIP,Nigeria,Gas,Gas,ResLimShare,0.07
 IHOVBOR NIP,Nigeria,Gas,Gas,FOMperMW,35000.0
 IHOVBOR NIP,Nigeria,Gas,Gas,VOM,2.0
-IHOVBOR NIP,Nigeria,Gas,Gas,BuildLimitperYear,50.0
 IHOVBOR NIP,Nigeria,Gas,Gas,MaxTotalBuild,50.0
 IHOVBOR NIP,Nigeria,Gas,Gas,Type,1.0
 IHOVBOR NIP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8062,7 +7631,6 @@ Olorunsogo I TPP,Nigeria,Gas,Gas,RampDnRate,0.434
 Olorunsogo I TPP,Nigeria,Gas,Gas,ResLimShare,0.07
 Olorunsogo I TPP,Nigeria,Gas,Gas,FOMperMW,35000.0
 Olorunsogo I TPP,Nigeria,Gas,Gas,VOM,2.0
-Olorunsogo I TPP,Nigeria,Gas,Gas,BuildLimitperYear,141.0
 Olorunsogo I TPP,Nigeria,Gas,Gas,MaxTotalBuild,141.0
 Olorunsogo I TPP,Nigeria,Gas,Gas,Type,2.0
 Olorunsogo I TPP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8082,7 +7650,6 @@ Omoku TPP,Nigeria,Gas,Gas,RampDnRate,0.9
 Omoku TPP,Nigeria,Gas,Gas,ResLimShare,0.2
 Omoku TPP,Nigeria,Gas,Gas,FOMperMW,7000.0
 Omoku TPP,Nigeria,Gas,Gas,VOM,2.5
-Omoku TPP,Nigeria,Gas,Gas,BuildLimitperYear,67.5
 Omoku TPP,Nigeria,Gas,Gas,MaxTotalBuild,67.5
 Omoku TPP,Nigeria,Gas,Gas,Type,1.0
 Omoku TPP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8102,7 +7669,6 @@ OMOTOSHO TTP,Nigeria,Gas,Gas,RampDnRate,0.9
 OMOTOSHO TTP,Nigeria,Gas,Gas,ResLimShare,0.2
 OMOTOSHO TTP,Nigeria,Gas,Gas,FOMperMW,7000.0
 OMOTOSHO TTP,Nigeria,Gas,Gas,VOM,2.5
-OMOTOSHO TTP,Nigeria,Gas,Gas,BuildLimitperYear,300.0
 OMOTOSHO TTP,Nigeria,Gas,Gas,MaxTotalBuild,300.0
 OMOTOSHO TTP,Nigeria,Gas,Gas,Type,1.0
 OMOTOSHO TTP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8122,7 +7688,6 @@ RIVERS IPP TTP,Nigeria,Gas,Gas,RampDnRate,0.9
 RIVERS IPP TTP,Nigeria,Gas,Gas,ResLimShare,0.2
 RIVERS IPP TTP,Nigeria,Gas,Gas,FOMperMW,7000.0
 RIVERS IPP TTP,Nigeria,Gas,Gas,VOM,2.5
-RIVERS IPP TTP,Nigeria,Gas,Gas,BuildLimitperYear,93.0
 RIVERS IPP TTP,Nigeria,Gas,Gas,MaxTotalBuild,93.0
 RIVERS IPP TTP,Nigeria,Gas,Gas,Type,1.0
 RIVERS IPP TTP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8142,7 +7707,6 @@ Sapele TPP,Nigeria,Gas,Gas,RampDnRate,0.9
 Sapele TPP,Nigeria,Gas,Gas,ResLimShare,0.2
 Sapele TPP,Nigeria,Gas,Gas,FOMperMW,7000.0
 Sapele TPP,Nigeria,Gas,Gas,VOM,2.5
-Sapele TPP,Nigeria,Gas,Gas,BuildLimitperYear,270.0
 Sapele TPP,Nigeria,Gas,Gas,MaxTotalBuild,270.0
 Sapele TPP,Nigeria,Gas,Gas,Type,1.0
 Sapele TPP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8159,7 +7723,6 @@ SHIRORO_North,Nigeria,Water,Hydro,RampUpRate,1.0
 SHIRORO_North,Nigeria,Water,Hydro,RampDnRate,1.0
 SHIRORO_North,Nigeria,Water,Hydro,ResLimShare,0.2
 SHIRORO_North,Nigeria,Water,Hydro,FOMperMW,20423.098611111116
-SHIRORO_North,Nigeria,Water,Hydro,BuildLimitperYear,427.5
 SHIRORO_North,Nigeria,Water,Hydro,MaxTotalBuild,427.5
 SHIRORO_North,Nigeria,Water,Hydro,Type,4.0
 SHIRORO_North,Nigeria,Water,Hydro,fuel1,3.0
@@ -8179,7 +7742,6 @@ TRANSAMADI,Nigeria,Gas,Gas,RampDnRate,0.9
 TRANSAMADI,Nigeria,Gas,Gas,ResLimShare,0.2
 TRANSAMADI,Nigeria,Gas,Gas,FOMperMW,7000.0
 TRANSAMADI,Nigeria,Gas,Gas,VOM,2.5
-TRANSAMADI,Nigeria,Gas,Gas,BuildLimitperYear,58.5
 TRANSAMADI,Nigeria,Gas,Gas,MaxTotalBuild,58.5
 TRANSAMADI,Nigeria,Gas,Gas,Type,1.0
 TRANSAMADI,Nigeria,Gas,Gas,fuel1,2.0
@@ -8199,14 +7761,13 @@ Azura-Edo IPP,Nigeria,Gas,Gas,RampDnRate,0.9
 Azura-Edo IPP,Nigeria,Gas,Gas,ResLimShare,0.2
 Azura-Edo IPP,Nigeria,Gas,Gas,FOMperMW,7000.0
 Azura-Edo IPP,Nigeria,Gas,Gas,VOM,2.5
-Azura-Edo IPP,Nigeria,Gas,Gas,BuildLimitperYear,368.0
 Azura-Edo IPP,Nigeria,Gas,Gas,MaxTotalBuild,368.0
 Azura-Edo IPP,Nigeria,Gas,Gas,Type,1.0
 Azura-Edo IPP,Nigeria,Gas,Gas,fuel1,2.0
 Azura-Edo IPP,Nigeria,Gas,Gas,Status,1.0
 Azura-Edo IPP,Nigeria,Gas,Gas,UnitSize,368.0
 Azura-Edo IPP,Nigeria,Gas,Gas,CapacityCredit,1.0
-Azura-Edo IPP,Nigeria,Gas,Gas,Error,12199.650000000001
+Azura-Edo IPP,Nigeria,Gas,Gas,Error,12199.65
 Azura-Edo IPP,Nigeria,Gas,Gas,OverLoadFactor,-0.2
 CALABAR/Odukpami,Nigeria,Gas,Gas,StYr,2015.0
 CALABAR/Odukpami,Nigeria,Gas,Gas,RetrYr,2059.0
@@ -8219,7 +7780,6 @@ CALABAR/Odukpami,Nigeria,Gas,Gas,RampDnRate,0.9
 CALABAR/Odukpami,Nigeria,Gas,Gas,ResLimShare,0.1
 CALABAR/Odukpami,Nigeria,Gas,Gas,FOMperMW,26342.72
 CALABAR/Odukpami,Nigeria,Gas,Gas,VOM,2.5
-CALABAR/Odukpami,Nigeria,Gas,Gas,BuildLimitperYear,361.5
 CALABAR/Odukpami,Nigeria,Gas,Gas,MaxTotalBuild,361.5
 CALABAR/Odukpami,Nigeria,Gas,Gas,Type,1.0
 CALABAR/Odukpami,Nigeria,Gas,Gas,fuel1,2.0
@@ -8241,7 +7801,6 @@ AFAM TTP,Nigeria,Gas,Gas,RampDnRate,0.9
 AFAM TTP,Nigeria,Gas,Gas,ResLimShare,0.2
 AFAM TTP,Nigeria,Gas,Gas,FOMperMW,7000.0
 AFAM TTP,Nigeria,Gas,Gas,VOM,2.5
-AFAM TTP,Nigeria,Gas,Gas,BuildLimitperYear,586.5
 AFAM TTP,Nigeria,Gas,Gas,MaxTotalBuild,586.5
 AFAM TTP,Nigeria,Gas,Gas,Type,2.0
 AFAM TTP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8253,17 +7812,16 @@ AFAM TTP,Nigeria,Gas,Gas,OverLoadFactor,-0.2
 Dadin Mando,Nigeria,Water,Hydro,StYr,2023.0
 Dadin Mando,Nigeria,Water,Hydro,RetrYr,2060.0
 Dadin Mando,Nigeria,Water,Hydro,Zone,11.0
-Dadin Mando,Nigeria,Water,Hydro,Capacity,27.599999999999998
+Dadin Mando,Nigeria,Water,Hydro,Capacity,27.6
 Dadin Mando,Nigeria,Water,Hydro,RampUpRate,1.0
 Dadin Mando,Nigeria,Water,Hydro,RampDnRate,1.0
-Dadin Mando,Nigeria,Water,Hydro,ResLimShare,0.18333333333333335
+Dadin Mando,Nigeria,Water,Hydro,ResLimShare,0.1833333333333333
 Dadin Mando,Nigeria,Water,Hydro,FOMperMW,19665.067905463045
-Dadin Mando,Nigeria,Water,Hydro,BuildLimitperYear,27.599999999999998
-Dadin Mando,Nigeria,Water,Hydro,MaxTotalBuild,27.599999999999998
+Dadin Mando,Nigeria,Water,Hydro,MaxTotalBuild,27.6
 Dadin Mando,Nigeria,Water,Hydro,Type,4.0
 Dadin Mando,Nigeria,Water,Hydro,fuel1,3.0
 Dadin Mando,Nigeria,Water,Hydro,Status,1.0
-Dadin Mando,Nigeria,Water,Hydro,UnitSize,27.599999999999998
+Dadin Mando,Nigeria,Water,Hydro,UnitSize,27.6
 Dadin Mando,Nigeria,Water,Hydro,CapacityCredit,1.0
 Dadin Mando,Nigeria,Water,Hydro,Error,23852.051238796375
 Dadin Mando,Nigeria,Water,Hydro,RE_Flag,1.0
@@ -8278,7 +7836,6 @@ EGBIN_Part2,Nigeria,Gas,Gas,RampDnRate,0.6
 EGBIN_Part2,Nigeria,Gas,Gas,ResLimShare,0.1
 EGBIN_Part2,Nigeria,Gas,Gas,FOMperMW,31700.0
 EGBIN_Part2,Nigeria,Gas,Gas,VOM,5.3
-EGBIN_Part2,Nigeria,Gas,Gas,BuildLimitperYear,757.0
 EGBIN_Part2,Nigeria,Gas,Gas,MaxTotalBuild,757.0
 EGBIN_Part2,Nigeria,Gas,Gas,Type,13.0
 EGBIN_Part2,Nigeria,Gas,Gas,fuel1,2.0
@@ -8295,7 +7852,6 @@ KAINJI_North_Part2,Nigeria,Water,Hydro,RampUpRate,1.0
 KAINJI_North_Part2,Nigeria,Water,Hydro,RampDnRate,1.0
 KAINJI_North_Part2,Nigeria,Water,Hydro,ResLimShare,0.15
 KAINJI_North_Part2,Nigeria,Water,Hydro,FOMperMW,18762.046522556393
-KAINJI_North_Part2,Nigeria,Water,Hydro,BuildLimitperYear,372.0
 KAINJI_North_Part2,Nigeria,Water,Hydro,MaxTotalBuild,372.0
 KAINJI_North_Part2,Nigeria,Water,Hydro,Type,4.0
 KAINJI_North_Part2,Nigeria,Water,Hydro,fuel1,3.0
@@ -8315,7 +7871,6 @@ Olorunsogo NIPP,Nigeria,Gas,Gas,RampDnRate,0.434
 Olorunsogo NIPP,Nigeria,Gas,Gas,ResLimShare,0.07
 Olorunsogo NIPP,Nigeria,Gas,Gas,FOMperMW,35000.0
 Olorunsogo NIPP,Nigeria,Gas,Gas,VOM,2.0
-Olorunsogo NIPP,Nigeria,Gas,Gas,BuildLimitperYear,28.0
 Olorunsogo NIPP,Nigeria,Gas,Gas,MaxTotalBuild,28.0
 Olorunsogo NIPP,Nigeria,Gas,Gas,Type,2.0
 Olorunsogo NIPP,Nigeria,Gas,Gas,fuel1,2.0
@@ -8335,7 +7890,6 @@ CALABAR_Part2,Nigeria,Gas,Gas,RampDnRate,0.9
 CALABAR_Part2,Nigeria,Gas,Gas,ResLimShare,0.1
 CALABAR_Part2,Nigeria,Gas,Gas,FOMperMW,26342.72
 CALABAR_Part2,Nigeria,Gas,Gas,VOM,2.5
-CALABAR_Part2,Nigeria,Gas,Gas,BuildLimitperYear,384.0
 CALABAR_Part2,Nigeria,Gas,Gas,MaxTotalBuild,384.0
 CALABAR_Part2,Nigeria,Gas,Gas,Type,1.0
 CALABAR_Part2,Nigeria,Gas,Gas,fuel1,2.0
@@ -8357,7 +7911,6 @@ AFAM TTP_Part2,Nigeria,Gas,Gas,RampDnRate,0.9
 AFAM TTP_Part2,Nigeria,Gas,Gas,ResLimShare,0.2
 AFAM TTP_Part2,Nigeria,Gas,Gas,FOMperMW,7000.0
 AFAM TTP_Part2,Nigeria,Gas,Gas,VOM,2.5
-AFAM TTP_Part2,Nigeria,Gas,Gas,BuildLimitperYear,1031.0
 AFAM TTP_Part2,Nigeria,Gas,Gas,MaxTotalBuild,1031.0
 AFAM TTP_Part2,Nigeria,Gas,Gas,Type,2.0
 AFAM TTP_Part2,Nigeria,Gas,Gas,fuel1,2.0
@@ -8545,7 +8098,7 @@ Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,Capacity,30000.0
 Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,RampUpRate,1.0
 Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,RampDnRate,1.0
 Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,ResLimShare,0.5
-Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,FOMperMW,13873.859999999999
+Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,FOMperMW,13873.86
 Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,BuildLimitperYear,1000.0
 Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,MaxTotalBuild,30000.0
 Storage_CAND_2027_Nigeria,Nigeria,Battery,Battery,Type,17.0
@@ -8563,7 +8116,6 @@ Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,Capacity,38.0
 Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,RampUpRate,1.0
 Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,RampDnRate,1.0
 Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,FOMperMW,17000.0
-Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,BuildLimitperYear,30.0
 Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,MaxTotalBuild,30.0
 Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,Type,6.0
 Centrale Solaire de Boundiali Phase 1,IvoryCoast,PV,Solar,fuel1,4.0
@@ -8703,7 +8255,7 @@ Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,fuel1,4.0
 Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,Status,3.0
 Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,UnitSize,38.4
 Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,CapacityCredit,1.0
-Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,Error,21278.170000000006
+Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,Error,21278.17000000001
 Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,Life,25.0
 Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,RE_Flag,1.0
 Centrale Solaire de Touba \x96 SCALING SOLAR,IvoryCoast,PV,Solar,Capex,0.97
@@ -8852,14 +8404,13 @@ Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,BuildLimitperYear,180.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,MaxTotalBuild,180.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,Type,10.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,fuel1,7.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,Status,1.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,UnitSize,180.0
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,Error,21656.010000000002
+Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,Error,21656.01
 Nouakchott_Dual_Power,Mauritania_grid,HFO,HFO,DescreteCap,1.0
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,StYr,2012.0
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,RetrYr,2042.0
@@ -8872,7 +8423,6 @@ Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,BuildLimitperYear,20.0
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,MaxTotalBuild,20.0
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,Type,10.0
 Nouakchott_Wharf_Plant,Mauritania_grid,HFO,HFO,fuel1,7.0
@@ -8891,7 +8441,6 @@ Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,BuildLimitperYear,35.0
 Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,MaxTotalBuild,35.0
 Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,Type,10.0
 Nouadhibou_New_Plant,Mauritania_grid,HFO,HFO,fuel1,7.0
@@ -8910,7 +8459,6 @@ Beni Naji,Mauritania_grid,Diesel,Diesel,RampDnRate,1.0
 Beni Naji,Mauritania_grid,Diesel,Diesel,ResLimShare,0.2
 Beni Naji,Mauritania_grid,Diesel,Diesel,FOMperMW,8000.0
 Beni Naji,Mauritania_grid,Diesel,Diesel,VOM,10.0
-Beni Naji,Mauritania_grid,Diesel,Diesel,BuildLimitperYear,4.5
 Beni Naji,Mauritania_grid,Diesel,Diesel,MaxTotalBuild,4.5
 Beni Naji,Mauritania_grid,Diesel,Diesel,Type,10.0
 Beni Naji,Mauritania_grid,Diesel,Diesel,fuel1,11.0
@@ -8929,14 +8477,13 @@ Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,BuildLimitperYear,14.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,MaxTotalBuild,14.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,Type,10.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,fuel1,7.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,Status,1.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,UnitSize,14.0
 Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,Error,21171.010000000002
+Arafat Rehab (2 gr),Mauritania_grid,HFO,HFO,Error,21171.01
 GTA_MAU,Mauritania_grid,Gas,Gas,StYr,2027.0
 GTA_MAU,Mauritania_grid,Gas,Gas,RetrYr,2055.0
 GTA_MAU,Mauritania_grid,Gas,Gas,Zone,15.0
@@ -8954,7 +8501,7 @@ GTA_MAU,Mauritania_grid,Gas,Gas,fuel1,2.0
 GTA_MAU,Mauritania_grid,Gas,Gas,Status,3.0
 GTA_MAU,Mauritania_grid,Gas,Gas,UnitSize,225.0
 GTA_MAU,Mauritania_grid,Gas,Gas,CapacityCredit,1.0
-GTA_MAU,Mauritania_grid,Gas,Gas,Error,31160.760000000002
+GTA_MAU,Mauritania_grid,Gas,Gas,Error,31160.76
 GTA_MAU,Mauritania_grid,Gas,Gas,Life,25.0
 GTA_MAU,Mauritania_grid,Gas,Gas,Capex,0.89
 DUALE Gaz,Mauritania_grid,HFO,HFO,StYr,2025.0
@@ -8990,14 +8537,13 @@ SNIM Zouerate,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 SNIM Zouerate,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 SNIM Zouerate,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 SNIM Zouerate,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-SNIM Zouerate,Mauritania_grid,HFO,HFO,BuildLimitperYear,128.1
 SNIM Zouerate,Mauritania_grid,HFO,HFO,MaxTotalBuild,128.1
 SNIM Zouerate,Mauritania_grid,HFO,HFO,Type,10.0
 SNIM Zouerate,Mauritania_grid,HFO,HFO,fuel1,7.0
 SNIM Zouerate,Mauritania_grid,HFO,HFO,Status,1.0
 SNIM Zouerate,Mauritania_grid,HFO,HFO,UnitSize,128.1
 SNIM Zouerate,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-SNIM Zouerate,Mauritania_grid,HFO,HFO,Error,21513.309999999998
+SNIM Zouerate,Mauritania_grid,HFO,HFO,Error,21513.31
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,StYr,2024.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,RetrYr,2050.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,Zone,15.0
@@ -9009,14 +8555,13 @@ Reserve Akjoujt,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Reserve Akjoujt,Mauritania_grid,HFO,HFO,BuildLimitperYear,40.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,MaxTotalBuild,40.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,Type,10.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,fuel1,7.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,Status,1.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,UnitSize,40.0
 Reserve Akjoujt,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Reserve Akjoujt,Mauritania_grid,HFO,HFO,Error,21249.010000000002
+Reserve Akjoujt,Mauritania_grid,HFO,HFO,Error,21249.01
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,StYr,2023.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,RetrYr,2050.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,Zone,15.0
@@ -9028,14 +8573,13 @@ Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,BuildLimitperYear,50.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,MaxTotalBuild,50.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,Type,10.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,fuel1,7.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,Status,1.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,UnitSize,50.0
 Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,Error,21278.010000000002
+Centrale d'appoint 2023,Mauritania_grid,HFO,HFO,Error,21278.01
 Rehab Wharf,Mauritania_grid,HFO,HFO,StYr,2024.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,RetrYr,2050.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,Zone,15.0
@@ -9047,14 +8591,13 @@ Rehab Wharf,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Rehab Wharf,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Rehab Wharf,Mauritania_grid,HFO,HFO,BuildLimitperYear,16.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,MaxTotalBuild,16.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,Type,10.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,fuel1,7.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,Status,1.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,UnitSize,16.0
 Rehab Wharf,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Rehab Wharf,Mauritania_grid,HFO,HFO,Error,21177.010000000002
+Rehab Wharf,Mauritania_grid,HFO,HFO,Error,21177.01
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,StYr,2024.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,RetrYr,2050.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,Zone,15.0
@@ -9066,14 +8609,13 @@ Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,BuildLimitperYear,56.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,MaxTotalBuild,56.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,Type,10.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,fuel1,7.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,Status,1.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,UnitSize,56.0
 Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,Error,21297.010000000002
+Groupes supplementaires HFO,Mauritania_grid,HFO,HFO,Error,21297.01
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,StYr,2024.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,RetrYr,2050.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,Zone,15.0
@@ -9085,14 +8627,13 @@ Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,RampDnRate,1.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,ResLimShare,0.2
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,FOMperMW,17000.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,VOM,9.999999999999998
-Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,BuildLimitperYear,28.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,MaxTotalBuild,28.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,Type,10.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,fuel1,7.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,Status,1.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,UnitSize,28.0
 Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,Error,21213.010000000002
+Rehab Arafat 4 gr,Mauritania_grid,HFO,HFO,Error,21213.01
 Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,StYr,2027.0
 Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,RetrYr,2050.0
 Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,Zone,15.0
@@ -9111,7 +8652,7 @@ Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,fuel1,7.0
 Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,Status,3.0
 Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,UnitSize,56.0
 Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,CapacityCredit,1.0
-Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,Error,21302.010000000002
+Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,Error,21302.01
 Groupes supplementaires Gaz,Mauritania_grid,HFO,HFO,Capex,1e-22
 Felou_MAU,Mauritania_grid,Water,Hydro,StYr,2013.0
 Felou_MAU,Mauritania_grid,Water,Hydro,RetrYr,2063.0
@@ -9121,7 +8662,6 @@ Felou_MAU,Mauritania_grid,Water,Hydro,RampUpRate,1.0
 Felou_MAU,Mauritania_grid,Water,Hydro,RampDnRate,1.0
 Felou_MAU,Mauritania_grid,Water,Hydro,ResLimShare,0.07
 Felou_MAU,Mauritania_grid,Water,Hydro,FOMperMW,22478.39732142858
-Felou_MAU,Mauritania_grid,Water,Hydro,BuildLimitperYear,18.45
 Felou_MAU,Mauritania_grid,Water,Hydro,MaxTotalBuild,18.45
 Felou_MAU,Mauritania_grid,Water,Hydro,Type,12.0
 Felou_MAU,Mauritania_grid,Water,Hydro,fuel1,3.0
@@ -9138,7 +8678,6 @@ Manantali_MAU,Mauritania_grid,Water,Hydro,RampUpRate,1.0
 Manantali_MAU,Mauritania_grid,Water,Hydro,RampDnRate,1.0
 Manantali_MAU,Mauritania_grid,Water,Hydro,ResLimShare,0.07
 Manantali_MAU,Mauritania_grid,Water,Hydro,FOMperMW,20655.51171428572
-Manantali_MAU,Mauritania_grid,Water,Hydro,BuildLimitperYear,30.0
 Manantali_MAU,Mauritania_grid,Water,Hydro,MaxTotalBuild,30.0
 Manantali_MAU,Mauritania_grid,Water,Hydro,Type,4.0
 Manantali_MAU,Mauritania_grid,Water,Hydro,fuel1,3.0
@@ -9155,7 +8694,6 @@ Gouina_hydro,Mauritania_grid,Water,Hydro,RampUpRate,1.0
 Gouina_hydro,Mauritania_grid,Water,Hydro,RampDnRate,1.0
 Gouina_hydro,Mauritania_grid,Water,Hydro,ResLimShare,0.07
 Gouina_hydro,Mauritania_grid,Water,Hydro,FOMperMW,45000.0
-Gouina_hydro,Mauritania_grid,Water,Hydro,BuildLimitperYear,46.2
 Gouina_hydro,Mauritania_grid,Water,Hydro,MaxTotalBuild,46.2
 Gouina_hydro,Mauritania_grid,Water,Hydro,Type,12.0
 Gouina_hydro,Mauritania_grid,Water,Hydro,fuel1,3.0
@@ -9253,7 +8791,6 @@ BESS DIASS  1h,Senegal,BESS1h,Battery,RampUpRate,1.0
 BESS DIASS  1h,Senegal,BESS1h,Battery,RampDnRate,1.0
 BESS DIASS  1h,Senegal,BESS1h,Battery,ResLimShare,0.5
 BESS DIASS  1h,Senegal,BESS1h,Battery,FOMperMW,10000.0
-BESS DIASS  1h,Senegal,BESS1h,Battery,BuildLimitperYear,56.0
 BESS DIASS  1h,Senegal,BESS1h,Battery,MaxTotalBuild,56.0
 BESS DIASS  1h,Senegal,BESS1h,Battery,Type,17.0
 BESS DIASS  1h,Senegal,BESS1h,Battery,fuel1,17.0
@@ -9271,7 +8808,6 @@ BESS KIAT 1h,Senegal,BESS1h,Battery,RampUpRate,1.0
 BESS KIAT 1h,Senegal,BESS1h,Battery,RampDnRate,1.0
 BESS KIAT 1h,Senegal,BESS1h,Battery,ResLimShare,0.5
 BESS KIAT 1h,Senegal,BESS1h,Battery,FOMperMW,10000.0
-BESS KIAT 1h,Senegal,BESS1h,Battery,BuildLimitperYear,10.0
 BESS KIAT 1h,Senegal,BESS1h,Battery,MaxTotalBuild,10.0
 BESS KIAT 1h,Senegal,BESS1h,Battery,Type,17.0
 BESS KIAT 1h,Senegal,BESS1h,Battery,fuel1,17.0
@@ -9289,7 +8825,6 @@ BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,RampUpRate,1.0
 BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,RampDnRate,1.0
 BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,ResLimShare,0.5
 BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,FOMperMW,22000.0
-BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,BuildLimitperYear,15.0
 BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,MaxTotalBuild,15.0
 BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,Type,17.0
 BESS NIAKHAR STORAGE 3h,Senegal,BESS3h,Battery,fuel1,19.0
@@ -9307,7 +8842,6 @@ BESS Walo Storage 2h,Senegal,BESS2h,Battery,RampUpRate,1.0
 BESS Walo Storage 2h,Senegal,BESS2h,Battery,RampDnRate,1.0
 BESS Walo Storage 2h,Senegal,BESS2h,Battery,ResLimShare,0.5
 BESS Walo Storage 2h,Senegal,BESS2h,Battery,FOMperMW,17000.0
-BESS Walo Storage 2h,Senegal,BESS2h,Battery,BuildLimitperYear,10.0
 BESS Walo Storage 2h,Senegal,BESS2h,Battery,MaxTotalBuild,10.0
 BESS Walo Storage 2h,Senegal,BESS2h,Battery,Type,17.0
 BESS Walo Storage 2h,Senegal,BESS2h,Battery,fuel1,18.0
@@ -9325,7 +8859,6 @@ BESS AKUO 3h,Senegal,BESS3h,Battery,RampUpRate,1.0
 BESS AKUO 3h,Senegal,BESS3h,Battery,RampDnRate,1.0
 BESS AKUO 3h,Senegal,BESS3h,Battery,ResLimShare,0.5
 BESS AKUO 3h,Senegal,BESS3h,Battery,FOMperMW,22000.0
-BESS AKUO 3h,Senegal,BESS3h,Battery,BuildLimitperYear,60.0
 BESS AKUO 3h,Senegal,BESS3h,Battery,MaxTotalBuild,60.0
 BESS AKUO 3h,Senegal,BESS3h,Battery,Type,17.0
 BESS AKUO 3h,Senegal,BESS3h,Battery,fuel1,19.0
@@ -9343,7 +8876,6 @@ BESS Dioudoubou 3h,Senegal,BESS3h,Battery,RampUpRate,1.0
 BESS Dioudoubou 3h,Senegal,BESS3h,Battery,RampDnRate,1.0
 BESS Dioudoubou 3h,Senegal,BESS3h,Battery,ResLimShare,0.5
 BESS Dioudoubou 3h,Senegal,BESS3h,Battery,FOMperMW,22000.0
-BESS Dioudoubou 3h,Senegal,BESS3h,Battery,BuildLimitperYear,30.0
 BESS Dioudoubou 3h,Senegal,BESS3h,Battery,MaxTotalBuild,30.0
 BESS Dioudoubou 3h,Senegal,BESS3h,Battery,Type,17.0
 BESS Dioudoubou 3h,Senegal,BESS3h,Battery,fuel1,19.0
@@ -9361,7 +8893,6 @@ BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,RampUpRate,1.0
 BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,RampDnRate,1.0
 BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,ResLimShare,0.5
 BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,FOMperMW,17000.0
-BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,BuildLimitperYear,23.7
 BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,MaxTotalBuild,23.7
 BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,Type,17.0
 BESS TAMBACOUNDA 2h,Senegal,BESS2h,Battery,fuel1,18.0
@@ -9379,7 +8910,6 @@ BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,RampUpRate,1.0
 BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,RampDnRate,1.0
 BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,ResLimShare,0.5
 BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,FOMperMW,22000.0
-BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,BuildLimitperYear,10.0
 BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,MaxTotalBuild,10.0
 BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,Type,17.0
 BESS axian de Tankanto 3h,Senegal,BESS3h,Battery,fuel1,19.0
@@ -9397,7 +8927,6 @@ BESS nexentury 1h,Senegal,BESS1h,Battery,RampUpRate,1.0
 BESS nexentury 1h,Senegal,BESS1h,Battery,RampDnRate,1.0
 BESS nexentury 1h,Senegal,BESS1h,Battery,ResLimShare,0.5
 BESS nexentury 1h,Senegal,BESS1h,Battery,FOMperMW,10000.0
-BESS nexentury 1h,Senegal,BESS1h,Battery,BuildLimitperYear,5.0
 BESS nexentury 1h,Senegal,BESS1h,Battery,MaxTotalBuild,5.0
 BESS nexentury 1h,Senegal,BESS1h,Battery,Type,17.0
 BESS nexentury 1h,Senegal,BESS1h,Battery,fuel1,17.0
@@ -9415,7 +8944,6 @@ BESS Serengeti 3h,Senegal,BESS3h,Battery,RampUpRate,1.0
 BESS Serengeti 3h,Senegal,BESS3h,Battery,RampDnRate,1.0
 BESS Serengeti 3h,Senegal,BESS3h,Battery,ResLimShare,0.5
 BESS Serengeti 3h,Senegal,BESS3h,Battery,FOMperMW,22000.0
-BESS Serengeti 3h,Senegal,BESS3h,Battery,BuildLimitperYear,15.0
 BESS Serengeti 3h,Senegal,BESS3h,Battery,MaxTotalBuild,15.0
 BESS Serengeti 3h,Senegal,BESS3h,Battery,Type,17.0
 BESS Serengeti 3h,Senegal,BESS3h,Battery,fuel1,19.0
@@ -9425,3 +8953,151 @@ BESS Serengeti 3h,Senegal,BESS3h,Battery,CapacityCredit,1.0
 BESS Serengeti 3h,Senegal,BESS3h,Battery,Error,26195.5
 BESS Serengeti 3h,Senegal,BESS3h,Battery,Life,20.0
 BESS Serengeti 3h,Senegal,BESS3h,Battery,Capex,1.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,StYr,2035.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RetrYr,2055.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Zone,6.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RampUpRate,1.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RampDnRate,1.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,FOMperMW,65000.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,VOM,7.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,MaxTotalBuild,5000.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Type,5.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,fuel1,14.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Status,3.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,UnitSize,50.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,CapacityCredit,1.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Error,74162.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Life,30.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RE_Flag,1.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,Capex,4.0
+OFSHORE_WIND_GBI,GuineaBissau,Offshore,Wind,RETech,1.0
+GT_Benin,Benin,Gas,Gas,StYr,2030.0
+GT_Benin,Benin,Gas,Gas,RetrYr,2054.0
+GT_Benin,Benin,Gas,Gas,Zone,1.0
+GT_Benin,Benin,Gas,Gas,MinLimitShare,0.3
+GT_Benin,Benin,Gas,Gas,HeatRate,9.0
+GT_Benin,Benin,Gas,Gas,RampUpRate,0.85
+GT_Benin,Benin,Gas,Gas,RampDnRate,0.9
+GT_Benin,Benin,Gas,Gas,ResLimShare,0.2
+GT_Benin,Benin,Gas,Gas,FOMperMW,26342.72
+GT_Benin,Benin,Gas,Gas,VOM,2.5
+GT_Benin,Benin,Gas,Gas,Type,1.0
+GT_Benin,Benin,Gas,Gas,fuel1,2.0
+GT_Benin,Benin,Gas,Gas,Status,3.0
+GT_Benin,Benin,Gas,Gas,HeatRate2,9.8
+GT_Benin,Benin,Gas,Gas,CapacityCredit,1.0
+GT_Benin,Benin,Gas,Gas,Error,30488.16
+GT_Benin,Benin,Gas,Gas,Life,30.0
+GT_Benin,Benin,Gas,Gas,Capex,0.89
+CC_GAS_LNG_BEN,Benin,Gas,Gas,StYr,2030.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,RetrYr,2060.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,Zone,1.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,MinLimitShare,0.6
+CC_GAS_LNG_BEN,Benin,Gas,Gas,HeatRate,6.4
+CC_GAS_LNG_BEN,Benin,Gas,Gas,RampUpRate,0.5
+CC_GAS_LNG_BEN,Benin,Gas,Gas,RampDnRate,0.83
+CC_GAS_LNG_BEN,Benin,Gas,Gas,ResLimShare,0.07
+CC_GAS_LNG_BEN,Benin,Gas,Gas,FOMperMW,20420.72
+CC_GAS_LNG_BEN,Benin,Gas,Gas,VOM,1.8
+CC_GAS_LNG_BEN,Benin,Gas,Gas,Type,2.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,fuel1,2.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,fuel2,12.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,Status,3.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,HeatRate2,6.8
+CC_GAS_LNG_BEN,Benin,Gas,Gas,CapacityCredit,1.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,Error,24578.716
+CC_GAS_LNG_BEN,Benin,Gas,Gas,Life,30.0
+CC_GAS_LNG_BEN,Benin,Gas,Gas,Capex,0.996
+ONSHORE_WIND_BEN,Benin,Wind,Wind,StYr,2030.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,RetrYr,2055.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,Zone,1.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,RampUpRate,1.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,RampDnRate,1.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,FOMperMW,32000.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,Type,5.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,fuel1,5.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,Status,3.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,CapacityCredit,1.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,Error,36133.6
+ONSHORE_WIND_BEN,Benin,Wind,Wind,Life,30.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,RE_Flag,1.0
+ONSHORE_WIND_BEN,Benin,Wind,Wind,Capex,1.6
+ONSHORE_WIND_BEN,Benin,Wind,Wind,RETech,1.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,StYr,2030.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,RetrYr,2055.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,Zone,6.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,RampUpRate,1.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,RampDnRate,1.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,FOMperMW,32000.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,Type,5.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,fuel1,5.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,Status,3.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,UnitSize,50.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,CapacityCredit,1.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,Error,36138.6
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,Life,30.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,RE_Flag,1.0
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,Capex,1.6
+WIND_CAND_GBI,GuineaBissau,Wind,Wind,RETech,1.0
+SONICHAR2,Niger,Coal,Coal,StYr,2018.0
+SONICHAR2,Niger,Coal,Coal,RetrYr,2068.0
+SONICHAR2,Niger,Coal,Coal,Zone,10.0
+SONICHAR2,Niger,Coal,Coal,MinLimitShare,0.5
+SONICHAR2,Niger,Coal,Coal,HeatRate,8.6
+SONICHAR2,Niger,Coal,Coal,RampUpRate,0.6
+SONICHAR2,Niger,Coal,Coal,RampDnRate,0.6
+SONICHAR2,Niger,Coal,Coal,ResLimShare,0.1
+SONICHAR2,Niger,Coal,Coal,FOMperMW,32100.0
+SONICHAR2,Niger,Coal,Coal,VOM,4.61
+SONICHAR2,Niger,Coal,Coal,Type,13.0
+SONICHAR2,Niger,Coal,Coal,fuel1,1.0
+SONICHAR2,Niger,Coal,Coal,Status,2.0
+SONICHAR2,Niger,Coal,Coal,HeatRate2,8.6
+SONICHAR2,Niger,Coal,Coal,CapacityCredit,1.0
+SONICHAR2,Niger,Coal,Coal,Error,36267.61
+SONICHAR2,Niger,Coal,Coal,Life,30.0
+SONICHAR2,Niger,Coal,Coal,Capex,2.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,StYr,2026.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,RetrYr,2050.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Zone,12.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,RampUpRate,1.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,RampDnRate,1.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,ResLimShare,0.5
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,FOMperMW,40000.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Type,17.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,fuel1,10.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Status,3.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,CapacityCredit,1.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Error,44140.8
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Life,20.0
+Storage_CAND_2026_Senegal,Senegal,Battery,Battery,Capex,0.3
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,StYr,2026.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RetrYr,2074.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Zone,12.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RampUpRate,1.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RampDnRate,1.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,ResLimShare,0.4
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,FOMperMW,42000.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Type,4.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,fuel1,3.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Status,2.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,CapacityCredit,1.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Error,46177.4
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Life,50.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,RE_Flag,1.0
+Hydro_Kaleta_viaGuinea,Senegal,Water,Hydro,Capex,4.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,StYr,2026.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RetrYr,2074.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Zone,12.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RampUpRate,1.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RampDnRate,1.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,ResLimShare,0.4
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,FOMperMW,42000.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Type,4.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,fuel1,3.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Status,2.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,CapacityCredit,1.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Error,46177.4
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Life,50.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,RE_Flag,1.0
+Hydro_Souapiti_viaGuinea,Senegal,Water,Hydro,Capex,4.0

@@ -58,7 +58,7 @@ Maguduza_HY_SWZ,Eswatini,Water,Hydro,fuel1,3.0
 Maguduza_HY_SWZ,Eswatini,Water,Hydro,Status,1.0
 Maguduza_HY_SWZ,Eswatini,Water,Hydro,RE_Flag,1.0
 Maguduza_HY_SWZ,Eswatini,Water,Hydro,CapacityCredit,1.0
-Maguduza_HY_SWZ,Eswatini,Water,Hydro,Error,15493.779999999999
+Maguduza_HY_SWZ,Eswatini,Water,Hydro,Error,15493.78
 Maguga_HY_SWZ,Eswatini,Water,Hydro,StYr,2007.0
 Maguga_HY_SWZ,Eswatini,Water,Hydro,RetrYr,2050.0
 Maguga_HY_SWZ,Eswatini,Water,Hydro,Zone,1.0
@@ -117,19 +117,6 @@ EDM_Connection,Mozambique,Import,Import,Status,1.0
 EDM_Connection,Mozambique,Import,Import,CapacityCredit,1.0
 EDM_Connection,Mozambique,Import,Import,Error,4232.412
 EDM_Connection,Mozambique,Import,Import,HeatRate,3.412
-SAPP_Connection,SAPP,Import,Import,StYr,2024.0
-SAPP_Connection,SAPP,Import,Import,RetrYr,2050.0
-SAPP_Connection,SAPP,Import,Import,Zone,4.0
-SAPP_Connection,SAPP,Import,Import,RampUpRate,1.0
-SAPP_Connection,SAPP,Import,Import,RampDnRate,1.0
-SAPP_Connection,SAPP,Import,Import,FOMperMW,5.0
-SAPP_Connection,SAPP,Import,Import,Life,100.0
-SAPP_Connection,SAPP,Import,Import,Type,8.0
-SAPP_Connection,SAPP,Import,Import,fuel1,6.0
-SAPP_Connection,SAPP,Import,Import,Status,1.0
-SAPP_Connection,SAPP,Import,Import,CapacityCredit,1.0
-SAPP_Connection,SAPP,Import,Import,Error,4203.412
-SAPP_Connection,SAPP,Import,Import,HeatRate,3.412
 RSSC_biomass_SWZ,Eswatini,Bagasse,Biomass,StYr,2011.0
 RSSC_biomass_SWZ,Eswatini,Bagasse,Biomass,RetrYr,2050.0
 RSSC_biomass_SWZ,Eswatini,Bagasse,Biomass,Zone,1.0
@@ -270,7 +257,7 @@ Biomass_Tender1,Eswatini,Woodchip,Biomass,Type,13.0
 Biomass_Tender1,Eswatini,Woodchip,Biomass,fuel1,16.0
 Biomass_Tender1,Eswatini,Woodchip,Biomass,Status,2.0
 Biomass_Tender1,Eswatini,Woodchip,Biomass,CapacityCredit,1.0
-Biomass_Tender1,Eswatini,Woodchip,Biomass,Error,46840.628000000004
+Biomass_Tender1,Eswatini,Woodchip,Biomass,Error,46840.628
 Biomass_Tender1,Eswatini,Woodchip,Biomass,HeatRate,11.37
 Biomass_Tender1,Eswatini,Woodchip,Biomass,VOM,13.4
 Biomass_Tender1,Eswatini,Woodchip,Biomass,MinLimitShare,0.6
@@ -347,7 +334,7 @@ Biomass_Generic,Eswatini,Woodchip,Biomass,Type,13.0
 Biomass_Generic,Eswatini,Woodchip,Biomass,fuel1,16.0
 Biomass_Generic,Eswatini,Woodchip,Biomass,Status,3.0
 Biomass_Generic,Eswatini,Woodchip,Biomass,CapacityCredit,1.0
-Biomass_Generic,Eswatini,Woodchip,Biomass,Error,46784.628000000004
+Biomass_Generic,Eswatini,Woodchip,Biomass,Error,46784.628
 Biomass_Generic,Eswatini,Woodchip,Biomass,HeatRate,11.37
 Biomass_Generic,Eswatini,Woodchip,Biomass,VOM,13.4
 Biomass_Generic,Eswatini,Woodchip,Biomass,MinLimitShare,0.6
@@ -417,7 +404,7 @@ LowerMaguga_Ext1,Eswatini,Water,Hydro,fuel1,3.0
 LowerMaguga_Ext1,Eswatini,Water,Hydro,Status,3.0
 LowerMaguga_Ext1,Eswatini,Water,Hydro,RE_Flag,1.0
 LowerMaguga_Ext1,Eswatini,Water,Hydro,CapacityCredit,1.0
-LowerMaguga_Ext1,Eswatini,Water,Hydro,Error,15591.119999999999
+LowerMaguga_Ext1,Eswatini,Water,Hydro,Error,15591.12
 LowerMaguga_Ext1,Eswatini,Water,Hydro,Capex,2.98
 LowerMaguga_Ext1,Eswatini,Water,Hydro,BuildLimitperYear,10.0
 LowerMaguga_Ext1,Eswatini,Water,Hydro,MaxTotalBuild,10.0
@@ -435,7 +422,7 @@ LowerMaguga_Ext2,Eswatini,Water,Hydro,fuel1,3.0
 LowerMaguga_Ext2,Eswatini,Water,Hydro,Status,3.0
 LowerMaguga_Ext2,Eswatini,Water,Hydro,RE_Flag,1.0
 LowerMaguga_Ext2,Eswatini,Water,Hydro,CapacityCredit,1.0
-LowerMaguga_Ext2,Eswatini,Water,Hydro,Error,15634.119999999999
+LowerMaguga_Ext2,Eswatini,Water,Hydro,Error,15634.12
 LowerMaguga_Ext2,Eswatini,Water,Hydro,Capex,2.98
 LowerMaguga_Ext2,Eswatini,Water,Hydro,BuildLimitperYear,23.0
 LowerMaguga_Ext2,Eswatini,Water,Hydro,MaxTotalBuild,23.0
@@ -623,7 +610,7 @@ Battery_Generic,Eswatini,Battery,Battery,Type,17.0
 Battery_Generic,Eswatini,Battery,Battery,fuel1,10.0
 Battery_Generic,Eswatini,Battery,Battery,Status,3.0
 Battery_Generic,Eswatini,Battery,Battery,CapacityCredit,1.0
-Battery_Generic,Eswatini,Battery,Battery,Error,16329.699999999999
+Battery_Generic,Eswatini,Battery,Battery,Error,16329.7
 Battery_Generic,Eswatini,Battery,Battery,Capex,0.8
 SAR_Connection_New,South_Africa,Import,Import,StYr,2027.0
 SAR_Connection_New,South_Africa,Import,Import,RetrYr,2050.0
@@ -667,3 +654,6 @@ SAPP_Connection_New,SAPP,Import,Import,CapacityCredit,1.0
 SAPP_Connection_New,SAPP,Import,Import,Error,4208.4220000000005
 SAPP_Connection_New,SAPP,Import,Import,HeatRate,3.412
 SAPP_Connection_New,SAPP,Import,Import,Capex,0.01
+Battery_Generic,Eswatini,Battery,Battery,Capacity,2500.0
+Battery_Generic,Eswatini,Battery,Battery,UnitSize,5.0
+Battery_Generic,Eswatini,Battery,Battery,BuildLimitperYear,100000.0

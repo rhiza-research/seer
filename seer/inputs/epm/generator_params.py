@@ -39,7 +39,7 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
     # since they're already baked into generator_costs.csv by the time this returns.
     param_list = [
         "Capacity", "Capex", "RampDnRate", "RampUpRate", "Life",
-        "HeatRate", "RETech", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear",
+        "HeatRate", "RETech", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear", "MaxTotalBuild",
     ]
     # Initialize generator_constants dataframe
     generator_constants = pd.DataFrame(columns=["generator", "zone", "tech", "fuel"] + param_list)
@@ -67,12 +67,38 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
     
     
     # Create standard columns PyPSA expects
-    # this is a build option if BuildLimitperYear is given and non-zero -- a zero build limit
-    # means "not buildable at all", the same as no value given, not a real (if degenerate)
-    # build option
-    generator_constants["expandable"] = (
-        generator_constants["BuildLimitperYear"].notna() & (generator_constants["BuildLimitperYear"] != 0)
+    # fall back to MaxTotalBuild (a real, per-generator lifetime build ceiling) wherever
+    # BOTH BuildLimitperYear and Capacity are missing -- some pure candidates only ever get a
+    # total buildable amount, no yearly rate, and no existing capacity, and MaxTotalBuild is
+    # otherwise discarded entirely even though it's genuine sizing data in that case. Restricted
+    # to Capacity-also-missing generators specifically because MaxTotalBuild has the exact same
+    # "duplicates the generator's own existing Capacity" artifact as BuildLimitperYear does for
+    # existing/committed plants (see Guinea/Turkiye/Serbia's Status-based fixes in
+    # data/processed_gams/README.md) -- using it as a blanket fallback would resurrect that bug.
+    missing_bly_and_capacity = generator_constants["BuildLimitperYear"].isna() & generator_constants["Capacity"].isna()
+    generator_constants.loc[missing_bly_and_capacity, "BuildLimitperYear"] = (
+        generator_constants.loc[missing_bly_and_capacity, "MaxTotalBuild"]
     )
+    # this is a build option if BuildLimitperYear (or its MaxTotalBuild fallback) is given and
+    # non-zero -- a zero build limit means "not buildable at all", the same as no value given,
+    # not a real (if degenerate) build option. A generator with no Capacity at all can't be
+    # "existing" (that needs a real size), so it must be a build option instead -- an
+    # unconstrained one (no annual_build_limit/unit_size) is a valid candidate as long as it has
+    # real cost data (Capex) to build generator_costs.csv from; both backends already support an
+    # expandable generator with no annual_build_limit (see seer/inputs/README.md). Only a
+    # generator missing Capacity AND Capex has nothing usable at all -- see
+    # data/processed_gams/README.md for regions where that combination was found and dropped.
+    generator_constants["expandable"] = (
+        (generator_constants["BuildLimitperYear"].notna() & (generator_constants["BuildLimitperYear"] != 0))
+        | (generator_constants["Capacity"].isna() & generator_constants["Capex"].notna())
+    )
+    # capacity is only meaningful for existing generators
+    generator_constants.loc[generator_constants["expandable"], "Capacity"] = pd.NA
+    # unit_size only meaningful for expandable generators
+    generator_constants.loc[~generator_constants["expandable"], "UnitSize"] = pd.NA
+    # ramp rates default to fully flexible when absent
+    generator_constants["RampUpRate"] = generator_constants["RampUpRate"].fillna(1)
+    generator_constants["RampDnRate"] = generator_constants["RampDnRate"].fillna(-1)
     # rename columns to PyPSA conventions
     generator_constants.rename(columns={
         "BuildLimitperYear": "annual_build_limit",
@@ -194,8 +220,9 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
     generator_cost = pd.DataFrame(rows, columns=["generator", "cost_type"] + years)
 
     # capex/heat_rate were only needed above (capex scaling multiplier, marginal-cost
-    # computation) -- already baked into generator_cost, so drop from the final output
-    generator_constants = generator_constants.drop(columns=["capex", "heat_rate"])
+    # computation) -- already baked into generator_cost, so drop from the final output.
+    # maxtotalbuild was only needed as a BuildLimitperYear fallback above.
+    generator_constants = generator_constants.drop(columns=["capex", "heat_rate", "maxtotalbuild"])
 
     # tech/fuel standardization (see seer.inputs.utils) happens last to allow data to be
     # matched with old names between raw files.

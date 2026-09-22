@@ -35,7 +35,6 @@ Malembo,Angola,OCGT,Gas,Capacity,105.0
 Limbe CCGT,Cameroon,CCGT,Gas,Status,2.0
 Limbe CCGT,Cameroon,CCGT,Gas,StYr,2027.0
 Limbe CCGT,Cameroon,CCGT,Gas,Capacity,350.0
-Limbe CCGT,Cameroon,CCGT,Gas,BuildLimitperYear,350.0
 Limbe CCGT,Cameroon,CCGT,Gas,Capex,0.85
 Bikongo,Congo,ReservoirHydro,Water,Status,3.0
 Bikongo,Congo,ReservoirHydro,Water,StYr,2051.0
@@ -44,7 +43,6 @@ Bikongo,Congo,ReservoirHydro,Water,BuildLimitperYear,100.0
 Baia farta,Angola,PV,Solar,Status,1.0
 Baia farta,Angola,PV,Solar,StYr,2024.0
 Baia farta,Angola,PV,Solar,Capacity,96.0
-Baia farta,Angola,PV,Solar,BuildLimitperYear,96.0
 Candidate_BESS_Burundi,Burundi,Storage,Battery,Status,3.0
 Candidate_BESS_Burundi,Burundi,Storage,Battery,StYr,2035.0
 Candidate_BESS_Burundi,Burundi,Storage,Battery,Capacity,3000.0
@@ -58,11 +56,9 @@ Bangui Enerca,CAR,OCGT,Diesel,Capacity,20.0
 Biopo,Angola,PV,Solar,Status,1.0
 Biopo,Angola,PV,Solar,StYr,2024.0
 Biopo,Angola,PV,Solar,Capacity,188.0
-Biopo,Angola,PV,Solar,BuildLimitperYear,188.0
 Saurimo,Angola,PV,Solar,Status,1.0
 Saurimo,Angola,PV,Solar,StYr,2024.0
 Saurimo,Angola,PV,Solar,Capacity,27.0
-Saurimo,Angola,PV,Solar,BuildLimitperYear,27.0
 AH Mabubas,Angola,ReservoirHydro,Water,Status,1.0
 AH Mabubas,Angola,ReservoirHydro,Water,StYr,1954.0
 AH Mabubas,Angola,ReservoirHydro,Water,RetrYr,2051.0
@@ -89,7 +85,6 @@ Kribi,Cameroon,OCGT,Gas,Capacity,216.0
 Ngaoundere,Cameroon,OCGT,Diesel,Status,2.0
 Ngaoundere,Cameroon,OCGT,Diesel,StYr,2030.0
 Ngaoundere,Cameroon,OCGT,Diesel,Capacity,10.0
-Ngaoundere,Cameroon,OCGT,Diesel,BuildLimitperYear,10.0
 Danzi,CAR,PV,Solar,Status,1.0
 Danzi,CAR,PV,Solar,StYr,2025.0
 Danzi,CAR,PV,Solar,Capacity,25.0
@@ -128,7 +123,6 @@ Candidate_OCGT_Diesel_Chad,Chad,OCGT,Diesel,BuildLimitperYear,3.5
 Denali Ndjamena,Chad,OCGT,Diesel,Status,2.0
 Denali Ndjamena,Chad,OCGT,Diesel,StYr,2028.0
 Denali Ndjamena,Chad,OCGT,Diesel,Capacity,32.0
-Denali Ndjamena,Chad,OCGT,Diesel,BuildLimitperYear,32.0
 Doba,Chad,OCGT,Diesel,Status,3.0
 Doba,Chad,OCGT,Diesel,StYr,2028.0
 Doba,Chad,OCGT,Diesel,Capacity,0.16
@@ -283,9 +277,6 @@ Gishoma,Rwanda,ST,Coal,Status,1.0
 Gishoma,Rwanda,ST,Coal,StYr,2017.0
 Gishoma,Rwanda,ST,Coal,RetrYr,2051.0
 Gishoma,Rwanda,ST,Coal,Capacity,10.0
-Akanyaru Peat,Rwanda,ST,Coal,Status,2.0
-Akanyaru Peat,Rwanda,ST,Coal,StYr,2032.0
-Akanyaru Peat,Rwanda,ST,Coal,BuildLimitperYear,50.0
 SPLK,Rwanda,OCGT,Diesel,Status,1.0
 SPLK,Rwanda,OCGT,Diesel,StYr,2019.0
 SPLK,Rwanda,OCGT,Diesel,RetrYr,2051.0
@@ -298,12 +289,6 @@ Jabana 1,Rwanda,OCGT,Diesel,Status,1.0
 Jabana 1,Rwanda,OCGT,Diesel,StYr,2004.0
 Jabana 1,Rwanda,OCGT,Diesel,RetrYr,2051.0
 Jabana 1,Rwanda,OCGT,Diesel,Capacity,2.0
-Gikondo,Rwanda,OCGT,Diesel,Status,1.0
-Gikondo,Rwanda,OCGT,Diesel,StYr,2005.0
-Gikondo,Rwanda,OCGT,Diesel,RetrYr,2051.0
-Mukungwa,Rwanda,OCGT,Diesel,Status,1.0
-Mukungwa,Rwanda,OCGT,Diesel,StYr,2010.0
-Mukungwa,Rwanda,OCGT,Diesel,RetrYr,2051.0
 Candidate_Gas_Rwanda,Rwanda,OCGT,Gas,Status,3.0
 Candidate_Gas_Rwanda,Rwanda,OCGT,Gas,StYr,2035.0
 Candidate_Gas_Rwanda,Rwanda,OCGT,Gas,Capacity,75.0
@@ -345,7 +330,6 @@ Boali 1 Rebuild,CAR,ReservoirHydro,Water,Capacity,9.0
 Amdjarass,Chad,OnshoreWind,Wind,Status,2.0
 Amdjarass,Chad,OnshoreWind,Wind,StYr,2025.0
 Amdjarass,Chad,OnshoreWind,Wind,Capacity,1.1
-Amdjarass,Chad,OnshoreWind,Wind,BuildLimitperYear,1.1
 Cafunfo,Angola,PV,Solar,Status,3.0
 Cafunfo,Angola,PV,Solar,StYr,2030.0
 Cafunfo,Angola,PV,Solar,Capacity,40.0
@@ -389,11 +373,9 @@ Matala,Angola,ReservoirHydro,Water,Capacity,41.0
 Lauca,Angola,ROR,Water,Status,1.0
 Lauca,Angola,ROR,Water,StYr,2017.0
 Lauca,Angola,ROR,Water,Capacity,2070.0
-Lauca,Angola,ROR,Water,BuildLimitperYear,2070.0
 Lauca,Angola,PV,Solar,Status,3.0
 Lauca,Angola,PV,Solar,StYr,2030.0
 Lauca,Angola,PV,Solar,Capacity,100.0
-Lauca,Angola,PV,Solar,BuildLimitperYear,100.0
 Cabinda Oil,Angola,OCGT,Diesel,Status,1.0
 Cabinda Oil,Angola,OCGT,Diesel,StYr,2024.0
 Cabinda Oil,Angola,OCGT,Diesel,Capacity,45.0
@@ -433,11 +415,9 @@ Ruzibazi,Burundi,ReservoirHydro,Water,Capacity,15.0
 Gitega,Burundi,PV,Solar,Status,2.0
 Gitega,Burundi,PV,Solar,StYr,2030.0
 Gitega,Burundi,PV,Solar,Capacity,10.0
-Gitega,Burundi,PV,Solar,BuildLimitperYear,10.0
 Littoral du Lac,Burundi,PV,Solar,Status,2.0
 Littoral du Lac,Burundi,PV,Solar,StYr,2030.0
 Littoral du Lac,Burundi,PV,Solar,Capacity,10.0
-Littoral du Lac,Burundi,PV,Solar,BuildLimitperYear,10.0
 Dechets municipaux,Burundi,BiomassPlant,Biomass,Status,3.0
 Dechets municipaux,Burundi,BiomassPlant,Biomass,StYr,2030.0
 Dechets municipaux,Burundi,BiomassPlant,Biomass,Capacity,15.0
@@ -474,7 +454,6 @@ Candidate_OnshoreWind_Cameroon,Cameroon,OnshoreWind,Wind,BuildLimitperYear,85.0
 Bini A Barak,Cameroon,PV,Solar,Status,2.0
 Bini A Barak,Cameroon,PV,Solar,StYr,2029.0
 Bini A Barak,Cameroon,PV,Solar,Capacity,35.0
-Bini A Barak,Cameroon,PV,Solar,BuildLimitperYear,35.0
 Candidate_OnshoreWind_Chad,Chad,OnshoreWind,Wind,Status,3.0
 Candidate_OnshoreWind_Chad,Chad,OnshoreWind,Wind,StYr,2035.0
 Candidate_OnshoreWind_Chad,Chad,OnshoreWind,Wind,Capacity,40000.0
@@ -482,7 +461,6 @@ Candidate_OnshoreWind_Chad,Chad,OnshoreWind,Wind,BuildLimitperYear,3.5
 GDS,Cameroon,PV,Solar,Status,2.0
 GDS,Cameroon,PV,Solar,StYr,2027.0
 GDS,Cameroon,PV,Solar,Capacity,33.0
-GDS,Cameroon,PV,Solar,BuildLimitperYear,33.0
 Guider Solar Plant,Cameroon,PV,Solar,Status,1.0
 Guider Solar Plant,Cameroon,PV,Solar,StYr,2025.0
 Guider Solar Plant,Cameroon,PV,Solar,Capacity,15.0
@@ -495,29 +473,21 @@ Boali 2,CAR,ReservoirHydro,Water,Capacity,20.0
 PV_CAF_2030,CAR,PV,Solar,Status,2.0
 PV_CAF_2030,CAR,PV,Solar,StYr,2030.0
 PV_CAF_2030,CAR,PV,Solar,Capacity,15.0
-PV_CAF_2030,CAR,PV,Solar,BuildLimitperYear,15.0
 Boali 3,CAR,ReservoirHydro,Water,Status,2.0
 Boali 3,CAR,ReservoirHydro,Water,StYr,2030.0
 Boali 3,CAR,ReservoirHydro,Water,Capacity,10.0
-Boali 3,CAR,ReservoirHydro,Water,BuildLimitperYear,10.0
 Baidou,CAR,ROR,Water,Status,2.0
 Baidou,CAR,ROR,Water,StYr,2030.0
 Baidou,CAR,ROR,Water,Capacity,4.5
-Baidou,CAR,ROR,Water,BuildLimitperYear,4.5
 Mbecko 1,CAR,ROR,Water,Status,2.0
 Mbecko 1,CAR,ROR,Water,StYr,2030.0
 Mbecko 1,CAR,ROR,Water,Capacity,1.0
-Mbecko 1,CAR,ROR,Water,BuildLimitperYear,1.0
 AM Timan 1,Chad,PV,Solar,Status,2.0
 AM Timan 1,Chad,PV,Solar,StYr,2023.0
 AM Timan 1,Chad,PV,Solar,Capacity,5.0
-AM Timan 1,Chad,PV,Solar,BuildLimitperYear,5.0
-Candidate_OnshoreWind_Congo,Congo,OnshoreWind,Wind,Status,3.0
-Candidate_OnshoreWind_Congo,Congo,OnshoreWind,Wind,StYr,2030.0
 Anda Gassi,Chad,PV,Solar,Status,2.0
 Anda Gassi,Chad,PV,Solar,StYr,2026.0
 Anda Gassi,Chad,PV,Solar,Capacity,50.0
-Anda Gassi,Chad,PV,Solar,BuildLimitperYear,50.0
 Candidate_OnshoreWind_DRC,DRC,OnshoreWind,Wind,Status,3.0
 Candidate_OnshoreWind_DRC,DRC,OnshoreWind,Wind,StYr,2035.0
 Candidate_OnshoreWind_DRC,DRC,OnshoreWind,Wind,Capacity,1800.0
@@ -525,11 +495,9 @@ Candidate_OnshoreWind_DRC,DRC,OnshoreWind,Wind,BuildLimitperYear,50.0
 Djermaya,Chad,PV,Solar,Status,2.0
 Djermaya,Chad,PV,Solar,StYr,2028.0
 Djermaya,Chad,PV,Solar,Capacity,36.0
-Djermaya,Chad,PV,Solar,BuildLimitperYear,36.0
 Innovent Abeche,Chad,PV,Solar,Status,2.0
 Innovent Abeche,Chad,PV,Solar,StYr,2026.0
 Innovent Abeche,Chad,PV,Solar,Capacity,15.0
-Innovent Abeche,Chad,PV,Solar,BuildLimitperYear,15.0
 Candidate_OnshoreWind_DRCSouth,DRC_South,OnshoreWind,Wind,Status,3.0
 Candidate_OnshoreWind_DRCSouth,DRC_South,OnshoreWind,Wind,StYr,2035.0
 Candidate_OnshoreWind_DRCSouth,DRC_South,OnshoreWind,Wind,Capacity,1800.0
@@ -537,12 +505,9 @@ Candidate_OnshoreWind_DRCSouth,DRC_South,OnshoreWind,Wind,BuildLimitperYear,36.0
 Respit,Chad,PV,Solar,Status,2.0
 Respit,Chad,PV,Solar,StYr,2026.0
 Respit,Chad,PV,Solar,Capacity,30.0
-Respit,Chad,PV,Solar,BuildLimitperYear,30.0
 Starsol,Chad,PV,Solar,Status,1.0
 Starsol,Chad,PV,Solar,StYr,2022.0
 Starsol,Chad,PV,Solar,Capacity,10.0
-Candidate_OCGT_Diesel_Congo,Congo,OCGT,Diesel,Status,3.0
-Candidate_OCGT_Diesel_Congo,Congo,OCGT,Diesel,StYr,2035.0
 Candidate_PV_Angola,Angola,PV,Solar,Status,3.0
 Candidate_PV_Angola,Angola,PV,Solar,StYr,2035.0
 Candidate_PV_Angola,Angola,PV,Solar,Capacity,200000.0
@@ -567,20 +532,10 @@ PV_Gabon_2025,Gabon,PV,Solar,Status,2.0
 PV_Gabon_2025,Gabon,PV,Solar,StYr,2025.0
 PV_Gabon_2025,Gabon,PV,Solar,RetrYr,2049.0
 PV_Gabon_2025,Gabon,PV,Solar,Capacity,65.0
-PV_Gabon_2025,Gabon,PV,Solar,BuildLimitperYear,65.0
-KP1 Gisenyi Methan,Rwanda,OCGT,Gas,Status,1.0
-KP1 Gisenyi Methan,Rwanda,OCGT,Gas,StYr,2009.0
-KP1 Gisenyi Methan,Rwanda,OCGT,Gas,RetrYr,2051.0
-Shema IPP,Rwanda,OCGT,Gas,Status,2.0
-Shema IPP,Rwanda,OCGT,Gas,StYr,2024.0
-Shema IPP,Rwanda,OCGT,Gas,BuildLimitperYear,56.0
 Jabana 2,Rwanda,OCGT,HFO,Status,1.0
 Jabana 2,Rwanda,OCGT,HFO,StYr,2009.0
 Jabana 2,Rwanda,OCGT,HFO,RetrYr,2051.0
 Jabana 2,Rwanda,OCGT,HFO,Capacity,20.0
-KSEZ,Rwanda,OCGT,HFO,Status,2.0
-KSEZ,Rwanda,OCGT,HFO,StYr,2019.0
-KSEZ,Rwanda,OCGT,HFO,BuildLimitperYear,50.0
 Candidate_PV_CAF,CAR,PV,Solar,Status,3.0
 Candidate_PV_CAF,CAR,PV,Solar,StYr,2035.0
 Candidate_PV_CAF,CAR,PV,Solar,Capacity,1000.0
@@ -595,7 +550,6 @@ Namibe,Angola,OCGT,Diesel,Capacity,134.0
 Namibe,Angola,OnshoreWind,Wind,Status,3.0
 Namibe,Angola,OnshoreWind,Wind,StYr,2030.0
 Namibe,Angola,OnshoreWind,Wind,Capacity,100.0
-Namibe,Angola,OnshoreWind,Wind,BuildLimitperYear,100.0
 Huila,Angola,OCGT,Diesel,Status,1.0
 Huila,Angola,OCGT,Diesel,StYr,2024.0
 Huila,Angola,OCGT,Diesel,Capacity,95.0
@@ -614,27 +568,21 @@ Moxico,Angola,OCGT,Diesel,Capacity,80.0
 Bailundo,Angola,PV,Solar,Status,2.0
 Bailundo,Angola,PV,Solar,StYr,2028.0
 Bailundo,Angola,PV,Solar,Capacity,8.0
-Bailundo,Angola,PV,Solar,BuildLimitperYear,96.0
 Kuito,Angola,PV,Solar,Status,2.0
 Kuito,Angola,PV,Solar,StYr,2028.0
 Kuito,Angola,PV,Solar,Capacity,15.0
-Kuito,Angola,PV,Solar,BuildLimitperYear,188.0
 Lucapa,Angola,PV,Solar,Status,2.0
 Lucapa,Angola,PV,Solar,StYr,2028.0
 Lucapa,Angola,PV,Solar,Capacity,7.0
-Lucapa,Angola,PV,Solar,BuildLimitperYear,7.0
 Luena,Angola,PV,Solar,Status,2.0
 Luena,Angola,PV,Solar,StYr,2028.0
 Luena,Angola,PV,Solar,Capacity,27.0
-Luena,Angola,PV,Solar,BuildLimitperYear,27.0
 Baynes,Angola,ReservoirHydro,Water,Status,2.0
 Baynes,Angola,ReservoirHydro,Water,StYr,2032.0
 Baynes,Angola,ReservoirHydro,Water,Capacity,430.0
-Baynes,Angola,ReservoirHydro,Water,BuildLimitperYear,430.0
 Cacula Cabasa,Angola,ReservoirHydro,Water,Status,2.0
 Cacula Cabasa,Angola,ReservoirHydro,Water,StYr,2027.0
 Cacula Cabasa,Angola,ReservoirHydro,Water,Capacity,2100.0
-Cacula Cabasa,Angola,ReservoirHydro,Water,BuildLimitperYear,2100.0
 Cafula (Keve),Angola,ReservoirHydro,Water,Status,3.0
 Cafula (Keve),Angola,ReservoirHydro,Water,StYr,2034.0
 Cafula (Keve),Angola,ReservoirHydro,Water,Capacity,400.0
@@ -678,7 +626,6 @@ Gikuka,Burundi,ReservoirHydro,Water,BuildLimitperYear,3.0
 Jiji,Burundi,ROR,Water,Status,1.0
 Jiji,Burundi,ROR,Water,StYr,2025.0
 Jiji,Burundi,ROR,Water,Capacity,33.0
-Jiji,Burundi,ROR,Water,BuildLimitperYear,33.0
 Kabu,Burundi,ROR,Water,Status,3.0
 Kabu,Burundi,ROR,Water,StYr,2027.0
 Kabu,Burundi,ROR,Water,Capacity,20.0
@@ -711,20 +658,16 @@ Kikot,Cameroon,ReservoirHydro,Water,Capex,2.3
 Lagdo,Cameroon,ReservoirHydro,Water,Status,1.0
 Lagdo,Cameroon,ReservoirHydro,Water,StYr,2025.0
 Lagdo,Cameroon,ReservoirHydro,Water,Capacity,72.0
-Lagdo,Cameroon,ReservoirHydro,Water,BuildLimitperYear,72.0
 Lom-Pangar,Cameroon,ReservoirHydro,Water,Status,1.0
 Lom-Pangar,Cameroon,ReservoirHydro,Water,StYr,2025.0
 Lom-Pangar,Cameroon,ReservoirHydro,Water,Capacity,30.0
-Lom-Pangar,Cameroon,ReservoirHydro,Water,BuildLimitperYear,30.0
 Nachtigal Amont,Cameroon,ReservoirHydro,Water,Status,1.0
 Nachtigal Amont,Cameroon,ReservoirHydro,Water,StYr,2025.0
 Nachtigal Amont,Cameroon,ReservoirHydro,Water,Capacity,420.0
-Nachtigal Amont,Cameroon,ReservoirHydro,Water,BuildLimitperYear,420.0
 Nachtigal Amont,Cameroon,ReservoirHydro,Water,Capex,2.8
 Song Loulou,Cameroon,ReservoirHydro,Water,Status,1.0
 Song Loulou,Cameroon,ReservoirHydro,Water,StYr,2025.0
 Song Loulou,Cameroon,ReservoirHydro,Water,Capacity,384.0
-Song Loulou,Cameroon,ReservoirHydro,Water,BuildLimitperYear,384.0
 Song Mbengue,Cameroon,ReservoirHydro,Water,Status,3.0
 Song Mbengue,Cameroon,ReservoirHydro,Water,StYr,2051.0
 Song Mbengue,Cameroon,ReservoirHydro,Water,Capacity,1140.0
@@ -878,11 +821,9 @@ Inga 3,DRC,ReservoirHydro,Water,BuildLimitperYear,3500.0
 Kakobola,DRC,ReservoirHydro,Water,Status,2.0
 Kakobola,DRC,ReservoirHydro,Water,StYr,2030.0
 Kakobola,DRC,ReservoirHydro,Water,Capacity,10.0
-Kakobola,DRC,ReservoirHydro,Water,BuildLimitperYear,10.0
 Katende,DRC,ReservoirHydro,Water,Status,2.0
 Katende,DRC,ReservoirHydro,Water,StYr,2030.0
 Katende,DRC,ReservoirHydro,Water,Capacity,64.0
-Katende,DRC,ReservoirHydro,Water,BuildLimitperYear,64.0
 Mobayi,DRC,ReservoirHydro,Water,Status,1.0
 Mobayi,DRC,ReservoirHydro,Water,StYr,1989.0
 Mobayi,DRC,ReservoirHydro,Water,RetrYr,2051.0
@@ -1006,7 +947,6 @@ Cuango,Angola,PV,Solar,BuildLimitperYear,11.0
 Poubara 2,Gabon,ReservoirHydro,Water,Status,1.0
 Poubara 2,Gabon,ReservoirHydro,Water,StYr,1975.0
 Poubara 2,Gabon,ReservoirHydro,Water,Capacity,18.0
-Poubara 2,Gabon,ReservoirHydro,Water,BuildLimitperYear,18.0
 Dibwangui,Gabon,ROR,Water,Status,3.0
 Dibwangui,Gabon,ROR,Water,StYr,2030.0
 Dibwangui,Gabon,ROR,Water,Capacity,14.5
@@ -1020,16 +960,12 @@ GigaWatt Solar,Rwanda,PV,Solar,Capacity,9.0
 Izuba,Rwanda,PV,Solar,Status,2.0
 Izuba,Rwanda,PV,Solar,StYr,2025.0
 Izuba,Rwanda,PV,Solar,Capacity,4.0
-Izuba,Rwanda,PV,Solar,BuildLimitperYear,4.0
 Nasho Solar,Rwanda,PV,Solar,Status,1.0
 Nasho Solar,Rwanda,PV,Solar,StYr,2024.0
 Nasho Solar,Rwanda,PV,Solar,Capacity,3.0
-Jali Solaire,Rwanda,PV,Solar,Status,1.0
-Jali Solaire,Rwanda,PV,Solar,StYr,2024.0
 Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,Status,2.0
 Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,StYr,2035.0
 Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,Capacity,145.0
-Ruzizi 4 (Rwanda),Rwanda,ReservoirHydro,Water,BuildLimitperYear,145.0
 PumpedStorage Rwanda,Rwanda,Storage,Water,Status,3.0
 PumpedStorage Rwanda,Rwanda,Storage,Water,StYr,2040.0
 PumpedStorage Rwanda,Rwanda,Storage,Water,Capacity,48.0
@@ -1115,11 +1051,9 @@ Siguvyaye,Burundi,ROR,Water,BuildLimitperYear,12.0
 Bayomen,Cameroon,ROR,Water,Status,2.0
 Bayomen,Cameroon,ROR,Water,StYr,2051.0
 Bayomen,Cameroon,ROR,Water,Capacity,470.0
-Bayomen,Cameroon,ROR,Water,BuildLimitperYear,470.0
 Bini A Warak,Cameroon,ROR,Water,Status,2.0
 Bini A Warak,Cameroon,ROR,Water,StYr,2029.0
 Bini A Warak,Cameroon,ROR,Water,Capacity,55.0
-Bini A Warak,Cameroon,ROR,Water,BuildLimitperYear,55.0
 Chollet (Cameroon),Cameroon,ROR,Water,Status,3.0
 Chollet (Cameroon),Cameroon,ROR,Water,StYr,2035.0
 Chollet (Cameroon),Cameroon,ROR,Water,Capacity,300.0
@@ -1168,11 +1102,9 @@ Mbinjal,Cameroon,ROR,Water,BuildLimitperYear,83.0
 Mekin,Cameroon,ROR,Water,Status,1.0
 Mekin,Cameroon,ROR,Water,StYr,2025.0
 Mekin,Cameroon,ROR,Water,Capacity,15.0
-Mekin,Cameroon,ROR,Water,BuildLimitperYear,15.0
 Memve'ele,Cameroon,ROR,Water,Status,1.0
 Memve'ele,Cameroon,ROR,Water,StYr,2025.0
 Memve'ele,Cameroon,ROR,Water,Capacity,211.0
-Memve'ele,Cameroon,ROR,Water,BuildLimitperYear,211.0
 Menchum Bamenda,Cameroon,ROR,Water,Status,3.0
 Menchum Bamenda,Cameroon,ROR,Water,StYr,2051.0
 Menchum Bamenda,Cameroon,ROR,Water,Capacity,72.0
@@ -1180,11 +1112,9 @@ Menchum Bamenda,Cameroon,ROR,Water,BuildLimitperYear,72.0
 Mouila Mogue,Cameroon,ROR,Water,Status,2.0
 Mouila Mogue,Cameroon,ROR,Water,StYr,2051.0
 Mouila Mogue,Cameroon,ROR,Water,Capacity,498.0
-Mouila Mogue,Cameroon,ROR,Water,BuildLimitperYear,498.0
 Nachtigal Aval,Cameroon,ROR,Water,Status,2.0
 Nachtigal Aval,Cameroon,ROR,Water,StYr,2051.0
 Nachtigal Aval,Cameroon,ROR,Water,Capacity,260.0
-Nachtigal Aval,Cameroon,ROR,Water,BuildLimitperYear,260.0
 Ndjock,Cameroon,ROR,Water,Status,3.0
 Ndjock,Cameroon,ROR,Water,StYr,2030.0
 Ndjock,Cameroon,ROR,Water,Capacity,117.0
@@ -1192,7 +1122,6 @@ Ndjock,Cameroon,ROR,Water,BuildLimitperYear,117.0
 Ngoila,Cameroon,ROR,Water,Status,2.0
 Ngoila,Cameroon,ROR,Water,StYr,2051.0
 Ngoila,Cameroon,ROR,Water,Capacity,84.0
-Ngoila,Cameroon,ROR,Water,BuildLimitperYear,84.0
 Nyazom,Cameroon,ROR,Water,Status,3.0
 Nyazom,Cameroon,ROR,Water,StYr,2051.0
 Nyazom,Cameroon,ROR,Water,Capacity,367.0
@@ -1200,13 +1129,10 @@ Nyazom,Cameroon,ROR,Water,BuildLimitperYear,367.0
 Song Mbong,Cameroon,ROR,Water,Status,2.0
 Song Mbong,Cameroon,ROR,Water,StYr,2051.0
 Song Mbong,Cameroon,ROR,Water,Capacity,94.0
-Song Mbong,Cameroon,ROR,Water,BuildLimitperYear,94.0
 Song Ndong,Cameroon,ROR,Water,Status,3.0
 Song Ndong,Cameroon,ROR,Water,StYr,2051.0
 Song Ndong,Cameroon,ROR,Water,Capacity,270.0
 Song Ndong,Cameroon,ROR,Water,BuildLimitperYear,270.0
-Yenga,Cameroon,ROR,Water,Status,3.0
-Yenga,Cameroon,ROR,Water,StYr,2051.0
 Zoukomanbalé,Cameroon,ROR,Water,Status,3.0
 Zoukomanbalé,Cameroon,ROR,Water,StYr,2051.0
 Zoukomanbalé,Cameroon,ROR,Water,Capacity,30.0
@@ -1236,7 +1162,6 @@ Lubumbashi,DRC_South,PV,Solar,Status,2.0
 Lubumbashi,DRC_South,PV,Solar,StYr,2025.0
 Lubumbashi,DRC_South,PV,Solar,RetrYr,2060.0
 Lubumbashi,DRC_South,PV,Solar,Capacity,100.0
-Lubumbashi,DRC_South,PV,Solar,BuildLimitperYear,100.0
 Bikomo,EquatorialGuinea,ROR,Water,Status,1.0
 Bikomo,EquatorialGuinea,ROR,Water,StYr,1981.0
 Bikomo,EquatorialGuinea,ROR,Water,RetrYr,2051.0
@@ -1275,7 +1200,6 @@ Kinguele Rebuild,Gabon,ROR,Water,BuildLimitperYear,57.0
 FE-2 (Kinguele Aval),Gabon,ROR,Water,Status,2.0
 FE-2 (Kinguele Aval),Gabon,ROR,Water,StYr,2025.0
 FE-2 (Kinguele Aval),Gabon,ROR,Water,Capacity,34.3
-FE-2 (Kinguele Aval),Gabon,ROR,Water,BuildLimitperYear,34.3
 Kongue,Gabon,ROR,Water,Status,3.0
 Kongue,Gabon,ROR,Water,StYr,2027.0
 Kongue,Gabon,ROR,Water,Capacity,104.0
@@ -1295,7 +1219,6 @@ Liboka,Gabon,ROR,Water,BuildLimitperYear,93.0
 Kinguele,Gabon,ROR,Water,Status,1.0
 Kinguele,Gabon,ROR,Water,StYr,1972.0
 Kinguele,Gabon,ROR,Water,Capacity,57.0
-Kinguele,Gabon,ROR,Water,BuildLimitperYear,57.0
 Lifouta,Gabon,ReservoirHydro,Water,Status,3.0
 Lifouta,Gabon,ReservoirHydro,Water,StYr,2030.0
 Lifouta,Gabon,ReservoirHydro,Water,Capacity,140.0
@@ -1371,11 +1294,9 @@ Giciye 3,Rwanda,ReservoirHydro,Water,Capacity,10.0
 Nyabarongo 2,Rwanda,ReservoirHydro,Water,Status,2.0
 Nyabarongo 2,Rwanda,ReservoirHydro,Water,StYr,2027.0
 Nyabarongo 2,Rwanda,ReservoirHydro,Water,Capacity,10.0
-Nyabarongo 2,Rwanda,ReservoirHydro,Water,BuildLimitperYear,10.0
 Ruzizi 3 (Rwanda),Rwanda,ReservoirHydro,Water,Status,2.0
 Ruzizi 3 (Rwanda),Rwanda,ReservoirHydro,Water,StYr,2029.0
 Ruzizi 3 (Rwanda),Rwanda,ReservoirHydro,Water,Capacity,10.0
-Ruzizi 3 (Rwanda),Rwanda,ReservoirHydro,Water,BuildLimitperYear,10.0
 Ntaruka 1,Rwanda,ReservoirHydro,Water,Status,1.0
 Ntaruka 1,Rwanda,ReservoirHydro,Water,StYr,1957.0
 Ntaruka 1,Rwanda,ReservoirHydro,Water,RetrYr,2051.0
@@ -1399,15 +1320,12 @@ Rukarara 5 Mushishito,Rwanda,ROR,Water,Capacity,5.0
 Nyundo,Rwanda,ROR,Water,Status,2.0
 Nyundo,Rwanda,ROR,Water,StYr,2026.0
 Nyundo,Rwanda,ROR,Water,Capacity,4.5
-Nyundo,Rwanda,ROR,Water,BuildLimitperYear,4.5
 Kilimbi,Rwanda,ROR,Water,Status,2.0
 Kilimbi,Rwanda,ROR,Water,StYr,2027.0
 Kilimbi,Rwanda,ROR,Water,Capacity,4.23
-Kilimbi,Rwanda,ROR,Water,BuildLimitperYear,4.23
 Bihongore,Rwanda,ROR,Water,Status,2.0
 Bihongore,Rwanda,ROR,Water,StYr,2027.0
 Bihongore,Rwanda,ROR,Water,Capacity,4.22
-Bihongore,Rwanda,ROR,Water,BuildLimitperYear,4.22
 Giciye 1,Rwanda,ROR,Water,Status,1.0
 Giciye 1,Rwanda,ROR,Water,StYr,2014.0
 Giciye 1,Rwanda,ROR,Water,RetrYr,2051.0
@@ -1419,15 +1337,12 @@ Giciye 2,Rwanda,ROR,Water,Capacity,4.0
 Gakenke 1,Rwanda,ROR,Water,Status,2.0
 Gakenke 1,Rwanda,ROR,Water,StYr,2027.0
 Gakenke 1,Rwanda,ROR,Water,Capacity,2.9
-Gakenke 1,Rwanda,ROR,Water,BuildLimitperYear,2.9
 Gakenke 2,Rwanda,ROR,Water,Status,2.0
 Gakenke 2,Rwanda,ROR,Water,StYr,2027.0
 Gakenke 2,Rwanda,ROR,Water,Capacity,2.9
-Gakenke 2,Rwanda,ROR,Water,BuildLimitperYear,2.9
 Ngororero,Rwanda,ROR,Water,Status,2.0
 Ngororero,Rwanda,ROR,Water,StYr,2027.0
 Ngororero,Rwanda,ROR,Water,Capacity,2.7
-Ngororero,Rwanda,ROR,Water,BuildLimitperYear,2.7
 Mukungwa 2,Rwanda,ROR,Water,Status,1.0
 Mukungwa 2,Rwanda,ROR,Water,StYr,2013.0
 Mukungwa 2,Rwanda,ROR,Water,RetrYr,2051.0
@@ -1447,7 +1362,6 @@ Rukarara 2,Rwanda,ROR,Water,Capacity,2.2
 Ntaruka 2,Rwanda,ROR,Water,Status,2.0
 Ntaruka 2,Rwanda,ROR,Water,StYr,2027.0
 Ntaruka 2,Rwanda,ROR,Water,Capacity,2.1
-Ntaruka 2,Rwanda,ROR,Water,BuildLimitperYear,2.1
 Rucanzogera,Rwanda,ROR,Water,Status,1.0
 Rucanzogera,Rwanda,ROR,Water,StYr,2014.0
 Rucanzogera,Rwanda,ROR,Water,RetrYr,2051.0
@@ -1484,9 +1398,6 @@ Sounda Gorge,Congo,ReservoirHydro,Water,Status,3.0
 Sounda Gorge,Congo,ReservoirHydro,Water,StYr,2035.0
 Sounda Gorge,Congo,ReservoirHydro,Water,Capacity,500.0
 Sounda Gorge,Congo,ReservoirHydro,Water,BuildLimitperYear,600.0
-Mwadingusha,DRC_South,ReservoirHydro,Water,Status,1.0
-Mwadingusha,DRC_South,ReservoirHydro,Water,StYr,1954.0
-Mwadingusha,DRC_South,ReservoirHydro,Water,RetrYr,2060.0
 Candidate_BESS_EquatorialGuinea,EquatorialGuinea,Storage,Battery,Status,3.0
 Candidate_BESS_EquatorialGuinea,EquatorialGuinea,Storage,Battery,StYr,2030.0
 Candidate_BESS_EquatorialGuinea,EquatorialGuinea,Storage,Battery,Capacity,4000.0
@@ -1499,9 +1410,6 @@ Kabavu,Rwanda,ROR,Water,Status,3.0
 Kabavu,Rwanda,ROR,Water,StYr,2030.0
 Kabavu,Rwanda,ROR,Water,Capacity,0.38
 Kabavu,Rwanda,ROR,Water,BuildLimitperYear,0.38
-Kigasa,Rwanda,ReservoirHydro,Water,Status,1.0
-Kigasa,Rwanda,ReservoirHydro,Water,StYr,2021.0
-Kigasa,Rwanda,ReservoirHydro,Water,RetrYr,2051.0
 Nyagwana,Burundi,PV,Solar,Status,3.0
 Nyagwana,Burundi,PV,Solar,StYr,2030.0
 Nyagwana,Burundi,PV,Solar,Capacity,30.0
@@ -1574,3 +1482,26 @@ Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,Status,3.0
 Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,StYr,2035.0
 Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,Capacity,400000.0
 Candidate_BESS_DRCSouth,DRC_South,Storage,Battery,BuildLimitperYear,74.0
+Akanyaru Peat,Rwanda,ST,Coal,Status,2.0
+Akanyaru Peat,Rwanda,ST,Coal,StYr,2032.0
+Akanyaru Peat,Rwanda,ST,Coal,BuildLimitperYear,50.0
+Gikondo,Rwanda,OCGT,Diesel,Status,1.0
+Gikondo,Rwanda,OCGT,Diesel,StYr,2005.0
+Gikondo,Rwanda,OCGT,Diesel,RetrYr,2051.0
+Mukungwa,Rwanda,OCGT,Diesel,Status,1.0
+Mukungwa,Rwanda,OCGT,Diesel,StYr,2010.0
+Mukungwa,Rwanda,OCGT,Diesel,RetrYr,2051.0
+KP1 Gisenyi Methan,Rwanda,OCGT,Gas,Status,1.0
+KP1 Gisenyi Methan,Rwanda,OCGT,Gas,StYr,2009.0
+KP1 Gisenyi Methan,Rwanda,OCGT,Gas,RetrYr,2051.0
+Shema IPP,Rwanda,OCGT,Gas,Status,2.0
+Shema IPP,Rwanda,OCGT,Gas,StYr,2024.0
+Shema IPP,Rwanda,OCGT,Gas,BuildLimitperYear,56.0
+KSEZ,Rwanda,OCGT,HFO,Status,2.0
+KSEZ,Rwanda,OCGT,HFO,StYr,2019.0
+KSEZ,Rwanda,OCGT,HFO,BuildLimitperYear,50.0
+Jali Solaire,Rwanda,PV,Solar,Status,1.0
+Jali Solaire,Rwanda,PV,Solar,StYr,2024.0
+Kigasa,Rwanda,ReservoirHydro,Water,Status,1.0
+Kigasa,Rwanda,ReservoirHydro,Water,StYr,2021.0
+Kigasa,Rwanda,ReservoirHydro,Water,RetrYr,2051.0

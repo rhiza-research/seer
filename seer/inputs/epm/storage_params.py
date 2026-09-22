@@ -80,13 +80,24 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     storage_constants.loc[missing_life, "life"] = storage_constants.loc[missing_life, "tech"].map(default_lifetime)
 
     # fill in the remaining GAMS parameters (same names generator_constants pulls)
-    gams_param_list = ["Capacity", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear"]
+    gams_param_list = ["Capacity", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear", "MaxTotalBuild"]
     for param in gams_param_list:
         param_values = storage_gen_params[storage_gen_params["parameters"] == param].set_index("generator")["value"]
         storage_constants[param] = storage_constants["storage"].map(param_values)
 
-    # build option if BuildLimitperYear is given and non-zero - same signal generator_constants
-    # uses (a zero build limit means "not buildable at all", same as no value given)
+    # fall back to MaxTotalBuild (a real, per-unit lifetime build ceiling) wherever BOTH
+    # BuildLimitperYear and Capacity are missing -- same reasoning and same restriction as
+    # generator_params.py (MaxTotalBuild has the same "duplicates existing Capacity" artifact
+    # otherwise)
+    missing_bly_and_capacity = storage_constants["BuildLimitperYear"].isna() & storage_constants["Capacity"].isna()
+    storage_constants.loc[missing_bly_and_capacity, "BuildLimitperYear"] = (
+        storage_constants.loc[missing_bly_and_capacity, "MaxTotalBuild"]
+    )
+    storage_constants = storage_constants.drop(columns=["MaxTotalBuild"])
+
+    # build option if BuildLimitperYear (or its MaxTotalBuild fallback) is given and non-zero -
+    # same signal generator_constants uses (a zero build limit means "not buildable at all",
+    # same as no value given)
     storage_constants["expandable"] = (
         storage_constants["BuildLimitperYear"].notna() & (storage_constants["BuildLimitperYear"] != 0)
     )
@@ -107,6 +118,14 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     )
 
     storage_constants["duration_hours"] = storage_constants["capacity_mwh"] / storage_constants["capacity_mw"]
+
+    # capacity_mw is only meaningful for existing (non-expandable) storage -- for build options
+    # it's whatever raw "Capacity" value happened to be given (often a placeholder ceiling, same
+    # pattern as generator_constants' capacity), and it's never read by either model backend for
+    # expandable storage (only annual_build_limit_mwh is). Null it out now, after it's already
+    # been used above to derive duration_hours (a real, meaningful property for every storage
+    # unit, expandable or not) -- see seer/inputs/README.md: "ignored/NaN for build options".
+    storage_constants.loc[storage_constants["expandable"], "capacity_mw"] = pd.NA
 
     """Setup storage costs.
     Use storage constants to fill in a single dataframe of storage costs.
