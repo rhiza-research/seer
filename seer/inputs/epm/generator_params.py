@@ -67,8 +67,12 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
     
     
     # Create standard columns PyPSA expects
-    # this is a build option if buildlimitperyear is not nan
-    generator_constants["expandable"] = generator_constants["BuildLimitperYear"].notna()
+    # this is a build option if BuildLimitperYear is given and non-zero -- a zero build limit
+    # means "not buildable at all", the same as no value given, not a real (if degenerate)
+    # build option
+    generator_constants["expandable"] = (
+        generator_constants["BuildLimitperYear"].notna() & (generator_constants["BuildLimitperYear"] != 0)
+    )
     # rename columns to PyPSA conventions
     generator_constants.rename(columns={
         "BuildLimitperYear": "annual_build_limit",
@@ -193,9 +197,16 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
     # computation) -- already baked into generator_cost, so drop from the final output
     generator_constants = generator_constants.drop(columns=["capex", "heat_rate"])
 
-    # tech/fuel standardization (see seer.inputs.utils) happens last to allow data to be 
+    # tech/fuel standardization (see seer.inputs.utils) happens last to allow data to be
     # matched with old names between raw files.
     generator_constants["tech"] = standardize_tech(generator_constants["tech"], generator_constants["fuel"])
+    # "CustomFuel" is an ambiguous legacy EPM placeholder used historically for both Uranium
+    # and Geothermal generators -- it can't be resolved to a real fuel name on its own (unlike
+    # "ICE"/"ST"/"Steam", it isn't in the compound tech-fuel synonym table, since the *tech*
+    # side here is never itself ambiguous: "NUC"/"Geothermal" already resolve correctly
+    # regardless of fuel). Treat it as a missing fuel instead, filled in below from the
+    # already-resolved tech's own default.
+    generator_constants["fuel"] = generator_constants["fuel"].replace("CustomFuel", pd.NA)
     generator_constants["fuel"] = standardize_fuel(generator_constants["fuel"])
     # fill any still-missing fuel using that tech's default
     missing_fuel = generator_constants["fuel"].isna()
@@ -264,6 +275,21 @@ def load_input_data(data_path):
             f"each, dropping the rest): {dup_names}"
         )
         all_generators = all_generators.drop_duplicates(subset="generator", keep="first")
+
+    # a plant that's also in pStorageDataInput.csv is a storage unit -- storage_params.py
+    # already builds a proper (charge+discharge) storage_constants.csv row for it, so it must
+    # be excluded here, or it'd be double-counted: once as a one-way, discharge-only
+    # generator, and again as a proper 2-way storage unit for the exact same physical asset.
+    storage_plants = _read_csv_or_empty(data_path + "pStorageDataInput.csv", ["plant", "year", "parameters", "value"])
+    if not storage_plants.empty:
+        is_storage = all_generators["generator"].isin(storage_plants["plant"])
+        if is_storage.any():
+            warnings.warn(
+                f"Excluding plant(s) in {data_path!r} from generator_constants.csv -- also in "
+                f"pStorageDataInput.csv, so already represented in storage_constants.csv: "
+                f"{sorted(all_generators.loc[is_storage, 'generator'])}"
+            )
+            all_generators = all_generators[~is_storage]
 
     # generator capex (by zone, tech, fuel) -- same story: treat a missing default or
     # custom capex trajectory as empty rather than failing, so build_generator_params

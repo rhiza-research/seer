@@ -104,23 +104,31 @@ Number of rows is zones x `times.csv` rows (x years, only if given per-year - se
 ## renewable potentials
 ### `renewable_profiles.csv`
 Normalized capacity-factor curve, at whatever time resolution `times.csv` specifies. Each row
-is either a **generic** profile (shared by every generator of a given zone/tech) or a
-**generator-specific** one (one individual generator's own profile, taking priority over its
-tech's generic profile where both exist) -- distinguished by which of `tech`/`generator` is
-populated; exactly one of the two is set per row, never both, never neither.
+is one of three kinds, distinguished by which of `zone`/`tech`/`generator` is populated,
+tried in this priority order per generator (each takes priority over the next only where it
+actually exists for that generator):
+1. **generator-specific** (`generator` set, `zone`/`tech` NaN) -- one individual generator's
+   own profile.
+2. **zone+tech generic** (`zone` and `tech` both set, `generator` NaN) -- shared by every
+   generator of that zone/tech.
+3. **tech-only fallback** (`tech` set, `zone`/`generator` both NaN) -- a zone-agnostic profile
+   for the whole tech, shared across every zone that has no more specific match. Only present
+   if the source data actually provides a zone-agnostic profile, or one was added by hand
+   during manual data cleanup (see `data/processed_gams/README.md`) -- never synthesized
+   automatically (e.g. by averaging other zones' profiles).
 
 | column | contents |
 | --- | --- |
-| `zone` | zone id |
-| `tech` | renewable technology, for a **generic** row; matches `generator_constants.tech`. NaN for a generator-specific row. |
-| `generator` | generator name, for a **generator-specific** row; matches `generator_constants.generator`. NaN for a generic row. |
+| `zone` | zone id, for a **generic** row. NaN for generator-specific or tech-only rows. |
+| `tech` | renewable technology, for a **generic** or **tech-only** row; matches `generator_constants.tech`. NaN for a generator-specific row. |
+| `generator` | generator name, for a **generator-specific** row; matches `generator_constants.generator`. NaN otherwise. |
 | `time` | matches a `times.csv` value |
 | `year` | **optional**, same template-vs-per-year rule as `demand_profile.csv` above |
 | `value` | capacity factor: available output as a fraction of nameplate capacity (unitless, 0–1) |
 
 A generator's `isre` (see `generator_constants.csv` below) reflects whether a matching profile
-(specific or generic) actually exists for it — not a raw source flag — so `isre=True` always
-implies there's something here to look up, and `isre=False` never needs a lookup.
+(any of the three kinds above) actually exists for it — not a raw source flag — so `isre=True`
+always implies there's something here to look up, and `isre=False` never needs a lookup.
 
 ## generator parameters
 ### `generator_constants.csv`
@@ -188,12 +196,12 @@ capacity is `capacity_mw * duration_hours`, derived wherever it's needed rather 
 | `efficiency` | optional round-trip efficiency component (unitless, 0–1), applied to both charging and discharging |
 
 ### `storage_costs.csv`
-Cost trajectory per storage unit, wide by year. Number of rows is storage units x cost
-types (currently just `capex`); columns are `storage`, `cost_type`, then one column per
-modeled year.
+Cost trajectory per storage unit, wide by year. Number of rows is storage units x 2
+(`capex`, `marginal_cost`); columns are `storage`, `cost_type`, then one column per modeled
+year. Every storage unit must have both cost types.
 
 | column | contents |
 | --- | --- |
 | `storage` | storage unit name (matches `storage_constants.storage`) |
-| `cost_type` | `capex` ($/MWh, annualized capital cost for build options) |
-| `<year>` (one column per modeled year) | capex value for that year |
+| `cost_type` | `capex` ($/MWh, annualized capital cost for build options) or `marginal_cost` ($/MWh) -- required, 0 if the source data has no variable-cost figure for storage (usually the case: storage doesn't burn fuel, and raw variable-cost data for it is sparse where present at all) |
+| `<year>` (one column per modeled year) | cost value for that year, in the units implied by `cost_type` |

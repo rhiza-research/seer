@@ -25,7 +25,6 @@ gas,OCGTNew
 gas,GasResidual
 uranium,Uranium
 uranium,Nuclear
-uranium,CustomFuel
 solid biomass,Woodchip
 solid biomass,Biomass
 solid biomass,Bagasse

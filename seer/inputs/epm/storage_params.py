@@ -85,8 +85,11 @@ def build_storage_params(data_path="data/Gambia/", years=None):
         param_values = storage_gen_params[storage_gen_params["parameters"] == param].set_index("generator")["value"]
         storage_constants[param] = storage_constants["storage"].map(param_values)
 
-    # build option if BuildLimitperYear is not nan - same signal generator_constants uses
-    storage_constants["expandable"] = storage_constants["BuildLimitperYear"].notna()
+    # build option if BuildLimitperYear is given and non-zero - same signal generator_constants
+    # uses (a zero build limit means "not buildable at all", same as no value given)
+    storage_constants["expandable"] = (
+        storage_constants["BuildLimitperYear"].notna() & (storage_constants["BuildLimitperYear"] != 0)
+    )
     # rename to seer-schema column names, matching generator_constants conventions
     storage_constants.rename(columns={
         "Capacity": "capacity_mw",
@@ -116,6 +119,16 @@ def build_storage_params(data_path="data/Gambia/", years=None):
         for y in years:
             row_capex[y] = storage.capex_mwh
         rows.append(row_capex)
+
+        # marginal cost -- always write a row (0 fallback), same pattern as
+        # generator_params.py. Storage doesn't burn fuel, and the raw data's own variable-cost
+        # param (VOM) is too sparse to build a real per-region value from (present for only a
+        # handful of plants in a couple of regions, absent everywhere else), so 0 is the
+        # honest default rather than a fabricated non-zero figure.
+        row_mc = {"storage": storage.storage, "cost_type": "marginal_cost"}
+        for y in years:
+            row_mc[y] = 0
+        rows.append(row_mc)
 
     storage_costs = pd.DataFrame(rows, columns=["storage", "cost_type"] + years)
 

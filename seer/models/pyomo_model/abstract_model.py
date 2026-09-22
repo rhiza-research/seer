@@ -46,9 +46,8 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
     model.generator_capacity = pyo.Param(model.existing_generators, within=pyo.NonNegativeReals)
     model.generator_start_year = pyo.Param(model.existing_generators, within=pyo.Reals)
     model.generator_retirement_year = pyo.Param(model.existing_generators, within=pyo.Reals)
-    # new build generators have an annual build limit and a discrete capacity increment
+    # new build generators have an annual build limit
     model.generator_annual_build_limit = pyo.Param(model.new_generators, within=pyo.NonNegativeReals)
-    model.generator_unit_size = pyo.Param(model.new_generators, within=pyo.PositiveReals)
 
     # generator costs
     model.generator_marginal_cost = pyo.Param(model.generators, model.years, within=pyo.NonNegativeReals)
@@ -97,7 +96,11 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
     # capacity added in a given year (persists into all subsequent years); only new-build generators can add capacity
     if discrete_additions:
         # additions must come in whole unit_size increments: units is the decision variable,
-        # generation_added_capacity is just units * unit_size, used everywhere else unchanged
+        # generation_added_capacity is just units * unit_size, used everywhere else unchanged.
+        # unit_size is only declared (and only needs data) here -- most raw source data has no
+        # UnitSize value at all for most generators, which is fine as long as this mode isn't
+        # requested (see seer.models.pyomo_model.build.load_data).
+        model.generator_unit_size = pyo.Param(model.new_generators, within=pyo.PositiveReals)
         model.generation_added_units = pyo.Var(model.new_generators, model.years, within=pyo.NonNegativeIntegers)
 
         def added_capacity_rule(model, gen, year):

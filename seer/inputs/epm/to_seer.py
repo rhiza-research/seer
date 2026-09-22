@@ -58,6 +58,22 @@ def _drop_unknown_zones(df, valid_zones, label, costs_df=None, id_col=None):
     return df
 
 
+def _read_settings(data_path):
+    """settings.csv: model-wide scalar settings -- currently just the discount rate `dr`,
+    used by both model backends to discount future years' objective terms. Sourced from
+    pSettings.csv's "DR" parameter (case-insensitive; not "WACC", which is a different
+    quantity used for annualizing capex, not for discounting the objective across years).
+    """
+    path = Path(f"{data_path}pSettings.csv")
+    if not path.exists():
+        raise ValueError(f"No pSettings.csv found in {data_path!r} -- can't determine discount rate.")
+    df = pd.read_csv(path)
+    dr_row = df[df["parameters"].str.upper() == "DR"]
+    if dr_row.empty:
+        raise ValueError(f"No 'DR' parameter found in {path} -- can't determine discount rate.")
+    return pd.DataFrame({"parameters": ["dr"], "value": [dr_row["value"].iloc[0]]})
+
+
 def _read_network(data_path, valid_zones):
     """network.csv: inter-zone transfer capacity. Sourced from pTransferLimit.csv (from, to,
     season, year, value) -- but the seer schema's network.csv is a single static capacity per
@@ -82,21 +98,26 @@ def _read_network(data_path, valid_zones):
 
 
 def _match_renewable_profiles(generator_constants, profiles_raw, times):
-    """Keep only renewable_profiles rows that actually match something real: a generic (zone,
-    tech) row is kept only if some generator actually has that (zone, tech); a
-    generator-specific row is kept only if its identifier is an actual generator name (some
-    regions' pVREgenProfile.csv variant has no real "generator" column at all, so its
-    identifiers are really sub-zone resource labels with nothing to attach to -- see
-    re_potentials.py's docstring). Matched profiles are further required to cover every
-    modeled time (see _drop_incomplete_profiles) -- a partial match is treated as no match.
+    """Keep only renewable_profiles rows that actually match something real, checked in this
+    priority order per generator (see seer/inputs/README.md):
+    1. generator-specific -- kept only if its identifier is an actual generator name (some
+       regions' pVREgenProfile.csv variant has no real "generator" column at all, so its
+       identifiers are really sub-zone resource labels with nothing to attach to -- see
+       re_potentials.py's docstring).
+    2. zone+tech generic -- kept only if some generator actually has that (zone, tech).
+    3. tech-only fallback (zone-agnostic) -- kept only if some generator has that tech at
+       all. Never synthesized here (e.g. by averaging other zones) -- only present if the
+       source data already had a zone-agnostic row, or one was added by hand during manual
+       data cleanup.
+    Matched profiles are further required to cover every modeled time (see
+    _drop_incomplete_profiles) -- a partial match is treated as no match.
 
-    isre is (re)computed here from scratch, straight from profile existence: True if a
-    generator has a matching specific profile (checked first) or, failing that, a matching
-    generic (zone, tech) profile -- regardless of what any raw RETech/VRETech flag said,
-    since profile existence is the actual ground truth for whether a generator's dispatch
-    should be profile-driven. A generator whose raw flag claimed renewable but has no
-    matching profile at all gets a warning and isre=False (can't be simulated as a variable
-    renewable with no profile to mask its output).
+    isre is (re)computed here from scratch, straight from profile existence via any of the
+    three tiers above -- regardless of what any raw RETech/VRETech flag said, since profile
+    existence is the actual ground truth for whether a generator's dispatch should be
+    profile-driven. A generator whose raw flag claimed renewable but has no matching profile
+    at all gets a warning and isre=False (can't be simulated as a variable renewable with no
+    profile to mask its output).
 
     `times` is the region's full times.csv time list, used to validate profile completeness.
 
@@ -105,19 +126,26 @@ def _match_renewable_profiles(generator_constants, profiles_raw, times):
     """
     real_zone_tech = generator_constants[["zone", "tech"]].drop_duplicates()
     real_generators = set(generator_constants["generator"])
+    real_techs = set(generator_constants["tech"])
 
-    is_generic = profiles_raw["tech"].notna()
-    generic_matched = profiles_raw[is_generic].merge(real_zone_tech, on=["zone", "tech"], how="inner")
-    specific_matched = profiles_raw[~is_generic & profiles_raw["generator"].isin(real_generators)]
+    has_tech = profiles_raw["tech"].notna()
+    has_zone = profiles_raw["zone"].notna()
+    zone_tech_matched = profiles_raw[has_tech & has_zone].merge(real_zone_tech, on=["zone", "tech"], how="inner")
+    tech_only_matched = profiles_raw[has_tech & ~has_zone]
+    tech_only_matched = tech_only_matched[tech_only_matched["tech"].isin(real_techs)]
+    specific_matched = profiles_raw[~has_tech & profiles_raw["generator"].isin(real_generators)]
 
-    generic_matched = _drop_incomplete_profiles(generic_matched, ["zone", "tech"], times, "generic")
+    zone_tech_matched = _drop_incomplete_profiles(zone_tech_matched, ["zone", "tech"], times, "generic")
+    tech_only_matched = _drop_incomplete_profiles(tech_only_matched, ["tech"], times, "tech-only fallback")
     specific_matched = _drop_incomplete_profiles(specific_matched, ["generator"], times, "generator-specific")
 
     has_specific = generator_constants["generator"].isin(set(specific_matched["generator"]))
-    matched_zone_tech = set(zip(generic_matched["zone"], generic_matched["tech"]))
-    has_generic = generator_constants.apply(lambda g: (g.zone, g.tech) in matched_zone_tech, axis=1)
+    matched_zone_tech = set(zip(zone_tech_matched["zone"], zone_tech_matched["tech"]))
+    has_zone_tech = generator_constants.apply(lambda g: (g.zone, g.tech) in matched_zone_tech, axis=1)
+    has_tech_only = generator_constants["tech"].isin(set(tech_only_matched["tech"]))
+    has_any = has_specific | has_zone_tech | has_tech_only
 
-    claimed_but_unmatched = generator_constants["isre"] & ~(has_specific | has_generic)
+    claimed_but_unmatched = generator_constants["isre"] & ~has_any
     for _, gen in generator_constants[claimed_but_unmatched].iterrows():
         warnings.warn(
             f"Generator {gen.generator!r} (zone={gen.zone}, tech={gen.tech}) is flagged "
@@ -125,8 +153,8 @@ def _match_renewable_profiles(generator_constants, profiles_raw, times):
         )
 
     generator_constants = generator_constants.copy()
-    generator_constants["isre"] = has_specific | has_generic
-    matched = pd.concat([generic_matched, specific_matched], ignore_index=True)
+    generator_constants["isre"] = has_any
+    matched = pd.concat([zone_tech_matched, tech_only_matched, specific_matched], ignore_index=True)
     return generator_constants, matched
 
 
@@ -146,6 +174,7 @@ def epm_to_seer(input_path, output_path):
     demand_forecast = _drop_unknown_zones(demand_forecast, valid_zones, "demand_forecast.csv")
     demand_profile = _drop_unknown_zones(demand_profile, valid_zones, "demand_profile.csv")
     network = _read_network(input_dir, valid_zones)
+    settings = _read_settings(input_dir)
 
     generator_constants, generator_costs = build_generator_params(input_dir, model_years=years["year"].tolist())
     generator_constants, generator_costs = _drop_unknown_zones(
@@ -177,6 +206,7 @@ def epm_to_seer(input_path, output_path):
         "times": times,
         "zones": zones,
         "network": network,
+        "settings": settings,
         "demand_forecast": demand_forecast,
         "demand_profile": demand_profile,
     }
@@ -195,6 +225,12 @@ def passthrough(data_path):
     years = pd.read_csv(f"{data_path}y.csv")[["year"]]
 
     demand_forecast = pd.read_csv(f"{data_path}pDemandForecast.csv")
+    # "type" must be lowercase ("peak"/"energy") per seer/inputs/README.md -- most regions'
+    # raw pDemandForecast.csv already spells it that way, but several (e.g. CAPP, Mexico) use
+    # "Peak"/"Energy" (Title Case) instead. Both model backends filter on the lowercase form,
+    # so an un-normalized region's demand silently vanishes (NaN, not an error) rather than
+    # raising -- this went undetected for a while as a result.
+    demand_forecast["type"] = demand_forecast["type"].str.lower()
     demand_profile = pd.read_csv(f"{data_path}pDemandProfile.csv")
     demand_profile = convert_season_day_hour(demand_profile)[["zone", "time", "value"]]
 

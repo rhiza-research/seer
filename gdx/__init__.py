@@ -3,9 +3,9 @@ gdx: load GAMS EPM .gdx inputs, align them to a canonical per-symbol schema,
 enrich generator and VRE profile data, and write one CSV per symbol per region.
 
     import gdx
-    gdx.to_csv(data_dir="data/epm_gams",
-               mapping_path="data/symbol_mapping.csv",
-               output_dir="data/epm_gams_csv")
+    gdx.gams_to_csv(data_dir="data/raw_gams",
+                     mapping_path="gdx/symbol_mapping.csv",
+                     output_dir="data/extracted_gams")
 """
 
 from .enrich_data import reconcile_data

@@ -8,9 +8,6 @@ import pypsa
 
 from ..time_utils import build_snapshot_calendar, load_times, resolve_profile
 
-# TODO: move to a config csv
-discount_rate = 0.08
-
 
 def build(data_path):
     input_data = load_data(data_path)
@@ -27,6 +24,7 @@ def build(data_path):
     model.investment_period_weightings["years"] = get_year_steps(years)
 
     # discount each period's objective terms relative to the first modeled year
+    discount_rate = input_data["settings"].set_index("parameters")["value"]["dr"]
     start_at = 0
     for period, nyears in model.investment_period_weightings.years.items():
         nyears = int(nyears)
@@ -75,13 +73,16 @@ def get_year_steps(years):
 
 
 def prepare_renewable_profiles(re_profiles, calendar):
-    """Resolve renewable_profiles.csv into two wide frames indexed by (year, datetime)
-    snapshots, for lookup during generator setup: generic (columns=(zone, tech)) and
-    generator-specific (columns=generator name) -- the latter takes priority over the former
-    when a generator has both (see seer/inputs/README.md's renewable_profiles.csv entry)."""
-    generic = _resolve_wide(re_profiles[re_profiles["tech"].notna()], calendar, ["zone", "tech"])
+    """Resolve renewable_profiles.csv into three wide frames indexed by (year, datetime)
+    snapshots, for lookup during generator setup: generic (columns=(zone, tech)), tech-only
+    (columns=tech, zone-agnostic) and generator-specific (columns=generator name). Priority
+    for a given generator is specific, then generic, then tech-only (see
+    seer/inputs/README.md's renewable_profiles.csv entry)."""
+    has_zone = re_profiles["zone"].notna()
+    generic = _resolve_wide(re_profiles[re_profiles["tech"].notna() & has_zone], calendar, ["zone", "tech"])
+    tech_only = _resolve_wide(re_profiles[re_profiles["tech"].notna() & ~has_zone], calendar, ["tech"])
     specific = _resolve_wide(re_profiles[re_profiles["generator"].notna()], calendar, ["generator"])
-    return generic, specific
+    return generic, tech_only, specific
 
 
 def _resolve_wide(profiles, calendar, key_cols):
@@ -123,9 +124,10 @@ def _marginal_cost(gen_costs, name):
 def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expansion=False):
     """Add existing generators and build options to the model. Returns the set of carriers used.
 
-    re_profiles: (generic, specific) tuple from prepare_renewable_profiles -- a generator's own
-    specific profile takes priority over its tech's generic one when both exist."""
-    generic_profiles, specific_profiles = re_profiles
+    re_profiles: (generic, tech_only, specific) tuple from prepare_renewable_profiles --
+    priority for a given generator is specific, then its (zone, tech) generic profile, then
+    the zone-agnostic tech-only fallback."""
+    generic_profiles, tech_only_profiles, specific_profiles = re_profiles
     carriers = set()
     gen_constants = gen_constants.set_index("generator")
     gen_costs = gen_costs.set_index(["generator", "cost_type"])
@@ -144,12 +146,22 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
         ramp_down_rate = gen.get("ramp_down_rate")
         is_renewable = bool(gen.isre)
         # isre guarantees a matching profile exists (see seer.inputs.epm.to_seer's matching
-        # step) -- specific (by this generator's own name) takes priority over generic
-        profile = specific_profiles[name] if name in specific_profiles.columns else generic_profiles.get((zone, gen_type))
+        # step) -- specific (by this generator's own name) takes priority over its (zone,
+        # tech) generic profile, which in turn takes priority over the zone-agnostic
+        # tech-only fallback
+        if name in specific_profiles.columns:
+            profile = specific_profiles[name]
+        elif (zone, gen_type) in generic_profiles.columns:
+            profile = generic_profiles[(zone, gen_type)]
+        else:
+            profile = tech_only_profiles.get(gen_type)
 
         if expandable:
-            # one PyPSA component per build-year vintage
-            valid_years = get_valid_years(model, gen.start_year, gen.retirement_year)
+            # one PyPSA component per build-year vintage -- no upper bound: a build option
+            # stays buildable for the rest of the modeled horizon once its start_year has
+            # passed, regardless of retirement_year (that governs each vintage's own
+            # lifetime, not how long the option to build remains open)
+            valid_years = get_valid_years(model, gen.start_year)
             capex = gen_costs.loc[(name, "capex"), :]
             mc = _marginal_cost(gen_costs, name)
             unit_capacity = gen.get("unit_size") if modular_expansion else None
@@ -209,11 +221,12 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
         name, expandable = sto.name, sto.expandable
 
         if expandable:
-            # one PyPSA component per build-year vintage
+            # one PyPSA component per build-year vintage -- no upper bound, same reasoning
+            # as build_generators' expandable branch above
             capex = storage_costs.loc[(name, "capex"), :]
             unit_capacity = sto.unit_size_mwh if modular_expansion else None
 
-            for year in get_valid_years(model, sto.start_year, sto.retirement_year):
+            for year in get_valid_years(model, sto.start_year):
                 model.add("StorageUnit", f"{name}_{year}", bus=sto.zone,
                     carrier="battery", build_year=year, lifetime=sto.life,
                     p_nom_extendable=True, p_nom_mod=unit_capacity, p_nom_max=sto.annual_build_limit_mwh,
@@ -238,9 +251,16 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
     return carriers
 
 
-def get_valid_years(model, start_year=2025, end_year=2051):
-    """Investment periods that fall within [start_year, end_year]."""
-    return [year for year in model.investment_periods if start_year <= year <= end_year]
+def get_valid_years(model, start_year=None, end_year=None):
+    """Investment periods that fall within [start_year, end_year]. Either bound may be
+    omitted/NaN to mean unbounded on that side -- callers use this for build options
+    (expandable=True), which only need a lower bound: once a technology's start_year has
+    passed, the model should be free to build it in any later modeled year, not just up to
+    some retirement_year (that bounds an individual vintage's own operating lifetime, via
+    `lifetime=gen.life` on each build-year component, not whether building is still allowed)."""
+    lo = -float("inf") if start_year is None or pd.isna(start_year) else start_year
+    hi = float("inf") if end_year is None or pd.isna(end_year) else end_year
+    return [year for year in model.investment_periods if lo <= year <= hi]
 
 
 def annual_to_snapshots(model, annual_series):
@@ -256,6 +276,7 @@ def load_data(data_path):
     return {
         "zones": pd.read_csv(data_path + "zones.csv"),
         "years": pd.read_csv(data_path + "years.csv"),
+        "settings": pd.read_csv(data_path + "settings.csv"),
         "times": load_times(data_path.rstrip("/")),
         "demand_forecast": pd.read_csv(data_path + "demand_forecast.csv"),
         "demand_profile": pd.read_csv(data_path + "demand_profile.csv"),

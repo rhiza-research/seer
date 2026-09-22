@@ -34,7 +34,10 @@ def _dedup_profile(df, key_cols, source):
     disagree on value (a real data conflict -- e.g. several distinct plants sharing one
     zone/tech label -- that can't be resolved by arbitrarily picking one)."""
     group_cols = key_cols + ["time"]
-    counts = df.groupby(group_cols)["value"].nunique().reset_index(name="n_values")
+    # dropna=False: a zone-agnostic (tech-only) row has zone=NaN in key_cols -- pandas
+    # groupby silently drops NaN-keyed groups by default, which would skip conflict
+    # detection entirely for that key rather than just not finding one
+    counts = df.groupby(group_cols, dropna=False)["value"].nunique().reset_index(name="n_values")
     conflicting = counts[counts["n_values"] > 1]
     if not conflicting.empty:
         bad_keys = conflicting[key_cols].drop_duplicates()

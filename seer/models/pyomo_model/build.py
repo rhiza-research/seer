@@ -4,10 +4,14 @@ from ..time_utils import build_snapshot_calendar, load_times, resolve_profile
 from .abstract_model import seer_base_model
 
 
-def load_data(data_path):
+def load_data(data_path, discrete_additions=False):
     """Read the seer-schema input CSVs at `data_path` and build a Pyomo AbstractModel data dict.
     data_path may be a local path or a remote URL (e.g. gs://bucket/prefix); reads go through
-    pandas/fsspec either way."""
+    pandas/fsspec either way.
+
+    `discrete_additions` must match the value passed to seer_base_model() -- generator_unit_size
+    is only declared (and only needs data) in that mode; most raw source data has no UnitSize
+    value at all for most generators, which is fine as long as this mode isn't requested."""
     data_path = str(data_path).rstrip("/")
 
     years_df = pd.read_csv(f"{data_path}/years.csv")
@@ -55,18 +59,26 @@ def load_data(data_path):
         for row in demand_long.itertuples()
     }
 
-    # ---- renewable availability. renewable_profiles.csv rows are either generic (shared by
-    # every generator of a (zone, tech)) or generator-specific (one generator's own profile,
-    # which takes priority over its tech's generic one -- see seer/inputs/README.md). Template
-    # profiles (no year in renewable_profiles.csv) are already replicated across every year by
-    # resolve_profile, so this is uniform whether or not the source data varies by year.
-    generic_df = renewable_profiles_df[renewable_profiles_df["tech"].notna()]
+    # ---- renewable availability. renewable_profiles.csv rows are generic (shared by every
+    # generator of a (zone, tech)), tech-only (zone-agnostic, shared across every zone), or
+    # generator-specific (one generator's own profile) -- priority is specific, then generic,
+    # then tech-only (see seer/inputs/README.md). Template profiles (no year in
+    # renewable_profiles.csv) are already replicated across every year by resolve_profile, so
+    # this is uniform whether or not the source data varies by year.
+    has_zone = renewable_profiles_df["zone"].notna()
+    has_tech = renewable_profiles_df["tech"].notna()
+    generic_df = renewable_profiles_df[has_tech & has_zone]
+    tech_only_df = renewable_profiles_df[has_tech & ~has_zone]
     specific_df = renewable_profiles_df[renewable_profiles_df["generator"].notna()]
 
     generic_availability = {
         (row.zone, row.tech, row.year, row.hour): row.value
         for row in resolve_profile(generic_df, calendar, key_cols=["zone", "tech"]).itertuples()
     } if not generic_df.empty else {}
+    tech_only_availability = {
+        (row.tech, row.year, row.hour): row.value
+        for row in resolve_profile(tech_only_df, calendar, key_cols=["tech"]).itertuples()
+    } if not tech_only_df.empty else {}
     specific_availability = {
         (row.generator, row.year, row.hour): row.value
         for row in resolve_profile(specific_df, calendar, key_cols=["generator"]).itertuples()
@@ -87,17 +99,21 @@ def load_data(data_path):
     generator_retirement_year = constants.loc[existing_generators, "retirement_year"].to_dict()
     # only meaningful (and only loaded) for new-build generators
     generator_annual_build_limit = constants.loc[new_generators, "annual_build_limit"].to_dict()
-    generator_unit_size = constants.loc[new_generators, "unit_size"].to_dict()
 
     # dispatchable generators have a capacity factor of 1.0 every (year, hour); renewables are
-    # derated by their own profile if they have one, else their tech's generic profile (which
-    # may itself vary by year). isre guarantees one of the two exists -- see
-    # seer.inputs.epm.to_seer's matching step.
+    # derated by their own profile if they have one, else their tech's (zone, tech) generic
+    # profile, else the zone-agnostic tech-only fallback (each may itself vary by year). isre
+    # guarantees one of the three exists -- see seer.inputs.epm.to_seer's matching step.
+    def _capacity_factor(gen, year, hour):
+        if (gen, year, hour) in specific_availability:
+            return specific_availability[(gen, year, hour)]
+        key = (generator_zone[gen], generator_tech[gen], year, hour)
+        if key in generic_availability:
+            return generic_availability[key]
+        return tech_only_availability[(generator_tech[gen], year, hour)]
+
     generator_capacity_factor = {
-        (gen, year, hour): (
-            specific_availability[(gen, year, hour)] if (gen, year, hour) in specific_availability
-            else generic_availability[(generator_zone[gen], generator_tech[gen], year, hour)]
-        ) if generator_isre[gen] else 1.0
+        (gen, year, hour): _capacity_factor(gen, year, hour) if generator_isre[gen] else 1.0
         for gen in generators
         for year, hour in times
     }
@@ -142,13 +158,23 @@ def load_data(data_path):
 
     # ---- storage costs ----
     storage_costs = storage_costs_df.set_index(["storage", "cost_type"])
+
+    # 0 if a storage unit's capex/marginal_cost row (or a specific year within it) is
+    # missing -- should always be fully present per seer/inputs/README.md, but fall back
+    # defensively rather than crash or pass NaN into a NonNegativeReals param
+    def _storage_cost(s, cost_type, year):
+        if (s, cost_type) not in storage_costs.index:
+            return 0.0
+        value = storage_costs.loc[(s, cost_type), str(year)]
+        return 0.0 if pd.isna(value) else value
+
     storage_capex_cost = {
-        (s, year): storage_costs.loc[(s, "capex"), str(year)]
+        (s, year): _storage_cost(s, "capex", year)
         for s in new_storage
         for year in years
     }
     storage_marginal_cost = {
-        (s, year): storage_costs.loc[(s, "marginal_cost"), str(year)]
+        (s, year): _storage_cost(s, "marginal_cost", year)
         for s in storage
         for year in years
     }
@@ -159,7 +185,7 @@ def load_data(data_path):
     line_to = network_df["to"].to_dict()
     line_capacity = network_df["capacity"].to_dict()
 
-    return {
+    data = {
         None: {
             "zones": {None: zones},
             "years": {None: years},
@@ -175,7 +201,6 @@ def load_data(data_path):
             "generator_start_year": generator_start_year,
             "generator_retirement_year": generator_retirement_year,
             "generator_annual_build_limit": generator_annual_build_limit,
-            "generator_unit_size": generator_unit_size,
             "generator_capex_cost": generator_capex_cost,
             "generator_marginal_cost": generator_marginal_cost,
             "generator_capacity_factor": generator_capacity_factor,
@@ -197,6 +222,9 @@ def load_data(data_path):
             "demand": demand,
         }
     }
+    if discrete_additions:
+        data[None]["generator_unit_size"] = constants.loc[new_generators, "unit_size"].to_dict()
+    return data
 
 
 def build(data_path, discrete_additions=False, battery_reset="annual", storage_reset_hour=0, storage_reset_soc=0.5):
@@ -207,4 +235,4 @@ def build(data_path, discrete_additions=False, battery_reset="annual", storage_r
         storage_reset_hour=storage_reset_hour,
         storage_reset_soc=storage_reset_soc,
     )
-    return model.create_instance(load_data(data_path))
+    return model.create_instance(load_data(data_path, discrete_additions=discrete_additions))

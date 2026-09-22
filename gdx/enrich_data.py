@@ -48,7 +48,7 @@ def build_fuel_id_lookup(ftf):
     Build a {fuel_id: (fuel_name, tech_name)} dict from a country's ftfindex: the raw,
     un-standardized names associated with each numeric fuel_id in pGenDataExcel.
 
-    ftfindex's declared column order (see gdx/data/symbol_mapping.csv) is (fuel, tech,
+    ftfindex's declared column order (see gdx/symbol_mapping.csv) is (fuel, tech,
     value) -- a broader category (e.g. "Hydro") and a more specific label (e.g. "Water").
     This is called on the *raw* gamspy-loaded frame, before symbol-mapping has renamed its
     columns to those real names (they're still generic, e.g. "uni_0"/"uni_1"/"value") -- so
