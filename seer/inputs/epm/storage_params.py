@@ -175,9 +175,7 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
 
     storage_costs = pd.DataFrame(rows, columns=["storage", "cost_type"] + years)
 
-    # reorder to match the seer schema. capacity_mwh/capex_mwh are dropped here -- they were
-    # only needed to compute duration_hours and the capex trajectory above; energy capacity is
-    # derived as capacity_mw * duration_hours wherever it's needed downstream.
+    # reorder to match schema
     storage_constants = storage_constants[[
         "storage", "zone", "tech", "duration_hours", "capacity_mw",
         "efficiency", "life", "start_year", "retirement_year",

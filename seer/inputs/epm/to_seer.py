@@ -56,9 +56,7 @@ def epm_to_seer(input_path, output_path):
         input_dir, zones["zone"], years["year"].tolist(), times["time"].tolist()
     )
 
-    # storage_costs.csv must carry a column for every modeled year (years.csv) -- build.py's
-    # per-vintage capex lookup indexes storage_costs by those exact values (see
-    # storage_params.py's build_storage_params docstring)
+    """build storage params"""
     storage_constants, storage_costs = build_storage_params(
         input_dir, years=years["year"].tolist(), valid_zones=zones["zone"]
     )
