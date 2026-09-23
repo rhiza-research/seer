@@ -48,23 +48,11 @@ def epm_to_seer(input_path, output_path):
     """settings"""
     settings = check_settings(pd.read_csv(f"{input_dir}pSettings.csv"))
 
+    """build generator params"""
+    generator_constants, generator_costs = build_generator_params(input_dir, zones["zone"], years["year"].tolist())
 
-
-    demand_forecast = _drop_unknown_zones(demand_forecast, valid_zones, "demand_forecast.csv")
-    demand_profile = _drop_unknown_zones(demand_profile, valid_zones, "demand_profile.csv")
-
-    generator_constants, generator_costs = build_generator_params(input_dir, model_years=years["year"].tolist())
-    generator_constants, generator_costs = _drop_unknown_zones(
-        generator_constants, valid_zones, "generator_constants.csv", generator_costs, "generator"
-    )
-    renewable_profiles_raw = build_re_potentials(input_dir)
-    # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own
-    # `time` values (EPM data is often already a handful of representative days per month, not
-    # a full year -- see seer/inputs/README.md's times.csv entry)
     times = pd.DataFrame({"time": sorted(demand_profile["time"].unique())})
-    generator_constants, renewable_profiles = _match_renewable_profiles(
-        generator_constants, renewable_profiles_raw, times["time"].tolist()
-    )
+    generator_constants, renewable_profiles = match_renewable_profiles(generator_constants, renewable_profiles, times["time"].tolist())
     # storage_costs.csv must carry a column for every modeled year (years.csv) -- build.py's
     # per-vintage capex lookup indexes storage_costs by those exact values (see
     # storage_params.py's build_storage_params docstring)

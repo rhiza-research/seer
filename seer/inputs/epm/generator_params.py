@@ -3,104 +3,106 @@ import warnings
 from pathlib import Path
 
 import pandas as pd
-import numpy as np
 
 from ..utils import standardize_tech, standardize_fuel, default_fuel_for_tech
+from .data_checks import check_generators, check_capex_trajectory
+from .utils import init_df, pivot_wide, pivot_years
 
 # sentinel for "no known retirement year" -- well beyond any realistic modeled horizon
 NO_RETIREMENT_YEAR = 9999
 
+# required generator parameters
+PARAM_LIST = [
+    "Capacity", "Capex", "RampDnRate", "RampUpRate", "Life",
+    "HeatRate", "RETech", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear", "MaxTotalBuild",
+]
 
-def build_generator_params(data_path="data/Gambia/", model_years=None):
-    """Combines disparate generator data sources into two seer schema files:
-    generator_constants.csv: a dataframe of generator constants (parameters, build limits, etc.)
-    generator_costs.csv: a dataframe of generator costs (capex and marginal cost)
-    Returns two dataframes: generator_constants and generator_costs.
 
-    `model_years` (the region's years.csv) is only used as a fallback: some regions have a base
-    capex value per generator (pGenDataInputCustom's "Capex" param) but no capex *trajectory*
-    data at all (neither pCapexTrajectoriesDefault.csv nor Custom.csv exists) -- there's no cost
-    decline curve to apply, so capex is held flat across model_years instead of producing an
-    empty generator_costs.csv with no year columns.
-    """
-    input_data = load_input_data(data_path)
-    all_generators = input_data["all_generators"]
-    default_gen_params = input_data["default_gen_params"]
-    custom_gen_params = input_data["custom_gen_params"]
-    default_gen_capex = input_data["default_gen_capex"]
-    custom_gen_capex = input_data["custom_gen_capex"]
-    fuel_prices = input_data["fuel_prices"]
+def build_generator_params(input_dir, valid_zones=None, model_years=None):
+    """Builds generator_constants.csv and generator_costs.csv from EPM's raw generator files."""
 
-    """Setup generator constants.
-    Use generator list, default parameters, and custom parameters to fill in a single dataframe of generator constants.
-    """
-    # Capex and HeatRate are needed only to compute generator_costs below (capex scaling
-    # multiplier, marginal cost from heat_rate x fuel price); dropped from the final output,
-    # since they're already baked into generator_costs.csv by the time this returns.
-    param_list = [
-        "Capacity", "Capex", "RampDnRate", "RampUpRate", "Life",
-        "HeatRate", "RETech", "RetrYr", "StYr", "UnitSize", "BuildLimitperYear", "MaxTotalBuild",
-    ]
-    # Initialize generator_constants dataframe
-    generator_constants = pd.DataFrame(columns=["generator", "zone", "tech", "fuel"] + param_list)
-    generator_constants[["generator", "zone", "tech", "fuel"]] = all_generators[["generator", "zone", "tech", "fuel"]]
+    default_gen_params = init_df(input_dir + "pGenDataInputDefault.csv",
+                                ["zone", "tech", "fuel", "parameters", "value"])
+    custom_gen_params = pd.read_csv(f"{input_dir}pGenDataInputCustom.csv")
 
-    # Fill in parameters from defaults first
-    for idx, gen in generator_constants.iterrows():
-        for param in param_list:
-            # find default row for this zone/tech/fuel/parameter
-            mask = (
-                (default_gen_params["zone"] == gen.zone) &
-                (default_gen_params["tech"] == gen.tech) &
-                (default_gen_params["fuel"] == gen.fuel) &
-                (default_gen_params["parameters"] == param)
-            )
-            if mask.any():
-                generator_constants.loc[idx, param] = default_gen_params.loc[mask, "value"].values[0]
-            # override with custom parameters where available
-            mask = (
-                (custom_gen_params["generator"] == gen.generator) &
-                (custom_gen_params["parameters"] == param)
-            )
-            if mask.any():
-                generator_constants.loc[idx, param] = custom_gen_params.loc[mask, "value"].values[0]
-    
-    
-    # Create standard columns PyPSA expects
-    # fall back to MaxTotalBuild (a real, per-generator lifetime build ceiling) wherever
-    # BOTH BuildLimitperYear and Capacity are missing -- some pure candidates only ever get a
-    # total buildable amount, no yearly rate, and no existing capacity, and MaxTotalBuild is
-    # otherwise discarded entirely even though it's genuine sizing data in that case. Restricted
-    # to Capacity-also-missing generators specifically because MaxTotalBuild has the exact same
-    # "duplicates the generator's own existing Capacity" artifact as BuildLimitperYear does for
-    # existing/committed plants (see Guinea/Turkiye/Serbia's Status-based fixes in
-    # data/processed_gams/README.md) -- using it as a blanket fallback would resurrect that bug.
-    missing_bly_and_capacity = generator_constants["BuildLimitperYear"].isna() & generator_constants["Capacity"].isna()
-    generator_constants.loc[missing_bly_and_capacity, "BuildLimitperYear"] = (
-        generator_constants.loc[missing_bly_and_capacity, "MaxTotalBuild"]
+    # get the list of generators; either from gmap or inferred from custom_gen_params
+    gmap_path = Path(f"{input_dir}gmap.csv")
+    if gmap_path.exists():
+        all_generators = pd.read_csv(gmap_path)
+    else:
+        all_generators = custom_gen_params[["generator", "zone", "tech", "fuel"]]\
+            .drop_duplicates(subset="generator")\
+            .reset_index(drop=True)
+
+
+    # generator cost trajectories
+    default_gen_capex = init_df(f"{input_dir}pCapexTrajectoriesDefault.csv",
+                                ["zone", "tech", "fuel", "year", "value"])
+    custom_gen_capex = init_df(f"{input_dir}pCapexTrajectoriesCustom.csv",
+                                ["plant", "year", "value"])
+    fuel_prices = pd.read_csv(f"{input_dir}pFuelPrice.csv")
+    # storage plants - used only to exclude generators that are actually storage
+    storage_plants = init_df(f"{input_dir}pStorageDataInput.csv",
+                            ["plant", "year", "parameters", "value"])
+
+    generators = check_generators(all_generators, storage_plants, valid_zones)
+
+    """fill generator parameters from various sources"""
+    gztf = ["generator", "zone", "tech", "fuel"]
+    ztf = ["zone", "tech", "fuel"]
+    tf = ["tech", "fuel"]
+    # match generators with defaults, more specific to less specific
+    defaults_ztf = generators.merge(pivot_wide(default_gen_params, ztf, PARAM_LIST), on=ztf, how="left")[PARAM_LIST]
+    defaults_tf = generators.merge(pivot_wide(default_gen_params, tf, PARAM_LIST), on=tf, how="left")[PARAM_LIST]
+    defaults = defaults_ztf.combine_first(defaults_tf)
+    # match generators with custom
+    customs = generators.merge(pivot_wide(custom_gen_params, "generator", PARAM_LIST), on="generator", how="left")[PARAM_LIST]
+    # fill with custom, then defaults
+    filled = customs.combine_first(defaults).reset_index(drop=True)
+    generator_constants = pd.concat([generators[gztf].reset_index(drop=True), filled], axis=1)
+
+    generator_constants = _derive_flags(generator_constants, input_dir)
+
+    """build generator costs"""
+    generator_cost = build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years)
+    # capex/heat_rate/maxtotalbuild were only needed to build generator_cost and can now be dropped
+    generator_constants = generator_constants.drop(columns=["capex", "heat_rate", "maxtotalbuild"])
+
+    """standardize tech & fuel names"""
+    generator_constants["tech"] = standardize_tech(generator_constants["tech"], generator_constants["fuel"])
+    generator_constants["fuel"] = generator_constants["fuel"].replace("CustomFuel", pd.NA)
+    generator_constants["fuel"] = standardize_fuel(generator_constants["fuel"])
+    missing_fuel = generator_constants["fuel"].isna()
+    if missing_fuel.any():
+        generator_constants.loc[missing_fuel, "fuel"] = (
+            generator_constants.loc[missing_fuel, "tech"].map(default_fuel_for_tech)
+        )
+
+    # reorder for readability
+    generator_constants = generator_constants.sort_values(["expandable", "fuel", "tech"]).reset_index(drop=True)
+
+    return generator_constants, generator_cost
+
+
+def _derive_flags(gc, data_path):
+    """Derive expandable/isre/retirement_year/life, and null out columns only meaningful
+    for one of expandable/existing."""
+    # MaxTotalBuild fallback when both BuildLimitperYear and Capacity are missing (see
+    # data/processed_gams/README.md re: this vs. the Status-based fixes)
+    no_limit_or_cap = gc["BuildLimitperYear"].isna() & gc["Capacity"].isna()
+    gc.loc[no_limit_or_cap, "BuildLimitperYear"] = gc.loc[no_limit_or_cap, "MaxTotalBuild"]
+
+    # expandable: a real nonzero build limit, or no capacity but real cost data to build from
+    gc["expandable"] = (
+        (gc["BuildLimitperYear"].notna() & (gc["BuildLimitperYear"] != 0))
+        | (gc["Capacity"].isna() & gc["Capex"].notna())
     )
-    # this is a build option if BuildLimitperYear (or its MaxTotalBuild fallback) is given and
-    # non-zero -- a zero build limit means "not buildable at all", the same as no value given,
-    # not a real (if degenerate) build option. A generator with no Capacity at all can't be
-    # "existing" (that needs a real size), so it must be a build option instead -- an
-    # unconstrained one (no annual_build_limit/unit_size) is a valid candidate as long as it has
-    # real cost data (Capex) to build generator_costs.csv from; both backends already support an
-    # expandable generator with no annual_build_limit (see seer/inputs/README.md). Only a
-    # generator missing Capacity AND Capex has nothing usable at all -- see
-    # data/processed_gams/README.md for regions where that combination was found and dropped.
-    generator_constants["expandable"] = (
-        (generator_constants["BuildLimitperYear"].notna() & (generator_constants["BuildLimitperYear"] != 0))
-        | (generator_constants["Capacity"].isna() & generator_constants["Capex"].notna())
-    )
-    # capacity is only meaningful for existing generators
-    generator_constants.loc[generator_constants["expandable"], "Capacity"] = pd.NA
-    # unit_size only meaningful for expandable generators
-    generator_constants.loc[~generator_constants["expandable"], "UnitSize"] = pd.NA
-    # ramp rates default to fully flexible when absent
-    generator_constants["RampUpRate"] = generator_constants["RampUpRate"].fillna(1)
-    generator_constants["RampDnRate"] = generator_constants["RampDnRate"].fillna(-1)
-    # rename columns to PyPSA conventions
-    generator_constants.rename(columns={
+    gc.loc[gc["expandable"], "Capacity"] = pd.NA   # only existing generators have a capacity
+    gc.loc[~gc["expandable"], "UnitSize"] = pd.NA  # only expandable generators have a unit_size
+    gc["RampUpRate"] = gc["RampUpRate"].fillna(1)  # default: fully flexible
+    gc["RampDnRate"] = gc["RampDnRate"].fillna(-1)
+
+    gc.rename(columns={
         "BuildLimitperYear": "annual_build_limit",
         "RampUpRate": "ramp_up_rate",
         "RampDnRate": "ramp_down_rate",
@@ -110,237 +112,65 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
         "UnitSize": "unit_size",
         "RETech": "isre",
     }, inplace=True)
-    # isre is a boolean flag -- no RETech/VRETech value found means "not a variable-renewable
-    # tech", not "unknown"; must be a real bool here, since bool(float("nan")) is True in
-    # Python and would otherwise silently misclassify every such generator as renewable
-    generator_constants["isre"] = generator_constants["isre"].infer_objects(copy=False).fillna(0).astype(bool)
-    # no RetrYr value found means "no known retirement" -- default to a sentinel year well
-    # beyond any realistic modeled horizon, not NaN. A NaN retirement_year makes every
-    # `year <= retirement_year` comparison False (both model backends' active-year checks work
-    # this way), which silently drops the generator/its capacity from every modeled year
-    # instead of leaving it active for the full horizon as intended.
-    generator_constants["retirement_year"] = (
-        generator_constants["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
-    )
-    # no Life value found -- required for expandable generators (see seer/inputs/README.md),
-    # but some regions mark existing units "expandable" too (they have both existing capacity
-    # and a BuildLimitperYear, i.e. can be built out further) without ever giving them a Life
-    # param. Their already-known active window is a reasonable stand-in for lifetime when
-    # nothing else is given.
-    missing_life = generator_constants["Life"].isna()
-    if missing_life.any():
-        generator_constants.loc[missing_life, "Life"] = (
-            generator_constants.loc[missing_life, "retirement_year"] - generator_constants.loc[missing_life, "start_year"]
-        )
-        still_missing = generator_constants["Life"].isna()
-        if still_missing.any():
-            warnings.warn(
-                f"No Life value (and no start/retirement year to derive one from) in {data_path!r} "
-                f"for generators: {generator_constants.loc[still_missing, 'generator'].tolist()}"
-            )
-    # change all capital leters to lowercase in column names
-    generator_constants.columns = generator_constants.columns.str.lower()
+
+    # isre must be a real bool -- bool(nan) is True in Python, so a plain fillna+astype would
+    # misclassify every generator with no RETech value as renewable
+    gc["isre"] = gc["isre"].infer_objects(copy=False).fillna(0).astype(bool)
+    # no retirement year -> sentinel far beyond the horizon, not NaN (NaN fails every
+    # `year <= retirement_year` check, dropping the generator from every modeled year)
+    gc["retirement_year"] = gc["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
+
+    # no Life -> derive from the generator's own known active window
+    missing_life = gc["Life"].isna()
+    gc.loc[missing_life, "Life"] = gc.loc[missing_life, "retirement_year"] - gc.loc[missing_life, "start_year"]
+    still_missing = gc["Life"].isna()
+    if still_missing.any():
+        warnings.warn(f"No Life value in {data_path!r} for generators: {gc.loc[still_missing, 'generator'].tolist()}")
+
+    gc.columns = gc.columns.str.lower()
+    return gc
 
 
-    """Setup generator costs.
-    Use generator constants, default capex trajectories, and custom capex trajectories to fill in a single dataframe of generator costs.
-    Result has two rows per generator (capex and marginal cost) and years as columns.
-    """
-    # setup cost dataframe
-    # (years normally comes from the default capex trajectory; some regions have no
-    # default capex data at all, so fall back to whatever years the custom trajectory covers)
-    has_capex_trajectory = not default_gen_capex.empty or not custom_gen_capex.empty
-    if not default_gen_capex.empty:
-        years = sorted(default_gen_capex["year"].unique())
-    elif not custom_gen_capex.empty:
-        years = sorted(custom_gen_capex["year"].unique())
-    elif model_years:
-        # no trajectory data at all (neither symbol exists in this region's raw gdx) -- base
-        # capex values are still present on generator_constants (pGenDataInputCustom's Capex
-        # param), just no decline curve to apply, so hold them flat across the modeled years
-        warnings.warn(
-            f"No capex trajectory data (pCapexTrajectoriesDefault/Custom) found in {data_path!r} "
-            "-- holding capex flat (no cost decline) across all modeled years."
-        )
-        years = list(model_years)
+def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years):
+    """generator_costs.csv: two rows per generator (capex and marginal cost), years as
+    columns. capex = capex trajectory x capex scalar. marginal_cost = heat_rate x fuel price."""
+
+    ztf = ["zone", "tech", "fuel"]
+    gc = generator_constants.set_index("generator")
+
+    default_wide = pivot_years(default_gen_capex, ztf, sorted(default_gen_capex["year"].unique()))
+    custom_gen_capex = custom_gen_capex.rename(columns={"plant": "generator"})
+    custom_wide = pivot_years(custom_gen_capex, "generator", sorted(custom_gen_capex["year"].unique()))
+
+    """build capex trajectory"""
+    flat = check_capex_trajectory(default_wide, custom_wide, model_years)
+    if flat:
+        capex_traj = pd.DataFrame({y: 1.0 for y in model_years}, index=gc.index)
     else:
-        years = []
-    rows = []
+        # downselect both trajectories to just the modeled years
+        default_wide = default_wide.reindex(columns=model_years)
+        custom_wide = custom_wide.reindex(columns=model_years)
+        custom_traj = custom_wide.reindex(gc.index)
+        default_traj = gc.reset_index().merge(default_wide, on=ztf, how="left").set_index("generator")[model_years]
+        has_custom = pd.Series(gc.index.isin(custom_gen_capex["generator"]), index=gc.index)
+        capex_traj = custom_traj.where(has_custom, default_traj)
+    # scale normalized trajectory by generator's own capex
+    capex_cost = capex_traj.mul(gc["capex"], axis=0)
 
-    for _, gen in generator_constants.iterrows():
+    """build marginal cost"""
+    fuel_price_traj = gc.reset_index().merge(
+        pivot_years(fuel_prices, ["fuel", "zone"], model_years), on=["fuel", "zone"], how="left"
+    ).set_index("generator")[model_years]
+    marginal_cost = fuel_price_traj.mul(gc["heat_rate"], axis=0)
+    # marginal cost is 0 for generators with no heat_rate
+    marginal_cost = marginal_cost.where(gc["heat_rate"].notna(), 0.0)
 
-        # capex
-        row_capex = {"generator": gen.generator, "cost_type": "capex"}
-
-        if not has_capex_trajectory:
-            for y in years:
-                row_capex[y] = gen.capex
-        else:
-            # get capex trajectory - custom if it exists, otherwise default
-            if gen.generator in custom_gen_capex["plant"].values:
-                capex_traj = custom_gen_capex[
-                    custom_gen_capex["plant"] == gen.generator
-                ][["year", "value"]].set_index("year")
-            else:
-                capex_traj = default_gen_capex[
-                    (default_gen_capex["zone"] == gen.zone) &
-                    (default_gen_capex["tech"] == gen.tech) &
-                    (default_gen_capex["fuel"] == gen.fuel)
-                ][["year", "value"]].set_index("year")
-
-            capex_traj = gen.capex * capex_traj["value"]
-
-            for y in years:
-                row_capex[y] = capex_traj.get(y, pd.NA)
-
-        rows.append(row_capex)
-
-        # marginal cost -- always write a row (0 when there's no heat_rate at all, e.g.
-        # renewables that don't burn fuel), so every generator has both capex and
-        # marginal_cost rows in generator_costs.csv
-        row_mc = {"generator": gen.generator, "cost_type": "marginal_cost"}
-        if pd.notna(gen.heat_rate):
-            # fuel prices are zone-specific (pFuelPrice.csv has a zone column) -- filtering
-            # by fuel alone matches every zone's price row for that fuel/year, producing a
-            # multi-row Series instead of a scalar per year
-            fuel_price = fuel_prices[
-                (fuel_prices["fuel"] == gen.fuel) & (fuel_prices["zone"] == gen.zone)
-            ][["year", "value"]].set_index("year")
-
-            mc = fuel_price["value"] * gen.heat_rate
-
-            for y in years:
-                row_mc[y] = mc.get(y, pd.NA)
-        else:
-            for y in years:
-                row_mc[y] = 0
-
-        rows.append(row_mc)
-
-    generator_cost = pd.DataFrame(rows, columns=["generator", "cost_type"] + years)
-
-    # capex/heat_rate were only needed above (capex scaling multiplier, marginal-cost
-    # computation) -- already baked into generator_cost, so drop from the final output.
-    # maxtotalbuild was only needed as a BuildLimitperYear fallback above.
-    generator_constants = generator_constants.drop(columns=["capex", "heat_rate", "maxtotalbuild"])
-
-    # tech/fuel standardization (see seer.inputs.utils) happens last to allow data to be
-    # matched with old names between raw files.
-    generator_constants["tech"] = standardize_tech(generator_constants["tech"], generator_constants["fuel"])
-    # "CustomFuel" is an ambiguous legacy EPM placeholder used historically for both Uranium
-    # and Geothermal generators -- it can't be resolved to a real fuel name on its own (unlike
-    # "ICE"/"ST"/"Steam", it isn't in the compound tech-fuel synonym table, since the *tech*
-    # side here is never itself ambiguous: "NUC"/"Geothermal" already resolve correctly
-    # regardless of fuel). Treat it as a missing fuel instead, filled in below from the
-    # already-resolved tech's own default.
-    generator_constants["fuel"] = generator_constants["fuel"].replace("CustomFuel", pd.NA)
-    generator_constants["fuel"] = standardize_fuel(generator_constants["fuel"])
-    # fill any still-missing fuel using that tech's default
-    missing_fuel = generator_constants["fuel"].isna()
-    if missing_fuel.any():
-        generator_constants.loc[missing_fuel, "fuel"] = (
-            generator_constants.loc[missing_fuel, "tech"].map(default_fuel_for_tech)
-        )
-
-    # order for readability: existing generators first (grouped by fuel, then tech), then
-    # build options (same grouping) -- makes it easy to scan generator_constants.csv by eye
-    generator_constants = generator_constants.sort_values(
-        ["expandable", "fuel", "tech"]
-    ).reset_index(drop=True)
-
-    return generator_constants, generator_cost
+    """concatenate capex and marginal cost"""
+    generator_cost = pd.concat([
+        capex_cost.assign(cost_type="capex"),
+        marginal_cost.assign(cost_type="marginal_cost"),
+    ]).reset_index().sort_values(["generator", "cost_type"]).reset_index(drop=True)
+    generator_cost = generator_cost[["generator", "cost_type"] + model_years]
+    return generator_cost
 
 
-def _read_csv_or_empty(path, columns):
-    """Read a csv, or return an empty dataframe with the given columns if it doesn't exist
-    (some regions' raw gdx simply has no data for certain symbols)."""
-    if Path(path).exists():
-        return pd.read_csv(path)
-    return pd.DataFrame(columns=columns)
-
-
-def load_input_data(data_path):
-    """Load EPM data for generators from the data path.
-    Files that are read containing generator data:
-    - gmap.csv: list of all generators including name, zone, fuel (if available — some
-      regions' raw gdx has no gmap symbol at all, see below)
-    - pGenDataInputDefault.csv: generator parameters (by zone, tech, fuel)
-    - pGenDataInputCustom.csv: generator parameters (by generator)
-    - pCapexTrajectoriesDefault.csv: generator capex (by zone, tech, fuel)
-    - pCapexTrajectoriesCustom.csv: generator capex (by generator)
-    - pFuelPrice.csv: fuel prices
-
-    Returns a dictionary of dataframes.
-    """
-    # generator parameters (by zone, tech, fuel) -- some regions have no default params at
-    # all (no such symbol in their raw gdx); treat as empty rather than failing, so those
-    # params just stay NaN on generator_constants (to be filled in properly later)
-    default_gen_params = _read_csv_or_empty(
-        data_path + "pGenDataInputDefault.csv", ["zone", "tech", "fuel", "parameters", "value"]
-    )
-    custom_gen_params = pd.read_csv(data_path + "pGenDataInputCustom.csv")
-
-    # list of all generators including name, zone, fuel
-    gmap_path = Path(data_path + "gmap.csv")
-    if gmap_path.exists():
-        all_generators = pd.read_csv(gmap_path)
-    else:
-        # This region's raw gdx has no gmap symbol at all. gdx's enrich_gen_data already
-        # backfills zone/tech/fuel into pGenDataInputCustom per generator in this case
-        # (via pZoneIndex/ftfindex), so derive the generator list from there instead.
-        all_generators = (
-            custom_gen_params[["generator", "zone", "tech", "fuel"]]
-            .drop_duplicates(subset="generator")
-            .reset_index(drop=True)
-        )
-
-    # generator names must be unique -- they're the primary key joining generator_constants.csv
-    # <-> generator_costs.csv, and are used for component naming in both model backends. Some
-    # regions' raw gmap.csv reuses the same name for two conceptually different plants (e.g. a
-    # hydro dam and a co-located PV installation both literally called "Lauca" -- see CAPP).
-    # Keep only the first occurrence and warn, rather than silently producing duplicate/
-    # ambiguous rows downstream.
-    dupes = all_generators["generator"].duplicated(keep=False)
-    if dupes.any():
-        dup_names = sorted(all_generators.loc[dupes, "generator"].unique())
-        warnings.warn(
-            f"Duplicate generator names found in {data_path!r} (keeping first occurrence of "
-            f"each, dropping the rest): {dup_names}"
-        )
-        all_generators = all_generators.drop_duplicates(subset="generator", keep="first")
-
-    # a plant that's also in pStorageDataInput.csv is a storage unit -- storage_params.py
-    # already builds a proper (charge+discharge) storage_constants.csv row for it, so it must
-    # be excluded here, or it'd be double-counted: once as a one-way, discharge-only
-    # generator, and again as a proper 2-way storage unit for the exact same physical asset.
-    storage_plants = _read_csv_or_empty(data_path + "pStorageDataInput.csv", ["plant", "year", "parameters", "value"])
-    if not storage_plants.empty:
-        is_storage = all_generators["generator"].isin(storage_plants["plant"])
-        if is_storage.any():
-            warnings.warn(
-                f"Excluding plant(s) in {data_path!r} from generator_constants.csv -- also in "
-                f"pStorageDataInput.csv, so already represented in storage_constants.csv: "
-                f"{sorted(all_generators.loc[is_storage, 'generator'])}"
-            )
-            all_generators = all_generators[~is_storage]
-
-    # generator capex (by zone, tech, fuel) -- same story: treat a missing default or
-    # custom capex trajectory as empty rather than failing, so build_generator_params
-    # falls back to whichever of the two is actually available
-    default_gen_capex = _read_csv_or_empty(
-        data_path + "pCapexTrajectoriesDefault.csv", ["zone", "tech", "fuel", "year", "value"]
-    )
-    custom_gen_capex = _read_csv_or_empty(
-        data_path + "pCapexTrajectoriesCustom.csv", ["plant", "year", "value"]
-    )
-    # fuel prices
-    fuel_prices = pd.read_csv(data_path + "pFuelPrice.csv")
-
-    return {
-        "all_generators": all_generators,
-        "default_gen_params": default_gen_params,
-        "custom_gen_params": custom_gen_params,
-        "default_gen_capex": default_gen_capex,
-        "custom_gen_capex": custom_gen_capex,
-        "fuel_prices": fuel_prices,
-    }

@@ -1,4 +1,31 @@
+from pathlib import Path
+
+import pandas as pd
+
 from seer.models.time_utils import format_time_string
+
+
+def init_df(path, columns):
+    """Read a csv, or if nonexisting create empty dataframe with given columns"""
+    if Path(path).exists():
+        return pd.read_csv(path)
+    return pd.DataFrame(columns=columns)
+
+
+def pivot_wide(df, index, param_list):
+    """Pivot a long-format (index cols..., parameters, value) dataframe to one row per
+    `index` combination, one column per `param_list` entry."""
+    return (
+        df[df["parameters"].isin(param_list)]
+        .pivot_table(index=index, columns="parameters", values="value", aggfunc="first")
+        .reindex(columns=param_list)
+    )
+
+
+def pivot_years(df, index, years):
+    """Pivot a long-format (index cols..., year, value) dataframe to one row per `index`
+    combination, one column per year in `years`."""
+    return df.pivot_table(index=index, columns="year", values="value", aggfunc="first").reindex(columns=years)
 
 
 def convert_season_day_hour(df, season_col="season", day_col="day", hour_col="hour"):
