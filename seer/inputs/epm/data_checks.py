@@ -99,6 +99,23 @@ def check_capex_trajectory(default_wide, custom_wide, model_years):
         raise ValueError(f"Capex trajectory is missing modeled year(s): {sorted(missing)}")
     return False
 
+def check_profile_time_coverage(profiles, times):
+    """Drop (with a warning) any renewable profile that doesn't cover every modeled time -- a
+    partial profile can't safely drive dispatch, so it's treated as no match at all. Profiles
+    are keyed by generator when set, else by (zone, tech)."""
+    key = profiles["generator"].fillna(profiles["zone"].fillna("") + "|" + profiles["tech"].fillna(""))
+    counts = key.groupby(key).transform("size")
+    incomplete = counts != len(times)
+    if incomplete.any():
+        bad_keys = profiles.loc[incomplete, ["zone", "tech", "generator"]].drop_duplicates()
+        logger.warning(
+            f"Renewable profile(s) cover only some modeled times -- dropping: "
+            f"{list(bad_keys.itertuples(index=False, name=None))}"
+        )
+        profiles = profiles[~incomplete]
+    return profiles
+
+
 def check_settings(settings):
     """Check settings exists and has a discount rate param."""
     dr_row = settings[settings["parameters"].str.upper() == "DR"]

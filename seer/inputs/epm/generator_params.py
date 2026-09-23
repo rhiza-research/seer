@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 
 from ..utils import standardize_tech, standardize_fuel, default_fuel_for_tech
-from .data_checks import check_generators, check_capex_trajectory
+from .data_checks import check_generators, check_capex_trajectory, check_profile_time_coverage
 from .re_potentials import build_re_potentials
 from .utils import init_df, pivot_wide, pivot_years
 
@@ -180,32 +180,30 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
 
 
 def match_re_profiles(gc, profiles_raw, times):
-    """Keep only renewable_profiles rows that match a real generator/tech, checked in
-    priority order: generator-specific, then zone+tech generic, then tech-only fallback (see
-    seer/inputs/README.md). Matched profiles must also cover every modeled time. isre is
-    recomputed from profile existence, not the raw RETech flag -- a generator claiming
-    renewable with no matching profile is warned and marked non-renewable.
-    Returns (gc, renewable_profiles)."""
-    real_zone_tech = gc[["zone", "tech"]].drop_duplicates()
-    real_generators = set(gc["generator"])
-    real_techs = set(gc["tech"])
+    """Keep only renewable_profiles rows matching a real generator/tech (priority: generator-
+    specific, zone+tech generic, tech-only fallback -- see seer/inputs/README.md), and recompute
+    isre from profile existence. Returns (gc, renewable_profiles)."""
+    profiles_raw = check_profile_time_coverage(profiles_raw, times)
 
+    # split candidate profiles into their three tiers, each filtered down to rows that
+    # actually reference something real in gc
     has_tech = profiles_raw["tech"].notna()
     has_zone = profiles_raw["zone"].notna()
-    zone_tech = profiles_raw[has_tech & has_zone].merge(real_zone_tech, on=["zone", "tech"], how="inner")
+    zone_tech = profiles_raw[has_tech & has_zone].merge(
+        gc[["zone", "tech"]].drop_duplicates(), on=["zone", "tech"], how="inner"
+    )
     tech_only = profiles_raw[has_tech & ~has_zone]
-    tech_only = tech_only[tech_only["tech"].isin(real_techs)]
-    specific = profiles_raw[~has_tech & profiles_raw["generator"].isin(real_generators)]
+    tech_only = tech_only[tech_only["tech"].isin(gc["tech"])]
+    specific = profiles_raw[~has_tech & profiles_raw["generator"].isin(gc["generator"])]
 
-    zone_tech = _drop_incomplete_profiles(zone_tech, ["zone", "tech"], times, "generic")
-    tech_only = _drop_incomplete_profiles(tech_only, ["tech"], times, "tech-only fallback")
-    specific = _drop_incomplete_profiles(specific, ["generator"], times, "generator-specific")
-
-    has_specific = gc["generator"].isin(set(specific["generator"]))
-    matched_zone_tech = set(zip(zone_tech["zone"], zone_tech["tech"]))
-    has_zone_tech = gc.apply(lambda g: (g.zone, g.tech) in matched_zone_tech, axis=1)
-    has_tech_only = gc["tech"].isin(set(tech_only["tech"]))
-    has_any = has_specific | has_zone_tech | has_tech_only
+    # does each generator have a matching profile in any tier?
+    gc_zone_tech = pd.MultiIndex.from_arrays([gc["zone"], gc["tech"]])
+    matched_zone_tech = pd.MultiIndex.from_arrays([zone_tech["zone"], zone_tech["tech"]])
+    has_any = (
+        gc["generator"].isin(specific["generator"])
+        | gc_zone_tech.isin(matched_zone_tech)
+        | gc["tech"].isin(tech_only["tech"])
+    )
 
     claimed_but_unmatched = gc["isre"] & ~has_any
     for _, gen in gc[claimed_but_unmatched].iterrows():
@@ -218,23 +216,5 @@ def match_re_profiles(gc, profiles_raw, times):
     gc["isre"] = has_any
     renewable_profiles = pd.concat([zone_tech, tech_only, specific], ignore_index=True)
     return gc, renewable_profiles
-
-
-def _drop_incomplete_profiles(df, key_cols, times, label):
-    """Drop (with a warning) any key whose profile doesn't cover every modeled time -- a
-    partial profile can't safely drive dispatch, so it's treated as no match at all."""
-    if df.empty:
-        return df
-    counts = df.groupby(key_cols).size().reset_index(name="n")
-    incomplete = counts[counts["n"] != len(times)]
-    if incomplete.empty:
-        return df
-    warnings.warn(
-        f"{label} profile(s) {list(incomplete[key_cols].itertuples(index=False, name=None))} "
-        "cover only some modeled times -- dropping."
-    )
-    return df.merge(incomplete[key_cols].assign(_incomplete=True), on=key_cols, how="left").pipe(
-        lambda d: d[d["_incomplete"].isna()].drop(columns="_incomplete")
-    )
 
 
