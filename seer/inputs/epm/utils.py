@@ -28,6 +28,12 @@ def pivot_years(df, index, years):
     return df.pivot_table(index=index, columns="year", values="value", aggfunc="first").reindex(columns=years)
 
 
+def align(df, df_target, on):
+    """Reorder `df`'s rows to follow `df_target[on]`'s order, matched by the `on` column."""
+    order = pd.Categorical(df[on], categories=df_target[on], ordered=True)
+    return df.assign(**{on: order}).sort_values(on, kind="stable").astype({on: df[on].dtype}).reset_index(drop=True)
+
+
 def convert_season_day_hour(df, season_col="season", day_col="day", hour_col="hour"):
     """Parse season/day/hour columns into a single `time` column."""
     df = df.copy()

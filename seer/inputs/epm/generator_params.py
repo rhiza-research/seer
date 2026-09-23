@@ -7,7 +7,7 @@ import pandas as pd
 from ..utils import standardize_tech, standardize_fuel, default_fuel_for_tech
 from .data_checks import check_generators, check_capex_trajectory, check_profile_time_coverage
 from .re_potentials import build_re_potentials
-from .utils import init_df, pivot_wide, pivot_years
+from .utils import init_df, pivot_wide, pivot_years, align
 
 # sentinel for "no known retirement year" -- well beyond any realistic modeled horizon
 NO_RETIREMENT_YEAR = 9999
@@ -85,6 +85,9 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
 
     # reorder for readability
     generator_constants = generator_constants.sort_values(["expandable", "fuel", "tech"]).reset_index(drop=True)
+
+    # generator_costs.csv rows should follow the same generator order as generator_constants.csv
+    generator_cost = align(generator_cost, generator_constants, "generator")
 
     return generator_constants, generator_cost, renewable_profiles
 
@@ -171,10 +174,11 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
     marginal_cost = marginal_cost.where(gc["heat_rate"].notna(), 0.0)
 
     """concatenate capex and marginal cost"""
+    # row order is finalized later, to match generator_constants.csv
     generator_cost = pd.concat([
         capex_cost.assign(cost_type="capex"),
         marginal_cost.assign(cost_type="marginal_cost"),
-    ]).reset_index().sort_values(["generator", "cost_type"]).reset_index(drop=True)
+    ]).reset_index()
     generator_cost = generator_cost[["generator", "cost_type"] + model_years]
     return generator_cost
 

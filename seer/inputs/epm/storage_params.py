@@ -151,6 +151,9 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
     # unit, expandable or not) -- see seer/inputs/README.md: "ignored/NaN for build options".
     storage_constants.loc[storage_constants["expandable"], "capacity_mw"] = pd.NA
 
+    # reorder for readability
+    storage_constants = storage_constants.sort_values(["expandable", "tech"]).reset_index(drop=True)
+
     """Setup storage costs.
     Use storage constants to fill in a single dataframe of storage costs.
     """
