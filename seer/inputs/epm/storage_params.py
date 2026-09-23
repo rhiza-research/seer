@@ -7,7 +7,7 @@ from .generator_params import NO_RETIREMENT_YEAR
 from ..utils import standardize_tech
 
 
-def build_storage_params(data_path="data/Gambia/", years=None):
+def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None):
     """
     Processes storage input data into two seer schema files:
     - storage_constants.csv
@@ -61,14 +61,16 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     )
     storage_constants = storage_constants.merge(zone_tech, on="storage", how="left")
 
-    # a storage plant with no matching pGenDataInputCustom row at all has no zone/tech
-    # this should be dropped with a warning
-    missing_zone = storage_constants["zone"].isna()
-    if missing_zone.any():
+    # drop storage plants with no zone (no matching pGenDataInputCustom row at all) or a zone
+    # not in zones.csv -- storage_costs is built from storage_constants below, so filtering
+    # here keeps both files consistent automatically.
+    bad_zone = ~storage_constants["zone"].isin(valid_zones)
+    if bad_zone.any():
         warnings.warn(
-            f"No pGenDataInputCustom.csv entry at all for storage plant(s) in {data_path!r} "
-            f"(no zone/tech to attach them with): {sorted(storage_constants.loc[missing_zone, 'storage'])}"
+            f"Excluding storage plant(s) with no zone, or a zone not in zones.csv, in "
+            f"{data_path!r}: {sorted(storage_constants.loc[bad_zone, 'storage'])}"
         )
+        storage_constants = storage_constants[~bad_zone]
 
     # fill missing lifetimes (some regions have no "Life" value at all for any storage
     # plant) with a default by tech.

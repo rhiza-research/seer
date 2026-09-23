@@ -6,6 +6,7 @@ import pandas as pd
 
 from ..utils import standardize_tech, standardize_fuel, default_fuel_for_tech
 from .data_checks import check_generators, check_capex_trajectory
+from .re_potentials import build_re_potentials
 from .utils import init_df, pivot_wide, pivot_years
 
 # sentinel for "no known retirement year" -- well beyond any realistic modeled horizon
@@ -18,7 +19,7 @@ PARAM_LIST = [
 ]
 
 
-def build_generator_params(input_dir, valid_zones=None, model_years=None):
+def build_generator_params(input_dir, valid_zones=None, model_years=None, times=None):
     """Builds generator_constants.csv and generator_costs.csv from EPM's raw generator files."""
 
     default_gen_params = init_df(input_dir + "pGenDataInputDefault.csv",
@@ -78,10 +79,14 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None):
             generator_constants.loc[missing_fuel, "tech"].map(default_fuel_for_tech)
         )
 
+    """match renewable profiles"""
+    profiles_raw = build_re_potentials(input_dir)
+    generator_constants, renewable_profiles = match_re_profiles(generator_constants, profiles_raw, times)
+
     # reorder for readability
     generator_constants = generator_constants.sort_values(["expandable", "fuel", "tech"]).reset_index(drop=True)
 
-    return generator_constants, generator_cost
+    return generator_constants, generator_cost, renewable_profiles
 
 
 def _derive_flags(gc, data_path):
@@ -172,5 +177,64 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
     ]).reset_index().sort_values(["generator", "cost_type"]).reset_index(drop=True)
     generator_cost = generator_cost[["generator", "cost_type"] + model_years]
     return generator_cost
+
+
+def match_re_profiles(gc, profiles_raw, times):
+    """Keep only renewable_profiles rows that match a real generator/tech, checked in
+    priority order: generator-specific, then zone+tech generic, then tech-only fallback (see
+    seer/inputs/README.md). Matched profiles must also cover every modeled time. isre is
+    recomputed from profile existence, not the raw RETech flag -- a generator claiming
+    renewable with no matching profile is warned and marked non-renewable.
+    Returns (gc, renewable_profiles)."""
+    real_zone_tech = gc[["zone", "tech"]].drop_duplicates()
+    real_generators = set(gc["generator"])
+    real_techs = set(gc["tech"])
+
+    has_tech = profiles_raw["tech"].notna()
+    has_zone = profiles_raw["zone"].notna()
+    zone_tech = profiles_raw[has_tech & has_zone].merge(real_zone_tech, on=["zone", "tech"], how="inner")
+    tech_only = profiles_raw[has_tech & ~has_zone]
+    tech_only = tech_only[tech_only["tech"].isin(real_techs)]
+    specific = profiles_raw[~has_tech & profiles_raw["generator"].isin(real_generators)]
+
+    zone_tech = _drop_incomplete_profiles(zone_tech, ["zone", "tech"], times, "generic")
+    tech_only = _drop_incomplete_profiles(tech_only, ["tech"], times, "tech-only fallback")
+    specific = _drop_incomplete_profiles(specific, ["generator"], times, "generator-specific")
+
+    has_specific = gc["generator"].isin(set(specific["generator"]))
+    matched_zone_tech = set(zip(zone_tech["zone"], zone_tech["tech"]))
+    has_zone_tech = gc.apply(lambda g: (g.zone, g.tech) in matched_zone_tech, axis=1)
+    has_tech_only = gc["tech"].isin(set(tech_only["tech"]))
+    has_any = has_specific | has_zone_tech | has_tech_only
+
+    claimed_but_unmatched = gc["isre"] & ~has_any
+    for _, gen in gc[claimed_but_unmatched].iterrows():
+        warnings.warn(
+            f"Generator {gen.generator!r} (zone={gen.zone}, tech={gen.tech}) is flagged "
+            "renewable but has no matching profile -- marking as non-renewable."
+        )
+
+    gc = gc.copy()
+    gc["isre"] = has_any
+    renewable_profiles = pd.concat([zone_tech, tech_only, specific], ignore_index=True)
+    return gc, renewable_profiles
+
+
+def _drop_incomplete_profiles(df, key_cols, times, label):
+    """Drop (with a warning) any key whose profile doesn't cover every modeled time -- a
+    partial profile can't safely drive dispatch, so it's treated as no match at all."""
+    if df.empty:
+        return df
+    counts = df.groupby(key_cols).size().reset_index(name="n")
+    incomplete = counts[counts["n"] != len(times)]
+    if incomplete.empty:
+        return df
+    warnings.warn(
+        f"{label} profile(s) {list(incomplete[key_cols].itertuples(index=False, name=None))} "
+        "cover only some modeled times -- dropping."
+    )
+    return df.merge(incomplete[key_cols].assign(_incomplete=True), on=key_cols, how="left").pipe(
+        lambda d: d[d["_incomplete"].isna()].drop(columns="_incomplete")
+    )
 
 
