@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 logger = logging.getLogger(__name__)
 
-def check_demand_forecast(demand_forecast):
+def check_demand_forecast(demand_forecast, valid_zones):
     """Check the demand forecast data for quality issues and log warnings."""
     if "type" not in demand_forecast.columns:
         logger.warning("demand_forecast.csv is missing the 'type' column -- needs peak / energy")
@@ -12,7 +12,26 @@ def check_demand_forecast(demand_forecast):
     if not set(demand_forecast["type"].unique()).issubset({"peak", "energy"}):
         logger.warning("demand_forecast.csv has invalid 'type' values -- needs peak / energy")
         return demand_forecast
+    bad_zone = ~demand_forecast["zone"].isin(valid_zones)
+    if bad_zone.any():
+        logger.warning(
+            f"demand_forecast.csv: dropping row(s) referencing zone(s) not in zones.csv: "
+            f"{sorted(demand_forecast.loc[bad_zone, 'zone'].unique())}"
+        )
+        demand_forecast = demand_forecast[~bad_zone]
     return demand_forecast
+
+
+def check_demand_profile(demand_profile, valid_zones):
+    """Check the demand profile data for quality issues and log warnings."""
+    bad_zone = ~demand_profile["zone"].isin(valid_zones)
+    if bad_zone.any():
+        logger.warning(
+            f"demand_profile.csv: dropping row(s) referencing zone(s) not in zones.csv: "
+            f"{sorted(demand_profile.loc[bad_zone, 'zone'].unique())}"
+        )
+        demand_profile = demand_profile[~bad_zone]
+    return demand_profile
 
 def check_zones(zones):
     """Check the zones data for quality issues and log warnings."""

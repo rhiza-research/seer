@@ -23,19 +23,20 @@ def epm_to_seer(input_path, output_path):
     """modelled years"""
     years = pd.read_csv(f"{input_dir}y.csv")[["year"]]
 
-    """demand forecast & profile"""
-    demand_forecast = check_demand_forecast(pd.read_csv(f"{input_dir}pDemandForecast.csv"))
-    demand_profile = pd.read_csv(f"{input_dir}pDemandProfile.csv")
-    demand_profile = convert_season_day_hour(demand_profile)[["zone", "time", "value"]]
-    # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own
-    # `time` values (EPM data is often already a handful of representative days per month, not
-    # a full year -- see seer/inputs/README.md's times.csv entry)
-    times = pd.DataFrame({"time": sorted(demand_profile["time"].unique())})
-
     """zones"""
     zones = check_zones(pd.read_csv(f"{input_dir}zcmap.csv"))
     # default name for a zone is the zone itself
     zones["name"] = zones["zone"]
+
+    """demand forecast & profile"""
+    demand_forecast = check_demand_forecast(pd.read_csv(f"{input_dir}pDemandForecast.csv"), zones["zone"])
+    demand_profile = pd.read_csv(f"{input_dir}pDemandProfile.csv")
+    demand_profile = convert_season_day_hour(demand_profile)[["zone", "time", "value"]]
+    demand_profile = check_demand_profile(demand_profile, zones["zone"])
+    # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own
+    # `time` values (EPM data is often already a handful of representative days per month, not
+    # a full year -- see seer/inputs/README.md's times.csv entry)
+    times = pd.DataFrame({"time": sorted(demand_profile["time"].unique())})
 
     """network"""
     network_path = Path(f"{input_dir}pTransferLimit.csv")
