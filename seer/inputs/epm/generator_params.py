@@ -242,6 +242,12 @@ def build_generator_params(data_path="data/Gambia/", model_years=None):
             generator_constants.loc[missing_fuel, "tech"].map(default_fuel_for_tech)
         )
 
+    # order for readability: existing generators first (grouped by fuel, then tech), then
+    # build options (same grouping) -- makes it easy to scan generator_constants.csv by eye
+    generator_constants = generator_constants.sort_values(
+        ["expandable", "fuel", "tech"]
+    ).reset_index(drop=True)
+
     return generator_constants, generator_cost
 
 

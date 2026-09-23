@@ -21,7 +21,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from ._time_convert import convert_season_day_hour
+from .utils import convert_season_day_hour
 from ..utils import standardize_tech
 
 # the month column's name varies across sources

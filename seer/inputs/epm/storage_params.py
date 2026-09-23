@@ -101,6 +101,10 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     storage_constants["expandable"] = (
         storage_constants["BuildLimitperYear"].notna() & (storage_constants["BuildLimitperYear"] != 0)
     )
+    # unit_size (modular build increment) is only meaningful for build options -- an existing
+    # unit isn't built in discrete increments, it just has its own fixed capacity (same as
+    # generator_params.py)
+    storage_constants.loc[~storage_constants["expandable"], "UnitSize"] = pd.NA
     # rename to seer-schema column names, matching generator_constants conventions
     storage_constants.rename(columns={
         "Capacity": "capacity_mw",
@@ -116,6 +120,24 @@ def build_storage_params(data_path="data/Gambia/", years=None):
     storage_constants["retirement_year"] = (
         storage_constants["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
     )
+
+    # capacity_mw (power) and capacity_mwh (energy) together give duration_hours -- there's no
+    # duration/hours parameter anywhere in the raw data itself (see data/processed_gams/
+    # README.md), so a unit missing either one has no real basis for a duration assumption in
+    # code. Fail loudly rather than guessing a duration (e.g. "4h for batteries") here -- that
+    # kind of physical assumption belongs in a documented, per-unit manual fix in
+    # data/processed_gams/<region>/ (see e.g. Eswatini's/Timor Leste's Battery_Generic fixes),
+    # not silently baked into the pipeline.
+    missing_capacity_mw = storage_constants["capacity_mw"].isna() & storage_constants["capacity_mwh"].notna()
+    if missing_capacity_mw.any():
+        raise ValueError(
+            f"{data_path!r}: storage unit(s) have CapacityMWh but no Capacity (MW), so "
+            f"duration_hours can't be computed: "
+            f"{sorted(storage_constants.loc[missing_capacity_mw, 'storage'])}. "
+            "Add a Capacity value for these in pGenDataInputCustom.csv (with a documented "
+            "duration assumption in data/processed_gams/README.md) rather than guessing one "
+            "here."
+        )
 
     storage_constants["duration_hours"] = storage_constants["capacity_mwh"] / storage_constants["capacity_mw"]
 

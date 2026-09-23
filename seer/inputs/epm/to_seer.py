@@ -4,12 +4,97 @@ import warnings
 from pathlib import Path
 import pandas as pd
 
-from ._time_convert import convert_season_day_hour
+from .utils import convert_season_day_hour
 from .generator_params import build_generator_params
 from .re_potentials import build_re_potentials
 from .storage_params import build_storage_params
+from .data_checks import *
 
 
+def epm_to_seer(input_path, output_path):
+    """Run all conversion steps to turn EPM model specification to seer schema
+    seer schema files are written to the output path.
+    returns a dict of all the dataframes, also written to csvs.
+    """
+
+    # set input and output directories
+    input_dir = f"{Path(input_path)}/"
+    output_dir = Path(output_path)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    """modelled years"""
+    years = pd.read_csv(f"{input_dir}y.csv")[["year"]]
+
+    """demand forecast & profile"""
+    demand_forecast = check_demand_forecast(pd.read_csv(f"{input_dir}pDemandForecast.csv"))
+    demand_profile = pd.read_csv(f"{input_dir}pDemandProfile.csv")
+    demand_profile = convert_season_day_hour(demand_profile)[["zone", "time", "value"]]
+
+    """zones"""
+    zones = check_zones(pd.read_csv(f"{input_dir}zcmap.csv"))
+    # default name for a zone is the zone itself
+    zones["name"] = zones["zone"]
+
+    """network"""
+    network_path = Path(f"{input_dir}pTransferLimit.csv")
+    if network_path.exists():
+        network = check_network(pd.read_csv(network_path), zones["zone"])
+        # original data has time varying capacities, but seer has static -> use average
+        network = network.groupby(["from", "to"])["value"].mean().reset_index().rename(columns={"value": "capacity"})
+    else:
+        # if there is no network, create a placeholder empty network
+        network = pd.DataFrame(columns=["from", "to", "capacity"])
+    
+    """settings"""
+    settings = check_settings(pd.read_csv(f"{input_dir}pSettings.csv"))
+
+
+
+    demand_forecast = _drop_unknown_zones(demand_forecast, valid_zones, "demand_forecast.csv")
+    demand_profile = _drop_unknown_zones(demand_profile, valid_zones, "demand_profile.csv")
+
+    generator_constants, generator_costs = build_generator_params(input_dir, model_years=years["year"].tolist())
+    generator_constants, generator_costs = _drop_unknown_zones(
+        generator_constants, valid_zones, "generator_constants.csv", generator_costs, "generator"
+    )
+    renewable_profiles_raw = build_re_potentials(input_dir)
+    # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own
+    # `time` values (EPM data is often already a handful of representative days per month, not
+    # a full year -- see seer/inputs/README.md's times.csv entry)
+    times = pd.DataFrame({"time": sorted(demand_profile["time"].unique())})
+    generator_constants, renewable_profiles = _match_renewable_profiles(
+        generator_constants, renewable_profiles_raw, times["time"].tolist()
+    )
+    # storage_costs.csv must carry a column for every modeled year (years.csv) -- build.py's
+    # per-vintage capex lookup indexes storage_costs by those exact values (see
+    # storage_params.py's build_storage_params docstring)
+    storage_constants, storage_costs = build_storage_params(input_dir, years=years["year"].tolist())
+    storage_constants, storage_costs = _drop_unknown_zones(
+        storage_constants, valid_zones, "storage_constants.csv", storage_costs, "storage"
+    )
+
+    outputs = {
+        "generator_constants": generator_constants,
+        "generator_costs": generator_costs,
+        "renewable_profiles": renewable_profiles,
+        "storage_constants": storage_constants,
+        "storage_costs": storage_costs,
+        "years": years,
+        "times": times,
+        "zones": zones,
+        "network": network,
+        "settings": settings,
+        "demand_forecast": demand_forecast,
+        "demand_profile": demand_profile,
+    }
+    # save seer schema csv files to output directory
+    for name, df in outputs.items():
+        df.to_csv(output_dir / f"{name}.csv", index=False)
+
+    return outputs
+
+
+"""Helper functions"""
 def _drop_incomplete_profiles(df, key_cols, times, label):
     """Drop (with a warning) any key whose profile doesn't cover every one of `times` -- e.g.
     a raw source that only has data for a subset of representative days/hours. A partial
@@ -57,44 +142,6 @@ def _drop_unknown_zones(df, valid_zones, label, costs_df=None, id_col=None):
         return df, costs_df
     return df
 
-
-def _read_settings(data_path):
-    """settings.csv: model-wide scalar settings -- currently just the discount rate `dr`,
-    used by both model backends to discount future years' objective terms. Sourced from
-    pSettings.csv's "DR" parameter (case-insensitive; not "WACC", which is a different
-    quantity used for annualizing capex, not for discounting the objective across years).
-    """
-    path = Path(f"{data_path}pSettings.csv")
-    if not path.exists():
-        raise ValueError(f"No pSettings.csv found in {data_path!r} -- can't determine discount rate.")
-    df = pd.read_csv(path)
-    dr_row = df[df["parameters"].str.upper() == "DR"]
-    if dr_row.empty:
-        raise ValueError(f"No 'DR' parameter found in {path} -- can't determine discount rate.")
-    return pd.DataFrame({"parameters": ["dr"], "value": [dr_row["value"].iloc[0]]})
-
-
-def _read_network(data_path, valid_zones):
-    """network.csv: inter-zone transfer capacity. Sourced from pTransferLimit.csv (from, to,
-    season, year, value) -- but the seer schema's network.csv is a single static capacity per
-    line, not time-varying, so each (from, to) pair's capacity is the average of its raw value
-    across every season/year row. Optional -- some regions (single-zone models, no inter-zone
-    lines) have no pTransferLimit.csv at all, matching network.csv's own optional status (see
-    seer/inputs/README.md).
-    """
-    path = Path(f"{data_path}pTransferLimit.csv")
-    if not path.exists():
-        return pd.DataFrame(columns=["from", "to", "capacity"])
-    df = pd.read_csv(path)
-    network = df.groupby(["from", "to"])["value"].mean().reset_index().rename(columns={"value": "capacity"})
-    bad = ~(network["from"].isin(valid_zones) & network["to"].isin(valid_zones))
-    if bad.any():
-        bad_pairs = list(network.loc[bad, ["from", "to"]].itertuples(index=False, name=None))
-        warnings.warn(
-            f"network.csv: dropping {bad.sum()} line(s) referencing zone(s) not in zones.csv: {bad_pairs}"
-        )
-        network = network[~bad]
-    return network
 
 
 def _match_renewable_profiles(generator_constants, profiles_raw, times):
@@ -157,106 +204,3 @@ def _match_renewable_profiles(generator_constants, profiles_raw, times):
     matched = pd.concat([zone_tech_matched, tech_only_matched, specific_matched], ignore_index=True)
     return generator_constants, matched
 
-
-def epm_to_seer(input_path, output_path):
-    """Run all conversion steps to turn EPM model specification to seer schema
-    seer schema files are written to the output path.
-    returns a dict of all the dataframes, also written to csvs.
-    """
-
-    # process_*_data build paths via `data_path + "file.csv"`, so it must end in "/"
-    input_dir = f"{Path(input_path)}/"
-    output_dir = Path(output_path)
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    years, zones, demand_forecast, demand_profile = passthrough(input_dir)
-    valid_zones = set(zones["zone"])
-    demand_forecast = _drop_unknown_zones(demand_forecast, valid_zones, "demand_forecast.csv")
-    demand_profile = _drop_unknown_zones(demand_profile, valid_zones, "demand_profile.csv")
-    network = _read_network(input_dir, valid_zones)
-    settings = _read_settings(input_dir)
-
-    generator_constants, generator_costs = build_generator_params(input_dir, model_years=years["year"].tolist())
-    generator_constants, generator_costs = _drop_unknown_zones(
-        generator_constants, valid_zones, "generator_constants.csv", generator_costs, "generator"
-    )
-    renewable_profiles_raw = build_re_potentials(input_dir)
-    # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own
-    # `time` values (EPM data is often already a handful of representative days per month, not
-    # a full year -- see seer/inputs/README.md's times.csv entry)
-    times = pd.DataFrame({"time": sorted(demand_profile["time"].unique())})
-    generator_constants, renewable_profiles = _match_renewable_profiles(
-        generator_constants, renewable_profiles_raw, times["time"].tolist()
-    )
-    # storage_costs.csv must carry a column for every modeled year (years.csv) -- build.py's
-    # per-vintage capex lookup indexes storage_costs by those exact values (see
-    # storage_params.py's build_storage_params docstring)
-    storage_constants, storage_costs = build_storage_params(input_dir, years=years["year"].tolist())
-    storage_constants, storage_costs = _drop_unknown_zones(
-        storage_constants, valid_zones, "storage_constants.csv", storage_costs, "storage"
-    )
-
-    outputs = {
-        "generator_constants": generator_constants,
-        "generator_costs": generator_costs,
-        "renewable_profiles": renewable_profiles,
-        "storage_constants": storage_constants,
-        "storage_costs": storage_costs,
-        "years": years,
-        "times": times,
-        "zones": zones,
-        "network": network,
-        "settings": settings,
-        "demand_forecast": demand_forecast,
-        "demand_profile": demand_profile,
-    }
-    # save seer schema csv files to output directory
-    for name, df in outputs.items():
-        df.to_csv(output_dir / f"{name}.csv", index=False)
-
-    return outputs
-
-
-def passthrough(data_path):
-    """Files that need only trivial reshaping to match the seer schema:
-    y.csv -> years, zcmap.csv -> zones, pDemandForecast -> demand_forecast (already in
-    seer-schema column form); pDemandProfile's season/day/hour columns are converted to a
-    single `time` column -> demand_profile."""
-    years = pd.read_csv(f"{data_path}y.csv")[["year"]]
-
-    demand_forecast = pd.read_csv(f"{data_path}pDemandForecast.csv")
-    # "type" must be lowercase ("peak"/"energy") per seer/inputs/README.md -- most regions'
-    # raw pDemandForecast.csv already spells it that way, but several (e.g. CAPP, Mexico) use
-    # "Peak"/"Energy" (Title Case) instead. Both model backends filter on the lowercase form,
-    # so an un-normalized region's demand silently vanishes (NaN, not an error) rather than
-    # raising -- this went undetected for a while as a result.
-    demand_forecast["type"] = demand_forecast["type"].str.lower()
-    demand_profile = pd.read_csv(f"{data_path}pDemandProfile.csv")
-    demand_profile = convert_season_day_hour(demand_profile)[["zone", "time", "value"]]
-
-    zcmap_path = Path(f"{data_path}zcmap.csv")
-    if zcmap_path.exists():
-        zones = pd.read_csv(zcmap_path)[["zone", "country"]]
-        # zcmap.csv isn't always a plain one-row-per-zone table -- some regions' variant
-        # encodes a bidirectional zone/trade-partner network instead (e.g. Eswatini has 4
-        # rows for "Eswatini", one per trade partner, plus the reverse row for each). Only
-        # the "zone" column is a genuine per-zone list; keep the first "country" value seen
-        # for each zone and don't try to validate it further -- it's used as given.
-        dupes = zones["zone"].duplicated(keep=False)
-        if dupes.any():
-            dup_zones = sorted(zones.loc[dupes, "zone"].unique())
-            warnings.warn(
-                f"zcmap.csv has multiple rows for the same zone(s) {dup_zones} -- "
-                "keeping the first country value seen for each."
-            )
-            zones = zones.drop_duplicates(subset="zone", keep="first")
-    else:
-        # Some regions' raw gdx has no zcmap symbol at all. Only "zone" drives spatial
-        # resolution (buses) in either model backend -- "country" isn't consumed anywhere
-        # -- so fall back to the zone list implied by demand data and stub in a placeholder
-        # country rather than failing.
-        zones = pd.DataFrame({"zone": sorted(demand_forecast["zone"].unique())})
-        zones["country"] = "default"
-    zones["name"] = zones["zone"]
-
-    return years, zones, demand_forecast, demand_profile
