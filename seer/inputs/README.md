@@ -103,10 +103,14 @@ Number of rows is zones x `times.csv` rows (x years, only if given per-year - se
 
 ## renewable potentials
 ### `renewable_profiles.csv`
-Normalized capacity-factor curve, at whatever time resolution `times.csv` specifies. Each row
-is one of three kinds, distinguished by which of `zone`/`tech`/`generator` is populated,
-tried in this priority order per generator (each takes priority over the next only where it
-actually exists for that generator):
+Normalized capacity-factor curve, at whatever time resolution `times.csv` specifies. Each
+distinct profile has its own `profile_id` (a uuid) -- the join key to `generator_constants.
+profile_id`, resolved once during input processing (see
+`seer.inputs.epm.generator_params.match_re_profiles`), not re-derived by the model backends.
+`zone`/`tech`/`generator` are descriptive metadata only (which raw source this profile came
+from), not used for matching -- each row is one of three kinds, distinguished by which of them
+is populated. When resolving a generator's `profile_id`, this priority order is used (each
+takes priority over the next only where it actually exists for that generator):
 1. **generator-specific** (`generator` set, `zone`/`tech` NaN) -- one individual generator's
    own profile.
 2. **zone+tech generic** (`zone` and `tech` both set, `generator` NaN) -- shared by every
@@ -119,16 +123,17 @@ actually exists for that generator):
 
 | column | contents |
 | --- | --- |
+| `profile_id` | uuid, unique per distinct profile; matches `generator_constants.profile_id` |
 | `zone` | zone id, for a **generic** row. NaN for generator-specific or tech-only rows. |
-| `tech` | renewable technology, for a **generic** or **tech-only** row; matches `generator_constants.tech`. NaN for a generator-specific row. |
+| `tech` | renewable technology, for a **generic** or **tech-only** row; matches `generator_constants.tech` when tech is a standardized name -- but this is descriptive metadata, not the match key, so it may also be a raw, unstandardized resource-class label where the source data needs finer-than-tech granularity (e.g. distinct high/medium/low resource-quality wind sites) that would otherwise collide multiple genuinely different profiles into one tech. NaN for a generator-specific row. |
 | `generator` | generator name, for a **generator-specific** row; matches `generator_constants.generator`. NaN otherwise. |
 | `time` | matches a `times.csv` value |
 | `year` | **optional**, same template-vs-per-year rule as `demand_profile.csv` above |
 | `value` | capacity factor: available output as a fraction of nameplate capacity (unitless, 0–1) |
 
-A generator's `isre` (see `generator_constants.csv` below) reflects whether a matching profile
-(any of the three kinds above) actually exists for it — not a raw source flag — so `isre=True`
-always implies there's something here to look up, and `isre=False` never needs a lookup.
+A generator's `isre` (see `generator_constants.csv` below) reflects whether `profile_id` is set
+— not a raw source flag — so `isre=True` always implies there's something here to look up, and
+`isre=False` never needs a lookup.
 
 ## generator parameters
 ### `generator_constants.csv`
@@ -149,7 +154,8 @@ generator.
 | `fuel` | fuel/carrier used to generate, same PyPSA-aligned vocabulary (e.g. `gas`, `coal`); empty for renewables/storage/import, which have no fuel commodity |
 | `capacity` | nameplate capacity, MW (existing generators only; ignored/NaN for build options) |
 | `expandable` | `True` if this is a build option (capacity decided by the optimizer per investment year), `False` if it's fixed existing capacity |
-| `isre` | renewable-technology flag (boolean): whether output is driven by `renewable_profiles.csv` |
+| `isre` | renewable-technology flag (boolean): `profile_id.notna()` |
+| `profile_id` | uuid matching a `renewable_profiles.csv` profile, or NaN if none matched. The sole join key for renewable output -- see `renewable_profiles.csv` above for how it's resolved. |
 | `life` | asset lifetime, years. **Required if `expandable`** |
 | `annual_build_limit` | max MW addable per year. **Required if `expandable`**; NaN/empty for non-expandable (existing) units |
 | `start_year` | first year the unit is available. Optional, only meaningful when not `expandable` |

@@ -73,28 +73,14 @@ def get_year_steps(years):
 
 
 def prepare_renewable_profiles(re_profiles, calendar):
-    """Resolve renewable_profiles.csv into three wide frames indexed by (year, datetime)
-    snapshots, for lookup during generator setup: generic (columns=(zone, tech)), tech-only
-    (columns=tech, zone-agnostic) and generator-specific (columns=generator name). Priority
-    for a given generator is specific, then generic, then tech-only (see
-    seer/inputs/README.md's renewable_profiles.csv entry)."""
-    has_zone = re_profiles["zone"].notna()
-    generic = _resolve_wide(re_profiles[re_profiles["tech"].notna() & has_zone], calendar, ["zone", "tech"])
-    tech_only = _resolve_wide(re_profiles[re_profiles["tech"].notna() & ~has_zone], calendar, ["tech"])
-    specific = _resolve_wide(re_profiles[re_profiles["generator"].notna()], calendar, ["generator"])
-    return generic, tech_only, specific
-
-
-def _resolve_wide(profiles, calendar, key_cols):
+    """Resolve renewable_profiles.csv into one wide frame (columns=profile_id) indexed by
+    (year, datetime) snapshots -- generator_constants profile_id indicates profile correspondence"""
     index = pd.MultiIndex.from_arrays([calendar["year"], calendar["datetime"]], names=[None, None])
-    if profiles.empty:
+    if re_profiles.empty:
         return pd.DataFrame(index=index)
-    resolved = resolve_profile(profiles, calendar, key_cols=key_cols)
+    resolved = resolve_profile(re_profiles, calendar, key_cols=["profile_id"])
     resolved = resolved.merge(calendar[["year", "hour", "datetime"]], on=["year", "hour"])
-    # a single key column pivots to a flat column index (e.g. bare generator names); multiple
-    # key columns pivot to a MultiIndex (e.g. (zone, tech) tuples)
-    col_spec = key_cols[0] if len(key_cols) == 1 else key_cols
-    wide = resolved.pivot(index=["year", "datetime"], columns=col_spec, values="value")
+    wide = resolved.pivot(index=["year", "datetime"], columns="profile_id", values="value")
     wide.index.names = [None, None]
     return wide
 
@@ -124,10 +110,7 @@ def _marginal_cost(gen_costs, name):
 def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expansion=False):
     """Add existing generators and build options to the model. Returns the set of carriers used.
 
-    re_profiles: (generic, tech_only, specific) tuple from prepare_renewable_profiles --
-    priority for a given generator is specific, then its (zone, tech) generic profile, then
-    the zone-agnostic tech-only fallback."""
-    generic_profiles, tech_only_profiles, specific_profiles = re_profiles
+    re_profiles: prepare_renewable_profiles's wide (year, datetime) x profile_id frame."""
     carriers = set()
     gen_constants = gen_constants.set_index("generator")
     gen_costs = gen_costs.set_index(["generator", "cost_type"])
@@ -145,16 +128,8 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
         ramp_up_rate = gen.get("ramp_up_rate")
         ramp_down_rate = gen.get("ramp_down_rate")
         is_renewable = bool(gen.isre)
-        # isre guarantees a matching profile exists (see seer.inputs.epm.to_seer's matching
-        # step) -- specific (by this generator's own name) takes priority over its (zone,
-        # tech) generic profile, which in turn takes priority over the zone-agnostic
-        # tech-only fallback
-        if name in specific_profiles.columns:
-            profile = specific_profiles[name]
-        elif (zone, gen_type) in generic_profiles.columns:
-            profile = generic_profiles[(zone, gen_type)]
-        else:
-            profile = tech_only_profiles.get(gen_type)
+        # isre guarantees profile_id is set (see seer.inputs.epm.generator_params.match_re_profiles)
+        profile = re_profiles[gen.profile_id] if is_renewable else None
 
         if expandable:
             # one PyPSA component per build-year vintage -- no upper bound: a build option

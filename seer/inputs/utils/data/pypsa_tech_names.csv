@@ -138,3 +138,7 @@ oil,Steam-LFO,oil
 coal,Steam-Steam,coal
 nuclear,ST-Uranium,uranium
 nuclear,Steam-Uranium,uranium
+central coal CHP,CHP-Coal,coal
+central gas CHP,CHP-Gas,gas
+central solid biomass CHP,CHP-Biomass,solid biomass
+waste CHP,WtoE-MunicipalWaste,solid biomass

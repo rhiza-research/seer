@@ -59,30 +59,10 @@ def load_data(data_path, discrete_additions=False):
         for row in demand_long.itertuples()
     }
 
-    # ---- renewable availability. renewable_profiles.csv rows are generic (shared by every
-    # generator of a (zone, tech)), tech-only (zone-agnostic, shared across every zone), or
-    # generator-specific (one generator's own profile) -- priority is specific, then generic,
-    # then tech-only (see seer/inputs/README.md). Template profiles (no year in
-    # renewable_profiles.csv) are already replicated across every year by resolve_profile, so
-    # this is uniform whether or not the source data varies by year.
-    has_zone = renewable_profiles_df["zone"].notna()
-    has_tech = renewable_profiles_df["tech"].notna()
-    generic_df = renewable_profiles_df[has_tech & has_zone]
-    tech_only_df = renewable_profiles_df[has_tech & ~has_zone]
-    specific_df = renewable_profiles_df[renewable_profiles_df["generator"].notna()]
-
-    generic_availability = {
-        (row.zone, row.tech, row.year, row.hour): row.value
-        for row in resolve_profile(generic_df, calendar, key_cols=["zone", "tech"]).itertuples()
-    } if not generic_df.empty else {}
-    tech_only_availability = {
-        (row.tech, row.year, row.hour): row.value
-        for row in resolve_profile(tech_only_df, calendar, key_cols=["tech"]).itertuples()
-    } if not tech_only_df.empty else {}
-    specific_availability = {
-        (row.generator, row.year, row.hour): row.value
-        for row in resolve_profile(specific_df, calendar, key_cols=["generator"]).itertuples()
-    } if not specific_df.empty else {}
+    availability = {
+        (row.profile_id, row.year, row.hour): row.value
+        for row in resolve_profile(renewable_profiles_df, calendar, key_cols=["profile_id"]).itertuples()
+    } if not renewable_profiles_df.empty else {}
 
     # ---- generator attributes ----
     constants = generator_constants_df.set_index("generator")
@@ -92,6 +72,7 @@ def load_data(data_path, discrete_additions=False):
     generator_zone = constants["zone"].to_dict()
     generator_tech = constants["tech"].to_dict()
     generator_isre = constants["isre"].astype(bool).to_dict()
+    generator_profile_id = constants["profile_id"].to_dict()
 
     # only meaningful (and only loaded) for existing generators
     generator_capacity = constants.loc[existing_generators, "capacity"].to_dict()
@@ -101,16 +82,10 @@ def load_data(data_path, discrete_additions=False):
     generator_annual_build_limit = constants.loc[new_generators, "annual_build_limit"].to_dict()
 
     # dispatchable generators have a capacity factor of 1.0 every (year, hour); renewables are
-    # derated by their own profile if they have one, else their tech's (zone, tech) generic
-    # profile, else the zone-agnostic tech-only fallback (each may itself vary by year). isre
-    # guarantees one of the three exists -- see seer.inputs.epm.to_seer's matching step.
+    # derated by their own profile_id's availability (each may itself vary by year). isre
+    # guarantees profile_id is set -- see seer.inputs.epm.generator_params.match_re_profiles.
     def _capacity_factor(gen, year, hour):
-        if (gen, year, hour) in specific_availability:
-            return specific_availability[(gen, year, hour)]
-        key = (generator_zone[gen], generator_tech[gen], year, hour)
-        if key in generic_availability:
-            return generic_availability[key]
-        return tech_only_availability[(generator_tech[gen], year, hour)]
+        return availability[(generator_profile_id[gen], year, hour)]
 
     generator_capacity_factor = {
         (gen, year, hour): _capacity_factor(gen, year, hour) if generator_isre[gen] else 1.0

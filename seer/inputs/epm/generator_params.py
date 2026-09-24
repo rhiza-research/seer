@@ -1,4 +1,5 @@
 """Build generator_constants.csv and generator_costs.csv from EPM input data."""
+import uuid
 import warnings
 from pathlib import Path
 
@@ -171,7 +172,7 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
     ).set_index("generator")[model_years]
     marginal_cost = fuel_price_traj.mul(gc["heat_rate"], axis=0)
     # marginal cost is 0 for generators with no heat_rate
-    marginal_cost = marginal_cost.where(gc["heat_rate"].notna(), 0.0)
+    marginal_cost = marginal_cost.where(gc["heat_rate"].fillna(0) != 0, 0.0)
 
     """concatenate capex and marginal cost"""
     # row order is finalized later, to match generator_constants.csv
@@ -184,13 +185,17 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
 
 
 def match_re_profiles(gc, profiles_raw, times):
-    """Keep only renewable_profiles rows matching a real generator/tech (priority: generator-
-    specific, zone+tech generic, tech-only fallback -- see seer/inputs/README.md), and recompute
-    isre from profile existence. Returns (gc, renewable_profiles)."""
+    """Resolve each generator to at most one renewable profile, by priority: generator-
+    specific, then zone+tech generic, then tech-only fallback (see seer/inputs/README.md).
+    Every distinct profile gets its own profile_id, independent of that priority order --
+    identity is just "which (zone, tech, generator) this is" -- shared by every generator that
+    resolves to it, so matching downstream is a plain id lookup, not a re-derived
+    zone/tech/generator priority chain. isre is recomputed from whether a match was found, not
+    the raw RETech flag. Returns (gc, renewable_profiles)."""
     profiles_raw = check_profile_time_coverage(profiles_raw, times)
 
-    # split candidate profiles into their three tiers, each filtered down to rows that
-    # actually reference something real in gc
+    # keep only profiles that actually reference something real in gc: generator-specific,
+    # zone+tech generic, or tech-only fallback
     has_tech = profiles_raw["tech"].notna()
     has_zone = profiles_raw["zone"].notna()
     zone_tech = profiles_raw[has_tech & has_zone].merge(
@@ -199,17 +204,27 @@ def match_re_profiles(gc, profiles_raw, times):
     tech_only = profiles_raw[has_tech & ~has_zone]
     tech_only = tech_only[tech_only["tech"].isin(gc["tech"])]
     specific = profiles_raw[~has_tech & profiles_raw["generator"].isin(gc["generator"])]
+    profiles_raw = pd.concat([zone_tech, tech_only, specific], ignore_index=True)
 
-    # does each generator have a matching profile in any tier?
-    gc_zone_tech = pd.MultiIndex.from_arrays([gc["zone"], gc["tech"]])
-    matched_zone_tech = pd.MultiIndex.from_arrays([zone_tech["zone"], zone_tech["tech"]])
-    has_any = (
-        gc["generator"].isin(specific["generator"])
-        | gc_zone_tech.isin(matched_zone_tech)
-        | gc["tech"].isin(tech_only["tech"])
-    )
+    # assign a unique profile_id to each distinct (zone, tech, generator)
+    keys = profiles_raw[["zone", "tech", "generator"]].drop_duplicates()
+    keys["profile_id"] = [str(uuid.uuid4()) for _ in range(len(keys))]
+    profiles_raw = profiles_raw.merge(keys, on=["zone", "tech", "generator"])
 
-    claimed_but_unmatched = gc["isre"] & ~has_any
+    # resolve each generator to (at most) one profile_id: try generator-specific, then
+    # zone+tech generic, then tech-only fallback, keeping the first match found
+    lookups = [
+        (keys[keys["generator"].notna()], ["generator"]),
+        (keys[keys["tech"].notna() & keys["zone"].notna()], ["zone", "tech"]),
+        (keys[keys["tech"].notna() & keys["zone"].isna()], ["tech"]),
+    ]
+    profile_id = pd.Series(pd.NA, index=gc.index, dtype="object")
+    for tier_keys, key_cols in lookups:
+        ids = tier_keys.drop_duplicates(key_cols)[key_cols + ["profile_id"]]
+        matched = gc[key_cols].reset_index().merge(ids, on=key_cols, how="left").set_index("index")["profile_id"]
+        profile_id = profile_id.where(profile_id.notna(), matched)
+
+    claimed_but_unmatched = gc["isre"] & profile_id.isna()
     for _, gen in gc[claimed_but_unmatched].iterrows():
         warnings.warn(
             f"Generator {gen.generator!r} (zone={gen.zone}, tech={gen.tech}) is flagged "
@@ -217,8 +232,9 @@ def match_re_profiles(gc, profiles_raw, times):
         )
 
     gc = gc.copy()
-    gc["isre"] = has_any
-    renewable_profiles = pd.concat([zone_tech, tech_only, specific], ignore_index=True)
+    gc["profile_id"] = profile_id
+    gc["isre"] = profile_id.notna()
+    renewable_profiles = profiles_raw[["profile_id", "zone", "tech", "generator", "time", "value"]]
     return gc, renewable_profiles
 
 

@@ -15,6 +15,7 @@ oil,FuelOil
 oil,LFO
 gas,Gas
 gas,LNG
+gas,LNGCCS
 gas,Methane
 gas,CCGTEx
 gas,CCGTNew
@@ -69,5 +70,6 @@ water,RoRNew
 water,Hydro
 water,PHP
 solid biomass,Biogas
+solid biomass,MunicipalWaste
 chem_reaction,ChemReaction
 wind,OSW
