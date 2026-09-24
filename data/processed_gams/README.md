@@ -101,6 +101,9 @@ Two recurring raw-data issues, fixed generically in code or per-region as noted 
   candidates missing from `pGenDataInputCustom.csv` entirely.
 - Code fix (`MaxTotalBuild` fallback) corrected 6 generators with a real, tailored
   `MaxTotalBuild` but no `Capacity`/`BuildLimitperYear`.
+- Added `Capacity` (= `CapacityMWh` / 4, standard 4h battery-duration assumption) for 27
+  storage plants with a `CapacityMWh` but no `Capacity` at all (`CommittedStorage2-*_NAM`,
+  `Committed_Storage1-*_BWA`, `Li-ion_storage_C_MWI`, `SA_IRP_New_BESS_2031..2050`).
 
 ## Mexico
 
@@ -117,6 +120,10 @@ Two recurring raw-data issues, fixed generically in code or per-region as noted 
 
 **BLOCKED -- wrong source file.** `data/raw_gams/Rwanda/input.gdx` contains SAPP-region data
 (same 13 zones as Malawi's model), not Rwanda. Needs the real Rwanda `.gdx`.
+
+- Added `Capacity` (= `CapacityMWh` / 4, standard 4h battery-duration assumption) for the same
+  27 storage plants as Malawi (identical SAPP source data), so the pipeline runs on this
+  placeholder data in the meantime.
 
 ## Serbia
 
