@@ -10,12 +10,33 @@ Usage:
     python -m jobs.epm_to_seer                       # process all regions under data/processed_gams
     python -m jobs.epm_to_seer Gambia Rwanda          # process just these regions
     python -m jobs.epm_to_seer --processed-gams-dir data/other --seer-output-dir data/seer/other
+
+!! DANGER -- regions with a hand-patched generator_costs.csv !!
+A few regions have marginal_cost values that were computed and written by hand directly into
+their seer-schema output (not reproducible by this script), because their own source data has
+no real price for some fuel and the fix was to borrow a price from a comparable sibling region
+or (Serbia) re-derive it from a differently-shaped Fuel Prices sheet. Re-running this script
+for one of these regions SILENTLY OVERWRITES that patch back to the broken (NaN) values, with
+no error -- it already happened once by accident (a no-args full sweep regenerated Mauritania's
+output while fixing an unrelated region, wiping out its patch without anyone noticing until the
+next validation pass). As of this writing the affected regions are:
+    - Serbia (gams)                 -- see data/processed_gams/README.md
+    - Rwanda, CAPP, Tanzania (gams)  -- see data/processed_gams/README.md
+    - Mauritania (epm_open)         -- see data/processed_epm_open/README.md
+Before running this script for ALL regions (no region arguments) or for any of the above by
+name, re-check those README sections for the current list and re-apply the patch afterward if
+needed. There is currently no automated guard against this -- the warning below is it.
 """
 
 import argparse
+import sys
 from pathlib import Path
 
 from seer.inputs.epm import epm_to_seer as convert_epm_to_seer
+
+# keep in sync with the module docstring above and with the "re-running ... will NOT reproduce
+# this" notes in data/processed_gams/README.md and data/processed_epm_open/README.md
+MANUALLY_PATCHED_REGIONS = {"Serbia", "Rwanda", "CAPP", "Tanzania", "Mauritania"}
 
 
 def epm_to_seer(region, processed_gams_dir, seer_output_dir):
@@ -37,6 +58,15 @@ def main():
     regions = args.regions or sorted(
         d.name for d in args.processed_gams_dir.iterdir() if d.is_dir()
     )
+
+    at_risk = MANUALLY_PATCHED_REGIONS & set(regions)
+    if at_risk:
+        print(
+            f"!! WARNING: {sorted(at_risk)} have a hand-patched generator_costs.csv (see the "
+            "module docstring above). Running this will silently overwrite that patch with "
+            "broken (NaN) marginal_cost values. Re-apply it afterward if you proceed.",
+            file=sys.stderr,
+        )
 
     results = {}
     for region in regions:

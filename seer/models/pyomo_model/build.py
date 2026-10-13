@@ -40,7 +40,7 @@ def load_data(data_path, discrete_additions=False):
     year_discount_factor = {year: 1 / (1 + discount_rate) ** (year - base_year) for year in years}
 
     # times.csv x years.csv, projected onto each real year (skipping e.g. Feb 29 in a
-    # non-leap year) -- see seer/inputs/README.md and seer.models.time_utils
+    # non-leap year) -- see seer/schema/README.md and seer.models.time_utils
     calendar = build_snapshot_calendar(years, load_times(data_path))
     hours = sorted(calendar["hour"].unique())
     times = list(zip(calendar["year"], calendar["hour"]))
@@ -101,7 +101,7 @@ def load_data(data_path, discrete_additions=False):
         for year in years
     }
     # 0 if a generator's marginal_cost row (or a specific year within it) is missing --
-    # should always be fully present per seer/inputs/README.md, but fall back defensively
+    # should always be fully present per seer/schema/README.md, but fall back defensively
     # rather than crash or pass NaN into a NonNegativeReals param
     def _marginal_cost(gen, year):
         if (gen, "marginal_cost") not in costs.index:
@@ -135,7 +135,7 @@ def load_data(data_path, discrete_additions=False):
     storage_costs = storage_costs_df.set_index(["storage", "cost_type"])
 
     # 0 if a storage unit's capex/marginal_cost row (or a specific year within it) is
-    # missing -- should always be fully present per seer/inputs/README.md, but fall back
+    # missing -- should always be fully present per seer/schema/README.md, but fall back
     # defensively rather than crash or pass NaN into a NonNegativeReals param
     def _storage_cost(s, cost_type, year):
         if (s, cost_type) not in storage_costs.index:

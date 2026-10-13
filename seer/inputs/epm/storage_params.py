@@ -50,12 +50,32 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
     """
     storage_gen_params = custom_gen_params[custom_gen_params["generator"].isin(storage_constants["storage"])].copy()
 
+    # some storage plants have no "CapexMWh" in pStorageDataInput.csv at all, but DO have a real
+    # "Capex" value on their own generator-side record (e.g. Serbia's BESS2025_4h_Ser, Turkiye's
+    # Gokcekaya_PHP, Lesotho's Monont'sa_HY_LSO) -- the same generator-side record zone/tech
+    # already gets pulled from below. Fall back to it here rather than leaving a real, known
+    # cost sitting unused in the wrong source file.
+    missing_capex = storage_constants["capex_mwh"].isna()
+    if missing_capex.any():
+        gen_side_capex = storage_gen_params[storage_gen_params["parameters"] == "Capex"].set_index("generator")["value"]
+        storage_constants.loc[missing_capex, "capex_mwh"] = (
+            storage_constants.loc[missing_capex, "storage"].map(gen_side_capex)
+        )
+
     # zone and tech (the storage carrier, e.g. "battery storage"/"PHS") are plain columns
     # rather than "parameters" rows. The raw "fuel" column here is the actual carrier
     # (Battery/Water/Pumped/...); the raw "tech" column (Storage/STO HY/...) is itself an
     # ambiguous placeholder that only disambiguates Water/Pumped/Hydro (pumped-hydro storage)
     # from Battery once paired with it -- see seer.inputs.utils's compound tech-fuel synonyms.
     storage_gen_params["tech"] = standardize_tech(storage_gen_params["tech"], storage_gen_params["fuel"])
+    # some regions' storage plants carry the same tech=Water/fuel=Hydro pair ordinary
+    # reservoir/ROR hydro *generators* use (e.g. South Africa's Drakensberg/Ingula/Palmiet/
+    # Steenbras pumped-storage schemes, named "...PH_HY_ZAF") -- standardize_tech can't tell
+    # these apart from real hydro generation on the pair alone, so it resolves to "hydro"
+    # (the correct call in a generator context). But every row here came from
+    # pStorageDataInput.csv's plant list to begin with -- reservoir/ROR hydro never appears
+    # there, so "hydro" in this storage-only context can only mean pumped-hydro storage.
+    storage_gen_params.loc[storage_gen_params["tech"] == "hydro", "tech"] = "PHS"
     zone_tech = storage_gen_params[["generator", "zone", "tech"]].drop_duplicates().rename(
         columns={"generator": "storage"}
     )
@@ -148,7 +168,7 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
     # pattern as generator_constants' capacity), and it's never read by either model backend for
     # expandable storage (only annual_build_limit_mwh is). Null it out now, after it's already
     # been used above to derive duration_hours (a real, meaningful property for every storage
-    # unit, expandable or not) -- see seer/inputs/README.md: "ignored/NaN for build options".
+    # unit, expandable or not) -- see seer/schema/README.md: "ignored/NaN for build options".
     storage_constants.loc[storage_constants["expandable"], "capacity_mw"] = pd.NA
 
     # reorder for readability

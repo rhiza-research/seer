@@ -15,7 +15,7 @@ def build(data_path):
 
     """TIME: Set up multi-period optimization.
     Years are investment periods. Build decisions can be made in each year.
-    times.csv defines the within-year dispatch grid (see seer/inputs/README.md); years x times,
+    times.csv defines the within-year dispatch grid (see seer/schema/README.md); years x times,
     projected onto each real year (skipping e.g. Feb 29 in non-leap years), gives the snapshots.
     """
     years = input_data["years"]["year"].tolist()
@@ -101,7 +101,7 @@ def set_demand(model, demand_forecast, demand_profile, calendar):
 
 def _marginal_cost(gen_costs, name):
     """gen_costs.loc[(name, "marginal_cost"), :], or all-zero if that row is absent (should
-    always be present per seer/inputs/README.md, but fall back defensively rather than crash)."""
+    always be present per seer/schema/README.md, but fall back defensively rather than crash)."""
     if (name, "marginal_cost") not in gen_costs.index:
         return pd.Series(0.0, index=gen_costs.columns)
     return gen_costs.loc[(name, "marginal_cost"), :].fillna(0)
@@ -139,7 +139,12 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             valid_years = get_valid_years(model, gen.start_year)
             capex = gen_costs.loc[(name, "capex"), :]
             mc = _marginal_cost(gen_costs, name)
+            # PyPSA's own p_nom_mod default is 0.0 (continuous), not NaN -- a generator with
+            # no known unit_size must fall back to that default explicitly, even under
+            # modular_expansion, rather than passing a raw NaN into the LP
             unit_capacity = gen.get("unit_size") if modular_expansion else None
+            if unit_capacity is not None and pd.isna(unit_capacity):
+                unit_capacity = 0
 
             for year in valid_years:
                 gen_year_name = f"{name}_{year}"
@@ -199,7 +204,11 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
             # one PyPSA component per build-year vintage -- no upper bound, same reasoning
             # as build_generators' expandable branch above
             capex = storage_costs.loc[(name, "capex"), :]
+            # same NaN -> 0.0 fallback as build_generators above -- PyPSA's p_nom_mod default
+            # is 0.0 (continuous), not NaN
             unit_capacity = sto.unit_size_mwh if modular_expansion else None
+            if unit_capacity is not None and pd.isna(unit_capacity):
+                unit_capacity = 0
 
             for year in get_valid_years(model, sto.start_year):
                 model.add("StorageUnit", f"{name}_{year}", bus=sto.zone,

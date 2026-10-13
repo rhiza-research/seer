@@ -47,9 +47,6 @@ Candidate_BESS_Burundi,Burundi,Storage,Battery,Status,3.0
 Candidate_BESS_Burundi,Burundi,Storage,Battery,StYr,2035.0
 Candidate_BESS_Burundi,Burundi,Storage,Battery,Capacity,3000.0
 Candidate_BESS_Burundi,Burundi,Storage,Battery,BuildLimitperYear,6.0
-Candidate_CSP_Cameroon,Cameroon,CSPPlant,CSP,Status,3.0
-Candidate_CSP_Cameroon,Cameroon,CSPPlant,CSP,StYr,2035.0
-Candidate_CSP_Cameroon,Cameroon,CSPPlant,CSP,BuildLimitperYear,40000.0
 Bangui Enerca,CAR,OCGT,Diesel,Status,1.0
 Bangui Enerca,CAR,OCGT,Diesel,StYr,2025.0
 Bangui Enerca,CAR,OCGT,Diesel,Capacity,20.0
@@ -672,9 +669,6 @@ Song Mbengue,Cameroon,ReservoirHydro,Water,Status,3.0
 Song Mbengue,Cameroon,ReservoirHydro,Water,StYr,2051.0
 Song Mbengue,Cameroon,ReservoirHydro,Water,Capacity,1140.0
 Song Mbengue,Cameroon,ReservoirHydro,Water,BuildLimitperYear,1140.0
-Candidate_CSP_CAF,CAR,CSPPlant,CSP,Status,3.0
-Candidate_CSP_CAF,CAR,CSPPlant,CSP,StYr,2030.0
-Candidate_CSP_CAF,CAR,CSPPlant,CSP,BuildLimitperYear,50000.0
 Candidate_OCGT_Diesel_CAR,CAR,OCGT,Diesel,Status,3.0
 Candidate_OCGT_Diesel_CAR,CAR,OCGT,Diesel,StYr,2030.0
 Candidate_OCGT_Diesel_CAR,CAR,OCGT,Diesel,BuildLimitperYear,100.0

@@ -3926,8 +3926,7 @@ Wind_Ex_Alb,Albania,WindEx,Wind,StYr,2018.0
 Wind_Ex_Alb,Albania,WindEx,Wind,RetrYr,2044.0
 Wind_Ex_Alb,Albania,WindEx,Wind,Zone,1.0
 Wind_Ex_Alb,Albania,WindEx,Wind,FOMperMW,28180.0
-Wind_Ex_Alb,Albania,WindEx,Wind,BuildLimitperYear,135.0
-Wind_Ex_Alb,Albania,WindEx,Wind,MaxTotalBuild,135.0
+Wind_Ex_Alb,Albania,WindEx,Wind,Capacity,135.0
 Wind_Ex_Alb,Albania,WindEx,Wind,Type,5.0
 Wind_Ex_Alb,Albania,WindEx,Wind,fuel1,17.0
 Wind_Ex_Alb,Albania,WindEx,Wind,Status,1.0
@@ -3942,8 +3941,7 @@ HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,RampUpRate,1.0
 HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,RampDnRate,1.0
 HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,ResLimShare,0.3
 HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,FOMperMW,15000.0
-HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,BuildLimitperYear,1465.0
-HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,MaxTotalBuild,1465.0
+HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,Capacity,1465.0
 HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,Type,4.0
 HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,fuel1,12.0
 HySto_Ex_Kos,Kosovo,HydroStorEx,Hydro,Status,1.0

@@ -19,6 +19,16 @@ def check_demand_forecast(demand_forecast, valid_zones):
             f"{sorted(demand_forecast.loc[bad_zone, 'zone'].unique())}"
         )
         demand_forecast = demand_forecast[~bad_zone]
+
+    # a (zone, type) series can have real rows for every year but a blank `value` for the
+    # earliest/latest ones -- e.g. Georgia's GE zone has real peak demand from 2021 on, but its
+    # 2018-2020 rows exist with no value. Hold flat at the nearest year with a real value,
+    # same reasoning as generator_params.build_costs' fuel-price fallback -- a demand series
+    # with NO real value anywhere has nothing to extrapolate from and is correctly left NaN.
+    demand_forecast = demand_forecast.sort_values(["zone", "type", "year"])
+    demand_forecast["value"] = demand_forecast.groupby(["zone", "type"])["value"].transform(
+        lambda s: s.ffill().bfill()
+    )
     return demand_forecast
 
 

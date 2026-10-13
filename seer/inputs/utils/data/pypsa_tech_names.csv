@@ -57,7 +57,7 @@ OCGT,GasResidual,gas
 hydro,MPA_Main,
 hydro,MPA_Opt,
 hydro,MPA_Reg,
-hydro,PHP,
+PHS,PHP,
 hydro,ReservoirHydro,
 hydro,Hydro,
 hydro,Water,
@@ -95,6 +95,7 @@ coal,ICE-CoalCCS,coal
 coal,ICE-Coal_CCS,coal
 coal,ICE-Coke,coal
 coal,ST-Coal,coal
+coal,ST-Coke,coal
 coal,ST-CoalEx,coal
 coal,ST-CoalNew,coal
 coal,ST-DomesticCoal,coal

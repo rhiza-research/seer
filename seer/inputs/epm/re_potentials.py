@@ -1,7 +1,7 @@
 """Build renewable_profiles.csv from EPM input data.
 
 renewable_profiles.csv can carry two different kinds of rows, distinguished by which of
-`tech`/`generator` is populated (see seer/inputs/README.md):
+`tech`/`generator` is populated (see seer/schema/README.md):
 - generic (tech set, generator NaN): one profile shared by every generator of that
   (zone, tech), sourced from pVREProfile.csv. tech names are standardized (see
   seer.inputs.utils) to match generator_constants.tech's canonical (PyPSA-aligned)
@@ -105,5 +105,10 @@ def _read_gen_profile(path):
     identifier_col = "generator" if "generator" in df.columns else "tech"
     df["generator"] = df[identifier_col]
     df["tech"] = pd.NA
+    # keep zone through dedup (two different zones' generators could share a name by
+    # coincidence -- collapsing them first would wrongly merge or conflict-detect across
+    # unrelated zones), but null it in the output: per seer/schema/README.md, a
+    # generator-specific row's zone/tech are both NaN, "generator" is the only identity key
     df = _dedup_profile(df, ["zone", "generator"], path)
+    df["zone"] = pd.NA
     return df[["zone", "tech", "generator", "time", "value"]]

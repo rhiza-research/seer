@@ -73,3 +73,17 @@ solid biomass,Biogas
 solid biomass,MunicipalWaste
 chem_reaction,ChemReaction
 wind,OSW
+coal,CoalBanovici
+coal,CoalGacko
+coal,CoalKakanj
+coal,CoalStanari
+coal,CoalTuzla
+coal,CoalUgljevik
+gas,GasECBM
+gas,GasZenica
+solar,PV-1
+solar,PV-2
+solar,PV-3
+wind,Wind1
+wind,Wind2
+wind,Wind3

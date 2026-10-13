@@ -18,6 +18,17 @@ Matching is case/whitespace-insensitive. The tech table additionally supports co
 tech-ambiguous raw values -- e.g. "ICE"/"ST"/"Steam" are all bare prime-mover labels that by
 themselves don't say whether the plant burns coal, oil, or something else; the true PyPSA
 technology can only be resolved once you also know the fuel.
+
+A third table, pypsa_cost_tech_names.csv, is deliberately separate: some regions' raw renewable
+tech values are genuinely finer-grained than a PyPSA tech (e.g. Georgia's WIND1/2/3, distinct
+resource-quality tiers sharing identical hardware) and must stay that way through
+`seer.inputs.epm.generator_params.match_re_profiles`, which joins a generator to its
+renewable_profiles.csv row on (zone, tech) -- folding them into "onwind" there would collapse
+three genuinely different capacity-factor curves into one. `coarsen_cost_tech` is meant to run
+on generator_constants.tech only, strictly after that matching step has already happened (once
+profile_id is assigned, downstream consumers key off profile_id, not tech) -- never on
+renewable_profiles.csv's own tech column, which stays at its original granularity as
+documented metadata.
 """
 
 import re
@@ -77,6 +88,7 @@ def _load_synonyms(csv_path, has_fuel_col=False):
 
 _TECH_LOOKUP, _TECH_DEFAULT_FUEL = _load_synonyms(DATA_DIR / "pypsa_tech_names.csv", has_fuel_col=True)
 _FUEL_LOOKUP, _ = _load_synonyms(DATA_DIR / "pypsa_fuel_names.csv")
+_COST_TECH_LOOKUP, _ = _load_synonyms(DATA_DIR / "pypsa_cost_tech_names.csv")
 
 
 def _resolve_tech(tech, fuel):
@@ -168,3 +180,14 @@ def default_fuel_for_tech(standard_tech):
     """The default fuel for a standardized tech name (from pypsa_tech_names.csv's "fuel"
     column), or None if that tech has no associated fuel (renewables, storage, import)."""
     return _TECH_DEFAULT_FUEL.get(standard_tech)
+
+
+def coarsen_cost_tech(tech):
+    """Map a tech value (or pandas Series) that's finer-grained than any real PyPSA technology
+    (resource-quality tiers like Georgia's Wind1/2/3) to its canonical costing tech, via
+    pypsa_cost_tech_names.csv. Anything not in that table (already-canonical names, or any
+    other unmapped value) passes through unchanged -- unlike standardize_tech, this never
+    warns, since most tech values are expected not to need this second pass."""
+    if isinstance(tech, pd.Series):
+        return tech.map(lambda t: _COST_TECH_LOOKUP.get(_normalize(t), t) if pd.notna(t) else t)
+    return _COST_TECH_LOOKUP.get(_normalize(tech), tech) if pd.notna(tech) else tech

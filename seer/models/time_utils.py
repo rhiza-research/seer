@@ -1,6 +1,6 @@
 """Shared time-handling utilities for both model backends.
 
-seer schema time strings ("MM-DD HH:MM:SS", see times.csv in seer/inputs/README.md) deliberately
+seer schema time strings ("MM-DD HH:MM:SS", see times.csv in seer/schema/README.md) deliberately
 carry no year -- they're a template dispatch grid, projected onto whichever real years are
 modeled. Parsing them must never invent a year (pandas/dateutil defaults to today's year;
 datetime.strptime defaults to 1900, which isn't even a leap year and would reject Feb 29) -- so

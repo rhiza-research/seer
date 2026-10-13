@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from ..utils import standardize_tech, standardize_fuel, default_fuel_for_tech
+from ..utils import standardize_tech, standardize_fuel, default_fuel_for_tech, coarsen_cost_tech
 from .data_checks import check_generators, check_capex_trajectory, check_profile_time_coverage
 from .re_potentials import build_re_potentials
 from .utils import init_df, pivot_wide, pivot_years, align
@@ -66,7 +66,9 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     generator_constants = _derive_flags(generator_constants, input_dir)
 
     """build generator costs"""
-    generator_cost = build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years)
+    generator_cost = build_costs(
+        generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years, input_dir
+    )
     # capex/heat_rate/maxtotalbuild were only needed to build generator_cost and can now be dropped
     generator_constants = generator_constants.drop(columns=["capex", "heat_rate", "maxtotalbuild"])
 
@@ -84,6 +86,86 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     profiles_raw = build_re_potentials(input_dir)
     generator_constants, renewable_profiles = match_re_profiles(generator_constants, profiles_raw, times)
 
+    # some regions' renewable tech is finer-grained than any real PyPSA technology (resource-
+    # quality tiers like Georgia's Wind1/2/3) -- that granularity had to survive the matching
+    # step just above (it's what keeps their distinct profiles from colliding into one), but
+    # once profile_id is assigned, nothing downstream reads tech for profile lookup any more,
+    # so it's now safe to coarsen generator_constants.tech to its canonical costing name.
+    # renewable_profiles.tech is untouched -- it stays at its original granularity (metadata).
+    generator_constants["tech"] = coarsen_cost_tech(generator_constants["tech"])
+
+    # "hydrogen_CCGT" isn't a real standalone PyPSA technology (no separate cost data), and
+    # it's never just CCGT either -- the raw EPM data gives combined-cycle and open-cycle
+    # hydrogen units the exact same tech=Hydrogen/fuel=Hydrogen (e.g. Mexico's "Generic CCGT
+    # H2" vs "Generic OCGT H2", Turkiye's "..._CCGT_H2" vs "..._OCGT_H2") -- only the
+    # generator's own name says which cycle it is. Split on that name pattern and approximate
+    # each with its matching gas-turbine cost basis; anything not explicitly named OCGT
+    # defaults to CCGT (the more common case across regions).
+    is_h2 = generator_constants["tech"] == "hydrogen_CCGT"
+    is_ocgt_named = generator_constants["generator"].str.contains("OCGT", case=False, na=False)
+    generator_constants.loc[is_h2, "tech"] = "CCGT"
+    generator_constants.loc[is_h2 & is_ocgt_named, "tech"] = "OCGT"
+
+    # import is a placeholder for externally-sourced power, not a real buildable generation
+    # asset -- never a build option, regardless of what BuildLimitperYear/Capex happen to say
+    # for it (several regions pair an existing import link with a real annual uprate allowance
+    # but no cost data at all -- see the drop below for exactly that case).
+    is_import = generator_constants["tech"] == "import"
+    generator_constants.loc[is_import, "expandable"] = False
+    generator_constants.loc[is_import, "annual_build_limit"] = pd.NA
+
+    # forcing expandable=False above can leave a pure candidate import/interconnection option
+    # (one that never had its own existing capacity -- e.g. a "<name>_expansion" split-off, or
+    # Eswatini's SAR/EDM/SAPP_Connection_New) with neither capacity nor annual_build_limit --
+    # completely inert, contributing nothing. Drop those; an import row with a real existing
+    # capacity (even 0, a currently-unused interconnector) is still meaningful and stays.
+    inert_import = is_import & generator_constants["capacity"].isna()
+    if inert_import.any():
+        dropped_import = set(generator_constants.loc[inert_import, "generator"])
+        warnings.warn(
+            f"Dropping import-tech generator(s) with no existing capacity (pure candidates, "
+            f"which can't be build options either): {sorted(dropped_import)}"
+        )
+        generator_constants = generator_constants[~inert_import].reset_index(drop=True)
+        generator_cost = generator_cost[~generator_cost["generator"].isin(dropped_import)].reset_index(drop=True)
+
+    # an expandable generator with literally no cost data anywhere -- no trajectory (even after
+    # the flat-capex fallback in build_costs above) and no base capex scalar at all -- has
+    # nothing to fall back to and no sensible interpretation as a buildable option. Drop it
+    # entirely rather than leave a free-to-build (PyPSA silently treats NaN capital_cost as 0)
+    # or crashing (pyomo's Param domain rejects NaN outright) option in the schema.
+    capex_by_gen = generator_cost[generator_cost["cost_type"] == "capex"].set_index("generator")
+    year_cols = [c for c in capex_by_gen.columns if c != "cost_type"]
+    unpriced_names = set(capex_by_gen.index[capex_by_gen[year_cols].isna().all(axis=1)])
+    truly_unpriced = (
+        generator_constants["expandable"]
+        & ~is_import
+        & generator_constants["generator"].isin(unpriced_names)
+    )
+    if truly_unpriced.any():
+        dropped = set(generator_constants.loc[truly_unpriced, "generator"])
+        warnings.warn(
+            f"Dropping expandable generator(s) with no cost data anywhere (no trajectory, no "
+            f"base capex): {sorted(dropped)}"
+        )
+        generator_constants = generator_constants[~truly_unpriced].reset_index(drop=True)
+        generator_cost = generator_cost[~generator_cost["generator"].isin(dropped)].reset_index(drop=True)
+
+    # an existing (non-expandable) generator with no capacity value at all -- e.g. Rwanda's
+    # Beloluane_TH_MOZ/Aggreko_IPP_ICE_MWI: raw Status=Existing, but no Capacity,
+    # BuildLimitperYear, or MaxTotalBuild anywhere. No number anywhere to recover -- same
+    # "nothing to fall back to" situation as the unpriced build options above, just on the
+    # existing side.
+    empty_existing = ~generator_constants["expandable"] & generator_constants["capacity"].isna()
+    if empty_existing.any():
+        dropped_empty = set(generator_constants.loc[empty_existing, "generator"])
+        warnings.warn(
+            f"Dropping existing generator(s) with no capacity value anywhere in the raw data: "
+            f"{sorted(dropped_empty)}"
+        )
+        generator_constants = generator_constants[~empty_existing].reset_index(drop=True)
+        generator_cost = generator_cost[~generator_cost["generator"].isin(dropped_empty)].reset_index(drop=True)
+
     # reorder for readability
     generator_constants = generator_constants.sort_values(["expandable", "fuel", "tech"]).reset_index(drop=True)
 
@@ -93,9 +175,44 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     return generator_constants, generator_cost, renewable_profiles
 
 
+def _split_existing_and_expansion(gc):
+    """Some regions' raw EPM data gives a single generator BOTH a real existing Capacity AND a
+    real nonzero BuildLimitperYear on the same row -- e.g. Nigeria's Egbin (1320 MW), Jebba
+    (578.4 MW), Kainji (760 MW), Shiroro (600 MW): all real plants with real nameplate
+    capacities that also carry a small annual rehab/uprate build limit. Checked across every
+    region: 2552 generators do this. The seer schema's `expandable` flag is a strict either/or
+    (existing fixed capacity, or a pure build option) -- it can't represent "existing, and also
+    separately expandable" on one row. Split any such generator into two: the original name
+    keeps its real existing capacity (its BuildLimitperYear/MaxTotalBuild move to the new row,
+    since that allowance isn't part of the fixed existing unit); a new "<generator>_expansion"
+    row keeps the annual build limit and shares the same zone/tech/fuel/cost basis as the
+    original (same underlying technology), with Capacity nulled so it resolves to a pure build
+    option once `expandable` is computed below."""
+    both = gc["Capacity"].notna() & gc["BuildLimitperYear"].notna() & (gc["BuildLimitperYear"] != 0)
+    if not both.any():
+        return gc
+
+    existing = gc.copy()
+    existing.loc[both, ["BuildLimitperYear", "MaxTotalBuild"]] = pd.NA
+
+    expansion = gc[both].copy()
+    expansion["generator"] = expansion["generator"] + "_expansion"
+    expansion["Capacity"] = pd.NA
+
+    collisions = set(expansion["generator"]) & set(existing["generator"])
+    if collisions:
+        raise ValueError(
+            f"Generated expansion-option generator name(s) collide with an existing generator: "
+            f"{sorted(collisions)} -- pick a different naming scheme in _split_existing_and_expansion."
+        )
+    return pd.concat([existing, expansion], ignore_index=True)
+
+
 def _derive_flags(gc, data_path):
     """Derive expandable/isre/retirement_year/life, and null out columns only meaningful
     for one of expandable/existing."""
+    gc = _split_existing_and_expansion(gc)
+
     # MaxTotalBuild fallback when both BuildLimitperYear and Capacity are missing (see
     # data/processed_gams/README.md re: this vs. the Status-based fixes)
     no_limit_or_cap = gc["BuildLimitperYear"].isna() & gc["Capacity"].isna()
@@ -106,6 +223,12 @@ def _derive_flags(gc, data_path):
         (gc["BuildLimitperYear"].notna() & (gc["BuildLimitperYear"] != 0))
         | (gc["Capacity"].isna() & gc["Capex"].notna())
     )
+    # the capex-only branch above can flag a generator expandable with no BuildLimitperYear at
+    # all (e.g. Poland's Generic_ROR) -- annual_build_limit must never be NaN for an expandable
+    # generator (both model backends read it as a real bound; pyomo's Param domain rejects NaN
+    # outright, crashing at model-build time). No known annual pace limit means unconstrained,
+    # same as PyPSA's own p_nom_max default -- fill with inf, not a guessed finite number.
+    gc.loc[gc["expandable"] & gc["BuildLimitperYear"].isna(), "BuildLimitperYear"] = float("inf")
     gc.loc[gc["expandable"], "Capacity"] = pd.NA   # only existing generators have a capacity
     gc.loc[~gc["expandable"], "UnitSize"] = pd.NA  # only expandable generators have a unit_size
     gc["RampUpRate"] = gc["RampUpRate"].fillna(1)  # default: fully flexible
@@ -140,7 +263,7 @@ def _derive_flags(gc, data_path):
     return gc
 
 
-def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years):
+def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years, input_dir):
     """generator_costs.csv: two rows per generator (capex and marginal cost), years as
     columns. capex = capex trajectory x capex scalar. marginal_cost = heat_rate x fuel price."""
 
@@ -166,10 +289,156 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
     # scale normalized trajectory by generator's own capex
     capex_cost = capex_traj.mul(gc["capex"], axis=0)
 
+    # a region can have real trajectory data covering every modeled year overall, yet still be
+    # missing it for one particular generator -- check_capex_trajectory only validates year
+    # coverage of whichever source has any data, not that every generator is represented in it
+    # (no custom trajectory row of its own, and its own (zone,tech,fuel) absent from the default
+    # table too). That slips through silently as NaN. A build option's capex must never be NaN
+    # (pyomo's Param domain rejects it outright at model-build time; PyPSA silently treats a NaN
+    # capital_cost as free-to-build, which is worse). Fall back to flat (no decline) for just
+    # these generators, the same treatment already used when a whole region has no trajectory
+    # data at all -- but only where there's a real base capex to hold flat; a generator with
+    # neither a trajectory nor a base capex has no cost signal to fall back to at all.
+    still_missing = gc["expandable"] & capex_cost.isna().all(axis=1) & gc["capex"].notna()
+    if still_missing.any():
+        warnings.warn(
+            f"No capex trajectory found for expandable generator(s) with a real base capex -- "
+            f"holding capex flat (no cost decline) for: {sorted(gc.index[still_missing])}"
+        )
+        capex_cost.loc[still_missing] = pd.DataFrame(
+            {y: gc.loc[still_missing, "capex"] for y in model_years}
+        )
+
     """build marginal cost"""
-    fuel_price_traj = gc.reset_index().merge(
-        pivot_years(fuel_prices, ["fuel", "zone"], model_years), on=["fuel", "zone"], how="left"
+    # match fuel/zone case/whitespace-insensitively -- raw spellings disagree even within the
+    # SAME workbook (e.g. Botswana's Generator Data calls it "Diesel"/"FuelOil", but its own
+    # Fuel Prices sheet calls the exact same fuels "diesel"/"Fueloil"); an exact-string merge
+    # silently drops a real, present price over nothing but a casing difference.
+    #
+    # PRICE_FUEL_ALIASES folds a few known same-commodity spelling variants that differ
+    # between a region's own Generator Data and its own Fuel Prices sheet -- "HFO" (Heavy
+    # Fuel Oil) and "FuelOil" are the same commodity under different abbreviations (one
+    # region's generators say "HFO" while its price sheet says "FuelOil", another region has
+    # it the other way around); WAPP's price sheet has a literal typo, "Biomas" (missing the
+    # final "s"). Checked every region's own Fuel Prices sheet first: none of them price both
+    # spellings as distinct entries, so folding them here can never silently prefer the wrong
+    # one. This is intentionally narrower than pypsa_fuel_names.csv's "oil"/"solid biomass"
+    # buckets, which also group in e.g. Diesel -- a genuinely different, separately-priced
+    # commodity in every region that has both (Malawi's Diesel is ~20% more expensive than its
+    # FuelOil) and must stay its own distinct price match.
+    PRICE_FUEL_ALIASES = {"hfo": "fueloil", "biomas": "biomass"}
+
+    def _norm(s):
+        return s.astype(str).str.strip().str.lower().replace(PRICE_FUEL_ALIASES)
+
+    gc_reset = gc.reset_index()
+    # "CustomFuel" is a GAMS placeholder meaning "no real fuel commodity -- this generator is
+    # priced some other way" (e.g. every nuclear plant in this dataset: Malawi's Uranium_NU_ZAF,
+    # Turkiye's AKKUYU_1-4). It never matches any real price row, but the generator's own raw
+    # TECH value (still raw/un-standardized at this point, same as fuel) usually already IS a
+    # real commodity name in disguise -- Turkiye's price sheet literally has a "Nuclear" entry,
+    # matching AKKUYU's own raw tech="Nuclear" directly once case-folded. Use tech as the
+    # price-match key for just these rows.
+    fuel_for_price = gc_reset["fuel"].where(gc_reset["fuel"].str.lower() != "customfuel", gc_reset["tech"])
+    fp_norm = fuel_prices.assign(fuel=_norm(fuel_prices["fuel"]), zone=_norm(fuel_prices["zone"]))
+
+    # a region can price imported gas only as LNG, never a bare "Gas" commodity at all (e.g.
+    # Morocco: Coal/Diesel/FuelOil/Hydrogen/LNG/LNGCCS, no plain "Gas" row anywhere) --
+    # unlike HFO/FuelOil, LNG and Gas are genuinely, separately priced wherever a region has
+    # both (confirmed across every region checked), so this substitution only fires when
+    # "gas" has ZERO price rows in this region at all -- there's no real "Gas" entry to
+    # conflict with, and gas is what Morocco's own LNG import price actually is for a plain
+    # gas-fueled generator here.
+    region_fuels = set(fp_norm["fuel"].unique())
+    if "gas" not in region_fuels and "lng" in region_fuels:
+        is_gas = fuel_for_price.str.lower() == "gas"
+        fuel_for_price = fuel_for_price.where(~is_gas, "lng")
+
+    gc_reset["_fuel_norm"] = _norm(fuel_for_price)
+    gc_reset["_zone_norm"] = _norm(gc_reset["zone"])
+
+    exact = gc_reset.merge(
+        pivot_years(fp_norm, ["fuel", "zone"], model_years),
+        left_on=["_fuel_norm", "_zone_norm"], right_on=["fuel", "zone"], how="left",
+        suffixes=("", "_pricezone"),
     ).set_index("generator")[model_years]
+
+    # several regions (Turkiye, Mexico, and the multi-zone regional pools CAPP/EAPP/Malawi/
+    # Rwanda/WAPP/Serbia) price fuel at the country level, but model generators at a finer
+    # sub-national zone (Turkiye's 9 grid regions, Mexico's CEN/NES/NOR/...) -- an exact
+    # (fuel, zone) match never succeeds for any of them. zcmap.csv already carries the zone ->
+    # country mapping used to build zones.csv itself; fall back to matching the generator's
+    # own country against fuel_prices' own "zone" column wherever the exact zone match comes
+    # up empty.
+    # some regions' zcmap.csv is a zone-adjacency list rather than a clean zone->country table
+    # (e.g. Serbia's lists every bordering zone as a separate "country" row for the same zone)
+    # -- keep just the first row per zone, same resolution seer.inputs.epm.data_checks.
+    # check_zones already applies when building zones.csv's own "country" column, so this
+    # fallback can never be more wrong than that column already is.
+    zcmap = pd.read_csv(f"{input_dir}zcmap.csv")[["zone", "country"]].drop_duplicates(subset="zone", keep="first")
+    zone_to_country = zcmap.set_index("zone")["country"]
+    gc_reset["_country_norm"] = _norm(gc_reset["zone"].map(zone_to_country))
+    fp_country_wide = pivot_years(fp_norm, ["fuel", "zone"], model_years).reset_index()
+    by_country = gc_reset.merge(
+        fp_country_wide, left_on=["_fuel_norm", "_country_norm"], right_on=["fuel", "zone"], how="left",
+        suffixes=("", "_pricezone2"),
+    ).set_index("generator")[model_years]
+
+    # some regions genuinely never price a given fuel for one particular zone even though they
+    # do for others in the SAME region (e.g. EAPP's Burundi only prices Diesel/Peat/HFO/Coal --
+    # never Gas/Biomass/Waste -- while other EAPP zones do). There's no real zone-specific
+    # number to recover here, so fall back to this fuel's average price across every zone that
+    # DOES have one, region-wide, rather than leave it unpriced -- a reasonable regional proxy,
+    # not a guess from nothing.
+    fp_region_avg = fp_norm.groupby(["fuel", "year"])["value"].mean().reset_index()
+    fp_region_wide = pivot_years(fp_region_avg, ["fuel"], model_years)
+    by_region = gc_reset.merge(
+        fp_region_wide, left_on="_fuel_norm", right_index=True, how="left"
+    ).set_index("generator")[model_years]
+
+    fuel_price_traj = exact.where(exact.notna(), by_country)
+    fuel_price_traj = fuel_price_traj.where(fuel_price_traj.notna(), by_region)
+    # a fuel's own raw price data can genuinely start (or end) partway through the modeled
+    # horizon -- e.g. Iraq's Gas price rows exist for 2018-2020 but are blank, with real values
+    # only from 2021 on; Egypt's/Lao's/Liberia's price data simply doesn't have rows for their
+    # region's earliest/latest modeled years at all. Hold flat at the nearest year with a real
+    # price rather than leave those years priced at NaN -- same reasoning as the capex fallback
+    # above. model_years is already ascending, so this only reaches across a real gap, never
+    # invents a trend. A fuel with NO real price anywhere (not even one year) has nothing to
+    # extrapolate from and is correctly left NaN -- caught by SeerInstance validation.
+    fuel_price_traj = fuel_price_traj.ffill(axis=1).bfill(axis=1)
+
+    # geothermal, water (hydro/ror), wind, and solar are never priced in ANY region's Fuel
+    # Prices sheet -- by GAMS modeling convention they're treated as free, naturally-occurring
+    # energy, not a purchased commodity like coal/gas/oil/biomass/uranium. Their generators
+    # still often carry a real (if arbitrary -- e.g. Botswana's wind AND solar both share the
+    # exact placeholder HeatRate=9.42) heat_rate, so they don't hit the heat_rate==0 fallback
+    # below and would otherwise end up with a NaN marginal cost despite having nothing wrong
+    # with their data. Treat these fuels' genuinely-unpriced rows as a real $0, not a gap.
+    # hydrogen and municipal waste are the same situation by explicit user call: hydrogen is
+    # never priced anywhere in this dataset (Mexico/Serbia/Turkiye/Poland's hydrogen-fired
+    # units all have a real heat_rate but no fuel price), and municipal solid waste combustion
+    # is conventionally treated as a free/near-zero-cost disposal fuel, distinct from purchased
+    # biomass (Poland's Incineration_plants/Konin_ZPTOK/Olsztyn_3's raw fuel1 is literally
+    # "MunicipalWaste"; EAPP's Burundi plant is bare "Waste" -- neither spelling folds to
+    # plain "Biomass" until standardize_fuel runs, after this). Checked every region's own
+    # Fuel Prices sheet: none of them price "Waste" at all, so this can't silently override a
+    # real number either.
+    # gc["fuel"] here is still the RAW, pre-standardization spelling (standardize_fuel runs
+    # later in build_generator_params) -- e.g. "Geothermal"/"Water"/"Wind"/"PV"/"Solar"/
+    # "Hydrogen"/"MunicipalWaste"/"Waste", not the canonical lowercase names used elsewhere.
+    # Match case-insensitively.
+    # "import" generators (e.g. Botswana's Moz_imports, HeatRate=9.42 -- the exact same
+    # placeholder value Botswana gives its wind/solar) are a mix: some have a real negotiated
+    # import price (Namibia's ESKOMimport/ZESCOImport/ZPCImport all do, and keep it -- this
+    # only fires where NOTHING was found at all, never overriding a real price), others have
+    # none anywhere to find. Zero is the right default for the latter: an import link with no
+    # known tariff isn't free in reality, but there's no commodity to price it against either.
+    free_fuels = gc["fuel"].str.lower().isin(
+        ["geothermal", "water", "wind", "solar", "pv", "hydrogen", "municipalwaste", "waste", "import"]
+    )
+    fuel_price_traj = fuel_price_traj.where(~(free_fuels & fuel_price_traj.isna().all(axis=1)), 0.0)
+
     marginal_cost = fuel_price_traj.mul(gc["heat_rate"], axis=0)
     # marginal cost is 0 for generators with no heat_rate
     marginal_cost = marginal_cost.where(gc["heat_rate"].fillna(0) != 0, 0.0)
@@ -186,7 +455,7 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
 
 def match_re_profiles(gc, profiles_raw, times):
     """Resolve each generator to at most one renewable profile, by priority: generator-
-    specific, then zone+tech generic, then tech-only fallback (see seer/inputs/README.md).
+    specific, then zone+tech generic, then tech-only fallback (see seer/schema/README.md).
     Every distinct profile gets its own profile_id, independent of that priority order --
     identity is just "which (zone, tech, generator) this is" -- shared by every generator that
     resolves to it, so matching downstream is a plain id lookup, not a re-derived

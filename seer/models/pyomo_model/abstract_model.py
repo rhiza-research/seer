@@ -19,7 +19,7 @@ def seer_base_model(discrete_additions=False, battery_reset="annual", storage_re
     """Indices"""
     # spatial
     model.zones = pyo.Set()
-    # temporal. hours is a 1-indexed within-year position (see seer/inputs/README.md's
+    # temporal. hours is a 1-indexed within-year position (see seer/schema/README.md's
     # times.csv), ranging over the longest modeled year -- times is NOT a strict years x hours
     # cross product, since a time can be skipped in a given year (e.g. Feb 29 in a non-leap
     # year), so it's supplied explicitly as its own (year, hour) pairs rather than derived.

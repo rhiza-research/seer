@@ -14,7 +14,7 @@ them and interacting with the outputs.
 ```
 seer.inputs  ->  seer-schema CSVs  ->  seer.models  ->  solved model  ->  seer.viz
 ```
-The seer schema is documented in [seer/inputs/README.md](inputs/README.md).
+The seer schema is documented in [seer/schema/README.md](schema/README.md).
 
 ## `seer/inputs/`
 Produces seer schema data. Currently, two input pathways are supported:

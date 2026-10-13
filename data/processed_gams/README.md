@@ -48,6 +48,16 @@ Two recurring raw-data issues, fixed generically in code or per-region as noted 
   CAPP zone -- confirmed cross-region contamination (likely EAPP data leaking into CAPP's raw
   `.gdx`), not a gap in `zcmap.csv`.
 - Removed `BuildLimitperYear` for `Status=1/2` generators (duplicate-of-`Capacity` artifact).
+- `pFuelPrice.csv` has no `Biomass` entry at all (only `Coal`/`Diesel`/`Gas`/`HFO`), and no
+  sibling dataset prices biomass for CAPP's own countries (EAPP only has Kenya/Rwanda/Uganda;
+  WAPP only West African countries) -- so `Forzi Akwaya` (Cameroon), `Nkayi Mill`/`Ouesso
+  Biomass` (Congo) have no real biomass price to recover anywhere. `marginal_cost` for these
+  (and `Forzi Akwaya_expansion`) in `data/seer/from_gams/CAPP/generator_costs.csv` was computed
+  by hand using the average of EAPP's and WAPP's own biomass prices as a regional benchmark
+  (not a real CAPP-specific number), multiplied by each generator's own `HeatRate` -- `12.5`,
+  taken from `pGenDataInputDefault.csv`'s `(Cameroon/Congo, BiomassPlant, Biomass)` default,
+  since neither generator has its own custom `HeatRate`. Re-running `jobs.epm_to_seer` for CAPP
+  will **not** reproduce this -- it only lives in the committed output CSV.
 
 ## EAPP
 
@@ -124,6 +134,18 @@ Two recurring raw-data issues, fixed generically in code or per-region as noted 
 - Added `Capacity` (= `CapacityMWh` / 4, standard 4h battery-duration assumption) for the same
   27 storage plants as Malawi (identical SAPP source data), so the pipeline runs on this
   placeholder data in the meantime.
+- `pFuelPrice.csv` has no `FuelOil` entry at all (only `Biomass`/`Coal`/`Diesel`/`Gas`/`LNG`/
+  `Uranium`), so every HFO-fueled generator (61 of them, across every SAPP zone) had no real
+  price to recover from Rwanda's own data. Since this dataset is already confirmed to be the
+  same underlying SAPP-region source as Malawi's (see the BLOCKED note above), and Malawi's own
+  `pFuelPrice.csv` *does* have `FuelOil` priced for every one of these same zones (Angola,
+  Botswana, DRC, Eswatini, Lesotho, Mozambique, Namibia, South_Africa, Tanzania, Zambia,
+  Zimbabwe), `marginal_cost` for all 61 affected generators in
+  `data/seer/from_gams/Rwanda/generator_costs.csv` was computed by hand using Malawi's own
+  zone-matched `FuelOil` price (not a generic regional average -- an exact same-country,
+  same-dataset-family match), multiplied by each generator's own `HeatRate`. Re-running
+  `jobs.epm_to_seer` for Rwanda will **not** reproduce this -- it only lives in the committed
+  output CSV.
 
 ## Serbia
 
@@ -139,6 +161,19 @@ Two recurring raw-data issues, fixed generically in code or per-region as noted 
   artifact, e.g. `TPP_Tuzla3`: `Capacity=BuildLimitperYear=90`).
 - Kept 5 `Status=1/2` generators expandable despite no `Capacity`, since their (generic)
   `BuildLimitperYear` is real usable data, not a duplicate artifact.
+- `pFuelPrice.csv` is priced per **technology**, not per fuel commodity -- its own "fuel"
+  column holds GAMS-ordinal-prefixed tech labels (`1.CoalEx`, `2.CoalNew`, `4.CCGTEx`,
+  `5.CCGTNew`, `9.GreenHydrogen`, `15.Biomass`, ...) that match each generator's own raw
+  `tech` value once the ordinal prefix is stripped (e.g. `TPP_Tuzla3`'s raw tech is literally
+  `CoalEx`). Every other region in this dataset prices by fuel commodity instead, so
+  `generator_params.build_costs`'s normal (fuel, zone) merge can't find a match here at all --
+  128 generators (every coal/gas/biomass/hydrogen one) ended up with a NaN `marginal_cost`.
+  Rather than add a Serbia-specific tech-keyed pricing path to the shared pipeline, these 128
+  generators' `marginal_cost` rows in `data/seer/from_gams/Serbia/generator_costs.csv` were
+  computed directly (ordinal-stripped tech + zone matched against `pFuelPrice.csv`, multiplied
+  by each generator's own `HeatRate`) and patched into the output by hand. Re-running
+  `jobs.epm_to_seer` for Serbia will **not** reproduce this fix -- it only lives in the
+  committed output CSV.
 
 ## Tanzania
 
@@ -148,6 +183,14 @@ Two recurring raw-data issues, fixed generically in code or per-region as noted 
 
 - 5 reclassified as storage; no other drops.
 - `zcmap.csv`: collapsed to a single zone.
+- `pFuelPrice.csv` has no `Biomass` entry at all (only `Coal`/`Diesel`/`FuelOil`/`Gas`/
+  `Nuclear`), and EAPP -- the only sibling dataset that also has a `Tanzania` zone -- never
+  prices biomass for it either (EAPP's own `Biomass` price only covers Kenya/Rwanda/Uganda).
+  `marginal_cost` for `Biomass_TZ_Candidate`/`Biomass_TZ_Candidate_expansion`/`TPC_Bio`/
+  `Tanwat_Bio` in `data/seer/from_gams/Tanzania/generator_costs.csv` was computed by hand using
+  the same EAPP+WAPP biomass regional average as CAPP (see CAPP's section above), multiplied by
+  each generator's own `HeatRate`. Re-running `jobs.epm_to_seer` for Tanzania will **not**
+  reproduce this -- it only lives in the committed output CSV.
 
 ## Timor Leste
 

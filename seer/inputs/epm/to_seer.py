@@ -35,7 +35,7 @@ def epm_to_seer(input_path, output_path):
     demand_profile = check_demand_profile(demand_profile, zones["zone"])
     # times.csv: the canonical dispatch time grid, taken directly from demand_profile's own
     # `time` values (EPM data is often already a handful of representative days per month, not
-    # a full year -- see seer/inputs/README.md's times.csv entry)
+    # a full year -- see seer/schema/README.md's times.csv entry)
     times = pd.DataFrame({"time": sorted(demand_profile["time"].unique())})
 
     """network"""
