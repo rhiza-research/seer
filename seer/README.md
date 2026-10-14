@@ -31,7 +31,7 @@ shared reference/library code next to a `perturb` module (and, later, a `create`
 - `base.py` (`Perturbation`, `apply_all`) and `daily_profiles.py` (circular-hour resampling
   shared by profile libraries) sit at the top level.
 
-Reference data the scenarios draw on lives in `seer/reference_data/`.
+Reference data the scenarios draw on lives in `seer/scenarios/reference_data/`.
 
 ## `seer/models/`
 Builds a solvable model from a seer schema model specification. A seer schema can be instantiated
