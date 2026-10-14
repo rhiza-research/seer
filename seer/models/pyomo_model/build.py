@@ -83,7 +83,7 @@ def load_data(data_path, discrete_additions=False):
 
     # dispatchable generators have a capacity factor of 1.0 every (year, hour); renewables are
     # derated by their own profile_id's availability (each may itself vary by year). isre
-    # guarantees profile_id is set -- see seer.inputs.epm.generator_params.match_re_profiles.
+    # guarantees profile_id is set -- see epm2seer.generator_params.match_re_profiles.
     def _capacity_factor(gen, year, hour):
         return availability[(generator_profile_id[gen], year, hour)]
 

@@ -4,7 +4,7 @@ import warnings
 import pandas as pd
 
 from .generator_params import NO_RETIREMENT_YEAR
-from ..utils import standardize_tech
+from .standard_names import standardize_tech
 
 
 def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None):
@@ -66,7 +66,7 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
     # rather than "parameters" rows. The raw "fuel" column here is the actual carrier
     # (Battery/Water/Pumped/...); the raw "tech" column (Storage/STO HY/...) is itself an
     # ambiguous placeholder that only disambiguates Water/Pumped/Hydro (pumped-hydro storage)
-    # from Battery once paired with it -- see seer.inputs.utils's compound tech-fuel synonyms.
+    # from Battery once paired with it -- see epm2seer.standard_names's compound tech-fuel synonyms.
     storage_gen_params["tech"] = standardize_tech(storage_gen_params["tech"], storage_gen_params["fuel"])
     # some regions' storage plants carry the same tech=Water/fuel=Hydro pair ordinary
     # reservoir/ROR hydro *generators* use (e.g. South Africa's Drakensberg/Ingula/Palmiet/

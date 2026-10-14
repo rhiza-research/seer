@@ -6,7 +6,7 @@ season as quarters (Q1-Q4), half-years (Q1/Q2, wet/dry), bare month integers,
 or already-correct "m1".."m12" strings; day as "d1".."dN" or bare integers;
 and VRE (esp. PV) profiles that only cover daylight hours instead of the
 full t01-t24 day. This module rewrites all of the above into the format
-seer/inputs/gams/process_re_data.py expects: season -> "m1".."m12", day ->
+epm2seer expects: season -> "m1".."m12", day ->
 "d1".."dN", hour -> zero-padded "t01".."t24" with zero-filled gaps.
 """
 

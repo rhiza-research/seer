@@ -19,7 +19,7 @@ from pathlib import Path
 
 from gdx import gams_to_csv
 
-MAPPING_PATH = Path("gdx/symbol_mapping.csv")
+MAPPING_PATH = Path("inputs/gdx/symbol_mapping.csv")
 
 
 def main():

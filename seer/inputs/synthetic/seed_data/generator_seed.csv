@@ -1,4 +1,0 @@
-type,fuel,unit_size_mw,ramp_down_rate,ramp_up_rate,life,retech,capex_per_mw,capex_escalation,marginal_cost_per_mwh,marginal_cost_escalation,annual_build_limit_mw
-gas,gas,25,1.0,1.0,30,False,0.80,0.005,45.0,0.01,100
-coal,coal,50,0.5,0.5,40,False,2.00,0.005,35.0,0.01,150
-PV,PV,10,1.0,1.0,25,True,0.90,-0.03,3.0,0.0,50

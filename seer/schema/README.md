@@ -1,8 +1,8 @@
 # seer schema capacity expansion model specification
 The seer schema consists of a set of standard csv files that specify a capacity planning
 model spanning one or more zones (which could correspond to regions or countries) and years.
-The seer schema can be produced by converting EPM models to the schema (as done in `seer/inputs/epm`)
-or by generating a synthetic model (as done in `seer/inputs/synthetic`). 
+The seer schema can be produced by converting EPM models to the schema (as done in `inputs/epm2seer`),
+and new instances can be derived from existing ones (`seer/scenarios`).
 
 Every file is a csv with a header row.
 

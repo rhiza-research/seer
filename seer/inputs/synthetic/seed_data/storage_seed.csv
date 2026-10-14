@@ -1,2 +1,0 @@
-type,carrier,unit_size_mwh,duration_hours,life,efficiency,capex_per_mwh,capex_escalation,annual_build_limit_mwh
-battery,Battery,20,4.0,15,0.9,0.30,-0.02,100

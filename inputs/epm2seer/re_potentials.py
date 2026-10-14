@@ -4,7 +4,7 @@ renewable_profiles.csv can carry two different kinds of rows, distinguished by w
 `tech`/`generator` is populated (see seer/schema/README.md):
 - generic (tech set, generator NaN): one profile shared by every generator of that
   (zone, tech), sourced from pVREProfile.csv. tech names are standardized (see
-  seer.inputs.utils) to match generator_constants.tech's canonical (PyPSA-aligned)
+  epm2seer.standard_names) to match generator_constants.tech's canonical (PyPSA-aligned)
   vocabulary.
 - generator-specific (generator set, tech NaN): a profile for one individual generator,
   sourced from pVREgenProfile.csv. That symbol sometimes has a real "generator" column (e.g.
@@ -22,7 +22,7 @@ from pathlib import Path
 import pandas as pd
 
 from .utils import convert_season_day_hour
-from ..utils import standardize_tech
+from .standard_names import standardize_tech
 
 # the month column's name varies across sources
 MONTH_COL_OPTIONS = ["month", "Month", "Month of the Year", "season"]

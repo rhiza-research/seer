@@ -1,4 +1,6 @@
-"""Convert a GAMS-based model's raw data into the seer schema."""
+"""epm2seer: convert EPM per-symbol CSVs (from gdx) into the seer schema.
+
+Tech/fuel name standardization lives in standard_names (synonym tables in data/)."""
 
 from .generator_params import build_generator_params
 from .re_potentials import build_re_potentials

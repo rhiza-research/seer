@@ -12,18 +12,26 @@ It also contains tools to visualize and explore model results. The package eleme
 be used in the following sequence going from generating model specifications, instantiating models, solving
 them and interacting with the outputs.
 ```
-seer.inputs  ->  seer-schema CSVs  ->  seer.models  ->  solved model  ->  seer.viz
+inputs/ (epm2seer)  ->  seer-schema CSVs  ->  seer.scenarios (optional)  ->  seer.models  ->  solved model  ->  seer.viz
 ```
 The seer schema is documented in [seer/schema/README.md](schema/README.md).
 
-## `seer/inputs/`
-Produces seer schema data. Currently, two input pathways are supported:
+## Input conversion (outside the package)
+Converting external models into the seer schema lives in the top-level `inputs/` folder
+(`gdx`, `epm2seer`), not in `seer/` -- see the repo [README](../README.md).
 
-- **`seer/inputs/epm/`** - converts EPM csv model files into the seer schema
-  (`epm_to_seer`).
-- **`seer/inputs/synthetic/`** - generates seer schema data from scratch (`generate_all_data`),
-  representing synthetic models. This package is useful for testing and solver-scaling experiments. Each parameter group (demand, generators, storage, renewables, network) has its own module (`demand_params.py`, `generator_params.py`, etc.).
+## `seer/scenarios/`
+Generates new seer-schema instances, organized by element. Each element package keeps its
+shared reference/library code next to a `perturb` module (and, later, a `create` module):
 
+- **`seer/scenarios/demand/`** - `library.py` (daily load-profile library and feature-matched
+  sampling), `perturb.py` (`DemandGrowthPerturbation`, `LoadCurvePerturbation`).
+- **`seer/scenarios/costs/`** - `reference.py` (reference cost/fuel tables, trajectory curves),
+  `perturb.py` (`CostPerturbation`, `MarginalCostPerturbation`).
+- `base.py` (`Perturbation`, `apply_all`) and `daily_profiles.py` (circular-hour resampling
+  shared by profile libraries) sit at the top level.
+
+Reference data the scenarios draw on lives in `seer/reference_data/`.
 
 ## `seer/models/`
 Builds a solvable model from a seer schema model specification. A seer schema can be instantiated

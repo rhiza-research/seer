@@ -22,7 +22,7 @@ technology can only be resolved once you also know the fuel.
 A third table, pypsa_cost_tech_names.csv, is deliberately separate: some regions' raw renewable
 tech values are genuinely finer-grained than a PyPSA tech (e.g. Georgia's WIND1/2/3, distinct
 resource-quality tiers sharing identical hardware) and must stay that way through
-`seer.inputs.epm.generator_params.match_re_profiles`, which joins a generator to its
+`epm2seer.generator_params.match_re_profiles`, which joins a generator to its
 renewable_profiles.csv row on (zone, tech) -- folding them into "onwind" there would collapse
 three genuinely different capacity-factor curves into one. `coarsen_cost_tech` is meant to run
 on generator_constants.tech only, strictly after that matching step has already happened (once

@@ -4,7 +4,7 @@ enrich generator and VRE profile data, and write one CSV per symbol per region.
 
     import gdx
     gdx.gams_to_csv(data_dir="data/raw_gams",
-                     mapping_path="gdx/symbol_mapping.csv",
+                     mapping_path="inputs/gdx/symbol_mapping.csv",
                      output_dir="data/extracted_gams")
 """
 
@@ -12,7 +12,7 @@ from .enrich_data import reconcile_data
 from .load_gdx import load_gdx_files
 from .to_csv import write_to_csv
 
-__all__ = ["to_csv", "load_gdx_files", "enrich_data", "write_csvs"]
+__all__ = ["gams_to_csv", "load_gdx_files", "reconcile_data", "write_to_csv"]
 
 
 def gams_to_csv(data_dir, mapping_path, output_dir, strict=True, region=None):

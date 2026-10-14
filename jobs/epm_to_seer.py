@@ -32,7 +32,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from seer.inputs.epm import epm_to_seer as convert_epm_to_seer
+from epm2seer import epm_to_seer as convert_epm_to_seer
 
 # keep in sync with the module docstring above and with the "re-running ... will NOT reproduce
 # this" notes in data/processed_gams/README.md and data/processed_epm_open/README.md

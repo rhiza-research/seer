@@ -128,7 +128,7 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
         ramp_up_rate = gen.get("ramp_up_rate")
         ramp_down_rate = gen.get("ramp_down_rate")
         is_renewable = bool(gen.isre)
-        # isre guarantees profile_id is set (see seer.inputs.epm.generator_params.match_re_profiles)
+        # isre guarantees profile_id is set (see epm2seer.generator_params.match_re_profiles)
         profile = re_profiles[gen.profile_id] if is_renewable else None
 
         if expandable:

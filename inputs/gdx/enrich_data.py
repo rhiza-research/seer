@@ -1,12 +1,12 @@
 """Fuel/tech domain lookups and generator & VRE profile enrichment.
 
 Standardizing raw tech/fuel *values* (e.g. "CCGTEx" -> a canonical PyPSA technology name) is
-deliberately NOT done here -- it happens once, centrally, in seer.inputs.utils, so every raw
+deliberately NOT done here -- it happens once, centrally, in epm2seer.standard_names, so every raw
 region-specific spelling is seen and mapped in one place rather than split across gdx's own
 ad hoc vocabulary and a second seer-side pass. This module still normalizes raw *parameter
 names* (STORAGE_PARAM_ALIAS, GEN_PARAM_ALIAS -- e.g. "Capacity" vs "CapacityMWh") and does the
 structural work of reconstructing zone/fuel/tech for generators when a region's raw gdx has
-no gmap symbol at all -- both of those need GAMS-specific domain knowledge seer.inputs has no
+no gmap symbol at all -- both of those need GAMS-specific domain knowledge epm2seer has no
 way to reconstruct on its own, so they stay here.
 """
 
@@ -19,14 +19,14 @@ from .standardize_profiles import standardize_all_profiles
 # Aliases for pStorageDataInput parameter names (the "parameters" column values) that vary
 # across regions/vintages of the raw pStorDataExcel symbol -- e.g. some regions use plain
 # "Capacity"/"Capex" instead of "CapacityMWh"/"CapexMWh" for the same storage-energy fields.
-# Canonical names (right-hand side) are what seer.inputs.epm.storage_params expects.
+# Canonical names (right-hand side) are what epm2seer.storage_params expects.
 STORAGE_PARAM_ALIAS = {
     "Capacity": "CapacityMWh",
     "Capex": "CapexMWh",
 }
 
 # Alias for pGenDataInputCustom/pGenDataInputDefault parameter names that vary across regions.
-# "VRETech" is the synonym for "RETech" (seer.inputs.epm.generator_params expects "RETech";
+# "VRETech" is the synonym for "RETech" (epm2seer.generator_params expects "RETech";
 # renamed to "isre" in the seer schema): confirmed by checking actual values across regions --
 # VRETech=1 only for variable-renewable techs (PV/Wind), matching RETech's meaning exactly.
 # NOT the same as "RE_Flag", which is also 1 for storage/hydro in most regions (a broader
@@ -48,7 +48,7 @@ def build_fuel_id_lookup(ftf):
     Build a {fuel_id: (fuel_name, tech_name)} dict from a country's ftfindex: the raw,
     un-standardized names associated with each numeric fuel_id in pGenDataExcel.
 
-    ftfindex's declared column order (see gdx/symbol_mapping.csv) is (fuel, tech,
+    ftfindex's declared column order (see inputs/gdx/symbol_mapping.csv) is (fuel, tech,
     value) -- a broader category (e.g. "Hydro") and a more specific label (e.g. "Water").
     This is called on the *raw* gamspy-loaded frame, before symbol-mapping has renamed its
     columns to those real names (they're still generic, e.g. "uni_0"/"uni_1"/"value") -- so
@@ -58,7 +58,7 @@ def build_fuel_id_lookup(ftf):
     blank for a given row (some regions only populate one of the two) and losing whichever
     one IS populated would silently drop real information; when one side is blank, the
     other's value is used for both placeholders. Standardizing these raw names to a
-    canonical tech/fuel vocabulary happens downstream, in seer.inputs.utils (see this
+    canonical tech/fuel vocabulary happens downstream, in epm2seer.standard_names (see this
     module's docstring for why).
 
     Returns an empty dict if the structure is not recognized.
@@ -165,7 +165,7 @@ def enrich_gen_data(region, country_data, country_data_raw):
     if fuel_id_series is not None and fuel_id_lookup:
         # fuel_id_lookup gives (fuel_name, tech_name) raw placeholders per fuel_id --
         # standardizing them into canonical tech/fuel values happens downstream, in
-        # seer.inputs.utils
+        # epm2seer.standard_names
         gen_wide["_fuel"] = fuel_id_series.map({k: v[0] for k, v in fuel_id_lookup.items()})
         gen_wide["_tech"] = fuel_id_series.map({k: v[1] for k, v in fuel_id_lookup.items()})
     else:
@@ -201,7 +201,7 @@ def enrich_gen_data(region, country_data, country_data_raw):
 def map_vre_tech(region, symbol_name, df):
     """Strip any leading GAMS UEL ordinal prefix (e.g. "18.WindNew" -> "WindNew") from
     df['tech'] -- a raw GDX artifact, not a naming choice. Standardizing the resulting raw
-    tech spelling to a canonical vocabulary happens downstream, in seer.inputs.utils (see
+    tech spelling to a canonical vocabulary happens downstream, in epm2seer.standard_names (see
     this module's docstring for why).
     """
 
@@ -333,7 +333,7 @@ def enrich_gen_vre_data(region: str, country_data: dict, country_data_raw: dict)
 
 def normalize_storage_params(df):
     """Normalize pStorageDataInput parameter-name variants (STORAGE_PARAM_ALIAS) to the
-    canonical names seer.inputs.epm.storage_params expects."""
+    canonical names epm2seer.storage_params expects."""
     df = df.copy()
     df["parameters"] = df["parameters"].replace(STORAGE_PARAM_ALIAS)
     return df
@@ -341,7 +341,7 @@ def normalize_storage_params(df):
 
 def normalize_gen_params(df):
     """Normalize pGenDataInputCustom/pGenDataInputDefault parameter-name variants
-    (GEN_PARAM_ALIAS) to the canonical names seer.inputs.epm.generator_params expects."""
+    (GEN_PARAM_ALIAS) to the canonical names epm2seer.generator_params expects."""
     df = df.copy()
     df["parameters"] = df["parameters"].replace(GEN_PARAM_ALIAS)
     return df

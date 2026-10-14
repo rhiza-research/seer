@@ -10,3 +10,10 @@ data/*
 !data/readme.md
 !data/processed_gams
 .claude
+
+# vendored source CSVs for seer/reference_data, re-downloaded by scripts/build_cost_ranges.py
+seer/reference_data/cost_assumptions/.cache/
+
+# scratch/exploration/smoke-test scripts have accumulated here -- ignored for now rather than
+# tracked piecemeal; worth revisiting once it's clearer which ones are worth keeping long-term
+scripts/

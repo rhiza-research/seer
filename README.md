@@ -9,10 +9,15 @@ be solved with multiple backends.
 
 ### `seer/`
 The installable package. See [seer/README.md](seer/README.md) for package organization
-(`inputs/`, `models/`, `viz/`).
+(`schema/`, `models/`, `scenarios/`, `viz/`).
+
+### `inputs/`
+Conversion of external model data into the seer schema, kept outside the core package:
+- `inputs/gdx/` (imported as `gdx`) - raw EPM GAMS .gdx files -> canonical per-symbol CSVs.
+- `inputs/epm2seer/` (imported as `epm2seer`) - EPM per-symbol CSVs -> seer schema.
 
 ### `jobs/`
-Jobs to convert data into the seer schema or generate synthetic models.
+Jobs to convert data into the seer schema and solve models.
 
 ### `experiments/`
 Various experiments exploring machine learning accelerations and conventional solver performance.
@@ -23,6 +28,5 @@ reference material. To be used minimally for shared data.
 
 ## Getting started
 - Dependencies are managed with `uv` (see `pyproject.toml` / `uv.lock`).
-- To generate a synthetic dataset and solve it: see `seer/inputs/synthetic/generate_data.py`
-  (or `jobs/generate_synthetic_instances.py` for batches) and `seer/models/pyomo_model`.
-- To convert an existing EPM/GAMS model: `jobs/epm_to_seer.py`.
+- To convert an existing EPM/GAMS model: `jobs/extract_gams.py` (gdx -> CSV), then `jobs/epm_to_seer.py`.
+- To solve a seer-schema model: `jobs/solve_pypsa_model.py` or `seer/models/pyomo_model`.

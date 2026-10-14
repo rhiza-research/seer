@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from ..utils import standardize_tech, standardize_fuel, default_fuel_for_tech, coarsen_cost_tech
+from .standard_names import standardize_tech, standardize_fuel, default_fuel_for_tech, coarsen_cost_tech
 from .data_checks import check_generators, check_capex_trajectory, check_profile_time_coverage
 from .re_potentials import build_re_potentials
 from .utils import init_df, pivot_wide, pivot_years, align
@@ -372,7 +372,7 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
     # up empty.
     # some regions' zcmap.csv is a zone-adjacency list rather than a clean zone->country table
     # (e.g. Serbia's lists every bordering zone as a separate "country" row for the same zone)
-    # -- keep just the first row per zone, same resolution seer.inputs.epm.data_checks.
+    # -- keep just the first row per zone, same resolution epm2seer.data_checks.
     # check_zones already applies when building zones.csv's own "country" column, so this
     # fallback can never be more wrong than that column already is.
     zcmap = pd.read_csv(f"{input_dir}zcmap.csv")[["zone", "country"]].drop_duplicates(subset="zone", keep="first")
