@@ -13,6 +13,21 @@ from .utils import init_df, pivot_wide, pivot_years, align
 # sentinel for "no known retirement year" -- well beyond any realistic modeled horizon
 NO_RETIREMENT_YEAR = 9999
 
+# generator_constants.csv column order
+GENERATOR_COLUMNS = [
+    "generator", "zone", "tech", "fuel", "capacity", "isre", "expandable", "unit_size",
+    "annual_build_limit", "total_build_limit", "ramp_up_rate", "ramp_down_rate",
+    "life", "start_year", "retirement_year", "profile_id",
+]
+
+
+def as_whole_years(df, cols):
+    """Year-valued columns (start/retirement year, life) as nullable ints, not floats."""
+    df = df.copy()
+    for col in cols:
+        df[col] = df[col].astype(float).round().astype("Int64")
+    return df
+
 # required generator parameters
 PARAM_LIST = [
     "Capacity", "Capex", "RampDnRate", "RampUpRate", "Life",
@@ -69,8 +84,8 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     generator_cost = build_costs(
         generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years, input_dir
     )
-    # capex/heat_rate/maxtotalbuild were only needed to build generator_cost and can now be dropped
-    generator_constants = generator_constants.drop(columns=["capex", "heat_rate", "maxtotalbuild"])
+    # capex/heat_rate were only needed to build generator_cost and can now be dropped
+    generator_constants = generator_constants.drop(columns=["capex", "heat_rate"])
 
     """standardize tech & fuel names"""
     generator_constants["tech"] = standardize_tech(generator_constants["tech"], generator_constants["fuel"])
@@ -113,6 +128,7 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     is_import = generator_constants["tech"] == "import"
     generator_constants.loc[is_import, "expandable"] = False
     generator_constants.loc[is_import, "annual_build_limit"] = pd.NA
+    generator_constants.loc[is_import, "total_build_limit"] = pd.NA
 
     # forcing expandable=False above can leave a pure candidate import/interconnection option
     # (one that never had its own existing capacity -- e.g. a "<name>_expansion" split-off, or
@@ -134,7 +150,7 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     # nothing to fall back to and no sensible interpretation as a buildable option. Drop it
     # entirely rather than leave a free-to-build (PyPSA silently treats NaN capital_cost as 0)
     # or crashing (pyomo's Param domain rejects NaN outright) option in the schema.
-    capex_by_gen = generator_cost[generator_cost["cost_type"] == "capex"].set_index("generator")
+    capex_by_gen = generator_cost[generator_cost["cost_type"] == "capital"].set_index("generator")
     year_cols = [c for c in capex_by_gen.columns if c != "cost_type"]
     unpriced_names = set(capex_by_gen.index[capex_by_gen[year_cols].isna().all(axis=1)])
     truly_unpriced = (
@@ -169,6 +185,9 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     # reorder for readability
     generator_constants = generator_constants.sort_values(["expandable", "fuel", "tech"]).reset_index(drop=True)
 
+    generator_constants = as_whole_years(generator_constants, ["life", "start_year", "retirement_year"])
+    generator_constants = generator_constants[GENERATOR_COLUMNS]
+
     # generator_costs.csv rows should follow the same generator order as generator_constants.csv
     generator_cost = align(generator_cost, generator_constants, "generator")
 
@@ -187,7 +206,9 @@ def _split_existing_and_expansion(gc):
     since that allowance isn't part of the fixed existing unit); a new "<generator>_expansion"
     row keeps the annual build limit and shares the same zone/tech/fuel/cost basis as the
     original (same underlying technology), with Capacity nulled so it resolves to a pure build
-    option once `expandable` is computed below."""
+    option once `expandable` is computed below. The new row records its parent's name in
+    `split_from`, so it also resolves to the parent's generator-specific renewable profile (and
+    so the same isre) in match_re_profiles, rather than looking up its own "_expansion" name."""
     both = gc["Capacity"].notna() & gc["BuildLimitperYear"].notna() & (gc["BuildLimitperYear"] != 0)
     if not both.any():
         return gc
@@ -198,6 +219,7 @@ def _split_existing_and_expansion(gc):
     expansion = gc[both].copy()
     expansion["generator"] = expansion["generator"] + "_expansion"
     expansion["Capacity"] = pd.NA
+    expansion["split_from"] = gc.loc[both, "generator"]
 
     collisions = set(expansion["generator"]) & set(existing["generator"])
     if collisions:
@@ -213,29 +235,36 @@ def _derive_flags(gc, data_path):
     for one of expandable/existing."""
     gc = _split_existing_and_expansion(gc)
 
-    # MaxTotalBuild fallback when both BuildLimitperYear and Capacity are missing (see
-    # data/processed_gams/README.md re: this vs. the Status-based fixes)
-    no_limit_or_cap = gc["BuildLimitperYear"].isna() & gc["Capacity"].isna()
-    gc.loc[no_limit_or_cap, "BuildLimitperYear"] = gc.loc[no_limit_or_cap, "MaxTotalBuild"]
-
-    # expandable: a real nonzero build limit, or no capacity but real cost data to build from
+    # expandable: a real nonzero annual or total build limit with no existing capacity (see
+    # data/processed_gams/README.md re: this vs. the Status-based fixes), a real nonzero annual
+    # build limit alongside existing capacity (split off above), or no capacity but real cost
+    # data to build from
+    has_annual = gc["BuildLimitperYear"].notna() & (gc["BuildLimitperYear"] != 0)
+    has_total = gc["MaxTotalBuild"].notna() & (gc["MaxTotalBuild"] != 0)
     gc["expandable"] = (
-        (gc["BuildLimitperYear"].notna() & (gc["BuildLimitperYear"] != 0))
+        has_annual
+        | (gc["Capacity"].isna() & has_total)
         | (gc["Capacity"].isna() & gc["Capex"].notna())
     )
-    # the capex-only branch above can flag a generator expandable with no BuildLimitperYear at
-    # all (e.g. Poland's Generic_ROR) -- annual_build_limit must never be NaN for an expandable
-    # generator (both model backends read it as a real bound; pyomo's Param domain rejects NaN
-    # outright, crashing at model-build time). No known annual pace limit means unconstrained,
-    # same as PyPSA's own p_nom_max default -- fill with inf, not a guessed finite number.
-    gc.loc[gc["expandable"] & gc["BuildLimitperYear"].isna(), "BuildLimitperYear"] = float("inf")
+    # annual_build_limit / total_build_limit are only kept where explicitly given -- absent
+    # means unconstrained (see seer/schema/README.md; the model backends read blank as inf).
+    # EPM only applies its build-limit constraints where the value is nonzero ($-conditioned),
+    # so 0 means unconstrained too, not "never build". Only meaningful for build options.
+    gc.loc[~has_annual | ~gc["expandable"], "BuildLimitperYear"] = pd.NA
+    gc.loc[~has_total | ~gc["expandable"], "MaxTotalBuild"] = pd.NA
     gc.loc[gc["expandable"], "Capacity"] = pd.NA   # only existing generators have a capacity
     gc.loc[~gc["expandable"], "UnitSize"] = pd.NA  # only expandable generators have a unit_size
-    gc["RampUpRate"] = gc["RampUpRate"].fillna(1)  # default: fully flexible
-    gc["RampDnRate"] = gc["RampDnRate"].fillna(-1)
+    # ramp rates are a fraction of capacity per hour, both positive (the down rate is a magnitude,
+    # not a signed change). EPM applies them the same way (per time step, x capacity). Missing
+    # means fully flexible (1). Some regions' data has values above 1 (e.g. Bosnia: 5.0 for
+    # hydro/gas, up to 3.0 for coal) -- a fraction above 1 can't bind (a unit can already go
+    # from zero to full in one hour), so cap at 1 rather than carry a meaningless value.
+    for col in ["RampUpRate", "RampDnRate"]:
+        gc[col] = gc[col].abs().fillna(1).clip(upper=1)
 
     gc.rename(columns={
         "BuildLimitperYear": "annual_build_limit",
+        "MaxTotalBuild": "total_build_limit",
         "RampUpRate": "ramp_up_rate",
         "RampDnRate": "ramp_down_rate",
         "HeatRate": "heat_rate",
@@ -269,6 +298,9 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
 
     ztf = ["zone", "tech", "fuel"]
     gc = generator_constants.set_index("generator")
+    # EPM's Capex is total (overnight) capital cost in $M/MW -- seer's capex is $/MW, incurred
+    # once in the build year (see seer/schema/README.md)
+    gc["capex"] = gc["capex"] * 1e6
 
     default_wide = pivot_years(default_gen_capex, ztf, sorted(default_gen_capex["year"].unique()))
     custom_gen_capex = custom_gen_capex.rename(columns={"plant": "generator"})
@@ -446,8 +478,8 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
     """concatenate capex and marginal cost"""
     # row order is finalized later, to match generator_constants.csv
     generator_cost = pd.concat([
-        capex_cost.assign(cost_type="capex"),
-        marginal_cost.assign(cost_type="marginal_cost"),
+        capex_cost.assign(cost_type="capital"),
+        marginal_cost.assign(cost_type="marginal"),
     ]).reset_index()
     generator_cost = generator_cost[["generator", "cost_type"] + model_years]
     return generator_cost
@@ -481,7 +513,12 @@ def match_re_profiles(gc, profiles_raw, times):
     profiles_raw = profiles_raw.merge(keys, on=["zone", "tech", "generator"])
 
     # resolve each generator to (at most) one profile_id: try generator-specific, then
-    # zone+tech generic, then tech-only fallback, keeping the first match found
+    # zone+tech generic, then tech-only fallback, keeping the first match found. A
+    # "<name>_expansion" split-off (see _split_existing_and_expansion) is the same plant, so
+    # its generator-specific lookup uses its parent's name.
+    gc = gc.copy()
+    if "split_from" in gc:
+        gc["generator"], own_name = gc["split_from"].fillna(gc["generator"]), gc["generator"]
     lookups = [
         (keys[keys["generator"].notna()], ["generator"]),
         (keys[keys["tech"].notna() & keys["zone"].notna()], ["zone", "tech"]),
@@ -492,6 +529,9 @@ def match_re_profiles(gc, profiles_raw, times):
         ids = tier_keys.drop_duplicates(key_cols)[key_cols + ["profile_id"]]
         matched = gc[key_cols].reset_index().merge(ids, on=key_cols, how="left").set_index("index")["profile_id"]
         profile_id = profile_id.where(profile_id.notna(), matched)
+    if "split_from" in gc:
+        gc["generator"] = own_name
+        gc = gc.drop(columns="split_from")
 
     claimed_but_unmatched = gc["isre"] & profile_id.isna()
     for _, gen in gc[claimed_but_unmatched].iterrows():
@@ -500,7 +540,6 @@ def match_re_profiles(gc, profiles_raw, times):
             "renewable but has no matching profile -- marking as non-renewable."
         )
 
-    gc = gc.copy()
     gc["profile_id"] = profile_id
     gc["isre"] = profile_id.notna()
     renewable_profiles = profiles_raw[["profile_id", "zone", "tech", "generator", "time", "value"]]

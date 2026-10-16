@@ -3,7 +3,7 @@ import warnings
 
 import pandas as pd
 
-from .generator_params import NO_RETIREMENT_YEAR
+from .generator_params import NO_RETIREMENT_YEAR, as_whole_years
 from .standard_names import standardize_tech
 
 
@@ -55,7 +55,13 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
     # Gokcekaya_PHP, Lesotho's Monont'sa_HY_LSO) -- the same generator-side record zone/tech
     # already gets pulled from below. Fall back to it here rather than leaving a real, known
     # cost sitting unused in the wrong source file.
+    # EPM's CapexMWh is total (overnight) energy-capacity cost in $/kWh -- seer's capex_mwh is
+    # $/MWh, incurred once in the build year (see seer/schema/README.md)
+    storage_constants["capex_mwh"] = storage_constants["capex_mwh"] * 1e3
     missing_capex = storage_constants["capex_mwh"].isna()
+    # the generator-side fallback below is a power-capacity cost ($M/MW), not an energy one --
+    # converted to $/MWh once duration_hours is known, further down
+    storage_constants["_capex_from_gen_side"] = missing_capex
     if missing_capex.any():
         gen_side_capex = storage_gen_params[storage_gen_params["parameters"] == "Capex"].set_index("generator")["value"]
         storage_constants.loc[missing_capex, "capex_mwh"] = (
@@ -107,26 +113,19 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
         param_values = storage_gen_params[storage_gen_params["parameters"] == param].set_index("generator")["value"]
         storage_constants[param] = storage_constants["storage"].map(param_values)
 
-    # fall back to MaxTotalBuild (a real, per-unit lifetime build ceiling) wherever BOTH
-    # BuildLimitperYear and Capacity are missing -- same reasoning and same restriction as
-    # generator_params.py (MaxTotalBuild has the same "duplicates existing Capacity" artifact
-    # otherwise)
-    missing_bly_and_capacity = storage_constants["BuildLimitperYear"].isna() & storage_constants["Capacity"].isna()
-    storage_constants.loc[missing_bly_and_capacity, "BuildLimitperYear"] = (
-        storage_constants.loc[missing_bly_and_capacity, "MaxTotalBuild"]
-    )
-    storage_constants = storage_constants.drop(columns=["MaxTotalBuild"])
-
-    # build option if BuildLimitperYear (or its MaxTotalBuild fallback) is given and non-zero -
-    # same signal generator_constants uses (a zero build limit means "not buildable at all",
-    # same as no value given)
-    storage_constants["expandable"] = (
-        storage_constants["BuildLimitperYear"].notna() & (storage_constants["BuildLimitperYear"] != 0)
-    )
+    # build option if a nonzero annual (BuildLimitperYear) or total (MaxTotalBuild) build limit
+    # is given -- same signal generator_constants uses. Either limit is only kept where given
+    # (absent means unconstrained); EPM only applies them where nonzero, so 0 means absent too.
+    has_annual = storage_constants["BuildLimitperYear"].notna() & (storage_constants["BuildLimitperYear"] != 0)
+    has_total = storage_constants["MaxTotalBuild"].notna() & (storage_constants["MaxTotalBuild"] != 0)
+    storage_constants["expandable"] = has_annual | has_total
     # unit_size (modular build increment) is only meaningful for build options -- an existing
     # unit isn't built in discrete increments, it just has its own fixed capacity (same as
     # generator_params.py)
     storage_constants.loc[~storage_constants["expandable"], "UnitSize"] = pd.NA
+    # likewise the build limits -- only meaningful for build options
+    storage_constants.loc[~has_annual | ~storage_constants["expandable"], "BuildLimitperYear"] = pd.NA
+    storage_constants.loc[~has_total | ~storage_constants["expandable"], "MaxTotalBuild"] = pd.NA
     # rename to seer-schema column names, matching generator_constants conventions
     storage_constants.rename(columns={
         "Capacity": "capacity_mw",
@@ -134,6 +133,7 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
         "StYr": "start_year",
         "UnitSize": "unit_size_mwh",
         "BuildLimitperYear": "annual_build_limit_mwh",
+        "MaxTotalBuild": "total_build_limit_mwh",
     }, inplace=True)
     # no RetrYr value found means "no known retirement" -- default to a sentinel year well
     # beyond any realistic modeled horizon, not NaN (see generator_params.py for why: a NaN
@@ -162,11 +162,21 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
         )
 
     storage_constants["duration_hours"] = storage_constants["capacity_mwh"] / storage_constants["capacity_mw"]
+    # EPM's build limits and unit size for storage come from its Generator Data row, in MW of
+    # power -- the schema's are MWh of energy capacity: convert via the fixed duration
+    for col in ["unit_size_mwh", "annual_build_limit_mwh", "total_build_limit_mwh"]:
+        storage_constants[col] = storage_constants[col] * storage_constants["duration_hours"]
+    # generator-side Capex fallback ($M/MW of power) -> $/MWh of energy capacity
+    from_gen_side = storage_constants.pop("_capex_from_gen_side").astype(bool)
+    storage_constants.loc[from_gen_side, "capex_mwh"] = (
+        storage_constants.loc[from_gen_side, "capex_mwh"] * 1e6
+        / storage_constants.loc[from_gen_side, "duration_hours"]
+    )
 
     # capacity_mw is only meaningful for existing (non-expandable) storage -- for build options
     # it's whatever raw "Capacity" value happened to be given (often a placeholder ceiling, same
     # pattern as generator_constants' capacity), and it's never read by either model backend for
-    # expandable storage (only annual_build_limit_mwh is). Null it out now, after it's already
+    # expandable storage (only the MWh build limits are). Null it out now, after it's already
     # been used above to derive duration_hours (a real, meaningful property for every storage
     # unit, expandable or not) -- see seer/schema/README.md: "ignored/NaN for build options".
     storage_constants.loc[storage_constants["expandable"], "capacity_mw"] = pd.NA
@@ -181,7 +191,7 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
 
     for _, storage in storage_constants.iterrows():
 
-        row_capex = {"storage": storage.storage, "cost_type": "capex"}
+        row_capex = {"storage": storage.storage, "cost_type": "capital"}
         for y in years:
             row_capex[y] = storage.capex_mwh
         rows.append(row_capex)
@@ -191,18 +201,20 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
         # param (VOM) is too sparse to build a real per-region value from (present for only a
         # handful of plants in a couple of regions, absent everywhere else), so 0 is the
         # honest default rather than a fabricated non-zero figure.
-        row_mc = {"storage": storage.storage, "cost_type": "marginal_cost"}
+        row_mc = {"storage": storage.storage, "cost_type": "marginal"}
         for y in years:
             row_mc[y] = 0
         rows.append(row_mc)
 
     storage_costs = pd.DataFrame(rows, columns=["storage", "cost_type"] + years)
 
-    # reorder to match schema
+    # column order: id/location/tech, size and performance, build options, then lifetime/years
+    # (same layout as generator_constants.csv)
+    storage_constants = as_whole_years(storage_constants, ["life", "start_year", "retirement_year"])
     storage_constants = storage_constants[[
-        "storage", "zone", "tech", "duration_hours", "capacity_mw",
-        "efficiency", "life", "start_year", "retirement_year",
-        "unit_size_mwh", "annual_build_limit_mwh", "expandable",
+        "storage", "zone", "tech", "capacity_mw", "duration_hours", "efficiency",
+        "expandable", "unit_size_mwh", "annual_build_limit_mwh", "total_build_limit_mwh",
+        "life", "start_year", "retirement_year",
     ]]
 
     return storage_constants, storage_costs

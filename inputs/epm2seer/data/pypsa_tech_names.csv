@@ -8,15 +8,15 @@ battery storage,Storage,
 PHS,HydroStorEx,
 PHS,HydroStorNew,
 PHS,PumpedHy,
-PHS,STO HY,
+hydro,STO HY,
 battery storage,Storage-Battery,
 battery storage,STO HY-Battery,
 PHS,Storage-Water,
 PHS,Storage-Pumped,
 PHS,Storage-Hydro,
-PHS,STO HY-Water,
+hydro,STO HY-Water,
 PHS,STO HY-Pumped,
-PHS,STO HY-Hydro,
+hydro,STO HY-Hydro,
 biomass,Woodchip,solid biomass
 biomass,Biomass,solid biomass
 biomass,Bagasse,solid biomass
