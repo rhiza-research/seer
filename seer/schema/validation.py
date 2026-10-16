@@ -58,8 +58,14 @@ def _check_years(instance, errors):
 
 
 def _check_times(instance, errors):
-    # times.csv just needs a time column
-    _require_columns(instance.times, "times", ["time"], errors)
+    # times.csv needs a time column; an optional weight column must be positive where given
+    if not _require_columns(instance.times, "times", ["time"], errors):
+        return
+    if "weight" in instance.times.columns:
+        weight = instance.times["weight"].astype(float)
+        bad = weight.notna() & (weight <= 0)
+        if bad.any():
+            errors.append(f"times.csv: non-positive weight(s) at time(s): {sorted(instance.times.loc[bad, 'time'])}")
 
 
 def _check_settings(instance, errors):
@@ -82,6 +88,17 @@ def _check_network(instance, zones, errors):
     if bad.any():
         bad_pairs = sorted(set(df.loc[bad, ["from", "to"]].itertuples(index=False, name=None)))
         errors.append(f"network.csv: line(s) reference zone(s) not in zones.csv: {bad_pairs}")
+    # lines are undirected: each zone pair appears once (A->B and B->A would double its capacity)
+    pairs = df.apply(lambda row: tuple(sorted((row["from"], row["to"]))), axis=1)
+    if pairs.duplicated().any():
+        errors.append(f"network.csv: zone pair(s) listed more than once: {sorted(set(pairs[pairs.duplicated()]))}")
+    # an expandable line must have a capex (start_year/unit_size/total_build_limit are optional)
+    if "expandable" in df.columns:
+        expandable = df["expandable"].fillna(False).astype(bool)
+        if expandable.any():
+            missing = expandable & (df["capital"].isna() if "capital" in df.columns else True)
+            if missing.any():
+                errors.append(f"network.csv: expandable line(s) missing 'capital': {sorted(set(pairs[missing]))}")
 
 
 def _check_demand_forecast(instance, zones, years, errors):
@@ -169,7 +186,7 @@ def _check_generator_constants(instance, zones, errors):
     if bad_zone.any():
         errors.append(f"generator_constants.csv: zone(s) not in zones.csv: {sorted(df.loc[bad_zone, 'zone'].unique())}")
 
-    # a build option (expandable=True) must have a life -- annual_build_limit is optional,
+    # a build option (expandable=True) must have a life -- annual/total_build_limit are optional,
     # defaulting to unconstrained (inf), see seer/schema/README.md
     expandable = df["expandable"].astype(bool)
     if "life" not in df.columns:
@@ -178,6 +195,21 @@ def _check_generator_constants(instance, zones, errors):
         missing = expandable & df["life"].isna()
         if missing.any():
             errors.append(f"generator_constants.csv: expandable generator(s) missing 'life': {sorted(df.loc[missing, 'generator'])}")
+
+    # build limits, where given, must be non-negative (absent means unconstrained)
+    for col in ["annual_build_limit", "total_build_limit"]:
+        if col in df.columns:
+            negative = df[col].astype(float) < 0
+            if negative.any():
+                errors.append(f"generator_constants.csv: negative '{col}' for generator(s): {sorted(df.loc[negative, 'generator'])}")
+
+    # ramp rates, where given, are a fraction of capacity per hour: 0 < rate <= 1
+    for col in ["ramp_up_rate", "ramp_down_rate"]:
+        if col in df.columns:
+            rate = df[col].astype(float)
+            bad = rate.notna() & ((rate <= 0) | (rate > 1))
+            if bad.any():
+                errors.append(f"generator_constants.csv: '{col}' outside (0, 1] for generator(s): {sorted(df.loc[bad, 'generator'])}")
 
     # an existing unit (expandable=False) must have a capacity
     missing_capacity = ~expandable & df["capacity"].isna()
@@ -203,10 +235,10 @@ def _check_generator_constants(instance, zones, errors):
 def _check_cost_table(df, file_name, id_col, constants_df, years, errors):
     if not _require_columns(df, file_name, [id_col, "cost_type"], errors):
         return
-    # cost_type must be capex or marginal_cost
-    bad_cost_type = ~df["cost_type"].isin(["capex", "marginal_cost"])
+    # cost_type must be capital or marginal
+    bad_cost_type = ~df["cost_type"].isin(["capital", "marginal"])
     if bad_cost_type.any():
-        errors.append(f"{file_name}.csv: 'cost_type' must be 'capex' or 'marginal_cost', found {sorted(df.loc[bad_cost_type, 'cost_type'].unique())}")
+        errors.append(f"{file_name}.csv: 'cost_type' must be 'capital' or 'marginal', found {sorted(df.loc[bad_cost_type, 'cost_type'].unique())}")
 
     # every modeled year must have its own column
     year_cols = [str(y) for y in years]
@@ -217,7 +249,7 @@ def _check_cost_table(df, file_name, id_col, constants_df, years, errors):
 
     # every unit must have both a capex row and a marginal_cost row
     cost_types_by_id = df.groupby(id_col)["cost_type"].apply(set)
-    incomplete = cost_types_by_id[cost_types_by_id != {"capex", "marginal_cost"}]
+    incomplete = cost_types_by_id[cost_types_by_id != {"capital", "marginal"}]
     if not incomplete.empty:
         errors.append(f"{file_name}.csv: {id_col}(s) missing capex and/or marginal_cost: {sorted(incomplete.index)}")
 
@@ -227,14 +259,14 @@ def _check_cost_table(df, file_name, id_col, constants_df, years, errors):
     # marginal_cost must be a real number for every unit, every modeled year -- it's read for
     # both existing and build-option units. capex is only ever read for build options (existing
     # units' capex is legitimately ignored/NaN per seer/schema/README.md), so only check it there.
-    marginal = df[df["cost_type"] == "marginal_cost"].set_index(id_col)
+    marginal = df[df["cost_type"] == "marginal"].set_index(id_col)
     bad_marginal = marginal[present_year_cols].isna().any(axis=1)
     if bad_marginal.any():
         errors.append(f"{file_name}.csv: marginal_cost has NaN value(s) for {id_col}(s): {sorted(bad_marginal[bad_marginal].index)}")
 
     # capex must be a real number for every build option, every modeled year
     expandable_ids = set(constants_df.loc[constants_df["expandable"].astype(bool), id_col])
-    capex = df[df["cost_type"] == "capex"].set_index(id_col)
+    capex = df[df["cost_type"] == "capital"].set_index(id_col)
     capex_expandable = capex.loc[capex.index.isin(expandable_ids)]
     bad_capex = capex_expandable[present_year_cols].isna().any(axis=1)
     if bad_capex.any():
@@ -263,11 +295,16 @@ def _check_storage_constants(instance, zones, errors):
     if bad_zone.any():
         errors.append(f"storage_constants.csv: zone(s) not in zones.csv: {sorted(df.loc[bad_zone, 'zone'].unique())}")
 
-    # a build option (expandable=True) must have a life and an annual_build_limit_mwh --
-    # unit_size_mwh is NOT required even when expandable, absent means a continuous
-    # (non-modular) build option, see seer/schema/README.md
+    # a build option (expandable=True) must have a life -- the annual/total build limits and
+    # unit_size_mwh are optional (absent means unconstrained / continuous), see
+    # seer/schema/README.md
     expandable = df["expandable"].astype(bool)
-    for col in ["life", "annual_build_limit_mwh"]:
+    for col in ["annual_build_limit_mwh", "total_build_limit_mwh"]:
+        if col in df.columns:
+            negative = df[col].astype(float) < 0
+            if negative.any():
+                errors.append(f"storage_constants.csv: negative '{col}' for storage unit(s): {sorted(df.loc[negative, 'storage'])}")
+    for col in ["life"]:
         if col not in df.columns:
             errors.append(f"storage_constants.csv: missing '{col}' (required when expandable=True)")
             continue
