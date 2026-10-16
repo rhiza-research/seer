@@ -16,6 +16,7 @@ dependencies = [
     "gcsfs",
     "torch",
     "gamspy>=1.26.4",
+    "gridflow",
 ]
 
 [build-system]
@@ -24,3 +25,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["seer", "inputs/gdx", "inputs/epm2seer"]
+
+[tool.uv.sources]
+gridflow = { git = "https://github.com/ESMAP-World-Bank-Group/gridflow.git", rev = "network-zoning-method" }
