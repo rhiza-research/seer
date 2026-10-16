@@ -25,8 +25,9 @@ which backend solved the model. Returns `{"generator_capacity": df, "storage_cap
 
 | table | columns | granularity | notes |
 | --- | --- | --- | --- |
-| `generator_capacity` | `zone`, `tech`, `generator`, `year`, `capacity` (MW) | annual | capacity in service that year |
-| `storage_capacity` | `zone`, `tech`, `storage`, `year`, `capacity` (MWh) | annual | capacity in service that year |
-| `dispatch` | `zone`, `tech`, `name`, `year`, `hour`, `datetime`, `dispatch` (MW) | per `times.csv` | generator output and storage net dispatch in one table (distinguish via `tech`/`name`); positive = net supply to the grid, storage charging is negative |
+| `generator_capacity` | `zone`, `tech`, `fuel`, `generator`, `year`, `capacity` (MW) | annual | capacity in service that year |
+| `storage_capacity` | `zone`, `tech`, `fuel`, `storage`, `year`, `capacity` (MWh) | annual | capacity in service that year |
+| `dispatch` | `zone`, `tech`, `fuel`, `name`, `year`, `hour`, `datetime`, `dispatch` (MW) | per `times.csv` | generator output and storage net dispatch in one table (distinguish via `tech`/`name`); `zone`/`tech`/`fuel` are joined from the input `generator_constants.csv`/`storage_constants.csv` by name, so both backends report them identically (`fuel` empty for storage); positive = net supply to the grid, storage charging is negative |
+| `line_capacity` | `from`, `to`, `year`, `capacity` (MW) | annual | line capacity in service that year (existing + any expansion), one row per zone pair |
 
 In `dispatch.csv`, time is indexed redundantly via `datetime` and `year`, `hour` column so there are multiple ways to plot, label, or aggregate the data.
