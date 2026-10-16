@@ -18,7 +18,7 @@ TECH_COLORS = {
     "hfo": "#a04000",
     "lfo": "#ba6136",
     "nuclear": "#8e44ad",
-    "hydro": "#2980b9",
+    "hydro": "#2471a3",
     "wind": "#5dade2",
     "pv": "#f1c40f",
     "solar": "#f1c40f",
@@ -26,7 +26,26 @@ TECH_COLORS = {
     "storage": "#27ae60",
     "import": "#95a5a6",
     "importtransmission": "#95a5a6",
+    # seer-schema (PyPSA technology-data) tech names
+    "ocgt": "#f5b041",
+    "ror": "#48c9b0",
+    "phs": "#7d3c98",
+    "onwind": "#85c1e9",
+    "offwind": "#2e86c1",
+    "solar-utility": "#f1c40f",
+    "solar-rooftop": "#f7dc6f",
+    "battery storage": "#27ae60",
+    "geothermal": "#c0392b",
+    "biomass": "#6e8b3d",
 }
+
+# bottom-to-top stacking order for tech-grouped dispatch (baseload first, storage last);
+# anything not listed goes on top in alphabetical order
+TECH_STACK_ORDER = [
+    "nuclear", "coal", "lignite", "geothermal", "biomass", "ccgt", "gas", "ocgt", "oil", "hfo",
+    "lfo", "ice", "hydro", "ror", "onwind", "offwind", "wind", "solar-utility", "solar-rooftop",
+    "solar", "pv", "import", "phs", "battery storage", "battery", "storage",
+]
 _FALLBACK_PALETTE = plt.get_cmap("tab20").colors
 
 MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -281,3 +300,53 @@ def plot_dispatch_window(df, window="day", group="tech", ax=None, rng=None):
     group_label = "by tech" if group == "tech" else "aggregate"
     ax.set_title(f"Dispatch sample: {window} in {year} ({group_label})")
     return ax
+
+
+def _tech_stack_key(tech):
+    key = str(tech).lower()
+    return (TECH_STACK_ORDER.index(key), key) if key in TECH_STACK_ORDER else (len(TECH_STACK_ORDER), key)
+
+
+def plot_dispatch_by_year(df, years=None, ncols=1, figsize_per_plot=(12, 3)):
+    """Dispatch (dispatch schema) grouped by tech as a stacked area chart, one subplot per year.
+
+    x is each year's own modeled hours in order (works for a full 8760 or a representative-days
+    grid -- months are labeled from the `datetime` column, not assumed hour counts). Storage
+    charging is drawn below zero. All subplots share the y axis and tech colors; one legend.
+    Returns the figure.
+    """
+    years = sorted(df["year"].unique()) if years is None else list(years)
+    techs = sorted(df["tech"].dropna().unique(), key=_tech_stack_key)
+    colors = {tech: tech_color(tech) for tech in techs}
+
+    nrows = int(np.ceil(len(years) / ncols))
+    fig, axes = plt.subplots(
+        nrows, ncols, figsize=(figsize_per_plot[0] * ncols, figsize_per_plot[1] * nrows),
+        sharey=True, squeeze=False,
+    )
+    for ax, year in zip(axes.flat, years):
+        year_df = df[df["year"] == year]
+        pivot = year_df.groupby(["hour", "tech"])["dispatch"].sum().unstack("tech").sort_index()
+        pivot = pivot.reindex(columns=techs, fill_value=0.0).fillna(0.0)
+        x = np.arange(len(pivot))
+        _signed_stackplot(ax, x, {tech: pivot[tech].values for tech in techs}, colors)
+
+        # month ticks at each month's first modeled hour
+        datetimes = pd.to_datetime(year_df.drop_duplicates("hour").set_index("hour")["datetime"]).reindex(pivot.index)
+        months = datetimes.dt.month.values
+        starts = np.flatnonzero(np.r_[True, months[1:] != months[:-1]])
+        ax.set_xticks(starts)
+        ax.set_xticklabels([MONTH_LABELS[months[i] - 1] for i in starts], fontsize=7)
+        for start in starts[1:]:
+            ax.axvline(start, color="grey", linewidth=0.5, linestyle="--")
+        ax.axhline(0, color="black", linewidth=0.5)
+        ax.set_xlim(0, len(pivot))
+        ax.set_title(str(year), fontsize=9, loc="left")
+        ax.set_ylabel("Dispatch (MW)")
+    for ax in list(axes.flat)[len(years):]:
+        ax.set_visible(False)
+
+    handles = [plt.Rectangle((0, 0), 1, 1, color=colors[tech]) for tech in reversed(techs)]
+    fig.legend(handles, list(reversed(techs)), loc="center left", bbox_to_anchor=(1.0, 0.5), fontsize=8)
+    fig.tight_layout()
+    return fig
