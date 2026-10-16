@@ -8,6 +8,8 @@ per base name, matching the fixed per-option naming used on the pyomo side.
 
 import pandas as pd
 
+from ..output_utils import add_input_metadata
+
 
 def _base_name(name, build_year):
     """Strip a build option's "_<build_year>" vintage suffix (see build.py:
@@ -77,8 +79,9 @@ def _melt_dispatch(dispatch_df, genmap_df):
     return long_df[["zone", "tech", "name", "year", "hour", "datetime", "dispatch"]]
 
 
-def build_output_tables(model):
-    """Build the three seer output tables from a solved PyPSA Network.
+def build_output_tables(model, data_path):
+    """Build the three seer output tables from a solved PyPSA Network. zone/tech/fuel come
+    from the seer-schema inputs at `data_path` (see output_utils.add_input_metadata).
 
     Returns {"generator_capacity": df, "storage_capacity": df, "dispatch": df}.
     """
@@ -86,7 +89,10 @@ def build_output_tables(model):
     sto_genmap = _genmap(model.storage_units)
 
     generator_capacity = _melt_capacity(_consolidate_capacity_by_year(model, model.generators), gen_genmap, "generator")
-    storage_capacity = _melt_capacity(_consolidate_capacity_by_year(model, model.storage_units), sto_genmap, "storage")
+    # storage capacity is reported in MWh of energy (output schema) -- a StorageUnit's p_nom is MW
+    # of power, so scale by its fixed duration (max_hours)
+    storage_units = model.storage_units.assign(p_nom_opt=model.storage_units["p_nom_opt"] * model.storage_units["max_hours"])
+    storage_capacity = _melt_capacity(_consolidate_capacity_by_year(model, storage_units), sto_genmap, "storage")
 
     generator_dispatch = _melt_dispatch(
         _consolidate_timeseries_by_base_name(model.generators, model.generators_t.p), gen_genmap
@@ -99,8 +105,26 @@ def build_output_tables(model):
 
     dispatch = pd.concat([generator_dispatch, storage_dispatch], ignore_index=True)
 
-    return {
+    # lines: existing Link + expansion vintages, consolidated to one row per (zone pair, year)
+    if len(model.links):
+        links = model.links.copy()
+        links["p_nom_opt"] = links["p_nom_opt"].fillna(links["p_nom"])
+        line_wide = _consolidate_capacity_by_year(model, links)
+        line_ends = links[~links.index.duplicated()].assign(
+            base=[_base_name(name, row.build_year) for name, row in links.iterrows()]
+        ).drop_duplicates("base").set_index("base")[["bus0", "bus1"]]
+        line_capacity = line_wide.rename_axis("year").reset_index().melt(
+            id_vars="year", var_name="line", value_name="capacity"
+        )
+        line_capacity["from"] = line_capacity["line"].map(line_ends["bus0"])
+        line_capacity["to"] = line_capacity["line"].map(line_ends["bus1"])
+        line_capacity = line_capacity[["from", "to", "year", "capacity"]]
+    else:
+        line_capacity = pd.DataFrame(columns=["from", "to", "year", "capacity"])
+
+    return add_input_metadata({
+        "line_capacity": line_capacity,
         "generator_capacity": generator_capacity,
         "storage_capacity": storage_capacity,
         "dispatch": dispatch,
-    }
+    }, data_path)

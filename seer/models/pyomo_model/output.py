@@ -3,11 +3,14 @@ seer/models/README.md for the output schema): generator_capacity, storage_capaci
 """
 
 import pandas as pd
+
+from ..output_utils import add_input_metadata
 import pyomo.environ as pyo
 
 
-def build_output_tables(instance):
-    """Build the three seer output tables from a solved pyomo model instance.
+def build_output_tables(instance, data_path):
+    """Build the three seer output tables from a solved pyomo model instance. zone/tech/fuel
+    come from the seer-schema inputs at `data_path` (see output_utils.add_input_metadata).
 
     Returns {"generator_capacity": df, "storage_capacity": df, "dispatch": df}.
     """
@@ -53,8 +56,19 @@ def build_output_tables(instance):
     ]
     dispatch = pd.DataFrame(generator_dispatch_rows + storage_dispatch_rows)
 
-    return {
+    line_from = instance.line_from.extract_values()
+    line_to = instance.line_to.extract_values()
+    line_capacity = pd.DataFrame([
+        {
+            "from": line_from[line], "to": line_to[line], "year": year,
+            "capacity": pyo.value(instance.line_total_capacity[line, year]),
+        }
+        for line in instance.lines for year in instance.years
+    ], columns=["from", "to", "year", "capacity"])
+
+    return add_input_metadata({
+        "line_capacity": line_capacity,
         "generator_capacity": generator_capacity,
         "storage_capacity": storage_capacity,
         "dispatch": dispatch,
-    }
+    }, data_path)

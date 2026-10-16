@@ -1,12 +1,13 @@
 """Build a PyPSA Network from seer-schema input CSVs."""
 
 import warnings
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pypsa
 
-from ..time_utils import build_snapshot_calendar, load_times, resolve_profile
+from ..time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
 
 
 def build(data_path):
@@ -19,7 +20,7 @@ def build(data_path):
     projected onto each real year (skipping e.g. Feb 29 in non-leap years), gives the snapshots.
     """
     years = input_data["years"]["year"].tolist()
-    calendar = build_snapshot_calendar(years, input_data["times"])
+    calendar = build_snapshot_calendar(years, input_data["times"], input_data["time_weights"])
     model.investment_periods = years
     model.investment_period_weightings["years"] = get_year_steps(years)
 
@@ -34,11 +35,22 @@ def build(data_path):
 
     model.snapshots = pd.MultiIndex.from_arrays([calendar["year"], calendar["datetime"]])
 
+    # how many real hours each modeled snapshot stands for -- 1.0 for a full 8760/8784-hour
+    # year, greater than 1 for a representative-days grid (see time_utils.compute_time_weights).
+    # PyPSA's own "objective" snapshot weighting is exactly this per-snapshot scale factor,
+    # applied on top of (not instead of) investment_period_weightings' per-period scaling above.
+    time_weight = compute_time_weights(calendar)
+    model.snapshot_weightings["objective"] = [time_weight[row.year, row.hour] for row in calendar.itertuples()]
+
     """SPACE: Set up components of the model.
     Zones represent the spatial resolution of the model.
     """
     for zone in input_data["zones"]["name"]:
         model.add("Bus", zone, carrier="AC")
+
+    """NETWORK: Lines between zones (network.csv is optional).
+    """
+    build_network(model, input_data["network"])
 
     """DEMAND: Set up demand trajectory.
     """
@@ -58,7 +70,7 @@ def build(data_path):
 
     """DEFINE CARRIERS: Define carriers in the model.
     """
-    for carrier in gen_carriers | sto_carriers:
+    for carrier in gen_carriers | sto_carriers | ({"AC"} if len(input_data["network"]) else set()):
         model.add("Carrier", carrier)
 
     return model
@@ -100,11 +112,11 @@ def set_demand(model, demand_forecast, demand_profile, calendar):
 
 
 def _marginal_cost(gen_costs, name):
-    """gen_costs.loc[(name, "marginal_cost"), :], or all-zero if that row is absent (should
+    """gen_costs.loc[(name, "marginal"), :], or all-zero if that row is absent (should
     always be present per seer/schema/README.md, but fall back defensively rather than crash)."""
-    if (name, "marginal_cost") not in gen_costs.index:
+    if (name, "marginal") not in gen_costs.index:
         return pd.Series(0.0, index=gen_costs.columns)
-    return gen_costs.loc[(name, "marginal_cost"), :].fillna(0)
+    return gen_costs.loc[(name, "marginal"), :].fillna(0)
 
 
 def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expansion=False):
@@ -137,7 +149,7 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             # passed, regardless of retirement_year (that governs each vintage's own
             # lifetime, not how long the option to build remains open)
             valid_years = get_valid_years(model, gen.start_year)
-            capex = gen_costs.loc[(name, "capex"), :]
+            capex = gen_costs.loc[(name, "capital"), :]
             mc = _marginal_cost(gen_costs, name)
             # PyPSA's own p_nom_mod default is 0.0 (continuous), not NaN -- a generator with
             # no known unit_size must fall back to that default explicitly, even under
@@ -145,6 +157,18 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             unit_capacity = gen.get("unit_size") if modular_expansion else None
             if unit_capacity is not None and pd.isna(unit_capacity):
                 unit_capacity = 0
+            # build limits are optional -- absent means unconstrained. annual_build_limit bounds
+            # each vintage on its own; total_build_limit bounds the sum across all vintages, which
+            # PyPSA can't express per component -- recorded in model.meta and added as a custom
+            # constraint at solve time (see solve.add_total_build_limits)
+            annual_limit = gen.get("annual_build_limit")
+            annual_limit = float("inf") if annual_limit is None or pd.isna(annual_limit) else float(annual_limit)
+            total_limit = gen.get("total_build_limit")
+            total_limit = float("inf") if total_limit is None or pd.isna(total_limit) else float(total_limit)
+            if total_limit != float("inf") and len(valid_years) > 0:
+                model.meta.setdefault("total_build_limits", {})[name] = {
+                    "limit": total_limit, "components": [f"{name}_{year}" for year in valid_years],
+                }
 
             for year in valid_years:
                 gen_year_name = f"{name}_{year}"
@@ -153,8 +177,8 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
                 ) if is_renewable else 1
                 model.add("Generator", gen_year_name, bus=zone,
                           carrier=carrier, build_year=year, lifetime=gen.life,
-                          p_nom_extendable=True, p_nom_mod=unit_capacity, p_nom_max=gen.annual_build_limit,
-                          marginal_cost=mc[year], capital_cost=capex[year],
+                          p_nom_extendable=True, p_nom_mod=unit_capacity, p_nom_max=min(annual_limit, total_limit),
+                          marginal_cost=mc[year], capital_cost=build_year_capital_cost(model, capex[year], year, gen.life),
                           ramp_up_rate=ramp_up_rate, ramp_down_rate=ramp_down_rate)
                 model.generators_t.p_max_pu[gen_year_name] = p_max_pu
 
@@ -203,20 +227,37 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
         if expandable:
             # one PyPSA component per build-year vintage -- no upper bound, same reasoning
             # as build_generators' expandable branch above
-            capex = storage_costs.loc[(name, "capex"), :]
+            capex = storage_costs.loc[(name, "capital"), :]
             # same NaN -> 0.0 fallback as build_generators above -- PyPSA's p_nom_mod default
             # is 0.0 (continuous), not NaN
             unit_capacity = sto.unit_size_mwh if modular_expansion else None
             if unit_capacity is not None and pd.isna(unit_capacity):
                 unit_capacity = 0
+            # a StorageUnit's p_nom is power (MW); the schema's storage build quantities and
+            # capex are per MWh of energy capacity -- convert via the fixed duration
+            # annual limit bounds each vintage; total limit spans all vintages -- recorded in
+            # model.meta like generators' (see solve.add_total_build_limits)
+            hours = sto.duration_hours
+            annual_limit = sto.get("annual_build_limit_mwh")
+            annual_limit = float("inf") if annual_limit is None or pd.isna(annual_limit) else annual_limit / hours
+            total_limit = sto.get("total_build_limit_mwh")
+            total_limit = float("inf") if total_limit is None or pd.isna(total_limit) else total_limit / hours
+            valid_years = get_valid_years(model, sto.start_year)
+            if total_limit != float("inf") and len(valid_years) > 0:
+                model.meta.setdefault("storage_total_build_limits", {})[name] = {
+                    "limit": total_limit, "components": [f"{name}_{year}" for year in valid_years],
+                }
 
-            for year in get_valid_years(model, sto.start_year):
+            for year in valid_years:
                 model.add("StorageUnit", f"{name}_{year}", bus=sto.zone,
                     carrier="battery", build_year=year, lifetime=sto.life,
-                    p_nom_extendable=True, p_nom_mod=unit_capacity, p_nom_max=sto.annual_build_limit_mwh,
-                    max_hours=sto.duration_hours,  # fixed duration
+                    p_nom_extendable=True, p_nom_mod=(unit_capacity or 0) / hours,
+                    p_nom_max=min(annual_limit, total_limit),
+                    max_hours=hours,  # fixed duration
                     efficiency_store=sto.efficiency, efficiency_dispatch=sto.efficiency,
-                    capital_cost=capex[year],
+                    # cyclic within each period; add_daily_storage_balance makes it per day
+                    cyclic_state_of_charge=True, cyclic_state_of_charge_per_period=True,
+                    capital_cost=build_year_capital_cost(model, capex[year] * hours, year, sto.life),
                 )
 
         else:
@@ -231,8 +272,58 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
                 p_nom=sto.capacity_mw, p_nom_extendable=False,
                 max_hours=sto.duration_hours,
                 efficiency_store=sto.efficiency, efficiency_dispatch=sto.efficiency,
+                    # cyclic within each period; add_daily_storage_balance makes it per day
+                    cyclic_state_of_charge=True, cyclic_state_of_charge_per_period=True,
             )
     return carriers
+
+
+def line_name(line):
+    return f"line_{line['from']}_{line['to']}"
+
+
+def build_network(model, network, modular_expansion=False):
+    """Each network.csv row is one undirected line (one row per zone pair) -- flow either way
+    bounded by its capacity, same as the pyomo backend. Modeled as lossless bidirectional Links
+    (a PyPSA Line would need impedances the schema doesn't carry): one fixed Link for existing
+    capacity, and for an expandable line one extendable Link per build-year vintage from its
+    start_year on, with no lifetime limit (lines have no life in the schema). total_build_limit
+    spans all vintages -- recorded in model.meta like generators' (see solve.add_total_build_limits)."""
+    for _, line in network.iterrows():
+        name = line_name(line)
+        model.add("Link", name, bus0=line["from"], bus1=line["to"],
+                  p_nom=0.0 if pd.isna(line["capacity"]) else line["capacity"], p_min_pu=-1, carrier="AC")
+        if not bool(line.get("expandable", False)) or pd.isna(line.get("expandable", False)):
+            continue
+
+        valid_years = get_valid_years(model, line.get("start_year"))
+        total_limit = line.get("total_build_limit")
+        total_limit = float("inf") if total_limit is None or pd.isna(total_limit) else float(total_limit)
+        unit_size = line.get("unit_size") if modular_expansion else None
+        unit_size = 0 if unit_size is None or pd.isna(unit_size) else unit_size
+        for year in valid_years:
+            model.add("Link", f"{name}_{year}", bus0=line["from"], bus1=line["to"], p_min_pu=-1, carrier="AC",
+                      build_year=year, lifetime=float("inf"), p_nom_extendable=True, p_nom_mod=unit_size,
+                      p_nom_max=total_limit,
+                      capital_cost=build_year_capital_cost(model, line["capital"], year, float("inf")))
+        if total_limit != float("inf") and len(valid_years) > 0:
+            model.meta.setdefault("line_total_build_limits", {})[name] = {
+                "limit": total_limit, "components": [f"{name}_{year}" for year in valid_years],
+            }
+
+
+def build_year_capital_cost(model, capex, build_year, lifetime):
+    """PyPSA capital_cost that makes a vintage's total capex `capex` ($/unit, total -- see
+    seer/schema/README.md) incurred once, in its build year, like the pyomo backend.
+
+    PyPSA charges capital_cost x p_nom x the investment period's objective weighting in EVERY
+    period the vintage is active (build_year <= period < build_year + lifetime). Dividing by the
+    sum of those weightings and multiplying by the build period's own makes the total exactly
+    capex discounted to the build year."""
+    weights = model.investment_period_weightings["objective"]
+    periods = weights.index
+    active = (periods >= build_year) & (periods < build_year + lifetime)
+    return capex * weights.loc[build_year] / weights[active].sum()
 
 
 def get_valid_years(model, start_year=None, end_year=None):
@@ -257,11 +348,15 @@ def annual_to_snapshots(model, annual_series):
 
 def load_data(data_path):
     """Read the seer-schema input CSVs at `data_path` into a dict of DataFrames."""
+    network_path = Path(data_path + "network.csv")
+    network = pd.read_csv(network_path) if network_path.exists() else pd.DataFrame(columns=["from", "to", "capacity"])
     return {
+        "network": network,
         "zones": pd.read_csv(data_path + "zones.csv"),
         "years": pd.read_csv(data_path + "years.csv"),
         "settings": pd.read_csv(data_path + "settings.csv"),
         "times": load_times(data_path.rstrip("/")),
+        "time_weights": load_time_weights(data_path.rstrip("/")),
         "demand_forecast": pd.read_csv(data_path + "demand_forecast.csv"),
         "demand_profile": pd.read_csv(data_path + "demand_profile.csv"),
         "renewable_profiles": pd.read_csv(data_path + "renewable_profiles.csv"),
