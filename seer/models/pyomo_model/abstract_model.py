@@ -59,7 +59,7 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
 
     # capacity factor: 1.0 for dispatchable generators, per-(year, hour) factor for renewables
     # (renewable_profiles.csv may be a template reused every year, or vary by year -- see
-    # seer.models.time_utils.resolve_profile)
+    # seer.models.utils.time_utils.resolve_profile)
     model.generator_capacity_factor = pyo.Param(model.generators, model.times, within=pyo.NonNegativeReals)
 
     # storage attributes
@@ -97,7 +97,7 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     # how many real hours each modeled snapshot stands for -- 1.0 for a full 8760/8784-hour year,
     # greater than 1 for a representative-days grid (see time_utils.compute_time_weights)
     model.time_weight = pyo.Param(model.times, within=pyo.PositiveReals)
-    # the real timestamp each (year, hour) represents (see seer.models.time_utils) - carried
+    # the real timestamp each (year, hour) represents (see seer.models.utils.time_utils) - carried
     # only for output tables to report a real datetime, not used by any constraint/objective
     model.snapshot_datetime = pyo.Param(model.times, within=pyo.Any)
     # discount factor relative to the first modeled year, applied to every cost term in the objective

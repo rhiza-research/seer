@@ -4,7 +4,7 @@ seer/models/README.md for the output schema): generator_capacity, storage_capaci
 
 import pandas as pd
 
-from ..output_utils import add_input_metadata
+from ..utils.output_utils import add_input_metadata
 import pyomo.environ as pyo
 
 

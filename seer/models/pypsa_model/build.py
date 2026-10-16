@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pypsa
 
-from ..time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
+from ..utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
 
 
 def build(data_path):

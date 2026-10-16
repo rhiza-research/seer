@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from seer.models.time_utils import format_time_string
+from seer.models.utils.time_utils import format_time_string
 
 
 def init_df(path, columns):

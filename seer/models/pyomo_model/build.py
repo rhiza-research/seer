@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ..time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
+from ..utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
 from .abstract_model import seer_base_model
 
 
@@ -58,7 +58,7 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
     year_discount_factor = {year: 1 / (1 + discount_rate) ** (year - base_year) for year in years}
 
     # times.csv x years.csv, projected onto each real year (skipping e.g. Feb 29 in a
-    # non-leap year) -- see seer/schema/README.md and seer.models.time_utils
+    # non-leap year) -- see seer/schema/README.md and seer.models.utils.time_utils
     calendar = build_snapshot_calendar(years, load_times(data_path), load_time_weights(data_path))
     hours = sorted(calendar["hour"].unique())
     times = list(zip(calendar["year"], calendar["hour"]))

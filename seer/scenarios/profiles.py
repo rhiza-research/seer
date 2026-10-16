@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 
 from .base import Perturbation
-from ..models.time_utils import parse_time_string
+from ..models.utils.time_utils import parse_time_string
 
 # --- shared: periodic (24h) curve resampling, and library-wide nearest-neighbor lookup ---
 

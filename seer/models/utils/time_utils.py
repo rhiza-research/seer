@@ -43,10 +43,19 @@ def load_times(data_path):
     return pd.read_csv(f"{data_path}/times.csv")["time"].tolist()
 
 
-def build_snapshot_calendar(years, times):
-    """One row per (year, time, hour, datetime) snapshot actually modeled across every year:
-    `hour` is a 1-indexed position within that year's own snapshot list, and `datetime` is the
-    real projected timestamp. A time that doesn't exist in a given year (e.g. Feb 29 in a
+def load_time_weights(data_path):
+    """times.csv's optional `weight` column as {time: weight}, or None if absent (uniform)."""
+    times = pd.read_csv(f"{data_path}/times.csv")
+    if "weight" not in times.columns or times["weight"].isna().all():
+        return None
+    return times.set_index("time")["weight"].astype(float).to_dict()
+
+
+def build_snapshot_calendar(years, times, weights=None):
+    """One row per (year, time, hour, datetime, weight) snapshot actually modeled across every
+    year: `hour` is a 1-indexed position within that year's own snapshot list, `datetime` is the
+    real projected timestamp, and `weight` is times.csv's relative weight for that time (1.0
+    everywhere if `weights` is None). A time that doesn't exist in a given year (e.g. Feb 29 in a
     non-leap year) is skipped for that year -- so different years can have different lengths.
     """
     rows = []
@@ -57,8 +66,27 @@ def build_snapshot_calendar(years, times):
             if dt is None:
                 continue
             hour += 1
-            rows.append({"year": year, "time": t, "hour": hour, "datetime": dt})
+            weight = 1.0 if weights is None else weights[t]
+            rows.append({"year": year, "time": t, "hour": hour, "datetime": dt, "weight": weight})
     return pd.DataFrame(rows)
+
+
+def compute_time_weights(calendar):
+    """Per-(year, hour) weight: how many real hours each modeled snapshot stands for, so a
+    representative-days dispatch grid still sums to a full year's worth of operating cost in the
+    objective. Each snapshot's relative weight (times.csv `weight`, see seer/schema/README.md --
+    uniform if absent) is scaled so a year's weights sum to that real calendar year's hours:
+    weight = year_hours x w / sum(w over that year). A full 8760/8784-snapshot year with no
+    weights gets 1.0 everywhere (a no-op)."""
+    if "weight" not in calendar.columns:
+        calendar = calendar.assign(weight=1.0)
+    weights = {}
+    for year, group in calendar.groupby("year"):
+        year_hours = 8784 if pd.Timestamp(year=year, month=12, day=31).is_leap_year else 8760
+        scale = year_hours / group["weight"].sum()
+        for row in group.itertuples():
+            weights[(row.year, row.hour)] = row.weight * scale
+    return weights
 
 
 def resolve_profile(profile_df, calendar, key_cols, value_col="value"):

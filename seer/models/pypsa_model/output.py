@@ -8,7 +8,7 @@ per base name, matching the fixed per-option naming used on the pyomo side.
 
 import pandas as pd
 
-from ..output_utils import add_input_metadata
+from ..utils.output_utils import add_input_metadata
 
 
 def _base_name(name, build_year):
