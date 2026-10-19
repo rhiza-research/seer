@@ -96,7 +96,7 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
     # only meaningful (and only loaded) for existing generators
     generator_capacity = constants.loc[existing_generators, "capacity"].to_dict()
     generator_start_year = constants.loc[existing_generators, "start_year"].to_dict()
-    generator_retirement_year = constants.loc[existing_generators, "retirement_year"].to_dict()
+    generator_life = constants.loc[existing_generators, "life"].to_dict()
     # only meaningful (and only loaded) for new-build generators
     # build limits are optional in the schema -- absent (blank, or no column at all) means unconstrained
     def _build_limit(col):
@@ -104,8 +104,9 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
         return values.loc[new_generators].astype(float).fillna(float("inf")).to_dict()
     generator_annual_build_limit = _build_limit("annual_build_limit")
     generator_total_build_limit = _build_limit("total_build_limit")
-    # earliest build year for build options -- absent means no restriction (0)
-    generator_build_start_year = constants.loc[new_generators, "start_year"].astype(float).fillna(0).to_dict()
+    # earliest build year for build options
+    generator_build_start_year = constants.loc[new_generators, "start_year"].to_dict()
+    generator_build_life = constants.loc[new_generators, "life"].to_dict()
 
     # dispatchable generators have a capacity factor of 1.0 every (year, hour); renewables are
     # derated by their own profile_id's availability (each may itself vary by year). isre
@@ -160,7 +161,7 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
         storage_constants["capacity_mw"] * storage_constants["duration_hours"]
     ).loc[existing_storage].to_dict()
     storage_start_year = storage_constants.loc[existing_storage, "start_year"].to_dict()
-    storage_retirement_year = storage_constants.loc[existing_storage, "retirement_year"].to_dict()
+    storage_life = storage_constants.loc[existing_storage, "life"].to_dict()
     # only meaningful (and only loaded) for new-build storage
     # build limits are optional -- absent (blank, or no column at all) means unconstrained
     def _storage_build_limit(col):
@@ -168,7 +169,8 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
         return values.loc[new_storage].astype(float).fillna(float("inf")).to_dict()
     storage_annual_build_limit_mwh = _storage_build_limit("annual_build_limit_mwh")
     storage_total_build_limit_mwh = _storage_build_limit("total_build_limit_mwh")
-    storage_build_start_year = storage_constants.loc[new_storage, "start_year"].astype(float).fillna(0).to_dict()
+    storage_build_start_year = storage_constants.loc[new_storage, "start_year"].to_dict()
+    storage_build_life = storage_constants.loc[new_storage, "life"].to_dict()
 
     # ---- storage costs ----
     storage_costs = storage_costs_df.set_index(["storage", "cost_type"])
@@ -241,10 +243,11 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
             "generator_tech": generator_tech,
             "generator_capacity": generator_capacity,
             "generator_start_year": generator_start_year,
-            "generator_retirement_year": generator_retirement_year,
+            "generator_life": generator_life,
             "generator_annual_build_limit": generator_annual_build_limit,
             "generator_total_build_limit": generator_total_build_limit,
             "generator_build_start_year": generator_build_start_year,
+            "generator_build_life": generator_build_life,
             "generator_capex_cost": generator_capex_cost,
             "generator_marginal_cost": generator_marginal_cost,
             "generator_capacity_factor": generator_capacity_factor,
@@ -255,10 +258,11 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
             "storage_duration_hours": storage_duration_hours,
             "storage_capacity_mwh": storage_capacity_mwh,
             "storage_start_year": storage_start_year,
-            "storage_retirement_year": storage_retirement_year,
+            "storage_life": storage_life,
             "storage_annual_build_limit_mwh": storage_annual_build_limit_mwh,
             "storage_total_build_limit_mwh": storage_total_build_limit_mwh,
             "storage_build_start_year": storage_build_start_year,
+            "storage_build_life": storage_build_life,
             "storage_capex_cost": storage_capex_cost,
             "storage_marginal_cost": storage_marginal_cost,
             "lines": {None: lines},

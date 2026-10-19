@@ -11,10 +11,14 @@ import pandas as pd
 from ..utils.output_utils import add_input_metadata
 
 
-def _base_name(name, build_year):
+def _base_name(name, row):
     """Strip a build option's "_<build_year>" vintage suffix (see build.py:
-    `gen_year_name = f"{name}_{year}"`) to recover its logical (base) name."""
-    suffix = f"_{int(build_year)}"
+    `gen_year_name = f"{name}_{year}"`) to recover its logical (base) name. Only build options
+    carry the suffix -- an existing unit's own name can end in its start year (e.g. Botswana's
+    Solar_Bot_2022) and is left alone."""
+    if not row["p_nom_extendable"]:
+        return name
+    suffix = f"_{int(row['build_year'])}"
     return name[: -len(suffix)] if name.endswith(suffix) else name
 
 
@@ -22,7 +26,7 @@ def _consolidate_capacity_by_year(model, static_df):
     """static_df: model.generators or model.storage_units. Returns capacity (p_nom_opt)
     indexed by year, one column per base name, summed across every vintage active that year."""
     base_names = pd.Series(
-        [_base_name(name, row.build_year) for name, row in static_df.iterrows()], index=static_df.index
+        [_base_name(name, row) for name, row in static_df.iterrows()], index=static_df.index
     )
     rows = {}
     for year in model.investment_periods:
@@ -40,7 +44,7 @@ def _consolidate_timeseries_by_base_name(static_df, t_df):
     to their base name (summing overlaps) and reindexes to (year, hour, datetime): hour is
     1-indexed within each year (matching the pyomo side's convention), datetime is the real
     timestamp already carried by model.snapshots."""
-    base_name_map = {name: _base_name(name, static_df.loc[name, "build_year"]) for name in t_df.columns}
+    base_name_map = {name: _base_name(name, static_df.loc[name]) for name in t_df.columns}
     renamed = t_df.rename(columns=base_name_map).T.groupby(level=0).sum().T
 
     years = renamed.index.get_level_values(0)
@@ -54,7 +58,7 @@ def _consolidate_timeseries_by_base_name(static_df, t_df):
 def _genmap(static_df):
     """static_df: model.generators or model.storage_units. Returns one row per base name
     (collapsing vintages), columns=[tech, zone]."""
-    base_names = [_base_name(name, row.build_year) for name, row in static_df.iterrows()]
+    base_names = [_base_name(name, row) for name, row in static_df.iterrows()]
     df = pd.DataFrame({"tech": static_df["carrier"].values, "zone": static_df["bus"].values}, index=base_names)
     return df[~df.index.duplicated()]
 
@@ -111,7 +115,7 @@ def build_output_tables(model, data_path):
         links["p_nom_opt"] = links["p_nom_opt"].fillna(links["p_nom"])
         line_wide = _consolidate_capacity_by_year(model, links)
         line_ends = links[~links.index.duplicated()].assign(
-            base=[_base_name(name, row.build_year) for name, row in links.iterrows()]
+            base=[_base_name(name, row) for name, row in links.iterrows()]
         ).drop_duplicates("base").set_index("base")[["bus0", "bus1"]]
         line_capacity = line_wide.rename_axis("year").reset_index().melt(
             id_vars="year", var_name="line", value_name="capacity"

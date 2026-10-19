@@ -43,15 +43,17 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     model.generator_zone = pyo.Param(model.generators, within=pyo.Any)
     model.generator_tech = pyo.Param(model.generators, within=pyo.Any)
 
-    # existing generators have a fixed capacity, between start and retirement year
+    # existing generators have a fixed capacity, active from start_year for life years
     model.generator_capacity = pyo.Param(model.existing_generators, within=pyo.NonNegativeReals)
     model.generator_start_year = pyo.Param(model.existing_generators, within=pyo.Reals)
-    model.generator_retirement_year = pyo.Param(model.existing_generators, within=pyo.Reals)
+    model.generator_life = pyo.Param(model.existing_generators, within=pyo.PositiveReals)
     # new build generators have an annual and a whole-horizon total build limit (inf = unconstrained)
     model.generator_annual_build_limit = pyo.Param(model.new_generators, within=pyo.NonNegativeReals)
     model.generator_total_build_limit = pyo.Param(model.new_generators, within=pyo.NonNegativeReals)
     # ...and can't be built before their start_year (default 0: no restriction)
     model.generator_build_start_year = pyo.Param(model.new_generators, within=pyo.Reals, default=0)
+    # ...and each year's additions retire after life years
+    model.generator_build_life = pyo.Param(model.new_generators, within=pyo.PositiveReals)
 
     # generator costs
     model.generator_marginal_cost = pyo.Param(model.generators, model.years, within=pyo.NonNegativeReals)
@@ -68,14 +70,15 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     # duration (energy/power ratio, hours) is fixed by technology; power capacity is derived from it, never expanded independently
     model.storage_duration_hours = pyo.Param(model.storage, within=pyo.PositiveReals)
 
-    # existing storage has a fixed energy capacity, between start and retirement year
+    # existing storage has a fixed energy capacity, active from start_year for life years
     model.storage_capacity_mwh = pyo.Param(model.existing_storage, within=pyo.NonNegativeReals)
     model.storage_start_year = pyo.Param(model.existing_storage, within=pyo.Reals)
-    model.storage_retirement_year = pyo.Param(model.existing_storage, within=pyo.Reals)
+    model.storage_life = pyo.Param(model.existing_storage, within=pyo.PositiveReals)
     # new build storage has an annual (energy) build limit
     model.storage_annual_build_limit_mwh = pyo.Param(model.new_storage, within=pyo.NonNegativeReals)
     model.storage_total_build_limit_mwh = pyo.Param(model.new_storage, within=pyo.NonNegativeReals)
     model.storage_build_start_year = pyo.Param(model.new_storage, within=pyo.Reals, default=0)
+    model.storage_build_life = pyo.Param(model.new_storage, within=pyo.PositiveReals)
 
     # storage costs
     model.storage_marginal_cost = pyo.Param(model.storage, model.years, within=pyo.NonNegativeReals)
@@ -278,13 +281,14 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
         rule=build_start_year_rule
     )
 
-    # 3. total capacity of new generators is the sum of all capacity added up to and including this year
+    # 3. total capacity of new generators is the capacity added up to and including this year
+    # that hasn't reached the end of its life (a build in y is active y <= year < y + life,
+    # as in PyPSA)
     def capacity_accumulation_rule(model, gen, year):
-        prior_and_current_years = [
-            y for y in model.years if model.years.ord(y) <= model.years.ord(year)
-        ]
+        life = pyo.value(model.generator_build_life[gen])
+        active_builds = [y for y in model.years if y <= year < y + life]
         return model.total_capacity[gen, year] == sum(
-            model.generation_added_capacity[gen, y] for y in prior_and_current_years
+            model.generation_added_capacity[gen, y] for y in active_builds
         )
 
     model.capacity_accumulation_constraint = pyo.Constraint(
@@ -295,7 +299,8 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
 
     # 4. capacity of generators depends on whether they are active
     def existing_capacity_rule(model, gen, year):
-        is_active = pyo.value(model.generator_start_year[gen]) <= year <= pyo.value(model.generator_retirement_year[gen])
+        start = pyo.value(model.generator_start_year[gen])
+        is_active = start <= year < start + pyo.value(model.generator_life[gen])
         return model.total_capacity[gen, year] == (model.generator_capacity[gen] if is_active else 0)
 
     model.existing_capacity_constraint = pyo.Constraint(
@@ -351,13 +356,13 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
         rule=storage_build_start_year_rule
     )
 
-    # 7. total energy capacity of new storage is the sum of all capacity added up to and including this year
+    # 7. total energy capacity of new storage is the capacity added up to and including this
+    # year that hasn't reached the end of its life (as for generators)
     def storage_capacity_accumulation_rule(model, s, year):
-        prior_and_current_years = [
-            y for y in model.years if model.years.ord(y) <= model.years.ord(year)
-        ]
+        life = pyo.value(model.storage_build_life[s])
+        active_builds = [y for y in model.years if y <= year < y + life]
         return model.storage_total_energy_capacity[s, year] == sum(
-            model.storage_added_capacity[s, y] for y in prior_and_current_years
+            model.storage_added_capacity[s, y] for y in active_builds
         )
 
     model.storage_capacity_accumulation_constraint = pyo.Constraint(
@@ -368,7 +373,8 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
 
     # 8. energy capacity of existing storage depends on whether it is active
     def storage_existing_capacity_rule(model, s, year):
-        is_active = pyo.value(model.storage_start_year[s]) <= year <= pyo.value(model.storage_retirement_year[s])
+        start = pyo.value(model.storage_start_year[s])
+        is_active = start <= year < start + pyo.value(model.storage_life[s])
         return model.storage_total_energy_capacity[s, year] == (model.storage_capacity_mwh[s] if is_active else 0)
 
     model.storage_existing_capacity_constraint = pyo.Constraint(

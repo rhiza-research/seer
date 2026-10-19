@@ -34,7 +34,7 @@ def build_output_tables(instance, data_path):
             "year": year, "capacity": pyo.value(instance.storage_total_energy_capacity[s, year]),
         }
         for s in instance.storage for year in instance.years
-    ])
+    ], columns=["zone", "tech", "storage", "year", "capacity"])  # columns even with no storage
 
     generator_dispatch_rows = [
         {

@@ -63,8 +63,11 @@ def solve(model, solver_name=SOLVER_NAME, verbose=True, **optimize_kwargs):
             user_extra(n, snapshots)
 
     start_time = time.perf_counter()
+    # multi_investment_periods: without it PyPSA ignores investment_period_weightings entirely --
+    # no discounting of opex or capex, and capital_cost charged once (see build.build_year_capital_cost)
     status, condition = model.optimize(
-        solver_name=solver_name, extra_functionality=extra_functionality, **optimize_kwargs
+        solver_name=solver_name, extra_functionality=extra_functionality,
+        multi_investment_periods=True, **optimize_kwargs
     )
     solve_time = time.perf_counter() - start_time
 

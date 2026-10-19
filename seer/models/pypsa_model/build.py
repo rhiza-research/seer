@@ -10,7 +10,9 @@ import pypsa
 from ..utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
 
 
-def build(data_path):
+def build(data_path, annualize_capex=False):
+    """annualize_capex: charge build options' capex as annual payments over their life instead
+    of once in the build year (see build_year_capital_cost), as in the pyomo backend."""
     input_data = load_data(data_path)
     model = pypsa.Network()
 
@@ -32,6 +34,7 @@ def build(data_path):
         discounts = [(1 / (1 + discount_rate) ** t) for t in range(start_at, start_at + nyears)]
         model.investment_period_weightings.at[period, "objective"] = sum(discounts)
         start_at += nyears
+    model.meta["capex"] = {"annualize": annualize_capex, "discount_rate": float(discount_rate)}
 
     model.snapshots = pd.MultiIndex.from_arrays([calendar["year"], calendar["datetime"]])
 
@@ -146,11 +149,13 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
         if expandable:
             # one PyPSA component per build-year vintage -- no upper bound: a build option
             # stays buildable for the rest of the modeled horizon once its start_year has
-            # passed, regardless of retirement_year (that governs each vintage's own
-            # lifetime, not how long the option to build remains open)
+            # passed (life governs each vintage's own lifetime, not how long the option to
+            # build remains open)
             valid_years = get_valid_years(model, gen.start_year)
             capex = gen_costs.loc[(name, "capital"), :]
-            mc = _marginal_cost(gen_costs, name)
+            # each year's marginal cost (fuel prices change), not the build year's frozen for the
+            # vintage's whole life -- same as existing units below and pyomo's mc[gen, year]
+            mc = annual_to_snapshots(model, _marginal_cost(gen_costs, name))
             # PyPSA's own p_nom_mod default is 0.0 (continuous), not NaN -- a generator with
             # no known unit_size must fall back to that default explicitly, even under
             # modular_expansion, rather than passing a raw NaN into the LP
@@ -178,13 +183,14 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
                 model.add("Generator", gen_year_name, bus=zone,
                           carrier=carrier, build_year=year, lifetime=gen.life,
                           p_nom_extendable=True, p_nom_mod=unit_capacity, p_nom_max=min(annual_limit, total_limit),
-                          marginal_cost=mc[year], capital_cost=build_year_capital_cost(model, capex[year], year, gen.life),
+                          capital_cost=build_year_capital_cost(model, capex[year], year, gen.life),
                           ramp_up_rate=ramp_up_rate, ramp_down_rate=ramp_down_rate)
                 model.generators_t.p_max_pu[gen_year_name] = p_max_pu
+                model.generators_t.marginal_cost[gen_year_name] = mc
 
         else:
             # single component covering the unit's whole active lifetime
-            years = get_valid_years(model, gen.start_year, gen.retirement_year)
+            years = get_valid_years(model, gen.start_year, gen.start_year + gen.life - 1)
             if len(years) == 0:
                 warnings.warn(f"No valid years found for generator {name}.")
                 continue
@@ -192,8 +198,11 @@ def build_generators(model, gen_constants, gen_costs, re_profiles, modular_expan
             mc = annual_to_snapshots(model, _marginal_cost(gen_costs, name))
             p_max_pu = profile if is_renewable else 1
 
+            # lifetime from the valid years, not gen.life itself: build_year is the first
+            # modeled year, not start_year (gen.life from there would run past its last year,
+            # e.g. Botswana's Moz_imports)
             model.add("Generator", name, bus=zone,
-                        carrier=carrier, build_year=years[0], lifetime=gen.life,
+                        carrier=carrier, build_year=years[0], lifetime=_existing_lifetime(model, years),
                         p_nom=gen.capacity, p_nom_extendable=False,
                         ramp_up_rate=ramp_up_rate, ramp_down_rate=ramp_down_rate)
             model.generators_t.p_max_pu[name] = p_max_pu
@@ -262,13 +271,13 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
 
         else:
             # single component covering the unit's whole active lifetime
-            years = get_valid_years(model, sto.start_year, sto.retirement_year)
+            years = get_valid_years(model, sto.start_year, sto.start_year + sto.life - 1)
             if len(years) == 0:
                 warnings.warn(f"No valid years found for storage {name}.")
                 continue
 
             model.add("StorageUnit", name, bus=sto.zone,
-                carrier="battery", build_year=years[0], lifetime=sto.life,
+                carrier="battery", build_year=years[0], lifetime=_existing_lifetime(model, years),
                 p_nom=sto.capacity_mw, p_nom_extendable=False,
                 max_hours=sto.duration_hours,
                 efficiency_store=sto.efficiency, efficiency_dispatch=sto.efficiency,
@@ -316,23 +325,45 @@ def build_year_capital_cost(model, capex, build_year, lifetime):
     """PyPSA capital_cost that makes a vintage's total capex `capex` ($/unit, total -- see
     seer/schema/README.md) incurred once, in its build year, like the pyomo backend.
 
-    PyPSA charges capital_cost x p_nom x the investment period's objective weighting in EVERY
-    period the vintage is active (build_year <= period < build_year + lifetime). Dividing by the
-    sum of those weightings and multiplying by the build period's own makes the total exactly
-    capex discounted to the build year."""
+    With multi_investment_periods=True (see solve.solve), PyPSA charges capital_cost x p_nom x
+    the investment period's objective weighting in EVERY period the vintage is active
+    (build_year <= period < build_year + lifetime). Dividing by the sum of those weightings and
+    multiplying by the build period's own makes the total exactly capex discounted to the build
+    year.
+
+    Under model.meta["capex"]["annualize"] it's instead PyPSA's native annual payment, capex x
+    CRF(discount_rate, lifetime), charged in each active period and never past the horizon --
+    the same as pyomo's annualized_capex_coefficient. Lines (infinite lifetime) pay capex x
+    discount_rate forever; with a zero discount rate they keep the one-off charge, as in pyomo."""
+    capex_settings = model.meta.get("capex", {})
+    if capex_settings.get("annualize"):
+        r = capex_settings["discount_rate"]
+        if r > 0:
+            return capex * r / (1 - (1 + r) ** -lifetime)
+        if lifetime != float("inf"):
+            return capex / lifetime
     weights = model.investment_period_weightings["objective"]
     periods = weights.index
     active = (periods >= build_year) & (periods < build_year + lifetime)
     return capex * weights.loc[build_year] / weights[active].sum()
 
 
+def _existing_lifetime(model, years):
+    """Lifetime for an existing unit active in `years` (its valid investment periods): up to the
+    period after its last one, or unbounded if that's the last modeled period -- so PyPSA's
+    build_year + lifetime activity window ends with the unit's last year, as on the pyomo side."""
+    periods = list(model.investment_periods)
+    i = periods.index(years[-1])
+    return periods[i + 1] - years[0] if i + 1 < len(periods) else float("inf")
+
+
 def get_valid_years(model, start_year=None, end_year=None):
     """Investment periods that fall within [start_year, end_year]. Either bound may be
     omitted/NaN to mean unbounded on that side -- callers use this for build options
     (expandable=True), which only need a lower bound: once a technology's start_year has
-    passed, the model should be free to build it in any later modeled year, not just up to
-    some retirement_year (that bounds an individual vintage's own operating lifetime, via
-    `lifetime=gen.life` on each build-year component, not whether building is still allowed)."""
+    passed, the model should be free to build it in any later modeled year (life bounds an
+    individual vintage's own operating lifetime, via `lifetime=gen.life` on each build-year
+    component, not whether building is still allowed)."""
     lo = -float("inf") if start_year is None or pd.isna(start_year) else start_year
     hi = float("inf") if end_year is None or pd.isna(end_year) else end_year
     return [year for year in model.investment_periods if lo <= year <= hi]
