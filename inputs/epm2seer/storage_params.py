@@ -3,7 +3,7 @@ import warnings
 
 import pandas as pd
 
-from .generator_params import NO_RETIREMENT_YEAR, as_whole_years
+from .generator_params import NO_RETIREMENT_YEAR, to_start_year_and_life
 from .standard_names import standardize_tech
 
 
@@ -135,10 +135,8 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
         "BuildLimitperYear": "annual_build_limit_mwh",
         "MaxTotalBuild": "total_build_limit_mwh",
     }, inplace=True)
-    # no RetrYr value found means "no known retirement" -- default to a sentinel year well
-    # beyond any realistic modeled horizon, not NaN (see generator_params.py for why: a NaN
-    # retirement_year makes every `year <= retirement_year` check False, silently dropping
-    # the unit from every modeled year instead of leaving it active for the full horizon).
+    # no RetrYr value found means "no known retirement" -- the sentinel year, which
+    # to_start_year_and_life (below) turns into a life outliving any horizon.
     storage_constants["retirement_year"] = (
         storage_constants["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
     )
@@ -191,9 +189,11 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
 
     for _, storage in storage_constants.iterrows():
 
+        # existing storage has no build cost -- explicit 0, never blank (see seer/schema/README.md)
         row_capex = {"storage": storage.storage, "cost_type": "capital"}
+        capex = storage.capex_mwh if storage.expandable or pd.notna(storage.capex_mwh) else 0.0
         for y in years:
-            row_capex[y] = storage.capex_mwh
+            row_capex[y] = capex
         rows.append(row_capex)
 
         # marginal cost -- always write a row (0 fallback), same pattern as
@@ -210,11 +210,11 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
 
     # column order: id/location/tech, size and performance, build options, then lifetime/years
     # (same layout as generator_constants.csv)
-    storage_constants = as_whole_years(storage_constants, ["life", "start_year", "retirement_year"])
+    storage_constants = to_start_year_and_life(storage_constants, "storage", data_path)
     storage_constants = storage_constants[[
         "storage", "zone", "tech", "capacity_mw", "duration_hours", "efficiency",
         "expandable", "unit_size_mwh", "annual_build_limit_mwh", "total_build_limit_mwh",
-        "life", "start_year", "retirement_year",
+        "start_year", "life",
     ]]
 
     return storage_constants, storage_costs

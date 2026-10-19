@@ -12,6 +12,9 @@ def check_demand_forecast(demand_forecast, valid_zones):
     if not set(demand_forecast["type"].unique()).issubset({"peak", "energy"}):
         logger.warning("demand_forecast.csv has invalid 'type' values -- needs peak / energy")
         return demand_forecast
+    # the schema only carries peak -- demand is peak x demand_profile; EPM's energy forecast
+    # often doesn't agree with its own peak + profile (e.g. Burkina Faso: ~4.6%), so it's dropped
+    demand_forecast = demand_forecast[demand_forecast["type"] == "peak"]
     bad_zone = ~demand_forecast["zone"].isin(valid_zones)
     if bad_zone.any():
         logger.warning(

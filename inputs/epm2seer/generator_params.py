@@ -10,23 +10,55 @@ from .data_checks import check_generators, check_capex_trajectory, check_profile
 from .re_potentials import build_re_potentials
 from .utils import init_df, pivot_wide, pivot_years, align
 
-# sentinel for "no known retirement year" -- well beyond any realistic modeled horizon
+# sentinel for "no known retirement year" in the raw data -- converted to NEVER_RETIRES_LIFE
 NO_RETIREMENT_YEAR = 9999
+# the schema has start_year + life, never blank (see seer/schema/README.md). Fill-ins:
+DEFAULT_START_YEAR = 2010   # no start year: online / buildable before any modeled horizon
+NEVER_RETIRES_LIFE = 100    # existing unit with no retirement year: outlives any horizon
+DEFAULT_BUILD_LIFE = 30     # build option with no life (needed to annualize capex)
 
 # generator_constants.csv column order
 GENERATOR_COLUMNS = [
     "generator", "zone", "tech", "fuel", "capacity", "isre", "expandable", "unit_size",
     "annual_build_limit", "total_build_limit", "ramp_up_rate", "ramp_down_rate",
-    "life", "start_year", "retirement_year", "profile_id",
+    "start_year", "life", "profile_id",
 ]
 
 
-def as_whole_years(df, cols):
-    """Year-valued columns (start/retirement year, life) as nullable ints, not floats."""
+def to_start_year_and_life(df, name_col, source=""):
+    """Replace retirement_year with start_year + life, both always filled, so a unit is active
+    in years start_year .. start_year + life - 1. Existing units: life = retirement_year -
+    start_year + 1 (retirement_year is the last year online); no retirement year means
+    NEVER_RETIRES_LIFE. Build options keep their own life (it's per build), DEFAULT_BUILD_LIFE
+    if missing. A missing start_year is DEFAULT_START_YEAR. Every fill-in is warned about."""
     df = df.copy()
-    for col in cols:
-        df[col] = df[col].astype(float).round().astype("Int64")
-    return df
+    existing = ~df["expandable"].astype(bool)
+    start = df["start_year"].astype(float)
+    retire = df["retirement_year"].astype(float)
+    life = df["life"].astype(float)
+
+    no_start = start.isna()
+    if no_start.any():
+        warnings.warn(f"{source}: no start_year, set to {DEFAULT_START_YEAR}: {sorted(df.loc[no_start, name_col])}")
+    start = start.fillna(DEFAULT_START_YEAR)
+
+    never = existing & (retire.isna() | (retire >= NO_RETIREMENT_YEAR))
+    life[existing] = retire[existing] - start[existing] + 1
+    life[never] = NEVER_RETIRES_LIFE
+    bad = existing & ~never & (life < 1)
+    if bad.any():
+        # retires before it starts -- never online; keep it a 1-year window so it stays valid
+        warnings.warn(f"{source}: retirement_year before start_year, life set to 1: {sorted(df.loc[bad, name_col])}")
+        life[bad] = 1
+
+    no_life = ~existing & life.isna()
+    if no_life.any():
+        warnings.warn(f"{source}: build option(s) with no life, set to {DEFAULT_BUILD_LIFE}: {sorted(df.loc[no_life, name_col])}")
+    life[no_life] = DEFAULT_BUILD_LIFE
+
+    df["start_year"], df["life"] = start.round().astype("Int64"), life.round().astype("Int64")
+    return df.drop(columns="retirement_year")
+
 
 # required generator parameters
 PARAM_LIST = [
@@ -185,7 +217,7 @@ def build_generator_params(input_dir, valid_zones=None, model_years=None, times=
     # reorder for readability
     generator_constants = generator_constants.sort_values(["expandable", "fuel", "tech"]).reset_index(drop=True)
 
-    generator_constants = as_whole_years(generator_constants, ["life", "start_year", "retirement_year"])
+    generator_constants = to_start_year_and_life(generator_constants, "generator", input_dir)
     generator_constants = generator_constants[GENERATOR_COLUMNS]
 
     # generator_costs.csv rows should follow the same generator order as generator_constants.csv
@@ -258,9 +290,11 @@ def _derive_flags(gc, data_path):
     # not a signed change). EPM applies them the same way (per time step, x capacity). Missing
     # means fully flexible (1). Some regions' data has values above 1 (e.g. Bosnia: 5.0 for
     # hydro/gas, up to 3.0 for coal) -- a fraction above 1 can't bind (a unit can already go
-    # from zero to full in one hour), so cap at 1 rather than carry a meaningless value.
+    # from zero to full in one hour), so cap at 1 rather than carry a meaningless value. A 0
+    # (e.g. Burkina Faso's hydro, imports and existing PV) is EPM's blank, not "can never change
+    # output" -- also fully flexible.
     for col in ["RampUpRate", "RampDnRate"]:
-        gc[col] = gc[col].abs().fillna(1).clip(upper=1)
+        gc[col] = gc[col].abs().replace(0, pd.NA).fillna(1).clip(upper=1)
 
     gc.rename(columns={
         "BuildLimitperYear": "annual_build_limit",
@@ -281,12 +315,8 @@ def _derive_flags(gc, data_path):
     # `year <= retirement_year` check, dropping the generator from every modeled year)
     gc["retirement_year"] = gc["retirement_year"].infer_objects(copy=False).fillna(NO_RETIREMENT_YEAR)
 
-    # no Life -> derive from the generator's own known active window
-    missing_life = gc["Life"].isna()
-    gc.loc[missing_life, "Life"] = gc.loc[missing_life, "retirement_year"] - gc.loc[missing_life, "start_year"]
-    still_missing = gc["Life"].isna()
-    if still_missing.any():
-        warnings.warn(f"No Life value in {data_path!r} for generators: {gc.loc[still_missing, 'generator'].tolist()}")
+    # Life / retirement_year are turned into the schema's start_year + life (always filled) by
+    # to_start_year_and_life, once the columns are final
 
     gc.columns = gc.columns.str.lower()
     return gc
@@ -294,7 +324,8 @@ def _derive_flags(gc, data_path):
 
 def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_prices, model_years, input_dir):
     """generator_costs.csv: two rows per generator (capex and marginal cost), years as
-    columns. capex = capex trajectory x capex scalar. marginal_cost = heat_rate x fuel price."""
+    columns. capex = capex trajectory x capex scalar. marginal_cost = heat_rate x fuel price
+    (+ VOM where the region sets includeVOM)."""
 
     ztf = ["zone", "tech", "fuel"]
     gc = generator_constants.set_index("generator")
@@ -340,6 +371,11 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
         capex_cost.loc[still_missing] = pd.DataFrame(
             {y: gc.loc[still_missing, "capex"] for y in model_years}
         )
+
+    # existing units have no build cost -- explicit 0, never blank (see seer/schema/README.md).
+    # A build option with no capex is left NaN and fails validation rather than becoming free.
+    existing = ~gc["expandable"].astype(bool)
+    capex_cost.loc[existing] = capex_cost.loc[existing].fillna(0.0)
 
     """build marginal cost"""
     # match fuel/zone case/whitespace-insensitively -- raw spellings disagree even within the
@@ -474,6 +510,23 @@ def build_costs(generator_constants, default_gen_capex, custom_gen_capex, fuel_p
     marginal_cost = fuel_price_traj.mul(gc["heat_rate"], axis=0)
     # marginal cost is 0 for generators with no heat_rate
     marginal_cost = marginal_cost.where(gc["heat_rate"].fillna(0) != 0, 0.0)
+
+    # VOM ($/MWh) on top of fuel, only for regions that opt in (pSettings.csv includeVOM=1) --
+    # e.g. Burkina Faso, whose imports and PPA solar are priced only through VOM
+    settings = pd.read_csv(f"{input_dir}pSettings.csv")
+    include_vom = settings.loc[settings["parameters"] == "includeVOM", "value"]
+    if not include_vom.empty and float(include_vom.iloc[0]):
+        custom = pd.read_csv(f"{input_dir}pGenDataInputCustom.csv")
+        vom = custom[custom["parameters"] == "VOM"].set_index("generator")["value"].astype(float)
+        marginal_cost = marginal_cost.add(vom.reindex(gc.index).fillna(0.0), axis=0)
+
+    # marginal cost given directly ($/MWh tariff), replacing heat rate x fuel price -- e.g.
+    # Botswana's Moz_imports (see scripts/convert_epm_open.py's marginal_cost_from_tariff)
+    override_path = f"{input_dir}pMarginalCostOverride.csv"
+    if Path(override_path).exists():
+        override = pivot_years(pd.read_csv(override_path), ["generator"], model_years)
+        override = override.reindex(gc.index).ffill(axis=1).bfill(axis=1)
+        marginal_cost = override.where(override.notna(), marginal_cost)
 
     """concatenate capex and marginal cost"""
     # row order is finalized later, to match generator_constants.csv
