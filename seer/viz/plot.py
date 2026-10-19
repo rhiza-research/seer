@@ -307,6 +307,25 @@ def _tech_stack_key(tech):
     return (TECH_STACK_ORDER.index(key), key) if key in TECH_STACK_ORDER else (len(TECH_STACK_ORDER), key)
 
 
+def draw_dispatch_year(ax, year_df, techs, colors):
+    """One year's dispatch (dispatch schema rows) as a stacked area on `ax`, storage charging
+    below zero, month ticks at each month's first modeled hour."""
+    pivot = year_df.groupby(["hour", "tech"])["dispatch"].sum().unstack("tech").sort_index()
+    pivot = pivot.reindex(columns=techs, fill_value=0.0).fillna(0.0)
+    x = np.arange(len(pivot))
+    _signed_stackplot(ax, x, {tech: pivot[tech].values for tech in techs}, colors)
+
+    datetimes = pd.to_datetime(year_df.drop_duplicates("hour").set_index("hour")["datetime"]).reindex(pivot.index)
+    months = datetimes.dt.month.values
+    starts = np.flatnonzero(np.r_[True, months[1:] != months[:-1]])
+    ax.set_xticks(starts)
+    ax.set_xticklabels([MONTH_LABELS[months[i] - 1] for i in starts], fontsize=7)
+    for start in starts[1:]:
+        ax.axvline(start, color="grey", linewidth=0.5, linestyle="--")
+    ax.axhline(0, color="black", linewidth=0.5)
+    ax.set_xlim(0, len(pivot))
+
+
 def plot_dispatch_by_year(df, years=None, ncols=1, figsize_per_plot=(12, 3)):
     """Dispatch (dispatch schema) grouped by tech as a stacked area chart, one subplot per year.
 
@@ -316,7 +335,9 @@ def plot_dispatch_by_year(df, years=None, ncols=1, figsize_per_plot=(12, 3)):
     Returns the figure.
     """
     years = sorted(df["year"].unique()) if years is None else list(years)
-    techs = sorted(df["tech"].dropna().unique(), key=_tech_stack_key)
+    # only techs that actually dispatch (or charge) somewhere -- keeps the legend to what's drawn
+    active = df.groupby("tech")["dispatch"].apply(lambda x: x.abs().max() > 1e-6)
+    techs = sorted(active.index[active], key=_tech_stack_key)
     colors = {tech: tech_color(tech) for tech in techs}
 
     nrows = int(np.ceil(len(years) / ncols))
@@ -325,22 +346,7 @@ def plot_dispatch_by_year(df, years=None, ncols=1, figsize_per_plot=(12, 3)):
         sharey=True, squeeze=False,
     )
     for ax, year in zip(axes.flat, years):
-        year_df = df[df["year"] == year]
-        pivot = year_df.groupby(["hour", "tech"])["dispatch"].sum().unstack("tech").sort_index()
-        pivot = pivot.reindex(columns=techs, fill_value=0.0).fillna(0.0)
-        x = np.arange(len(pivot))
-        _signed_stackplot(ax, x, {tech: pivot[tech].values for tech in techs}, colors)
-
-        # month ticks at each month's first modeled hour
-        datetimes = pd.to_datetime(year_df.drop_duplicates("hour").set_index("hour")["datetime"]).reindex(pivot.index)
-        months = datetimes.dt.month.values
-        starts = np.flatnonzero(np.r_[True, months[1:] != months[:-1]])
-        ax.set_xticks(starts)
-        ax.set_xticklabels([MONTH_LABELS[months[i] - 1] for i in starts], fontsize=7)
-        for start in starts[1:]:
-            ax.axvline(start, color="grey", linewidth=0.5, linestyle="--")
-        ax.axhline(0, color="black", linewidth=0.5)
-        ax.set_xlim(0, len(pivot))
+        draw_dispatch_year(ax, df[df["year"] == year], techs, colors)
         ax.set_title(str(year), fontsize=9, loc="left")
         ax.set_ylabel("Dispatch (MW)")
     for ax in list(axes.flat)[len(years):]:

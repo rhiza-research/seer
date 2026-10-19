@@ -98,9 +98,8 @@ def starting_capacity(generator_constants, storage_constants, first_year):
     """Existing capacity in service in `first_year`, MW, by (zone, tech) -- generators plus
     storage power capacity."""
     def in_service(df):
-        start = df["start_year"].astype(float).fillna(-np.inf)
-        end = df["retirement_year"].astype(float).fillna(np.inf)
-        return df[~df["expandable"].astype(bool) & (start <= first_year) & (first_year <= end)]
+        start = df["start_year"].astype(float)
+        return df[~df["expandable"].astype(bool) & (start <= first_year) & (first_year < start + df["life"])]
 
     gens = in_service(generator_constants)[["zone", "tech", "capacity"]]
     sto = in_service(storage_constants)[["zone", "tech", "capacity_mw"]].rename(columns={"capacity_mw": "capacity"})
@@ -112,24 +111,59 @@ def _stack_key(tech):
     return (TECH_STACK_ORDER.index(key), key) if key in TECH_STACK_ORDER else (len(TECH_STACK_ORDER), key)
 
 
-def plot_starting_capacity(generator_constants, storage_constants, first_year):
-    """Stacked bar of existing capacity by tech, one bar per zone."""
-    cap = starting_capacity(generator_constants, storage_constants, first_year)
-    techs = sorted([t for t in cap.columns if cap[t].sum() > 0], key=_stack_key)
-    fig, ax = plt.subplots(figsize=(min(FIGSIZE[0], 3 + 0.9 * len(cap)), FIGSIZE[1] + 0.3))
-    bottom = np.zeros(len(cap))
-    x = np.arange(len(cap))
-    for tech in techs:
-        ax.bar(x, cap[tech].values, bottom=bottom, width=0.6, color=tech_color(tech), label=tech)
-        bottom += cap[tech].values
-    for xi, total in zip(x, bottom):
-        ax.text(xi, total, f"{total:,.0f}", ha="center", va="bottom", fontsize=7)
-    ax.set_xticks(x)
-    ax.set_xticklabels(cap.index)
-    ax.set_title(f"Starting capacity by tech ({first_year})")
-    ax.set_ylabel("Capacity (MW)")
-    handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles[::-1], labels[::-1], loc="center left", bbox_to_anchor=(1.0, 0.5))
+def build_options(generator_constants, storage_constants):
+    """Build options by tech: count, and summed total build limit (MW for generators, MWh for
+    storage; NaN if any option of that tech has no limit)."""
+    def by_tech(df, limit_col, unit):
+        df = df[df["expandable"].astype(bool)]
+        g = df.groupby("tech")[limit_col]
+        return pd.DataFrame({"count": g.size(), "limit": g.sum(min_count=1).where(g.count() == g.size()), "unit": unit})
+
+    return pd.concat([
+        by_tech(generator_constants, "total_build_limit", "MW"),
+        by_tech(storage_constants, "total_build_limit_mwh", "MWh"),
+    ])
+
+
+def _tech_pie(ax, values, labels, title, show_counts=False):
+    """Pie of `values` (indexed by tech, in stack order), `labels` in a legend below. Wedges of
+    5% or more are labeled with their share, or with the value itself if `show_counts`."""
+    total = values.sum()
+    wedge_label = lambda pct: "" if pct < 5 else (f"{pct * total / 100:.0f}" if show_counts else f"{pct:.0f}%")
+    wedges, _, _ = ax.pie(
+        values.values, colors=[tech_color(t) for t in values.index], startangle=90, counterclock=False,
+        autopct=wedge_label, pctdistance=0.72,
+        textprops={"fontsize": 7, "color": "white", "weight": "bold"},
+        wedgeprops={"linewidth": 1, "edgecolor": "white"},
+    )
+    ax.legend(wedges, labels, loc="upper center", bbox_to_anchor=(0.5, 0.0), fontsize=7)
+    ax.set_title(title, loc="center")
+    ax.set_aspect("equal")
+
+
+def plot_capacity_mix(generator_constants, storage_constants, first_year):
+    """Two pies by tech: existing capacity in `first_year` (MW, summed over zones), and build
+    options by count -- not by build limit, which is often missing or an "unlimited"
+    placeholder (e.g. Botswana's 10,000 MW); the legend gives each tech's summed limit."""
+    cap = starting_capacity(generator_constants, storage_constants, first_year).sum()
+    cap = cap[cap > 0]
+    cap = cap[sorted(cap.index, key=_stack_key)]
+    opts = build_options(generator_constants, storage_constants)
+    opts = opts.loc[sorted(opts.index, key=_stack_key)]
+
+    n_rows = max(len(cap), len(opts), 1)
+    fig, (ax_cap, ax_opt) = plt.subplots(1, 2, figsize=(FIGSIZE[0], 2.6 + 0.14 * n_rows))
+    total = cap.sum()
+    _tech_pie(ax_cap, cap, [f"{t}  {mw:,.0f} MW ({mw / total:.0%})" for t, mw in cap.items()],
+              f"Starting capacity ({first_year}): {total:,.0f} MW")
+    if len(opts):
+        limit = lambda r: "no limit" if pd.isna(r["limit"]) else f"limit {r['limit']:,.0f} {r['unit']}"
+        _tech_pie(ax_opt, opts["count"],
+                  [f"{t}  x{int(r['count'])} ({limit(r)})" for t, r in opts.iterrows()],
+                  f"Build options: {int(opts['count'].sum())}", show_counts=True)
+    else:
+        ax_opt.set_axis_off()
+        ax_opt.set_title("No build options", loc="center")
     fig.tight_layout()
     return fig
 
