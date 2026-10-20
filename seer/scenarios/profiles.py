@@ -1,75 +1,77 @@
-"""Perturb profiles by resampling stochastically from profile libraries."""
+"""Sample profiles from profile libraries: `sample` builds one profile from target features
+(e.g. a renewable capacity factor) for creating a new instance; `resample` perturbs every day of an
+existing instance's profiles by randomizing each day's features and resampling a library profile."""
 import warnings
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from .base import Perturbation
 from ..models.utils.time_utils import parse_time_string
 
 
-class ProfilePerturbation(Perturbation):
-    """Shared perturb pipeline."""
+class ProfileSampler:
+    """Shared sample/resample pipeline over a library of real daily profiles."""
 
-    to_perturb: str  # SeerInstance attribute to perturb
+    to_perturb: str  # SeerInstance attribute resample perturbs
     FILTER_COL: str | None = None  # library column restricting candidates, via filter_value
 
-    def apply(self, seer_instance, rng):
-        """Perturb the profiles of a given attribute in a SeerInstance."""
+    @cached_property
+    def library(self):
+        return load_profile_library(self.library_dir)
+
+    @cached_property
+    def library_features(self):
+        return pd.DataFrame(
+            [self.extract_features(t, v) for t, v in zip(self.library["times"], self.library["values"])], index=self.library.index
+        )
+
+    def sample(self, features, times, filter_value=None):
+        """Return the library profile matching target features, evaluated at times (fractional
+        hours of day). Returns None if no library profile matches filter_value. Not rescaled: a
+        load profile comes back peak-normalized, a renewable profile as a capacity factor."""
+        library_profiles = self.library if self.FILTER_COL is None else self.library[self.library[self.FILTER_COL] == filter_value]
+        if library_profiles.empty:
+            return None
+        # distance between target and library features
+        dist = self.feature_distance(features, self.library_features.loc[library_profiles.index])
+        nearest = dist.nsmallest(self.k).index
+        profiles = [time_align(library_profiles.loc[i, "times"], library_profiles.loc[i, "values"], times) for i in nearest]
+        if self.k == 1:
+            return profiles[0]  # deterministic: the single nearest real profile
+        weights = 1.0 / (dist.loc[nearest].to_numpy() + 1e-6)
+        return np.average(profiles, axis=0, weights=weights / weights.sum())
+
+    def resample(self, seer_instance, rng):
+        """Perturb the profiles of a SeerInstance. Returns (new instance, sampled log)."""
         out = seer_instance.copy()
         df = getattr(out, self.to_perturb)  # the seer instance attribute to perturb
-        library = load_profile_library(self.library_dir)  # the library of profiles we sample from
-
-        # Step 1: compute features on each profile in the library
-        library_features = pd.DataFrame(
-            [self.extract_features(t, v) for t, v in zip(library["times"], library["values"])], index=library.index
-        )
         shared_perturbation = self.get_perturbation(rng)  # only used if perturbation_mode == "shared"
 
         sampled_days = []
         for pid, times, values, day_rows in self.prepare_profiles(df):
-            # Step 2: compute this day's own features
+            # Step 1: compute this day's own features
             features = self.extract_features(times, values)
 
-            # Step 3: perturb the features to get a target
+            # Step 2: perturb the features to get a target
             perturbation = shared_perturbation if self.perturbation_mode == "shared" else self.get_perturbation(rng)
             target_features = self.randomize_features(features, perturbation)
 
-            # Step 4: restrict to library rows matching this day (e.g. renewable's solar/wind category; none for demand)
-            if self.FILTER_COL is None:
-                library_profiles = library
-            else:
-                library_profiles = library[library[self.FILTER_COL] == self.filter_value(day_rows)]
-            if library_profiles.empty:
+            # Step 3: sample the target's profile from the library, restricted to rows matching this
+            # day (e.g. renewable's solar/wind category; none for demand)
+            matched = self.sample(target_features, times, self.filter_value(day_rows))
+            if matched is None:
                 continue  # e.g. renewable tech with no matching category library (geothermal etc.) -- leave unperturbed
 
-            # Step 5: sample perturbed profile from the library.
-            matched = self.sample_perturbed_profile(times, target_features, library_profiles, library_features.loc[library_profiles.index], rng)
-
-            # Step 6: rescale (identity by default) and write back
+            # Step 4: rescale (identity by default) and write back
             df.loc[day_rows.index, "value"] = self.rescale(matched, times, values)
 
             sampled_days.append({**pid, **features, **{f"target_{n}": v for n, v in target_features.items()}})
 
         setattr(out, self.to_perturb, df)
-        self.sampled_ = {"perturbation_mode": self.perturbation_mode, "days": sampled_days}
-        return out
-
-    def sample_perturbed_profile(self, target_times, target_features, library_profiles, library_features, rng):
-        """Sample a perturbed profile(s) from the library."""
-        # compute distance between target and library features
-        dist = self.feature_distance(target_features, library_features)
-        nearest = dist.nsmallest(self.k).index
-        # sample perturbed profile(s) from the library
-        perturbed_profiles = [time_align(library_profiles.loc[i, "times"], library_profiles.loc[i, "values"], target_times) for i in nearest]
-        if self.k == 1:
-            perturbed_profile = perturbed_profiles[0]  # deterministic: the single nearest real profile
-        else:
-            weights = 1.0 / (dist.loc[nearest].to_numpy() + 1e-6)
-            perturbed_profile = np.average(perturbed_profiles, axis=0, weights=weights / weights.sum())
-        return perturbed_profile
+        return out, {"perturbation_mode": self.perturbation_mode, "days": sampled_days}
 
     def prepare_profiles(self, df):
         """Yield (key, times, values, day_rows) per represented day in df -- see split_into_days below."""
@@ -102,16 +104,15 @@ class ProfilePerturbation(Perturbation):
 
 
 @dataclass
-class LoadProfilePerturbation(ProfilePerturbation):
-    """Perturb demand_profile.csv's daily shape (peakiness + peak_hour), rescaled to the day's own peak."""
+class LoadProfileSampler(ProfileSampler):
+    """Sample demand_profile.csv's daily shape (peakiness + peak_hour); resample rescales to each day's own peak."""
 
     to_perturb = "demand_profile"
 
     library_dir: Path = Path(__file__).parent / "reference_data" / "demand_profiles"
-    scale: float = 1.0  # multiplies both features' jitter std -- 0 = unperturbed, 2 = twice the default spread
+    scale: float = 1.0  # multiplies both features' perturbation std -- 0 = unperturbed, 2 = twice the default spread
     k: int = 5  # >1 blends the k nearest real profiles; 1 uses the single nearest as-is
     perturbation_mode: str = "shared"  # "shared": one draw for every day; "independent": a fresh draw per day
-    sampled_: dict = field(default_factory=dict, repr=False, compare=False)
 
     def prepare_profiles(self, df):
         """demand_profile.csv: zone, time, value[, year] -- one day per (zone[, year])."""
@@ -160,8 +161,8 @@ def renewable_category(tech):
 
 
 @dataclass
-class ReProfilePerturbation(ProfilePerturbation):
-    """Perturb renewable_profiles.csv's daily capacity-factor shape."""
+class ReProfileSampler(ProfileSampler):
+    """Sample renewable_profiles.csv's daily capacity-factor shape; filter_value is the solar/wind category."""
 
     to_perturb = "renewable_profiles"
     FILTER_COL = "category"
@@ -170,7 +171,6 @@ class ReProfilePerturbation(ProfilePerturbation):
     scale: float = 1.0  # 0 = unperturbed; larger = wider spread around each day's own capacity_factor
     k: int = 1  # blending real profiles could push an hourly value above 1 (physically invalid)
     perturbation_mode: str = "independent"
-    sampled_: dict = field(default_factory=dict, repr=False, compare=False)
 
     def prepare_profiles(self, df):
         """renewable_profiles.csv: profile_id, tech, zone, time, value -- one day per profile_id."""
