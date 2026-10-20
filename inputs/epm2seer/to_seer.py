@@ -53,7 +53,7 @@ def epm_to_seer(input_path, output_path):
     demand_profile = demand_profile.sort_values(["zone", "time"]).reset_index(drop=True)
 
     """network"""
-    network = build_network(input_dir, zones["zone"])
+    network = build_network(input_dir, zones["zone"], years["year"].tolist())
 
     """settings"""
     settings = check_settings(pd.read_csv(f"{input_dir}pSettings.csv"))

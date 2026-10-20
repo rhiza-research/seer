@@ -9,6 +9,7 @@ per base name, matching the fixed per-option naming used on the pyomo side.
 import pandas as pd
 
 from ..utils.output_utils import add_input_metadata
+from .build import LOAD_SHEDDING
 
 
 def _base_name(name, row):
@@ -89,17 +90,20 @@ def build_output_tables(model, data_path):
 
     Returns {"generator_capacity": df, "storage_capacity": df, "dispatch": df}.
     """
-    gen_genmap = _genmap(model.generators)
+    # load shedding isn't a real generator (pyomo's lost_load isn't reported either)
+    generators = model.generators[model.generators["carrier"] != LOAD_SHEDDING]
+    generators_p = model.generators_t.p[generators.index]
+    gen_genmap = _genmap(generators)
     sto_genmap = _genmap(model.storage_units)
 
-    generator_capacity = _melt_capacity(_consolidate_capacity_by_year(model, model.generators), gen_genmap, "generator")
+    generator_capacity = _melt_capacity(_consolidate_capacity_by_year(model, generators), gen_genmap, "generator")
     # storage capacity is reported in MWh of energy (output schema) -- a StorageUnit's p_nom is MW
     # of power, so scale by its fixed duration (max_hours)
     storage_units = model.storage_units.assign(p_nom_opt=model.storage_units["p_nom_opt"] * model.storage_units["max_hours"])
     storage_capacity = _melt_capacity(_consolidate_capacity_by_year(model, storage_units), sto_genmap, "storage")
 
     generator_dispatch = _melt_dispatch(
-        _consolidate_timeseries_by_base_name(model.generators, model.generators_t.p), gen_genmap
+        _consolidate_timeseries_by_base_name(generators, generators_p), gen_genmap
     )
     # PyPSA's native StorageUnit.p convention is already positive = discharging (net supply to
     # the grid), matching our dispatch sign convention directly - no negation needed here
@@ -122,7 +126,8 @@ def build_output_tables(model, data_path):
         )
         line_capacity["from"] = line_capacity["line"].map(line_ends["bus0"])
         line_capacity["to"] = line_capacity["line"].map(line_ends["bus1"])
-        line_capacity = line_capacity[["from", "to", "year", "capacity"]]
+        # one row per (zone pair, year): sum a pair's lines with different start years
+        line_capacity = line_capacity.groupby(["from", "to", "year"], as_index=False, sort=False)["capacity"].sum()
     else:
         line_capacity = pd.DataFrame(columns=["from", "to", "year", "capacity"])
 

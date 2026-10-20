@@ -65,6 +65,8 @@ def build_output_tables(instance, data_path):
         }
         for line in instance.lines for year in instance.years
     ], columns=["from", "to", "year", "capacity"])
+    # one row per (zone pair, year): sum a pair's lines with different start years
+    line_capacity = line_capacity.groupby(["from", "to", "year"], as_index=False, sort=False)["capacity"].sum()
 
     return add_input_metadata({
         "line_capacity": line_capacity,

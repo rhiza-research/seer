@@ -2,7 +2,6 @@
 
 .DS_Store
 __pycache__/
-experiments/tmp_data/
 
 # data/ is bulk gams data (raw/extracted/seer-schema outputs), regenerable and often large --
 # ignored by default, with specific carve-outs for files/folders worth tracking in git.
@@ -17,3 +16,7 @@ seer/scenarios/reference_data/cost_assumptions/.cache/
 # scratch/exploration/smoke-test scripts have accumulated here -- ignored for now rather than
 # tracked piecemeal; worth revisiting once it's clearer which ones are worth keeping long-term
 scripts/
+
+# local experiments and job scripts -- kept on disk but not tracked
+experiments/
+jobs/

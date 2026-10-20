@@ -1,9 +1,12 @@
 # seer package structure
 
-The seer schema specifies a capacity expansion planning model. This schema can be
-instantiated from other modeling specifications (such as EPM) or through synthetic
-data generation. Given a model specification in the schema, a model can be instantiated
-and solved in multiple frameworks, including PyPSA and pyomo.
+The seer schema specifies a capacity expansion planning model.
+The schema is specified in a list of csv's and aims to be expressive but not exhaustive, allowing
+for representation of the core functionalities of capacity planning problems. 
+
+A seer schema instance can be created by translating another model specification (e.g. EPM). 
+
+Given a model specified in the schema, the model can be solved in multiple frameworks, here including PyPSA and pyomo.
 In future, machine learning solvers will be added to solve a seer model.
 
 The seer package contains tools to convert models to or generate new models in the seer schema. 

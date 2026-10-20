@@ -89,6 +89,7 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     model.line_from = pyo.Param(model.lines, within=pyo.Any)
     model.line_to = pyo.Param(model.lines, within=pyo.Any)
     model.line_capacity = pyo.Param(model.lines, within=pyo.NonNegativeReals)
+    model.line_start_year = pyo.Param(model.lines, within=pyo.Reals, default=0)
     model.line_build_start_year = pyo.Param(model.new_lines, within=pyo.Reals, default=0)
     model.line_total_build_limit = pyo.Param(model.new_lines, within=pyo.NonNegativeReals)
     model.line_capex_cost = pyo.Param(model.new_lines, model.years, within=pyo.NonNegativeReals)
@@ -156,7 +157,8 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
         added = 0
         if line in model.new_lines:
             added = sum(model.line_added_capacity[line, y] for y in model.years if y <= year)
-        return model.line_capacity[line] + added
+        existing = model.line_capacity[line] if year >= pyo.value(model.line_start_year[line]) else 0
+        return existing + added
 
     model.line_total_capacity = pyo.Expression(model.lines, model.years, rule=line_total_capacity_rule)
 

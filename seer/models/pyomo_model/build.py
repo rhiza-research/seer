@@ -212,7 +212,10 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
         return network_df[col] if col in network_df else pd.Series(default, index=network_df.index)
     line_expandable = _network_col("expandable", False).fillna(False).astype(bool)
     new_lines = network_df.index[line_expandable].tolist()
-    line_build_start_year = _network_col("start_year", float("nan")).loc[new_lines].astype(float).fillna(0).to_dict()
+    # a line (existing capacity and, if expandable, builds) is available from its start_year on;
+    # several rows for one zone pair with different start years step its capacity up over time
+    line_start_year = _network_col("start_year", float("nan")).astype(float).fillna(0)
+    line_build_start_year = line_start_year.loc[new_lines].to_dict()
     line_total_build_limit = (
         _network_col("total_build_limit", float("nan")).loc[new_lines].astype(float).fillna(float("inf")).to_dict()
     )
@@ -269,6 +272,7 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
             "line_from": line_from,
             "line_to": line_to,
             "line_capacity": line_capacity,
+            "line_start_year": line_start_year.to_dict(),
             "new_lines": {None: new_lines},
             "line_build_start_year": line_build_start_year,
             "line_total_build_limit": line_total_build_limit,

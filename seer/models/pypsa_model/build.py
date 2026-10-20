@@ -58,6 +58,7 @@ def build(data_path, annualize_capex=False):
     """DEMAND: Set up demand trajectory.
     """
     set_demand(model, input_data["demand_forecast"], input_data["demand_profile"], calendar)
+    add_load_shedding(model)
 
     """RENEWABLES: Prepare renewable profiles for use in generator setup.
     """
@@ -73,7 +74,7 @@ def build(data_path, annualize_capex=False):
 
     """DEFINE CARRIERS: Define carriers in the model.
     """
-    for carrier in gen_carriers | sto_carriers | ({"AC"} if len(input_data["network"]) else set()):
+    for carrier in gen_carriers | sto_carriers | {LOAD_SHEDDING} | ({"AC"} if len(input_data["network"]) else set()):
         model.add("Carrier", carrier)
 
     return model
@@ -112,6 +113,20 @@ def set_demand(model, demand_forecast, demand_profile, calendar):
         group = group.sort_values(["year", "hour"])
         demand_ts = pd.Series(group["demand"].values, index=pd.MultiIndex.from_arrays([group["year"], group["datetime"]]))
         model.add("Load", zone, bus=zone, p_set=demand_ts)
+
+
+# value of lost load ($/MWh), as in the pyomo backend (abstract_model.py: model.voll)
+VOLL = 1_000_000.0
+LOAD_SHEDDING = "load_shedding"
+
+
+def add_load_shedding(model):
+    """One load-shedding generator per zone at VOLL, sized to the zone's peak load -- the
+    pyomo backend's lost_load slack. Without it a capacity shortfall is infeasible rather than
+    priced. Left out of the output tables (output.py), as lost load is on the pyomo side."""
+    for zone, load in model.loads_t.p_set.items():
+        model.add("Generator", f"{zone}_{LOAD_SHEDDING}", bus=model.loads.at[zone, "bus"],
+                  carrier=LOAD_SHEDDING, p_nom=float(load.max()), marginal_cost=VOLL)
 
 
 def _marginal_cost(gen_costs, name):
@@ -288,20 +303,26 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
 
 
 def line_name(line):
-    return f"line_{line['from']}_{line['to']}"
+    start = line.get("start_year")
+    suffix = "" if start is None or pd.isna(start) else f"_from{int(start)}"
+    return f"line_{line['from']}_{line['to']}{suffix}"
 
 
 def build_network(model, network, modular_expansion=False):
-    """Each network.csv row is one undirected line (one row per zone pair) -- flow either way
-    bounded by its capacity, same as the pyomo backend. Modeled as lossless bidirectional Links
-    (a PyPSA Line would need impedances the schema doesn't carry): one fixed Link for existing
-    capacity, and for an expandable line one extendable Link per build-year vintage from its
-    start_year on, with no lifetime limit (lines have no life in the schema). total_build_limit
-    spans all vintages -- recorded in model.meta like generators' (see solve.add_total_build_limits)."""
+    """Each network.csv row is one undirected line -- flow either way bounded by its capacity,
+    same as the pyomo backend. Modeled as lossless bidirectional Links (a PyPSA Line would need
+    impedances the schema doesn't carry): one fixed Link for existing capacity, online from the
+    row's start_year (build_year; a zone pair can have several rows with different start years),
+    and for an expandable line one extendable Link per build-year vintage from its start_year on,
+    with no lifetime limit (lines have no life in the schema). total_build_limit spans all
+    vintages -- recorded in model.meta like generators' (see solve.add_total_build_limits)."""
     for _, line in network.iterrows():
         name = line_name(line)
+        start = line.get("start_year")
+        online = {} if start is None or pd.isna(start) else {"build_year": int(start)}
         model.add("Link", name, bus0=line["from"], bus1=line["to"],
-                  p_nom=0.0 if pd.isna(line["capacity"]) else line["capacity"], p_min_pu=-1, carrier="AC")
+                  p_nom=0.0 if pd.isna(line["capacity"]) else line["capacity"], p_min_pu=-1, carrier="AC",
+                  **online)
         if not bool(line.get("expandable", False)) or pd.isna(line.get("expandable", False)):
             continue
 

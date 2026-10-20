@@ -88,18 +88,21 @@ and discharge on a heavily weighted one.
 ### `network.csv`
 Each row is one transmission line connecting two zones, so the row count is the number of
 lines. Lines are undirected -- flow in either direction is bounded by the same capacity -- so
-**each zone pair appears at most once** (listing both `A,B` and `B,A` would double it). This
-file is *optional*: a dataset with no inter-zone lines (e.g. single-zone) can omit it.
+**each zone pair appears at most once per `start_year`** (listing both `A,B` and `B,A` would
+double it). A pair whose capacity steps up over time is several rows with different
+`start_year`s, each adding its `capacity` from that year on (e.g. 200 MW with no start year,
+plus 600 MW from 2022: 200 MW, then 800 MW). This file is *optional*: a dataset with no
+inter-zone lines (e.g. single-zone) can omit it.
 
 | column | contents |
 | --- | --- |
 | `from` | zone id at one end|
 | `to` | zone id at the other end |
 | `capacity` | existing transfer capacity in MW (0 for a new corridor) |
+| `start_year` | first year the line is available: its `capacity` is online, and (if `expandable`) capacity can be added, from this year on. *Optional* -- absent means the whole horizon |
 | **optional, expansion** | |
 | `expandable` | `True` if capacity can be added to this line (default `False`) |
 | `capital` | capital cost, $/MW added, total (overnight) cost incurred once in the build year. **Required if `expandable`** |
-| `start_year` | earliest year capacity can be added. *Optional* -- absent means no restriction |
 | `unit_size` | MW increment used for modular expansion (e.g. one circuit) |
 | `total_build_limit` | max MW addable over the whole horizon. *Optional* -- absent means unconstrained (`inf`) |
 
@@ -107,15 +110,16 @@ Added line capacity has no lifetime: once built it stays for the rest of the hor
 
 ## demand parameters
 ### `demand_forecast.csv`
-This file gives the annual demand trajectory for each zone. The row count is zones times
-years (times two if both energy and peak are given).
+This file gives the annual peak demand trajectory for each zone. The row count is zones times
+years. Hourly demand is `peak x demand_profile`; there is no separate annual energy target
+(EPM's energy forecast is dropped -- it often disagrees with its own peak and profile).
 
 | column | contents |
 | --- | --- |
 | `zone` | zone id |
-| `type` | `peak` (annual peak demand, MW) or `energy` (annual energy demand, GWh). Only `peak` is currently consumed by the model builders — `energy` is carried through but not yet used. |
+| `type` | `peak` (annual peak demand, MW) -- the only allowed value |
 | `year` | forecast year|
-| `value` | forecast value in the units implied by `type` |
+| `value` | annual peak demand, MW |
 
 **Required:** demand data for every year in `years.csv`.
 
@@ -166,13 +170,12 @@ financial parameters. The row count is the number of generators.
 | **renewable** | |
 | `isre` | renewable-technology flag (boolean) |
 | `profile_id` | uuid matching a `renewable_profiles.csv` profile. **Required if `isre`** |
+| **lifetime, any generator** | |
+| `start_year` | existing units: first year online; build options: earliest year it can be built. **Required** |
+| `life` | years in service: an existing unit is active in `start_year` .. `start_year + life - 1`; each build of a build option lasts `life` years from its build year (also used to annualize capex). **Required**, > 0 |
 | **expandable units** | |
-| `life` | asset lifetime, years. **Required if `expandable`** |
 | `annual_build_limit` | max MW addable per year. *Optional* -- absent means unconstrained (`inf`) |
 | `total_build_limit` | max MW addable over the whole horizon (summed across build years). *Optional* -- absent means unconstrained (`inf`) |
-| `start_year` | build options: earliest year it can be built; existing units: first year available. *Optional* -- absent means no restriction |
-| **existing units** | |
-| `retirement_year` | last year available. *Optional* |
 | **optional, any generator** | |
 | `ramp_up_rate` / `ramp_down_rate` | max ramp rate, as a positive fraction of capacity per hour (0 < rate <= 1; 1 means unconstrained). *Optional* -- absent means 1 |
 | `unit_size` | MW increment used for modular capacity expansion |
@@ -182,14 +185,20 @@ naming.
 
 If `annual_build_limit` or `total_build_limit` is absent on a build option, it defaults to
 unconstrained (`inf`), the same default PyPSA uses. A single build-once project is a build
-option with `total_build_limit` equal to its size. If `retirement_year` is absent, the unit stays active through the
-full modeled horizon - not unknown or never-active.
+option with `total_build_limit` equal to its size.
+
+`start_year` and `life` are never blank (there's no `retirement_year`: it would duplicate them).
+Converters fill gaps with explicit values: no known start year -> a year before any modeled
+horizon (the epm2seer pipeline uses 2010); an existing unit that never retires -> a life that
+outlives the horizon (epm2seer: 100); a build option with no life -> an assumed life
+(epm2seer: 30, with a warning).
 
 ### `generator_costs.csv`
 This file gives each generator's cost trajectory. There's one column per modeled year (e.g.
 `2025`, `2030`, ...), holding the cost value for that year in the units implied by
 `cost_type`. **Required:** one row each for `capital` and `marginal`, per generator, with a
-column for every year in `years.csv`.
+column for every year in `years.csv`. Every value must be a number, never blank:
+a unit with no cost is an explicit `0` (e.g. existing units' `capital`, which is never used).
 
 | column | contents |
 | --- | --- |
@@ -208,13 +217,12 @@ Each row is one storage unit (existing or a build option), analogous to
 | `capacity_mw` | power capacity, MW. Existing units only |
 | `duration_hours` | hours of storage at rated power |
 | `expandable` | `True` for a build option, `False` for fixed existing capacity |
+| **lifetime, any storage unit** | |
+| `start_year` | existing units: first year online; build options: earliest year it can be built. **Required** |
+| `life` | years in service, as for generators. **Required**, > 0 |
 | **build options** | |
-| `life` | asset lifetime, years. **Required if `expandable`** |
 | `annual_build_limit_mwh` | max MWh addable per year. *Optional* -- absent means unconstrained (`inf`) |
 | `total_build_limit_mwh` | max MWh addable over the whole horizon (summed across build years). *Optional* -- absent means unconstrained (`inf`) |
-| `start_year` | build options: earliest year it can be built; existing units: first year available. *Optional* -- absent means no restriction |
-| **existing units** | |
-| `retirement_year` | last year available. *Optional* |
 | **optional, any storage unit** | |
 | `efficiency` | round-trip efficiency, applied to both charging and discharging (unitless, 0–1) |
 | `unit_size_mwh` | MWh increment used for modular capacity expansion |
@@ -224,14 +232,14 @@ naming, the same vocabulary as `generator_constants.tech`.
 
 Energy capacity is calculated as `capacity_mw * duration_hours`.
 The build limits and `unit_size_mwh` are empty for existing units. An absent `unit_size_mwh` means
-unconstrained (continuous) build. An absent `retirement_year` means the unit stays active
-through the full modeled horizon.
+unconstrained (continuous) build. `start_year` and `life` are never blank, as for generators.
 
 ### `storage_costs.csv`
 This file gives each storage unit's cost trajectory. There's one column per modeled year (e.g.
 `2025`, `2030`, ...), holding the cost value for that year in the units implied by
 `cost_type`. **Required:** one row each for `capital` and `marginal`, per storage unit, with
-a column for every year in `years.csv`.
+a column for every year in `years.csv`. Every value must be a number, never blank:
+a unit with no cost is an explicit `0` (e.g. existing units' `capital`, which is never used).
 
 | column | contents |
 | --- | --- |

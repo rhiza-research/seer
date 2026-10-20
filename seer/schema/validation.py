@@ -88,10 +88,13 @@ def _check_network(instance, zones, errors):
     if bad.any():
         bad_pairs = sorted(set(df.loc[bad, ["from", "to"]].itertuples(index=False, name=None)))
         errors.append(f"network.csv: line(s) reference zone(s) not in zones.csv: {bad_pairs}")
-    # lines are undirected: each zone pair appears once (A->B and B->A would double its capacity)
+    # lines are undirected: each zone pair appears once per start_year (A->B and B->A would
+    # double its capacity); several start years step a pair's capacity up over time
     pairs = df.apply(lambda row: tuple(sorted((row["from"], row["to"]))), axis=1)
-    if pairs.duplicated().any():
-        errors.append(f"network.csv: zone pair(s) listed more than once: {sorted(set(pairs[pairs.duplicated()]))}")
+    start = df["start_year"].fillna(-1) if "start_year" in df.columns else -1
+    dup = df.assign(pair=pairs, start=start)[["pair", "start"]].duplicated()
+    if dup.any():
+        errors.append(f"network.csv: zone pair(s) listed more than once with the same start_year: {sorted(set(pairs[dup]))}")
     # an expandable line must have a capex (start_year/unit_size/total_build_limit are optional)
     if "expandable" in df.columns:
         expandable = df["expandable"].fillna(False).astype(bool)

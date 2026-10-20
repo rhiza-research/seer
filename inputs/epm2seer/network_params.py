@@ -44,33 +44,54 @@ def _expansion_params(new_transmission, valid_zones):
     })
 
 
-def build_network(input_dir, valid_zones):
+def _capacity_steps(transfer, years):
+    """pTransferLimit (long: from, to, season, year, value) -> network rows. Capacity per zone
+    pair and modeled year is the mean over seasons; years before/after the data take its
+    nearest year. The first modeled year's capacity is one row with no start_year, and each
+    later increase is another row of the added MW with start_year = that year (see
+    seer/schema/README.md's network.csv). Lines can't retire, so a decrease is ignored (warned)."""
+    by_year = transfer.groupby(["from", "to", "year"])["value"].mean().unstack("year")
+    if years is not None:
+        by_year = by_year.reindex(columns=sorted(set(by_year.columns) | set(years))).ffill(axis=1).bfill(axis=1)
+        by_year = by_year[sorted(years)]
+    directed = by_year.reset_index()
+    pairs = _one_row_per_pair(directed, list(by_year.columns), "pTransferLimit.csv")
+    rows, decreasing = [], []
+    for _, pair in pairs.iterrows():
+        series = pair[list(by_year.columns)].astype(float)
+        rows.append({"from": pair["from"], "to": pair["to"], "capacity": series.iloc[0], "start_year": pd.NA})
+        level = series.iloc[0]
+        for year, value in series.iloc[1:].items():
+            if value > level + 1e-6:
+                rows.append({"from": pair["from"], "to": pair["to"], "capacity": value - level, "start_year": year})
+                level = value
+            elif value < level - 1e-6:
+                decreasing.append((pair["from"], pair["to"], year))
+    if decreasing:
+        warnings.warn(f"pTransferLimit.csv: capacity decreases (ignored -- lines can't retire): {decreasing}")
+    return pd.DataFrame(rows, columns=["from", "to", "capacity", "start_year"])
+
+
+def build_network(input_dir, valid_zones, years=None):
     transfer_path = Path(f"{input_dir}pTransferLimit.csv")
     if transfer_path.exists():
-        network = check_network(pd.read_csv(transfer_path), valid_zones)
-        # original data has time varying capacities, but seer has static -> use average
-        network = network.groupby(["from", "to"])["value"].mean().reset_index().rename(columns={"value": "capacity"})
-        network = _one_row_per_pair(network, ["capacity"], "pTransferLimit.csv")
+        network = _capacity_steps(check_network(pd.read_csv(transfer_path), valid_zones), years)
     else:
-        network = pd.DataFrame(columns=["from", "to", "capacity"])
+        network = pd.DataFrame(columns=["from", "to", "capacity", "start_year"])
     network["expandable"] = False
 
     expansion_path = Path(f"{input_dir}pNewTransmission.csv")
     if expansion_path.exists():
         expansion = _expansion_params(pd.read_csv(expansion_path), valid_zones)
-        # match a candidate corridor to its existing line regardless of direction; a corridor
-        # with no existing line becomes a new row with zero existing capacity
-        def pair_key(df):
-            return df.apply(lambda row: tuple(sorted((row["from"], row["to"]))), axis=1)
-        network["pair"] = pair_key(network) if len(network) else pd.Series(dtype=object)
-        expansion["pair"] = pair_key(expansion)
-        existing = network.set_index("pair")
-        merged = expansion.set_index("pair").drop(columns=["from", "to"]).combine_first(existing)
-        merged[["from", "to"]] = existing[["from", "to"]].reindex(merged.index).fillna(
-            expansion.set_index("pair")[["from", "to"]].reindex(merged.index)
-        )
-        merged["capacity"] = merged["capacity"].fillna(0.0)
-        merged["expandable"] = merged["expandable"].fillna(False).astype(bool)
-        network = merged.reset_index(drop=True)
+        # each candidate corridor is its own row (capacity 0, available from its EarliestEntry --
+        # absent means the first modeled year, so it can't collide with the base row), oriented
+        # like the pair's existing line so the outputs' (from, to) rows line up
+        orientation = {tuple(sorted(k)): k for k in zip(network["from"], network["to"])}
+        ends = [orientation.get(tuple(sorted(k)), k) for k in zip(expansion["from"], expansion["to"])]
+        expansion["from"], expansion["to"] = [e[0] for e in ends], [e[1] for e in ends]
+        expansion["capacity"] = 0.0
+        if years is not None:
+            expansion["start_year"] = expansion["start_year"].fillna(min(years))
+        network = pd.concat([network, expansion], ignore_index=True)
 
     return network.reindex(columns=NETWORK_COLUMNS)

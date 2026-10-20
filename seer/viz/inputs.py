@@ -73,23 +73,32 @@ def plot_demand_trajectory(demand_forecast):
 
 
 def plot_demand_profiles(demand_profile, times):
-    """Normalized hourly demand profile for every modeled timepoint, by zone."""
+    """Normalized hourly demand profile for every modeled timepoint, by zone. Zones with
+    identical profiles are drawn as one line labeled with all of them, so none look missing."""
     time_order = times["time"].tolist()
     position = {t: i for i, t in enumerate(time_order)}
     zones = sorted(demand_profile["zone"].unique())
     colors = zone_colors(zones)
-    fig, ax = plt.subplots(figsize=FIGSIZE)
+    wide = demand_profile.pivot(index="time", columns="zone", values="value").reindex(time_order)
+    groups = []  # [zones sharing one curve], in zone order
     for zone in zones:
-        z = demand_profile[demand_profile["zone"] == zone].copy()
-        z["x"] = z["time"].map(position)
-        z = z.sort_values("x")
-        ax.plot(z["x"], z["value"], linewidth=1, color=colors[zone], label=zone)
+        for group in groups:
+            if np.allclose(wide[zone].values, wide[group[0]].values, equal_nan=True):
+                group.append(zone)
+                break
+        else:
+            groups.append([zone])
+    fig, ax = plt.subplots(figsize=FIGSIZE)
+    x = np.arange(len(time_order))
+    for group in groups:
+        label = group[0] if len(group) == 1 else f"{', '.join(group)} (identical)"
+        ax.plot(x, wide[group[0]].values, linewidth=1, color=colors[group[0]], label=label)
     _time_axis(ax, times)
     ax.set_title("Hourly demand profiles (modeled days)")
     ax.set_ylabel("Demand (fraction of annual peak)")
     ax.set_ylim(bottom=0)
     if len(zones) > 1:
-        ax.legend(title="Zone", loc="upper right")
+        ax.legend(title="Zone", loc="upper left", bbox_to_anchor=(1.01, 1), frameon=False)
     fig.tight_layout()
     return fig
 
