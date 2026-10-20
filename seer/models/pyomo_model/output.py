@@ -1,5 +1,6 @@
 """Standardized long-format output tables for a solved pyomo seer model (see
-seer/models/README.md for the output schema): generator_capacity, storage_capacity, dispatch.
+seer/models/README.md for the output schema): generator_capacity, storage_capacity, dispatch,
+line_capacity, lost_load.
 """
 
 import pandas as pd
@@ -12,7 +13,7 @@ def build_output_tables(instance, data_path):
     """Build the three seer output tables from a solved pyomo model instance. zone/tech/fuel
     come from the seer-schema inputs at `data_path` (see output_utils.add_input_metadata).
 
-    Returns {"generator_capacity": df, "storage_capacity": df, "dispatch": df}.
+    Returns {"line_capacity", "generator_capacity", "storage_capacity", "dispatch", "lost_load"}: df.
     """
     generator_zone = instance.generator_zone.extract_values()
     generator_tech = instance.generator_tech.extract_values()
@@ -56,6 +57,15 @@ def build_output_tables(instance, data_path):
     ]
     dispatch = pd.DataFrame(generator_dispatch_rows + storage_dispatch_rows)
 
+    # unserved demand, priced at settings.csv's `voll` in the objective
+    lost_load = pd.DataFrame([
+        {
+            "zone": zone, "year": year, "hour": hour, "datetime": snapshot_datetime[year, hour],
+            "lost_load": pyo.value(instance.lost_load[zone, year, hour]),
+        }
+        for zone in instance.zones for year, hour in instance.times
+    ], columns=["zone", "year", "hour", "datetime", "lost_load"])
+
     line_from = instance.line_from.extract_values()
     line_to = instance.line_to.extract_values()
     line_capacity = pd.DataFrame([
@@ -73,4 +83,5 @@ def build_output_tables(instance, data_path):
         "generator_capacity": generator_capacity,
         "storage_capacity": storage_capacity,
         "dispatch": dispatch,
+        "lost_load": lost_load,
     }, data_path)

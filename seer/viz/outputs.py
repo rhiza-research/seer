@@ -9,17 +9,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..models.utils.settings_utils import get_voll
 from ..models.utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times
 from .inputs import FIGSIZE, _stack_key
 from .plot import _tech_stack_key, draw_dispatch_year, tech_color
 
 OUTPUT_TABLES = ["generator_capacity", "storage_capacity", "dispatch"]
+OPTIONAL_OUTPUT_TABLES = ["lost_load"]  # missing from results solved before it was added
 
 
 def load_results(results_dir):
     """{table name: DataFrame} for one model's output folder."""
     results_dir = Path(results_dir)
-    return {name: pd.read_csv(results_dir / f"{name}.csv") for name in OUTPUT_TABLES}
+    tables = {name: pd.read_csv(results_dir / f"{name}.csv") for name in OUTPUT_TABLES}
+    for name in OPTIONAL_OUTPUT_TABLES:
+        if (results_dir / f"{name}.csv").exists():
+            tables[name] = pd.read_csv(results_dir / f"{name}.csv")
+    return tables
 
 
 def hour_weights(data_path, years):
@@ -27,6 +33,18 @@ def hour_weights(data_path, years):
     data_path = str(data_path).rstrip("/")
     calendar = build_snapshot_calendar(years, load_times(data_path), load_time_weights(data_path))
     return compute_time_weights(calendar)
+
+
+def annual_demand(data_path, years):
+    """{year: weighted demand (MWh) summed over zones} -- peak x profile x the hours each
+    timepoint stands for, as the models see it."""
+    data_path = Path(data_path)
+    peak = pd.read_csv(data_path / "demand_forecast.csv")
+    peak = peak[peak["type"] == "peak"]
+    profile = pd.read_csv(data_path / "demand_profile.csv").merge(pd.read_csv(data_path / "times.csv"), on="time")
+    zone_energy = (profile["value"] * profile["weight"]).groupby(profile["zone"]).sum()  # MWh per MW of peak
+    peak = peak[peak["year"].isin(years)]
+    return (peak["value"] * peak["zone"].map(zone_energy)).groupby(peak["year"]).sum().to_dict()
 
 
 def capacity_built(capacity, constants, name_col):
@@ -40,7 +58,9 @@ def capacity_built(capacity, constants, name_col):
 
 def summarize(results, data_path):
     """Totals for one model's results: built capacity (generators MW; storage MW and MWh),
-    undiscounted capital and marginal cost over the run, and weighted dispatch (GWh) by tech."""
+    undiscounted capital and marginal cost over the run, weighted dispatch (GWh) by tech, and
+    weighted lost load (GWh) with its undiscounted cost at settings.csv's `voll` (None if the
+    results have no lost_load table)."""
     data_path = Path(data_path)
     gens = pd.read_csv(data_path / "generator_constants.csv")
     sto = pd.read_csv(data_path / "storage_constants.csv")
@@ -81,9 +101,21 @@ def summarize(results, data_path):
         for n, y, e in zip(dispatch.loc[is_gen, "name"], dispatch.loc[is_gen, "year"], dispatch.loc[is_gen, "energy"])
     )
 
+    lost_load_gwh = lost_load_cost = lost_by_year = None
+    if "lost_load" in results:
+        lost = results["lost_load"]
+        hours = [weights[(y, h)] for y, h in zip(lost["year"], lost["hour"])]
+        lost_by_year = (lost["lost_load"] * hours).groupby(lost["year"]).sum().to_dict()  # MWh
+        lost_mwh = float((lost["lost_load"] * hours).sum())
+        lost_load_gwh = lost_mwh / 1e3
+        lost_load_cost = lost_mwh * get_voll(pd.read_csv(data_path / "settings.csv"))
+
     return {
         "years": years,
         "capital_cost": gen_capex + sto_capex,
+        "lost_load_gwh": lost_load_gwh,
+        "lost_load_cost": lost_load_cost,
+        "lost_load_by_year": lost_by_year,
         "marginal_cost": marginal_cost,
         "dispatch_gwh": (dispatch.groupby("tech")["energy"].sum() / 1e3).to_dict(),
         "built_mw": pd.concat([gen_built, sto_built_mw]).groupby("tech")["built"].sum().to_dict(),
@@ -110,6 +142,10 @@ def comparison_rows(summaries, runs):
     add("Solve time (s)", {m: runs[m]["solve_seconds"] for m in models if m in runs}, lambda v: f"{v:,.0f}")
     add("Capital cost ($M)", {m: s["capital_cost"] / 1e6 for m, s in summaries.items()}, lambda v: f"{v:,.1f}")
     add("Marginal cost ($M)", {m: s["marginal_cost"] / 1e6 for m, s in summaries.items()}, lambda v: f"{v:,.1f}")
+    lost = {m: s for m, s in summaries.items() if s.get("lost_load_gwh") is not None}
+    if lost:
+        add("Lost load (GWh)", {m: s["lost_load_gwh"] for m, s in lost.items()}, lambda v: f"{v:,.1f}")
+        add("Lost load cost at VOLL ($M)", {m: s["lost_load_cost"] / 1e6 for m, s in lost.items()}, lambda v: f"{v:,.1f}")
     # per-tech rows grouped under a full-width label row (a 1-element row)
     rows.append(["Dispatch (GWh)"])
     techs = sorted({t for s in summaries.values() for t in s["dispatch_gwh"]}, key=_stack_key)
@@ -170,6 +206,29 @@ def plot_capacity_built(built_by_case, years, title="Capacity built by year"):
     if techs:
         handles = [plt.Rectangle((0, 0), 1, 1, color=tech_color(t)) for t in techs]
         fig.legend(handles, techs, loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=len(techs), fontsize=7.5, frameon=False)
+    fig.suptitle(title, x=0.01, ha="left", fontsize=9.5, weight="bold")
+    fig.tight_layout()
+    return fig
+
+
+def plot_lost_load_share(summaries_by_case, demand_by_year, title="Lost load by year"):
+    """Annual lost load as % of demand, bars by year: one row per case, one panel per model
+    ({case: {model: summary}}, as plot_capacity_built), shared y axis."""
+    years = sorted(demand_by_year)
+    n_cols = max(len(case) for case in summaries_by_case.values())
+    fig, axes = plt.subplots(len(summaries_by_case), n_cols, figsize=(FIGSIZE[0], FIGSIZE[1] * (0.4 + 0.5 * len(summaries_by_case))),
+                             sharey=True, squeeze=False)
+    for row, (case, summaries) in enumerate(summaries_by_case.items()):
+        for ax, (model, summary) in zip(axes[row], summaries.items()):
+            lost = summary.get("lost_load_by_year") or {}
+            share = [100 * lost.get(y, 0.0) / demand_by_year[y] for y in years]
+            bars = ax.bar(np.arange(len(years)), share, width=0.7, color="#c0392b")
+            ax.bar_label(bars, labels=[f"{v:.1f}%" for v in share], fontsize=6.5, padding=1)
+            ax.set_xticks(np.arange(len(years)))
+            ax.set_xticklabels([str(y) for y in years], fontsize=7)
+            ax.set_title(f"{model}, {case}" if case else model, fontsize=8.5, loc="left")
+        axes[row][0].set_ylabel("Lost load (% of demand)")
+    axes[0][0].set_ylim(top=axes[0][0].get_ylim()[1] * 1.12)  # room for the labels
     fig.suptitle(title, x=0.01, ha="left", fontsize=9.5, weight="bold")
     fig.tight_layout()
     return fig

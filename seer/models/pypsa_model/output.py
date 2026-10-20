@@ -1,5 +1,6 @@
 """Standardized long-format output tables for a solved PyPSA seer model (see
-seer/models/README.md for the output schema): generator_capacity, storage_capacity, dispatch.
+seer/models/README.md for the output schema): generator_capacity, storage_capacity, dispatch,
+line_capacity, lost_load.
 
 PyPSA needs one component per (build option, investment-period vintage) for anything
 expandable; the _consolidate_* helpers below collapse these back into a single logical row
@@ -88,10 +89,11 @@ def build_output_tables(model, data_path):
     """Build the three seer output tables from a solved PyPSA Network. zone/tech/fuel come
     from the seer-schema inputs at `data_path` (see output_utils.add_input_metadata).
 
-    Returns {"generator_capacity": df, "storage_capacity": df, "dispatch": df}.
+    Returns {"line_capacity", "generator_capacity", "storage_capacity", "dispatch", "lost_load"}: df.
     """
-    # load shedding isn't a real generator (pyomo's lost_load isn't reported either)
-    generators = model.generators[model.generators["carrier"] != LOAD_SHEDDING]
+    # load shedding isn't a real generator -- reported as lost_load, not in the generator tables
+    is_shedding = model.generators["carrier"] == LOAD_SHEDDING
+    generators = model.generators[~is_shedding]
     generators_p = model.generators_t.p[generators.index]
     gen_genmap = _genmap(generators)
     sto_genmap = _genmap(model.storage_units)
@@ -112,6 +114,13 @@ def build_output_tables(model, data_path):
     )
 
     dispatch = pd.concat([generator_dispatch, storage_dispatch], ignore_index=True)
+
+    # unserved demand: the load-shedding generators' output (pyomo's lost_load)
+    shedding = model.generators[is_shedding]
+    lost_load = _consolidate_timeseries_by_base_name(shedding, model.generators_t.p[shedding.index])
+    lost_load = lost_load.rename(columns=shedding["bus"]).reset_index().melt(
+        id_vars=["year", "hour", "datetime"], var_name="zone", value_name="lost_load"
+    )[["zone", "year", "hour", "datetime", "lost_load"]]
 
     # lines: existing Link + expansion vintages, consolidated to one row per (zone pair, year)
     if len(model.links):
@@ -136,4 +145,5 @@ def build_output_tables(model, data_path):
         "generator_capacity": generator_capacity,
         "storage_capacity": storage_capacity,
         "dispatch": dispatch,
+        "lost_load": lost_load,
     }, data_path)
