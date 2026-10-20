@@ -45,19 +45,16 @@ class ProfileSampler:
         return np.average(profiles, axis=0, weights=weights / weights.sum())
 
     def resample(self, seer_instance, rng):
-        """Perturb the profiles of a SeerInstance. Returns (new instance, sampled log)."""
+        """Return a copy of seer_instance with its profiles perturbed."""
         out = seer_instance.copy()
         df = getattr(out, self.to_perturb)  # the seer instance attribute to perturb
-        shared_perturbation = self.get_perturbation(rng)  # only used if perturbation_mode == "shared"
 
-        sampled_days = []
         for pid, times, values, day_rows in self.prepare_profiles(df):
             # Step 1: compute this day's own features
             features = self.extract_features(times, values)
 
-            # Step 2: perturb the features to get a target
-            perturbation = shared_perturbation if self.perturbation_mode == "shared" else self.get_perturbation(rng)
-            target_features = self.randomize_features(features, perturbation)
+            # Step 2: randomly perturb the features to get a target
+            target_features = self.randomize_features(features, rng)
 
             # Step 3: sample the target's profile from the library, restricted to rows matching this
             # day (e.g. renewable's solar/wind category; none for demand)
@@ -68,10 +65,8 @@ class ProfileSampler:
             # Step 4: rescale (identity by default) and write back
             df.loc[day_rows.index, "value"] = self.rescale(matched, times, values)
 
-            sampled_days.append({**pid, **features, **{f"target_{n}": v for n, v in target_features.items()}})
-
         setattr(out, self.to_perturb, df)
-        return out, {"perturbation_mode": self.perturbation_mode, "days": sampled_days}
+        return out
 
     def prepare_profiles(self, df):
         """Yield (key, times, values, day_rows) per represented day in df -- see split_into_days below."""
@@ -81,12 +76,8 @@ class ProfileSampler:
         """Compute features for a profile."""
         raise NotImplementedError
 
-    def randomize_features(self, features, perturbation) -> dict:
-        """Perturb features by amount perturbation"""
-        raise NotImplementedError
-
-    def get_perturbation(self, rng) -> dict:
-        """Sample a random offset per feature (written out explicitly per subclass below)."""
+    def randomize_features(self, features, rng) -> dict:
+        """Randomly perturb features, with spread set by self.scale."""
         raise NotImplementedError
 
     def feature_distance(self, target_features, library_features) -> pd.Series:
@@ -112,7 +103,6 @@ class LoadProfileSampler(ProfileSampler):
     library_dir: Path = Path(__file__).parent / "reference_data" / "demand_profiles"
     scale: float = 1.0  # multiplies both features' perturbation std -- 0 = unperturbed, 2 = twice the default spread
     k: int = 5  # >1 blends the k nearest real profiles; 1 uses the single nearest as-is
-    perturbation_mode: str = "shared"  # "shared": one draw for every day; "independent": a fresh draw per day
 
     def prepare_profiles(self, df):
         """demand_profile.csv: zone, time, value[, year] -- one day per (zone[, year])."""
@@ -122,13 +112,10 @@ class LoadProfileSampler(ProfileSampler):
     def extract_features(self, times, values):
         return {"peakiness": float(values.mean() / values.max()), "peak_hour": float(times[np.argmax(values)])}
 
-    def get_perturbation(self, rng):
+    def randomize_features(self, features, rng):
         # typical perturbation moves peakiness by a few hundredths, peak_hour by an hour or two
-        return {"peakiness": rng.normal(0, 0.05 * self.scale), "peak_hour": rng.normal(0, 1.5 * self.scale)}
-
-    def randomize_features(self, features, perturbation):
-        peakiness = float(np.clip(features["peakiness"] + perturbation["peakiness"], 0.01, 1.0))
-        peak_hour = (features["peak_hour"] + perturbation["peak_hour"]) % 24  # wraps across midnight
+        peakiness = float(np.clip(features["peakiness"] + rng.normal(0, 0.05 * self.scale), 0.01, 1.0))
+        peak_hour = (features["peak_hour"] + rng.normal(0, 1.5 * self.scale)) % 24  # wraps across midnight
         return {"peakiness": peakiness, "peak_hour": peak_hour}
 
     @staticmethod
@@ -170,7 +157,6 @@ class ReProfileSampler(ProfileSampler):
     library_dir: Path = Path(__file__).parent / "reference_data" / "renewable_profiles"
     scale: float = 1.0  # 0 = unperturbed; larger = wider spread around each day's own capacity_factor
     k: int = 1  # blending real profiles could push an hourly value above 1 (physically invalid)
-    perturbation_mode: str = "independent"
 
     def prepare_profiles(self, df):
         """renewable_profiles.csv: profile_id, tech, zone, time, value -- one day per profile_id."""
@@ -179,11 +165,9 @@ class ReProfileSampler(ProfileSampler):
     def extract_features(self, times, values):
         return {"capacity_factor": float(np.mean(values))}
 
-    def get_perturbation(self, rng):
-        return {"capacity_factor": rng.normal(0, 0.05 * self.scale)}  # typical perturbation moves it by a few hundredths
-
-    def randomize_features(self, features, perturbation):
-        capacity_factor = float(np.clip(features["capacity_factor"] + perturbation["capacity_factor"], 0.001, 0.999))
+    def randomize_features(self, features, rng):
+        # typical perturbation moves capacity_factor by a few hundredths
+        capacity_factor = float(np.clip(features["capacity_factor"] + rng.normal(0, 0.05 * self.scale), 0.001, 0.999))
         return {"capacity_factor": capacity_factor}
 
     def feature_distance(self, target_features, library_features):
