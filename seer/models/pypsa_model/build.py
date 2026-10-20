@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import pypsa
 
+from ..utils.settings_utils import get_voll
 from ..utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
 
 
@@ -58,7 +59,7 @@ def build(data_path, annualize_capex=False):
     """DEMAND: Set up demand trajectory.
     """
     set_demand(model, input_data["demand_forecast"], input_data["demand_profile"], calendar)
-    add_load_shedding(model)
+    add_load_shedding(model, get_voll(input_data["settings"]))
 
     """RENEWABLES: Prepare renewable profiles for use in generator setup.
     """
@@ -115,18 +116,16 @@ def set_demand(model, demand_forecast, demand_profile, calendar):
         model.add("Load", zone, bus=zone, p_set=demand_ts)
 
 
-# value of lost load ($/MWh), as in the pyomo backend (abstract_model.py: model.voll)
-VOLL = 1_000_000.0
 LOAD_SHEDDING = "load_shedding"
 
 
-def add_load_shedding(model):
-    """One load-shedding generator per zone at VOLL, sized to the zone's peak load -- the
+def add_load_shedding(model, voll):
+    """One load-shedding generator per zone at `voll` ($/MWh, settings.csv), sized to the zone's peak load -- the
     pyomo backend's lost_load slack. Without it a capacity shortfall is infeasible rather than
     priced. Left out of the output tables (output.py), as lost load is on the pyomo side."""
     for zone, load in model.loads_t.p_set.items():
         model.add("Generator", f"{zone}_{LOAD_SHEDDING}", bus=model.loads.at[zone, "bus"],
-                  carrier=LOAD_SHEDDING, p_nom=float(load.max()), marginal_cost=VOLL)
+                  carrier=LOAD_SHEDDING, p_nom=float(load.max()), marginal_cost=voll)
 
 
 def _marginal_cost(gen_costs, name):

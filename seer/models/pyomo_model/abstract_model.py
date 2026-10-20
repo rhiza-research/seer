@@ -106,9 +106,8 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     model.snapshot_datetime = pyo.Param(model.times, within=pyo.Any)
     # discount factor relative to the first modeled year, applied to every cost term in the objective
     model.year_discount_factor = pyo.Param(model.years, within=pyo.NonNegativeReals)
-    # value of lost load ($/MWh); kept high so lost load is only used when truly necessary
-    # TODO: why is this intialized
-    model.voll = pyo.Param(within=pyo.NonNegativeReals, initialize=1_000_000.0, mutable=True)
+    # value of lost load ($/MWh), from settings.csv's `voll` (see build.py)
+    model.voll = pyo.Param(within=pyo.NonNegativeReals, mutable=True)
 
     """Variables"""
     model.generation_output = pyo.Var(model.generators, model.times, within=pyo.NonNegativeReals)

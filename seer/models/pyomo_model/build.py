@@ -1,5 +1,6 @@
 import pandas as pd
 
+from ..utils.settings_utils import get_voll
 from ..utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
 from .abstract_model import seer_base_model
 
@@ -257,6 +258,7 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
             "existing_storage": {None: existing_storage},
             "new_storage": {None: new_storage},
             "storage_zone": storage_zone,
+            "voll": {None: get_voll(settings_df)},
             "storage_tech": storage_tech,
             "storage_duration_hours": storage_duration_hours,
             "storage_capacity_mwh": storage_capacity_mwh,
