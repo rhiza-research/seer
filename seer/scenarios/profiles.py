@@ -44,9 +44,12 @@ class ProfileSampler:
         weights = 1.0 / (dist.loc[nearest].to_numpy() + 1e-6)
         return np.average(profiles, axis=0, weights=weights / weights.sum())
 
-    def resample(self, seer_instance, rng):
-        """Return a copy of seer_instance with its profiles perturbed."""
+    def resample(self, seer_instance, rng, scale=1.0):
+        """Return a copy of seer_instance with its profiles perturbed. scale: 0 = unperturbed, 1 =
+        the largest shift."""
         out = seer_instance.copy()
+        if scale == 0:
+            return out
         df = getattr(out, self.to_perturb)  # the seer instance attribute to perturb
 
         for pid, times, values, day_rows in self.prepare_profiles(df):
@@ -54,7 +57,7 @@ class ProfileSampler:
             features = self.extract_features(times, values)
 
             # Step 2: randomly perturb the features to get a target
-            target_features = self.randomize_features(features, rng)
+            target_features = self.randomize_features(features, rng, scale)
 
             # Step 3: sample the target's profile from the library, restricted to rows matching this
             # day (e.g. renewable's solar/wind category; none for demand)
@@ -76,8 +79,8 @@ class ProfileSampler:
         """Compute features for a profile."""
         raise NotImplementedError
 
-    def randomize_features(self, features, rng) -> dict:
-        """Randomly perturb features, with spread set by self.scale."""
+    def randomize_features(self, features, rng, scale) -> dict:
+        """Shift each feature by about scale times its largest shift, in a random direction."""
         raise NotImplementedError
 
     def feature_distance(self, target_features, library_features) -> pd.Series:
@@ -101,7 +104,6 @@ class LoadProfileSampler(ProfileSampler):
     to_perturb = "demand_profile"
 
     library_dir: Path = Path(__file__).parent / "reference_data" / "demand_profiles"
-    scale: float = 1.0  # multiplies both features' perturbation std -- 0 = unperturbed, 2 = twice the default spread
     k: int = 5  # >1 blends the k nearest real profiles; 1 uses the single nearest as-is
 
     def prepare_profiles(self, df):
@@ -112,11 +114,14 @@ class LoadProfileSampler(ProfileSampler):
     def extract_features(self, times, values):
         return {"peakiness": float(values.mean() / values.max()), "peak_hour": float(times[np.argmax(values)])}
 
-    def randomize_features(self, features, rng):
-        # typical perturbation moves peakiness by a few hundredths, peak_hour by an hour or two
-        peakiness = float(np.clip(features["peakiness"] + rng.normal(0, 0.05 * self.scale), 0.01, 1.0))
-        peak_hour = (features["peak_hour"] + rng.normal(0, 1.5 * self.scale)) % 24  # wraps across midnight
-        return {"peakiness": peakiness, "peak_hour": peak_hour}
+    def randomize_features(self, features, rng, scale):
+        # largest shifts: 0.2 peakiness, 4 hours
+        shift = rng.choice([-1, 1]) * abs(rng.normal(scale * 0.2, 0.02))
+        peakiness = features["peakiness"] + shift
+        if not 0.3 <= peakiness <= 1.0:
+            peakiness = features["peakiness"] - shift  # shift the other way instead
+        peak_hour = features["peak_hour"] + rng.choice([-1, 1]) * abs(rng.normal(scale * 4.0, 0.5))
+        return {"peakiness": float(np.clip(peakiness, 0.3, 1.0)), "peak_hour": float(peak_hour % 24)}
 
     @staticmethod
     def _hour_distance(h1, h2):
@@ -155,7 +160,6 @@ class ReProfileSampler(ProfileSampler):
     FILTER_COL = "category"
 
     library_dir: Path = Path(__file__).parent / "reference_data" / "renewable_profiles"
-    scale: float = 1.0  # 0 = unperturbed; larger = wider spread around each day's own capacity_factor
     k: int = 1  # blending real profiles could push an hourly value above 1 (physically invalid)
 
     def prepare_profiles(self, df):
@@ -165,10 +169,14 @@ class ReProfileSampler(ProfileSampler):
     def extract_features(self, times, values):
         return {"capacity_factor": float(np.mean(values))}
 
-    def randomize_features(self, features, rng):
-        # typical perturbation moves capacity_factor by a few hundredths
-        capacity_factor = float(np.clip(features["capacity_factor"] + rng.normal(0, 0.05 * self.scale), 0.001, 0.999))
-        return {"capacity_factor": capacity_factor}
+    def randomize_features(self, features, rng, scale):
+        # largest shift: 50% of the day's own capacity factor (relative, since solar and wind differ)
+        cf = features["capacity_factor"]
+        shift = rng.choice([-1, 1]) * abs(rng.normal(scale * 0.5, 0.05)) * cf
+        capacity_factor = cf + shift
+        if not 0.001 <= capacity_factor <= 0.999:
+            capacity_factor = cf - shift  # shift the other way instead
+        return {"capacity_factor": float(np.clip(capacity_factor, 0.001, 0.999))}
 
     def feature_distance(self, target_features, library_features):
         return (library_features["capacity_factor"] - target_features["capacity_factor"]).abs()
