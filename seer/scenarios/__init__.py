@@ -4,7 +4,7 @@ everything):
 
     from seer.scenarios import apply_all
     from seer.scenarios.costs import CapexPerturbation, MarginalPerturbation
-    from seer.scenarios.profiles import LoadCurvePerturbation, RenewableProfilePerturbation
+    from seer.scenarios.profiles import LoadProfilePerturbation, ReProfilePerturbation
     from seer.scenarios.demand_trajectory import DemandGrowthPerturbation
     from seer.scenarios.settings import DiscountRatePerturbation
 """
