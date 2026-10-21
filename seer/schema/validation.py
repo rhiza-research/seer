@@ -281,6 +281,11 @@ def _check_cost_table(df, file_name, id_col, constants_df, years, errors):
     if not present_year_cols or constants_df is None or id_col not in constants_df.columns:
         return
 
+    # every unit in the constants file must have cost rows
+    no_costs = set(constants_df[id_col]) - set(df[id_col])
+    if no_costs:
+        errors.append(f"{file_name}.csv: {id_col}(s) in constants with no cost rows: {sorted(no_costs)}")
+
     # every cost must be a real number -- no blanks. Existing units' capital is never read but
     # is still written as an explicit 0 (seer/schema/README.md).
     marginal = df[df["cost_type"] == "marginal"].set_index(id_col)
