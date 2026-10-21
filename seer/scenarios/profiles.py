@@ -116,7 +116,7 @@ class LoadProfileSampler(ProfileSampler):
 
     to_perturb = "demand_profile"
 
-    library_dir: Path = Path(__file__).parent / "reference_data" / "demand_profiles"
+    library_dir: Path = Path(__file__).parent / "reference_data" / "profiles" / "demand"
     k: int = 5  # >1 blends the k nearest real profiles; 1 uses the single nearest as-is
 
     SCENARIOS = {
@@ -178,7 +178,7 @@ class ReProfileSampler(ProfileSampler):
     to_perturb = "renewable_profiles"
     FILTER_COL = "category"
 
-    library_dir: Path = Path(__file__).parent / "reference_data" / "renewable_profiles"
+    library_dir: Path = Path(__file__).parent / "reference_data" / "profiles" / "renewable"
     k: int = 1  # blending real profiles could push an hourly value above 1 (physically invalid)
 
     # capacity factor per category
