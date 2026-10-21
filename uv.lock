@@ -4501,6 +4501,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pyomo" },
     { name = "pypsa" },
+    { name = "pyyaml" },
     { name = "torch" },
 ]
 
@@ -4517,6 +4518,7 @@ requires-dist = [
     { name = "pandas" },
     { name = "pyomo" },
     { name = "pypsa" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "torch" },
 ]
 

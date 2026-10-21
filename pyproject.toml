@@ -17,6 +17,7 @@ dependencies = [
     "torch",
     "gamspy>=1.26.4",
     "gridflow",
+    "pyyaml>=6.0.3",
 ]
 
 [build-system]
