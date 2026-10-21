@@ -11,7 +11,7 @@ data/*
 .claude
 
 # vendored source CSVs for seer/scenarios/reference_data, re-downloaded by scripts/build_cost_ranges.py
-seer/scenarios/reference_data/cost_assumptions/.cache/
+seer/scenarios/reference_data/.cache/
 
 # scratch/exploration/smoke-test scripts have accumulated here -- ignored for now rather than
 # tracked piecemeal; worth revisiting once it's clearer which ones are worth keeping long-term

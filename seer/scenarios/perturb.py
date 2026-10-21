@@ -8,7 +8,7 @@ import numpy as np
 from . import costs, demand_trajectory, profiles, settings
 from .spec import tokenize
 
-TARGETS = ["dr", "voll", "demand-growth", "demand-profile", "re-profile", "capex-start", "capex-pathway", "fuel-start", "fuel-pathway"]
+TARGETS = ["dr", "voll", "demand-growth", "demand-profile", "re-profile", "hydro", "capex-start", "capex-pathway", "fuel-start", "fuel-pathway"]
 GROUPS = {"capex": ["capex-start", "capex-pathway"], "fuel": ["fuel-start", "fuel-pathway"],
           "cost": ["capex-start", "capex-pathway", "fuel-start", "fuel-pathway"]}
 
@@ -30,6 +30,8 @@ def perturb(seer_instance, spec, seed=None):
     # renewables
     if "re-profile" in options:
         out = profiles.ReProfileSampler().resample(out, rng, options["scale"])
+    if "hydro" in options:
+        out = profiles.HydroProfileSampler().resample(out, rng, options["hydro"], options["scale"])
     # costs
     if "capex-start" in options or "capex-pathway" in options:
         out = costs.CapexSampler().resample(out, rng, options.get("capex-start"), options.get("capex-pathway"), options["scale"])

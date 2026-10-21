@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 
 from ..models.utils.time_utils import parse_time_string
+from .costs import tech_parameter
+from .spec import sample_value
 
 
 class ProfileSampler:
@@ -255,3 +257,40 @@ def load_profile_library(library_dir):
     metadata["times"] = profiles["hour"].apply(lambda s: s.to_numpy(dtype=float))
     metadata["values"] = profiles["value"].apply(lambda s: s.to_numpy(dtype=float))
     return metadata.reset_index()
+
+
+# --- hydro: flat availability at an annual capacity factor ---
+
+
+class HydroProfileSampler:
+    """Sample hydro and ror's availability: a flat profile at an annual capacity factor, with low /
+    mid / high from technology/tech_parameters.csv (cf_low / cf_mid / cf_high). One draw is shared by
+    every hydro and ror profile."""
+
+    to_perturb = "renewable_profiles"
+    TECHS = ["hydro", "ror"]
+
+    def reference(self):
+        return {level: tech_parameter("hydro", f"cf_{level}") for level in ["low", "mid", "high"]}
+
+    def sample(self, level, rng, scale=1.0):
+        """Annual capacity factor (random draws around mid)."""
+        ref = self.reference()
+        return float(sample_value(level, ref["mid"], ref, rng, scale))
+
+    def resample(self, seer_instance, rng, level, scale=1.0):
+        """Return a copy of seer_instance with its hydro and ror profiles rescaled to a capacity factor
+        drawn at level (random draws around their current mean), keeping each profile's shape."""
+        out = seer_instance.copy()
+        gens = out.generator_constants
+        ids = gens.loc[gens["tech"].isin(self.TECHS) & gens["isre"].astype(bool), "profile_id"].dropna().unique()
+        df = getattr(out, self.to_perturb)
+        rows = df["profile_id"].isin(ids)
+        if not rows.any():
+            warnings.warn("no hydro / ror generators with a profile -- hydro left unchanged")
+            return out
+        start = df.loc[rows, "value"].mean()
+        cf = sample_value(level, start, self.reference(), rng, scale)
+        df.loc[rows, "value"] = (df.loc[rows, "value"] * cf / start).clip(upper=1.0)
+        setattr(out, self.to_perturb, df)
+        return out

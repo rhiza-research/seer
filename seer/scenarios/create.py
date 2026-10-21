@@ -18,7 +18,7 @@ from . import settings as scenario_settings
 from .costs import CapexSampler, MarginalSampler, per_key_rng, tech_parameter
 from .demand_trajectory import DemandTrajectorySampler
 from .perturb import parse
-from .profiles import LoadProfileSampler, ReProfileSampler, renewable_category
+from .profiles import HydroProfileSampler, LoadProfileSampler, ReProfileSampler, renewable_category
 from .spec import REFERENCE, sample_value
 
 GRIDFLOW_DATA = Path(os.environ.get("GRIDFLOW_DATA", Path(__file__).parents[3] / "gridflow" / "data" / "global"))
@@ -35,7 +35,7 @@ def create(country, spec=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 20
     zone (default: scenarios.yaml's build_options)."""
     options = {
         "dr": "mid", "voll": "mid", "demand-growth": "mid", "demand-profile": "random",
-        "capex-start": "mid", "capex-pathway": "mid", "fuel-start": "mid", "fuel-pathway": "mid",
+        "capex-start": "mid", "capex-pathway": "mid", "fuel-start": "mid", "fuel-pathway": "mid", "hydro": "mid",
         **parse(spec),
     }
     rng = np.random.default_rng(seed)
@@ -136,11 +136,13 @@ def profile_id(zone, category):
 """Supply"""
 
 def create_renewable_profiles(region, times, options, rng):
-    """One profile per zone per category (solar, wind), matched on gridflow's capacity factor --
-    or, if the spec sets re-profile, on a capacity factor sampled at that level around it."""
+    """One profile per zone per category: solar and wind matched on gridflow's capacity factor --
+    or, if the spec sets re-profile, on a capacity factor sampled at that level around it -- and
+    hydro (for hydro and ror) flat at a capacity factor sampled at the hydro level, shared by every zone."""
     hours = np.arange(24.0)
     sampler = ReProfileSampler()
     n_days = len(times) // len(hours)
+    hydro_cf = HydroProfileSampler().sample(options["hydro"], rng, options["scale"])
     frames = []
     for zone, potential in region.zone_re_potential.iterrows():
         for category, column in RE_POTENTIAL_COLUMN.items():
@@ -152,6 +154,10 @@ def create_renewable_profiles(region, times, options, rng):
                 "profile_id": profile_id(zone, category), "zone": zone, "tech": column, "generator": None,
                 "time": times["time"], "value": np.tile(curve, n_days),
             }))
+        frames.append(pd.DataFrame({
+            "profile_id": profile_id(zone, "hydro"), "zone": zone, "tech": "hydro", "generator": None,
+            "time": times["time"], "value": hydro_cf,
+        }))
     return pd.concat(frames, ignore_index=True)
 
 
@@ -171,7 +177,7 @@ def create_generator_constants(region, build_options, first_year):
         "capacity": np.nan, "expandable": True, "start_year": first_year, "life": int(tech_parameter(tech, "life")),
     } for zone in region.zones.index for tech in techs])
     df = pd.concat([df, options], ignore_index=True)
-    category = df["tech"].map(renewable_category)
+    category = df["tech"].map(lambda t: "hydro" if t in HydroProfileSampler.TECHS else renewable_category(t))
     df["isre"] = category.notna()
     df["profile_id"] = [profile_id(z, c) if c else None for z, c in zip(df["zone"], category)]
     return df[["generator", "zone", "tech", "fuel", "capacity", "expandable", "isre", "profile_id", "start_year", "life"]]

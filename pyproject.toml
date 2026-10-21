@@ -18,6 +18,7 @@ dependencies = [
     "gamspy>=1.26.4",
     "gridflow",
     "pyyaml>=6.0.3",
+    "xarray<2026",
 ]
 
 [build-system]
@@ -29,3 +30,8 @@ packages = ["seer", "inputs/gdx", "inputs/epm2seer"]
 
 [tool.uv.sources]
 gridflow = { git = "https://github.com/ESMAP-World-Bank-Group/gridflow.git", rev = "network-zoning-method" }
+
+[dependency-groups]
+dev = [
+    "openpyxl>=3.1.5",
+]
