@@ -1,8 +1,7 @@
-"""Shared tokenizer for scenario spec strings, used by both create.py and perturb.py (which each
-parse the tokens with their own grammar).
+"""Tokenizer for scenario spec strings (parsed by perturb.parse, used by both create and perturb).
 
-A spec is a string ("high-cost, mid-demand" or "high-cost+mid-demand"), or an iterable of such
-strings (e.g. a set {"high-cost", "mid-demand"}), or None.
+A spec is a string ("high-cost, low-demand-growth" or "high-cost+low-demand-growth"), or an iterable
+of such strings (e.g. a set {"high-cost", "low-demand-growth"}), or None.
 
 Also loads reference_data/scenarios.yaml (REFERENCE) and applies its low / mid / high / random rule
 (sample_value).
@@ -13,8 +12,6 @@ import numpy as np
 import yaml
 
 REFERENCE = yaml.safe_load((Path(__file__).parent / "reference_data" / "scenarios.yaml").read_text())
-
-LEVELS = ["low", "mid", "high", "random"]
 
 
 def tokenize(spec):
@@ -29,21 +26,6 @@ def tokenize(spec):
             if token:
                 tokens.append(token)
     return tokens
-
-
-def split_level(token):
-    """'high-cost' -> ('high', 'cost'); None if the token doesn't start with a level."""
-    level, _, target = token.partition("-")
-    if level in LEVELS and target:
-        return level, target
-    return None
-
-
-def set_choice(choices, target, value, token):
-    """Record one choice per target; a second, different choice for the same target is an error."""
-    if target in choices and choices[target] != value:
-        raise ValueError(f"conflicting choices for {target!r}: {choices[target]!r} and {value!r} (from {token!r})")
-    choices[target] = value
 
 
 def sample_value(level, start, ref, rng, scale=1.0):

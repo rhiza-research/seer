@@ -43,8 +43,10 @@ def create(country, spec=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 20
     # Step 1 - Get gridflow starting model for the country
     region = gridflow.model.region([country],
                                    global_data_path=Path(gridflow_data),
-                                   zone_stats_to_load=["population"])
+                                   zone_stats_to_load=["population"],
+                                   year=int(years[0]))
     region.create_network(method="network", n=n_zones)
+    region.set_country_demand()
     region.set_zone_demand_shares()
     region.set_zone_re_potential()
     region.set_zone_plants()
@@ -101,11 +103,12 @@ def create(country, spec=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 20
 
 def create_demand_profile(zones, times, options, rng):
     """One sampled daily load shape per zone per representative day (peak-normalized)."""
+    hours = np.arange(24.0)
     sampler = LoadProfileSampler()
-    n_days = len(times) // len(HOURS)
+    n_days = len(times) // len(hours)
     frames = []
     for zone in zones["zone"]:
-        values = np.concatenate([sampler.sample(options["demand-profile"], HOURS, rng=rng, scale=options["scale"]) for _ in range(n_days)])
+        values = np.concatenate([sampler.sample(options["demand-profile"], hours, rng=rng, scale=options["scale"]) for _ in range(n_days)])
         frames.append(pd.DataFrame({"zone": zone, "time": times["time"], "value": values}))
     return pd.concat(frames, ignore_index=True)
 
@@ -135,15 +138,16 @@ def profile_id(zone, category):
 def create_renewable_profiles(region, times, options, rng):
     """One profile per zone per category (solar, wind), matched on gridflow's capacity factor --
     or, if the spec sets re-profile, on a capacity factor sampled at that level around it."""
+    hours = np.arange(24.0)
     sampler = ReProfileSampler()
-    n_days = len(times) // len(HOURS)
+    n_days = len(times) // len(hours)
     frames = []
     for zone, potential in region.zone_re_potential.iterrows():
         for category, column in RE_POTENTIAL_COLUMN.items():
             cf = potential[column]
             if "re-profile" in options:
                 cf = sample_value(options["re-profile"], cf, REFERENCE["renewable_profiles"][category], rng, options["scale"])
-            curve = sampler.sample({"capacity_factor": cf}, HOURS, category)
+            curve = sampler.sample({"capacity_factor": cf}, hours, category)
             frames.append(pd.DataFrame({
                 "profile_id": profile_id(zone, category), "zone": zone, "tech": column, "generator": None,
                 "time": times["time"], "value": np.tile(curve, n_days),
