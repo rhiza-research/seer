@@ -1,0 +1,39 @@
+# Reference low / mid / high values for scenario creation and perturbation.
+#
+# low / mid / high: the reference value, times (1 + U(-noise, noise)).
+# random (with scale): uniform on [start - scale * (start - min(low, start)),
+#                                  start + scale * (max(high, start) - start)]
+#   where start is the instance's own value (perturb) or mid (create).
+#
+# All values are placeholders, to be replaced with sourced numbers.
+
+noise: 0.02  # relative noise on low / mid / high
+
+settings:
+  dr: {low: 0.04, mid: 0.08, high: 0.12}
+  voll: {low: 500, mid: 2500, high: 10000}  # $/MWh
+
+demand_trajectory:
+  growth_rate: {low: 0.02, mid: 0.035, high: 0.05}  # annual peak growth
+
+renewable_profiles:
+  # annual capacity factor, per category
+  solar: {low: 0.15, mid: 0.20, high: 0.25}
+  wind: {low: 0.20, mid: 0.30, high: 0.40}
+
+demand_profile:
+  # random only: per-day range at scale 1
+  random:
+    peakiness: {low: 0.55, high: 0.95}
+    peak_hour_shift: 4.0  # hours, either direction (wraps at 24)
+  shapes:
+    flat: {peakiness: 0.90, peak_hour: 19}
+    peaky: {peakiness: 0.60, peak_hour: 19}
+    morning-peak: {peakiness: 0.75, peak_hour: 9}
+
+# techs offered as build options in every zone by create (generator or storage, per
+# technology/tech_parameters.csv)
+build_options: [CCGT, OCGT, coal, solar-utility, onwind, battery storage]
+
+# costs: low / mid / high start values and pathways live in technology/ (tech_costs.csv,
+# tech_cost_pathways.csv) and fuels/ (fuel_prices.csv, fuel_price_pathways.csv) -- see costs.py

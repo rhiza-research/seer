@@ -15,7 +15,7 @@ import pandas as pd
 from ..models.utils.time_utils import to_profile_times
 from ..schema import SeerInstance
 from . import settings as scenario_settings
-from .costs import CapexSampler, MarginalSampler
+from .costs import CapexSampler, MarginalSampler, per_key_rng, tech_parameter
 from .demand_trajectory import DemandTrajectorySampler
 from .perturb import parse
 from .profiles import LoadProfileSampler, ReProfileSampler, renewable_category
@@ -28,11 +28,16 @@ NEVER_RETIRES = 100  # schema README convention for an existing unit with no ret
 
 
 def create(country, spec=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 2040), n_days=12, weights=None,
-           gridflow_data=GRIDFLOW_DATA):
+           build_options=None, gridflow_data=GRIDFLOW_DATA):
     """Return a new seer instance for country, an ISO3 code (as gridflow expects).
     Targets not in spec are sampled at mid; the demand profile defaults to random, and renewable
-    profiles to gridflow's capacity factors."""
-    options = {"dr": "mid", "voll": "mid", "demand-growth": "mid", "demand-profile": "random", "capex": "mid", "fuel": "mid", **parse(spec)}
+    profiles to gridflow's capacity factors. build_options: techs offered for building in every
+    zone (default: scenarios.yaml's build_options)."""
+    options = {
+        "dr": "mid", "voll": "mid", "demand-growth": "mid", "demand-profile": "random",
+        "capex-start": "mid", "capex-pathway": "mid", "fuel-start": "mid", "fuel-pathway": "mid",
+        **parse(spec),
+    }
     rng = np.random.default_rng(seed)
 
     # Step 1 - Get gridflow starting model for the country
@@ -76,12 +81,13 @@ def create(country, spec=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 20
     # Step 5 - Supply
     # renewable profiles
     renewable_profiles = create_renewable_profiles(region, times, options, rng)
-    # generators
-    generator_constants = create_generator_constants(region)
+    # generators and storage: existing units, plus build options in every zone
+    build_options = REFERENCE["build_options"] if build_options is None else build_options
+    first_year = int(years["year"].iloc[0])
+    generator_constants = create_generator_constants(region, build_options, first_year)
     generator_costs = create_generator_costs(generator_constants, years, options, rng)
-    # storage
-    storage_constants = create_storage_constants()
-    storage_costs = create_storage_costs(storage_constants, years)
+    storage_constants = create_storage_constants(zones, build_options, first_year)
+    storage_costs = create_storage_costs(storage_constants, years, options, rng)
 
     return SeerInstance(
         settings=settings, zones=zones, years=years, times=times, network=network,
@@ -145,9 +151,9 @@ def create_renewable_profiles(region, times, options, rng):
     return pd.concat(frames, ignore_index=True)
 
 
-def create_generator_constants(region):
+def create_generator_constants(region, build_options, first_year):
     """Existing plants (operating or under construction), aggregated per zone, tech, fuel, start
-    year and life. Build options: to come."""
+    year and life; plus a build option per zone for each generator tech in build_options."""
     plants = region.zone_plants[region.zone_plants["Status"].isin(["operating", "construction"])].copy()
     plants["start_year"] = plants["DateIn"].fillna(UNKNOWN_START_YEAR).astype(int)
     plants["life"] = (plants["DateOut"] - plants["start_year"] + 1).fillna(NEVER_RETIRES).astype(int)
@@ -155,6 +161,12 @@ def create_generator_constants(region):
     df = plants.groupby(["zone", "tech", "fuel", "start_year", "life"], as_index=False)["Capacity"].sum().rename(columns={"Capacity": "capacity"})
     df["generator"] = df["zone"] + "_" + df["tech"] + "_" + df["fuel"] + "_" + df["start_year"].astype(str) + "_" + df["life"].astype(str)
     df["expandable"] = False
+    techs = [t for t in build_options if tech_parameter(t, "type") == "generator"]
+    options = pd.DataFrame([{
+        "generator": f"{zone}_{tech}_new", "zone": zone, "tech": tech, "fuel": tech_parameter(tech, "fuel") or "",
+        "capacity": np.nan, "expandable": True, "start_year": first_year, "life": int(tech_parameter(tech, "life")),
+    } for zone in region.zones.index for tech in techs])
+    df = pd.concat([df, options], ignore_index=True)
     category = df["tech"].map(renewable_category)
     df["isre"] = category.notna()
     df["profile_id"] = [profile_id(z, c) if c else None for z, c in zip(df["zone"], category)]
@@ -163,23 +175,40 @@ def create_generator_constants(region):
 
 def create_generator_costs(generator_constants, years, options, rng):
     """Capital (build options only) and marginal (thermal units with a fuel price reference) cost
-    trajectories, sampled per generator; 0 otherwise."""
+    trajectories; 0 otherwise."""
     years = list(years["year"])
     capex, marginal = CapexSampler(), MarginalSampler()
+    rng_for = per_key_rng(rng)  # one draw per tech (capital) and per fuel (marginal), shared across zones
     rows = []
     for g in generator_constants.itertuples():
-        capital = capex.sample(options["capex"], g.tech, years, rng, options["scale"]) if g.expandable else np.zeros(len(years))
-        has_fuel_reference = marginal.reference(g.tech, g.fuel, years) is not None
-        cost = marginal.sample(options["fuel"], g.tech, g.fuel, years, rng, options["scale"]) if has_fuel_reference else np.zeros(len(years))
+        capital = np.zeros(len(years))
+        if g.expandable:
+            capital = capex.sample(options["capex-start"], options["capex-pathway"], g.tech, years, rng_for(g.tech), options["scale"])
+        cost = np.zeros(len(years))
+        if marginal.reference(g.tech, g.fuel, years) is not None:
+            cost = marginal.sample(options["fuel-start"], options["fuel-pathway"], g.tech, g.fuel, years, rng_for(g.fuel), options["scale"])
         rows += [[g.generator, "capital", *capital], [g.generator, "marginal", *cost]]
     return pd.DataFrame(rows, columns=["generator", "cost_type", *[str(y) for y in years]])
 
 
-def create_storage_constants():
-    """No existing storage from gridflow. Build options: to come."""
-    columns = ["storage", "zone", "tech", "capacity_mw", "duration_hours", "efficiency", "expandable", "start_year", "life"]
-    return pd.DataFrame(columns=columns)
+def create_storage_constants(zones, build_options, first_year):
+    """No existing storage from gridflow; a build option per zone for each storage tech in build_options."""
+    techs = [t for t in build_options if tech_parameter(t, "type") == "storage"]
+    return pd.DataFrame([{
+        "storage": f"{zone}_{tech}_new", "zone": zone, "tech": tech, "capacity_mw": np.nan,
+        "duration_hours": tech_parameter(tech, "duration_hours"), "efficiency": tech_parameter(tech, "efficiency"),
+        "expandable": True, "start_year": first_year, "life": int(tech_parameter(tech, "life")),
+    } for zone in zones["zone"] for tech in techs],
+        columns=["storage", "zone", "tech", "capacity_mw", "duration_hours", "efficiency", "expandable", "start_year", "life"])
 
-def create_storage_costs(storage_constants, years):
-    """No storage yet -- see create_storage_constants."""
-    return pd.DataFrame(columns=["storage", "cost_type", *[str(y) for y in years["year"]]])
+
+def create_storage_costs(storage_constants, years, options, rng):
+    """Capital ($/MWh of energy, one draw per tech) and zero marginal cost per storage unit."""
+    years = list(years["year"])
+    capex = CapexSampler()
+    rng_for = per_key_rng(rng)
+    rows = []
+    for s in storage_constants.itertuples():
+        capital = capex.sample(options["capex-start"], options["capex-pathway"], s.tech, years, rng_for(s.tech), options["scale"])
+        rows += [[s.storage, "capital", *capital], [s.storage, "marginal", *np.zeros(len(years))]]
+    return pd.DataFrame(rows, columns=["storage", "cost_type", *[str(y) for y in years]])

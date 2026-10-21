@@ -8,7 +8,9 @@ import numpy as np
 from . import costs, demand_trajectory, profiles, settings
 from .spec import tokenize
 
-TARGETS = ["dr", "voll", "demand-growth", "demand-profile", "re-profile", "capex", "fuel"]
+TARGETS = ["dr", "voll", "demand-growth", "demand-profile", "re-profile", "capex-start", "capex-pathway", "fuel-start", "fuel-pathway"]
+GROUPS = {"capex": ["capex-start", "capex-pathway"], "fuel": ["fuel-start", "fuel-pathway"],
+          "cost": ["capex-start", "capex-pathway", "fuel-start", "fuel-pathway"]}
 
 
 def perturb(seer_instance, spec, seed=None):
@@ -29,10 +31,10 @@ def perturb(seer_instance, spec, seed=None):
     if "re-profile" in options:
         out = profiles.ReProfileSampler().resample(out, rng, options["scale"])
     # costs
-    if "capex" in options:
-        out = costs.CapexSampler().resample(out, rng, options["capex"], options["scale"])
-    if "fuel" in options:
-        out = costs.MarginalSampler().resample(out, rng, options["fuel"], options["scale"])
+    if "capex-start" in options or "capex-pathway" in options:
+        out = costs.CapexSampler().resample(out, rng, options.get("capex-start"), options.get("capex-pathway"), options["scale"])
+    if "fuel-start" in options or "fuel-pathway" in options:
+        out = costs.MarginalSampler().resample(out, rng, options.get("fuel-start"), options.get("fuel-pathway"), options["scale"])
 
     return out
 
@@ -46,10 +48,10 @@ def parse(spec):
             options.update(dict.fromkeys(TARGETS, "random"))
         elif level == "scale":
             options["scale"] = float(target)
-        elif target == "cost":
-            options.update(capex=level, fuel=level)
+        elif target in GROUPS:
+            options.update(dict.fromkeys(GROUPS[target], level))
         elif target in TARGETS:
             options[target] = level
         else:
-            raise ValueError(f"can't parse {token!r}; expected <level>-<target> with target in {TARGETS + ['cost']}, scale-<x> or random")
+            raise ValueError(f"can't parse {token!r}; expected <level>-<target> with target in {TARGETS + list(GROUPS)}, scale-<x> or random")
     return options
