@@ -5,7 +5,27 @@ from.
 """
 from dataclasses import dataclass, field
 
+import pandas as pd
+
 from .base import Perturbation
+from .spec import REFERENCE, sample_value
+
+
+def resample(instance, options, rng):
+    """Resample dr and voll at the levels in options."""
+    out = instance.copy()
+    for name in ["dr", "voll"]:
+        if name not in options:
+            continue
+        ref = REFERENCE["settings"][name]
+        rows = out.settings["parameters"] == name
+        start = float(out.settings.loc[rows, "value"].iloc[0]) if rows.any() else ref["mid"]
+        value = sample_value(options[name], start, ref, rng, options["scale"])
+        if rows.any():
+            out.settings.loc[rows, "value"] = value
+        else:
+            out.settings = pd.concat([out.settings, pd.DataFrame({"parameters": [name], "value": [value]})], ignore_index=True)
+    return out
 
 
 @dataclass

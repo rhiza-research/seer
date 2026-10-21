@@ -28,10 +28,16 @@ class ProfileSampler:
             [self.extract_features(t, v) for t, v in zip(self.library["times"], self.library["values"])], index=self.library.index
         )
 
-    def sample(self, features, times, filter_value=None):
+    def sample(self, features, times, filter_value=None, rng=None, scale=1.0):
         """Return the library profile matching target features, evaluated at times (fractional
-        hours of day). Returns None if no library profile matches filter_value. Not rescaled: a
-        load profile comes back peak-normalized, a renewable profile as a capacity factor."""
+        hours of day). features is a dict of feature values, a named scenario (see SCENARIOS), or
+        "random" (a randomly chosen named scenario, randomized by scale). Returns None if no library
+        profile matches filter_value. Not rescaled: a load profile comes back peak-normalized, a
+        renewable profile as a capacity factor."""
+        if features == "random":
+            features = self.randomize_features(self.named_scenario(rng.choice(self.scenario_names(filter_value)), filter_value), rng, scale)
+        elif isinstance(features, str):
+            features = self.named_scenario(features, filter_value)
         library_profiles = self.library if self.FILTER_COL is None else self.library[self.library[self.FILTER_COL] == filter_value]
         if library_profiles.empty:
             return None
@@ -79,6 +85,13 @@ class ProfileSampler:
         """Compute features for a profile."""
         raise NotImplementedError
 
+    def scenario_names(self, filter_value=None):
+        return list(self.SCENARIOS)
+
+    def named_scenario(self, name, filter_value=None) -> dict:
+        """Hardcoded feature values for a named scenario."""
+        return self.SCENARIOS[name]
+
     def randomize_features(self, features, rng, scale) -> dict:
         """Shift each feature by about scale times its largest shift, in a random direction."""
         raise NotImplementedError
@@ -105,6 +118,12 @@ class LoadProfileSampler(ProfileSampler):
 
     library_dir: Path = Path(__file__).parent / "reference_data" / "demand_profiles"
     k: int = 5  # >1 blends the k nearest real profiles; 1 uses the single nearest as-is
+
+    SCENARIOS = {
+        "flat": {"peakiness": 0.9, "peak_hour": 19.0},
+        "peaky": {"peakiness": 0.6, "peak_hour": 19.0},
+        "morning-peak": {"peakiness": 0.75, "peak_hour": 9.0},
+    }
 
     def prepare_profiles(self, df):
         """demand_profile.csv: zone, time, value[, year] -- one day per (zone[, year])."""
@@ -161,6 +180,18 @@ class ReProfileSampler(ProfileSampler):
 
     library_dir: Path = Path(__file__).parent / "reference_data" / "renewable_profiles"
     k: int = 1  # blending real profiles could push an hourly value above 1 (physically invalid)
+
+    # capacity factor per category
+    SCENARIOS = {
+        "solar": {"low": 0.15, "mid": 0.2, "high": 0.25},
+        "wind": {"low": 0.2, "mid": 0.3, "high": 0.4},
+    }
+
+    def scenario_names(self, filter_value=None):
+        return list(self.SCENARIOS[filter_value])
+
+    def named_scenario(self, name, filter_value=None):
+        return {"capacity_factor": self.SCENARIOS[filter_value][name]}
 
     def prepare_profiles(self, df):
         """renewable_profiles.csv: profile_id, tech, zone, time, value -- one day per profile_id."""

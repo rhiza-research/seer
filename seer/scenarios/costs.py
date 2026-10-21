@@ -1,230 +1,119 @@
-"""Cost scenarios: capex and marginal-cost trajectories, from reference tables in
-seer/scenarios/reference_data/cost_assumptions (built by scripts/build_cost_ranges.py and
+"""Sample and resample cost trajectories (generator_costs.csv, storage_costs.csv) from reference
+tables in reference_data/cost_assumptions (built by scripts/build_cost_ranges.py and
 scripts/build_fuel_prices.py).
 
-CapexPerturbation: sample a starting-cost multiplier and a decline trajectory independently per
-tech, then rescale every generator/storage unit's capex trajectory from its own existing starting
-value -- never from reference_data's absolute dollar figures, which belong to a different
-(US/global-average) context than any given instance's real costs.
-
-MarginalPerturbation: unlike capex, seer's marginal_cost is one undifferentiated $/MWh number
-with no stored fuel/VOM split. We estimate the fuel-driven share as heat_rate[tech] (MMBtu/MWh,
-from costs.csv) x fuel_price[fuel] ($/MMBtu, from fuel_prices.csv), treat the rest of the existing
-marginal_cost as a flat non-fuel residual, and perturb only the fuel share -- sampling a starting-
-price multiplier and a price trajectory independently per fuel (not per tech, since a commodity's
-price doesn't depend on which plant burns it; cached across techs sharing a fuel).
-
-Techs with no heat_rate entry (renewables, storage, CHP, etc. -- anything without a real fuel
-commodity) are left with marginal_cost unperturbed; this only ever touches thermal generators
-burning gas/oil/coal.
-
-Both perturbations share the same core (sample_scenario, below): sample a start multiplier +
-decline-trajectory ratio for a key (tech or fuel) via one of three modes, then rescale a cost-table
-value from its own start-year level.
+Each reference is a low / mid / high trajectory over the modeled years: central_value x the level's
+multiplier (1 for mid) x the level's decline curve, relative to the first modeled year.
 """
 import warnings
-from dataclasses import dataclass, field
+from functools import cache
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
-from .base import Perturbation
+from .spec import sample_value
 
 REFERENCE_DIR = Path(__file__).parent / "reference_data" / "cost_assumptions"
-
-TRAJECTORY_SCENARIOS = ["low", "mid", "high"]
-
-
-def load_capex_tables(reference_dir=REFERENCE_DIR):
-    return (
-        pd.read_csv(reference_dir / "costs.csv"),
-        pd.read_csv(reference_dir / "decline_curves.csv"),
-    )
+BATTERY_HOURS = 4.0  # costs.csv's battery storage capex is $/kW of a 4-hour system (NREL ATB)
 
 
-def load_fuel_tables(reference_dir=REFERENCE_DIR):
-    return (
-        pd.read_csv(reference_dir / "costs.csv"),
-        pd.read_csv(reference_dir / "fuel_prices.csv"),
-        pd.read_csv(reference_dir / "decline_curves_fuel.csv"),
-    )
+@cache
+def load_table(name):
+    return pd.read_csv(REFERENCE_DIR / name)
 
 
-def trajectory_curve(decline_df, key_col, key, value_col, scenario, years, start_year):
-    """One scenario's decline curve for `key` (a tech or fuel), indexed by year and filled onto
-    every year in `years` plus start_year -- interpolated between the table's own years, held
-    flat beyond either end."""
-    curve = decline_df[(decline_df[key_col] == key) & (decline_df["scenario"] == scenario)].set_index("year")[value_col].sort_index()
-    all_years = sorted(set(curve.index) | set(years) | {start_year})
-    return curve.reindex(all_years).interpolate(method="index").ffill().bfill()
+def reference_trajectory(row, decline, key_col, value_col, years):
+    """{"low", "mid", "high"}: arrays over years, for one costs.csv / fuel_prices.csv row."""
+    ref = {}
+    for level, mult in [("low", row["low_mult"]), ("mid", 1.0), ("high", row["high_mult"])]:
+        curve = decline[(decline[key_col] == row[key_col]) & (decline["scenario"] == level)].set_index("year")[value_col]
+        if curve.empty:
+            curve = pd.Series(1.0, index=years)  # no decline curve: flat
+        curve = curve.reindex(sorted(set(curve.index) | set(years))).interpolate(method="index").ffill().bfill().loc[years]
+        ref[level] = row["central_value"] * mult * (curve / curve.iloc[0]).to_numpy()
+    return ref
 
 
-def sample_scenario(low_mult, high_mult, decline_df, key_col, key, value_col, years, start_year, rng, mode="uniform", scenario=None):
-    """Sample a start-year multiplier and a year-by-year ratio-to-start-year trajectory for `key`
-    (a tech or fuel), from the same low/mid/high scenario data (low_mult/1.0/high_mult for the
-    start value, the low/mid/high curves in `decline_df` for the trajectory), via one of three
-    modes -- the piece shared by every cost perturbation (and, later, cost creation) that rescales
-    a value from its own start-year level:
-
-      "uniform" (default): draw one quantile u ~ Uniform(0, 1); the start multiplier AND the
-        trajectory curve are each interpolated between their own low and high anchors at that
-        SAME u, so a low draw is a low start cost with a low-decline trajectory together, not an
-        inconsistent mix of a continuous price with an independently-random trajectory shape.
-      "random_scenario": pick one of low/mid/high uniformly at random, and use THAT scenario's
-        own start value and its own trajectory curve.
-      "scenario": use the caller-supplied `scenario` ("low"/"mid"/"high") explicitly --
-        deterministic, so every tech/fuel in one perturbation gets the same named scenario.
-
-    Returns (start_multiplier, info, ratio) where ratio[start_year] == 1.0 and `info` records what
-    was drawn (`{"mode": "uniform", "quantile": u}` or `{"mode": mode, "scenario": scenario}`). If
-    `key` has no decline curve at all, ratio is flat (all 1.0) in every mode."""
-    key_decline = decline_df[decline_df[key_col] == key]
-
-    if mode == "uniform":
-        u = float(rng.uniform(0.0, 1.0))
-        start_mult = low_mult + u * (high_mult - low_mult)
-        info = {"mode": "uniform", "quantile": u}
-        if key_decline.empty:
-            return float(start_mult), info, {y: 1.0 for y in years}
-        low_curve = trajectory_curve(key_decline, key_col, key, value_col, "low", years, start_year)
-        high_curve = trajectory_curve(key_decline, key_col, key, value_col, "high", years, start_year)
-        curve = (1 - u) * low_curve + u * high_curve
-        return float(start_mult), info, (curve / curve.loc[start_year]).to_dict()
-
-    if mode == "random_scenario":
-        scenario = str(rng.choice(TRAJECTORY_SCENARIOS))
-    elif mode != "scenario":
-        raise ValueError(f"mode must be one of 'uniform', 'random_scenario', 'scenario', got {mode!r}")
-    elif scenario not in TRAJECTORY_SCENARIOS:
-        raise ValueError(f"scenario must be one of {TRAJECTORY_SCENARIOS}, got {scenario!r}")
-
-    start_mult = {"low": low_mult, "mid": 1.0, "high": high_mult}[scenario]
-    info = {"mode": mode, "scenario": scenario}
-    if key_decline.empty:
-        return float(start_mult), info, {y: 1.0 for y in years}
-    curve = trajectory_curve(key_decline, key_col, key, value_col, scenario, years, start_year)
-    return float(start_mult), info, (curve / curve.loc[start_year]).to_dict()
+def year_columns(df):
+    return [c for c in df.columns if str(c).isdigit()]
 
 
-def perturb_capex(cost_table, constants_table, id_col, ranges_df, decline_df, start_year, rng, mode="uniform", scenario=None):
-    cost_table = cost_table.copy()
-    year_cols = [c for c in cost_table.columns if c not in (id_col, "cost_type")]
-    years = [int(c) for c in year_cols]
-    capex_rows = cost_table["cost_type"] == "capital"
-    start_col = next(c for c in year_cols if int(c) == start_year)
-    ranges = ranges_df[(ranges_df["parameter"] == "capex") & ranges_df["method"].isin(["scenario", "multiplier"])].set_index("tech")
+class CapexSampler:
+    """Sample build options' capital cost trajectories ($/MW, or $/MWh for storage)."""
 
-    sampled = {}
-    for tech in constants_table["tech"].dropna().unique():
-        if tech not in ranges.index:
-            warnings.warn(f"CapexPerturbation: no capex range data for tech {tech!r} -- leaving its capex unperturbed.")
-            continue
-        if tech not in decline_df["tech"].values:
-            warnings.warn(f"CapexPerturbation: no decline curve for tech {tech!r} -- holding capex trajectory flat at the perturbed start value.")
+    to_perturb = [("generator_costs", "generator_constants", "generator"), ("storage_costs", "storage_constants", "storage")]
 
-        low_mult, high_mult = ranges.loc[tech, ["low_mult", "high_mult"]]
-        start_mult, info, ratio = sample_scenario(low_mult, high_mult, decline_df, "tech", tech, "capex_fraction", years, start_year, rng, mode, scenario)
-        sampled[tech] = {"start_multiplier": start_mult, **info}
+    def reference(self, tech, years, per_mwh=False):
+        capex = load_table("costs.csv")
+        rows = capex[(capex["tech"] == tech) & (capex["parameter"] == "capex") & (capex["unit"] == "$/kW")]
+        if rows.empty:
+            return None
+        ref = reference_trajectory(rows.iloc[0], load_table("decline_curves.csv"), "tech", "capex_fraction", years)
+        return {level: v * 1000 / (BATTERY_HOURS if per_mwh else 1) for level, v in ref.items()}  # $/kW -> $/MW (or $/MWh)
 
-        ids = constants_table.loc[constants_table["tech"] == tech, id_col]
-        rows = capex_rows & cost_table[id_col].isin(ids)
-        if not rows.any():
-            continue
+    def sample(self, level, tech, years, rng, scale=1.0, per_mwh=False):
+        """Capital cost trajectory for a new build option of tech (random draws around mid)."""
+        ref = self.reference(tech, years, per_mwh)
+        return sample_value(level, ref["mid"], ref, rng, scale)
 
-        new_start_values = cost_table.loc[rows, start_col] * start_mult
-        for year_col in year_cols:
-            cost_table.loc[rows, year_col] = new_start_values * ratio[int(year_col)]
-
-    return cost_table, sampled
-
-
-@dataclass
-class CapexPerturbation(Perturbation):
-    reference_dir: Path = REFERENCE_DIR
-    mode: str = "uniform"  # "uniform" / "random_scenario" / "scenario" -- see sample_scenario
-    scenario: str | None = None  # required ("low"/"mid"/"high") when mode == "scenario"
-    sampled_: dict = field(default_factory=dict, repr=False, compare=False)
-
-    def apply(self, instance, rng):
-        out = instance.copy()
-        ranges, decline = load_capex_tables(self.reference_dir)
-        start_year = int(min(out.years["year"]))
-
-        out.generator_costs, gen_sampled = perturb_capex(
-            out.generator_costs, out.generator_constants, "generator", ranges, decline, start_year, rng, self.mode, self.scenario
-        )
-        out.storage_costs, sto_sampled = perturb_capex(
-            out.storage_costs, out.storage_constants, "storage", ranges, decline, start_year, rng, self.mode, self.scenario
-        )
-        self.sampled_ = {"generator": gen_sampled, "storage": sto_sampled}
+    def resample(self, seer_instance, rng, level, scale=1.0):
+        """Return a copy of seer_instance with every build option's capital cost trajectory resampled
+        (random draws around the instance's own trajectory). Existing units' capital (0) is untouched."""
+        out = seer_instance.copy()
+        for costs_name, constants_name, id_col in self.to_perturb:
+            df = getattr(out, costs_name)
+            constants = getattr(out, constants_name).set_index(id_col)
+            year_cols = year_columns(df)
+            years = [int(c) for c in year_cols]
+            for i, row in df[df["cost_type"] == "capital"].iterrows():
+                unit = constants.loc[row[id_col]]
+                if not unit["expandable"]:
+                    continue
+                ref = self.reference(unit["tech"], years, per_mwh=costs_name == "storage_costs")
+                if ref is None:
+                    warnings.warn(f"no $/kW capex reference for tech {unit['tech']!r} -- leaving {row[id_col]!r} unchanged")
+                    continue
+                df.loc[i, year_cols] = sample_value(level, row[year_cols].to_numpy(dtype=float), ref, rng, scale)
+            setattr(out, costs_name, df)
         return out
 
-    def params(self):
-        return {"mode": self.mode, "scenario": self.scenario, "sampled": self.sampled_}
 
+class MarginalSampler:
+    """Sample thermal generators' marginal cost trajectories ($/MWh): heat_rate x fuel price + vom."""
 
-def perturb_marginal(cost_table, constants_table, id_col, costs_df, fuel_prices, fuel_decline, start_year, rng, mode="uniform", scenario=None):
-    cost_table = cost_table.copy()
-    year_cols = [c for c in cost_table.columns if c not in (id_col, "cost_type")]
-    years = [int(c) for c in year_cols]
-    start_col = next(c for c in year_cols if int(c) == start_year)
-    marginal_rows = cost_table["cost_type"] == "marginal"
+    to_perturb = "generator_costs"
 
-    heat_rates = costs_df[costs_df["parameter"] == "heat_rate"].set_index("tech")["central_value"]
-    fuel_ranges = fuel_prices[fuel_prices["parameter"] == "price"].set_index("fuel")
-    fuel_by_tech = constants_table.drop_duplicates("tech").set_index("tech")["fuel"]
+    def reference(self, tech, fuel, years):
+        capex = load_table("costs.csv").set_index(["tech", "parameter"])
+        prices = load_table("fuel_prices.csv")
+        price_rows = prices[(prices["fuel"] == fuel) & (prices["parameter"] == "price")]
+        if (tech, "heat_rate") not in capex.index or price_rows.empty:
+            return None
+        heat_rate = capex.loc[(tech, "heat_rate"), "central_value"]
+        vom = capex.loc[(tech, "vom"), "central_value"] if (tech, "vom") in capex.index and capex.loc[(tech, "vom"), "unit"] == "$/MWh" else 0.0
+        price = reference_trajectory(price_rows.iloc[0], load_table("decline_curves_fuel.csv"), "fuel", "price_fraction", years)
+        return {level: heat_rate * p + vom for level, p in price.items()}
 
-    sampled = {}
-    for tech in constants_table["tech"].dropna().unique():
-        if tech not in heat_rates.index:
-            continue
-        fuel = fuel_by_tech.get(tech)
-        if fuel not in fuel_ranges.index:
-            warnings.warn(f"MarginalPerturbation: no fuel price data for fuel {fuel!r} (tech {tech!r}) -- leaving its marginal_cost unperturbed.")
-            continue
+    def sample(self, level, tech, fuel, years, rng, scale=1.0):
+        """Marginal cost trajectory for tech burning fuel (random draws around mid)."""
+        ref = self.reference(tech, fuel, years)
+        return sample_value(level, ref["mid"], ref, rng, scale)
 
-        if fuel not in sampled:
-            low_mult, high_mult = fuel_ranges.loc[fuel, ["low_mult", "high_mult"]]
-            start_mult, info, ratio = sample_scenario(low_mult, high_mult, fuel_decline, "fuel", fuel, "price_fraction", years, start_year, rng, mode, scenario)
-            sampled[fuel] = {"start_multiplier": start_mult, "ratio": ratio, **info}
-        start_mult, ratio = sampled[fuel]["start_multiplier"], sampled[fuel]["ratio"]
-
-        ids = constants_table.loc[constants_table["tech"] == tech, id_col]
-        rows = marginal_rows & cost_table[id_col].isin(ids)
-        if not rows.any():
-            continue
-
-        # fuel share of the EXISTING marginal_cost, estimated at reference-data's own
-        # (unperturbed) central price -- the rest is held as a flat residual (O&M etc.), never
-        # touched. The perturbed fuel cost (which start_mult/ratio actually act on) is a separate
-        # quantity, so start_mult visibly shifts the start-year total too, not just future years.
-        fuel_cost_estimate = heat_rates.loc[tech] * float(fuel_ranges.loc[fuel, "central_value"])
-        perturbed_fuel_cost_start = fuel_cost_estimate * start_mult
-        residual = (cost_table.loc[rows, start_col] - fuel_cost_estimate).clip(lower=0)
-
-        for year_col in year_cols:
-            cost_table.loc[rows, year_col] = residual + perturbed_fuel_cost_start * ratio[int(year_col)]
-
-    return cost_table, {fuel: {k: v[k] for k in v if k != "ratio"} for fuel, v in sampled.items()}
-
-
-@dataclass
-class MarginalPerturbation(Perturbation):
-    reference_dir: Path = REFERENCE_DIR
-    mode: str = "uniform"  # "uniform" / "random_scenario" / "scenario" -- see sample_scenario
-    scenario: str | None = None  # required ("low"/"mid"/"high") when mode == "scenario"
-    sampled_: dict = field(default_factory=dict, repr=False, compare=False)
-
-    def apply(self, instance, rng):
-        out = instance.copy()
-        costs_df, fuel_prices, fuel_decline = load_fuel_tables(self.reference_dir)
-        start_year = int(min(out.years["year"]))
-
-        out.generator_costs, gen_sampled = perturb_marginal(
-            out.generator_costs, out.generator_constants, "generator", costs_df, fuel_prices, fuel_decline, start_year, rng, self.mode, self.scenario
-        )
-        self.sampled_ = {"generator": gen_sampled}
+    def resample(self, seer_instance, rng, level, scale=1.0):
+        """Return a copy of seer_instance with every thermal generator's marginal cost trajectory
+        resampled (random draws around the instance's own trajectory). Generators with no heat rate
+        or fuel price reference (renewables, hydro, ...) are untouched."""
+        out = seer_instance.copy()
+        df = getattr(out, self.to_perturb)
+        constants = out.generator_constants.set_index("generator")
+        year_cols = year_columns(df)
+        years = [int(c) for c in year_cols]
+        for i, row in df[df["cost_type"] == "marginal"].iterrows():
+            unit = constants.loc[row["generator"]]
+            ref = self.reference(unit["tech"], unit["fuel"], years)
+            if ref is None:
+                continue
+            df.loc[i, year_cols] = sample_value(level, row[year_cols].to_numpy(dtype=float), ref, rng, scale)
+        setattr(out, self.to_perturb, df)
         return out
-
-    def params(self):
-        return {"mode": self.mode, "scenario": self.scenario, "sampled": self.sampled_}
