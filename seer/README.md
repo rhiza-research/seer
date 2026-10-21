@@ -24,17 +24,18 @@ Converting external models into the seer schema lives in the top-level `inputs/`
 (`gdx`, `epm2seer`), not in `seer/` -- see the repo [README](../README.md).
 
 ## `seer/scenarios/`
-Generates new seer-schema instances, organized by element. Each element package keeps its
-shared reference/library code next to a `perturb` module (and, later, a `create` module):
+Generates seer-schema instances from spec strings like `"high-capex-start, random-demand-profile"`:
 
-- **`seer/scenarios/demand/`** - `library.py` (daily load-profile library and feature-matched
-  sampling), `perturb.py` (`DemandGrowthPerturbation`, `LoadCurvePerturbation`).
-- **`seer/scenarios/costs/`** - `reference.py` (reference cost/fuel tables, trajectory curves),
-  `perturb.py` (`CostPerturbation`, `MarginalCostPerturbation`).
-- `base.py` (`Perturbation`, `apply_all`) and `daily_profiles.py` (circular-hour resampling
-  shared by profile libraries) sit at the top level.
+- **`create.py`** - `create(country, spec)` builds a new instance from gridflow (zones, network,
+  demand, existing plants) plus sampled reference data.
+- **`perturb.py`** - `perturb(instance, spec)` resamples an existing instance.
+- **`settings.py`, `demand_trajectory.py`, `profiles.py`, `costs.py`** - the samplers both call,
+  each with a `sample` (create) and `resample` (perturb).
+- **`spec.py`** - spec tokenizing and the shared low / mid / high / random rule (`sample_value`).
 
-Reference data the scenarios draw on lives in `seer/scenarios/reference_data/`.
+Reference data lives in `seer/scenarios/reference_data/`: `scenarios.yaml` (low / mid / high
+values), `technology/` (tech parameters, cost start values and pathways), `fuels/` (fuel price
+start values and pathways) and `profiles/` (demand and renewable daily-profile libraries).
 
 ## `seer/models/`
 Builds a solvable model from a seer schema model specification. A seer schema can be instantiated
