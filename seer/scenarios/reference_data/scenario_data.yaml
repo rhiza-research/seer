@@ -1,0 +1,41 @@
+# Reference low / mid / high values for scenario creation and perturbation (see
+# seer/scenarios/scenario_options.py):
+#
+# scenario level low / mid / high: the reference value, times (1 + U(-noise, noise)).
+# scenario level random: uniform between the reference low and high.
+# perturbation scale s (0-1), applied after the level: uniform on
+#   [value - s * (value - min(low, high, value)), value + s * (max(low, high, value) - value)]
+#
+# All values are placeholders, to be replaced with sourced numbers.
+
+noise: 0.02  # relative noise on low / mid / high
+
+settings:
+  dr: {low: 0.04, mid: 0.08, high: 0.12}
+  voll: {low: 500, mid: 2500, high: 10000}  # $/MWh
+
+demand_trajectory:
+  growth_rate: {low: 0.02, mid: 0.035, high: 0.05}  # annual peak growth
+
+renewable_profiles:
+  # annual capacity factor, per category
+  solar: {low: 0.15, mid: 0.20, high: 0.25}
+  wind: {low: 0.20, mid: 0.30, high: 0.40}
+
+demand_profile:
+  # daily load factor (mean / max): low / mid / high is how peaky each day is, so high = lowest load factor
+  load_factor: {low: 0.90, mid: 0.75, high: 0.60}
+  peak_hour: 19  # create's starting peak hour
+  peak_hour_shift: 4.0  # hours, either direction, at perturbation scale 1 (wraps at 24)
+  # named shapes, also accepted as demand-profile specs
+  shapes:
+    flat: {load_factor: 0.90, peak_hour: 19}
+    peaky: {load_factor: 0.60, peak_hour: 19}
+    morning-peak: {load_factor: 0.75, peak_hour: 9}
+
+# techs offered as build options in every zone by create (generator or storage, per
+# technology/tech_parameters.csv)
+build_options: [CCGT, OCGT, coal, solar-utility, onwind, battery storage]
+
+# costs: low / mid / high start values and pathways live in technology/ (tech_costs.csv,
+# tech_cost_pathways.csv) and fuels/ (fuel_prices.csv, fuel_price_pathways.csv) -- see costs.py
