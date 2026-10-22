@@ -3,11 +3,8 @@
 .DS_Store
 __pycache__/
 
-# data/ is bulk gams data (raw/extracted/seer-schema outputs), regenerable and often large --
-# ignored by default, with specific carve-outs for files/folders worth tracking in git.
-data/*
-!data/readme.md
-!data/processed_gams
+# data/ is bulk gams data (raw/extracted/seer-schema outputs) -- kept local only, never tracked
+/data/
 .claude
 
 # vendored source CSVs for seer/scenarios/reference_data, re-downloaded by scripts/build_cost_ranges.py
