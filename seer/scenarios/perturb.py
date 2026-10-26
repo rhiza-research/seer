@@ -1,4 +1,4 @@
-"""Perturb an existing seer-schema instance: set parameters to scenario levels and / or perturb them.
+"""Perturb an existing seer-schema instance: set parameters to fixed scenario levels and / or perturb them.
 Examples:
     perturb(instance, scenario={"fuel:gas": "high", "demand_growth": "low"}, seed=0)
     perturb(instance, perturbation={"capex_pathway": 0.3}, seed=0)
@@ -6,31 +6,28 @@ Examples:
 
 See scenario_options for parameters, groups and keys. Parameters in neither are left as they are.
 """
-import numpy as np
-
 from . import costs, demand_trajectory, profiles, settings
 from .scenario_options import parse
 
 
 def perturb(seer_instance, scenario=None, perturbation=None, seed=None):
     """Copy of seer_instance with scenario's levels set, then perturbation's scales applied."""
-    options = parse(scenario, perturbation)
-    rng = np.random.default_rng(seed)
+    scenario_options = parse(scenario, perturbation, seed=seed)
     out = seer_instance.copy()
 
     # settings
-    out = settings.resample(out, options, rng)
+    out = settings.resample(out, scenario_options)
 
     # demand
-    out = demand_trajectory.resample(out, options, rng)
-    out = profiles.resample_demand_profile(out, options, rng)
+    out = demand_trajectory.resample(out, scenario_options)
+    out = profiles.resample_demand_profile(out, scenario_options)
 
     # renewables
-    out = profiles.resample_re_profile(out, options, rng)
-    out = profiles.resample_hydro(out, options, rng)
+    out = profiles.resample_re_profile(out, scenario_options)
+    out = profiles.resample_hydro(out, scenario_options)
 
     # costs
-    out = costs.resample_capex(out, options, rng)
-    out = costs.resample_marginal(out, options, rng)
+    out = costs.resample_capex(out, scenario_options)
+    out = costs.resample_marginal(out, scenario_options)
 
     return out
