@@ -1,9 +1,9 @@
-"""Sample profiles from profile libraries: `sample` builds one profile from target features
-(e.g. a renewable capacity factor) for creating a new instance; `resample` perturbs every day of an
-existing instance's profiles by randomizing each day's features and resampling a library profile."""
+"""Sample profiles: `sample` matches one library profile to target features (for creating an
+instance); `resample` sets / perturbs an existing instance's profiles per its ScenarioOptions targets
+(demand-profile, re-profile, hydro), day by day from the library, or rescaled for hydro."""
 import warnings
 from dataclasses import dataclass
-from functools import cached_property
+from functools import cache, cached_property
 from pathlib import Path
 
 import numpy as np
@@ -11,13 +11,14 @@ import pandas as pd
 
 from ..models.utils.time_utils import parse_time_string
 from .costs import tech_parameter
-from .spec import sample_value
+from .scenario_options import SCENARIO_DATA, sample_value
 
 
 class ProfileSampler:
-    """Shared sample/resample pipeline over a library of real daily profiles."""
+    """Shared sample / resample pipeline over a library of real daily profiles."""
 
     to_perturb: str  # SeerInstance attribute resample perturbs
+    target: str  # ScenarioOptions target
     FILTER_COL: str | None = None  # library column restricting candidates, via filter_value
 
     @cached_property
@@ -30,16 +31,10 @@ class ProfileSampler:
             [self.extract_features(t, v) for t, v in zip(self.library["times"], self.library["values"])], index=self.library.index
         )
 
-    def sample(self, features, times, filter_value=None, rng=None, scale=1.0):
+    def sample(self, features, times, filter_value=None):
         """Return the library profile matching target features, evaluated at times (fractional
-        hours of day). features is a dict of feature values, a named scenario (see SCENARIOS), or
-        "random" (a randomly chosen named scenario, randomized by scale). Returns None if no library
-        profile matches filter_value. Not rescaled: a load profile comes back peak-normalized, a
-        renewable profile as a capacity factor."""
-        if features == "random":
-            features = self.randomize_features(self.named_scenario(rng.choice(self.scenario_names(filter_value)), filter_value), rng, scale)
-        elif isinstance(features, str):
-            features = self.named_scenario(features, filter_value)
+        hours of day). Returns None if no library profile matches filter_value. Not rescaled: a
+        load profile comes back peak-normalized, a renewable profile as a capacity factor."""
         library_profiles = self.library if self.FILTER_COL is None else self.library[self.library[self.FILTER_COL] == filter_value]
         if library_profiles.empty:
             return None
@@ -52,20 +47,20 @@ class ProfileSampler:
         weights = 1.0 / (dist.loc[nearest].to_numpy() + 1e-6)
         return np.average(profiles, axis=0, weights=weights / weights.sum())
 
-    def resample(self, seer_instance, rng, scale=1.0):
-        """Return a copy of seer_instance with its profiles perturbed. scale: 0 = unperturbed, 1 =
-        the largest shift."""
+    def resample(self, seer_instance, options, rng):
+        """Return a copy of seer_instance with its profiles set / perturbed per options' target."""
         out = seer_instance.copy()
-        if scale == 0:
+        if not options.active(self.target):
             return out
         df = getattr(out, self.to_perturb)  # the seer instance attribute to perturb
+        day_target = self.day_targets(df, options, rng)
 
-        for pid, times, values, day_rows in self.prepare_profiles(df):
+        for key, times, values, day_rows in self.prepare_profiles(df):
             # Step 1: compute this day's own features
             features = self.extract_features(times, values)
 
-            # Step 2: randomly perturb the features to get a target
-            target_features = self.randomize_features(features, rng, scale)
+            # Step 2: the day's target features, per options
+            target_features = day_target(key, features)
 
             # Step 3: sample the target's profile from the library, restricted to rows matching this
             # day (e.g. renewable's solar/wind category; none for demand)
@@ -79,23 +74,16 @@ class ProfileSampler:
         setattr(out, self.to_perturb, df)
         return out
 
+    def day_targets(self, df, options, rng):
+        """(day key, day features) -> target features, for every day in df."""
+        raise NotImplementedError
+
     def prepare_profiles(self, df):
         """Yield (key, times, values, day_rows) per represented day in df -- see split_into_days below."""
         raise NotImplementedError
 
     def extract_features(self, times, values) -> dict:
         """Compute features for a profile."""
-        raise NotImplementedError
-
-    def scenario_names(self, filter_value=None):
-        return list(self.SCENARIOS)
-
-    def named_scenario(self, name, filter_value=None) -> dict:
-        """Hardcoded feature values for a named scenario."""
-        return self.SCENARIOS[name]
-
-    def randomize_features(self, features, rng, scale) -> dict:
-        """Shift each feature by about scale times its largest shift, in a random direction."""
         raise NotImplementedError
 
     def feature_distance(self, target_features, library_features) -> pd.Series:
@@ -109,23 +97,37 @@ class ProfileSampler:
         return profile
 
 
-# --- demand: load-curve shape, parametrized by (peakiness, peak_hour) ---
+# --- demand: load-curve shape, parametrized by (load_factor, peak_hour) ---
 
 
 @dataclass
 class LoadProfileSampler(ProfileSampler):
-    """Sample demand_profile.csv's daily shape (peakiness + peak_hour); resample rescales to each day's own peak."""
+    """Sample demand_profile.csv's daily shape (load factor = mean / max, and peak hour); resample
+    rescales to each day's own peak. Target demand-profile: low / mid / high set the load factor
+    (high = peakiest), a named shape sets both features, and the scale perturbs both."""
 
     to_perturb = "demand_profile"
+    target = "demand-profile"
+    data = SCENARIO_DATA["demand_profile"]
 
     library_dir: Path = Path(__file__).parent / "reference_data" / "profiles" / "demand"
     k: int = 5  # >1 blends the k nearest real profiles; 1 uses the single nearest as-is
 
-    SCENARIOS = {
-        "flat": {"peakiness": 0.9, "peak_hour": 19.0},
-        "peaky": {"peakiness": 0.6, "peak_hour": 19.0},
-        "morning-peak": {"peakiness": 0.75, "peak_hour": 9.0},
-    }
+    def start_features(self):
+        """create's starting features: mid load factor at the reference peak hour."""
+        return {"load_factor": self.data["load_factor"]["mid"], "peak_hour": float(self.data["peak_hour"])}
+
+    def target_features(self, features, options, rng):
+        """features set to options' level (or named shape) and perturbed by its scale."""
+        level, scale = options.level(self.target), options.scale(self.target)
+        if level in self.data["shapes"]:
+            features, level = {k: float(v) for k, v in self.data["shapes"][level].items()}, None
+        load_factor = float(np.clip(sample_value(features["load_factor"], self.data["load_factor"], rng, level, scale), 0.01, 1.0))
+        shift = scale * self.data["peak_hour_shift"] * rng.uniform(-1, 1) if scale else 0.0
+        return {"load_factor": load_factor, "peak_hour": (features["peak_hour"] + shift) % 24}
+
+    def day_targets(self, df, options, rng):
+        return lambda key, features: self.target_features(features, options, rng)  # a fresh draw per day
 
     def prepare_profiles(self, df):
         """demand_profile.csv: zone, time, value[, year] -- one day per (zone[, year])."""
@@ -133,16 +135,7 @@ class LoadProfileSampler(ProfileSampler):
         return split_into_days(df, group_cols)
 
     def extract_features(self, times, values):
-        return {"peakiness": float(values.mean() / values.max()), "peak_hour": float(times[np.argmax(values)])}
-
-    def randomize_features(self, features, rng, scale):
-        # largest shifts: 0.2 peakiness, 4 hours
-        shift = rng.choice([-1, 1]) * abs(rng.normal(scale * 0.2, 0.02))
-        peakiness = features["peakiness"] + shift
-        if not 0.3 <= peakiness <= 1.0:
-            peakiness = features["peakiness"] - shift  # shift the other way instead
-        peak_hour = features["peak_hour"] + rng.choice([-1, 1]) * abs(rng.normal(scale * 4.0, 0.5))
-        return {"peakiness": float(np.clip(peakiness, 0.3, 1.0)), "peak_hour": float(peak_hour % 24)}
+        return {"load_factor": float(values.mean() / values.max()), "peak_hour": float(times[np.argmax(values)])}
 
     @staticmethod
     def _hour_distance(h1, h2):
@@ -151,10 +144,10 @@ class LoadProfileSampler(ProfileSampler):
         return min(d, 24 - d)
 
     def feature_distance(self, target_features, library_features):
-        peakiness_diff = library_features["peakiness"] - target_features["peakiness"]
+        load_factor_diff = library_features["load_factor"] - target_features["load_factor"]
         peak_hour_diff = library_features["peak_hour"].apply(lambda h: self._hour_distance(h, target_features["peak_hour"]))
-        peak_hour_diff = peak_hour_diff / 12.0  # scale by its max possible value so it's comparable to peakiness_diff
-        return (peakiness_diff ** 2 + peak_hour_diff ** 2) ** 0.5
+        peak_hour_diff = peak_hour_diff / 12.0  # scale by its max possible value so it's comparable to load_factor_diff
+        return (load_factor_diff ** 2 + peak_hour_diff ** 2) ** 0.5
 
     def rescale(self, profile, times, values):
         return profile * values.max()  # library profile is peak-normalized; restore the day's own peak level
@@ -175,25 +168,33 @@ def renewable_category(tech):
 
 @dataclass
 class ReProfileSampler(ProfileSampler):
-    """Sample renewable_profiles.csv's daily capacity-factor shape; filter_value is the solar/wind category."""
+    """Sample renewable_profiles.csv's daily capacity-factor shape; filter_value is the solar/wind
+    category. Target re-profile: level and scale set each profile's annual capacity factor (per
+    category, scenario_data.yaml's renewable_profiles), and every day moves by the same ratio."""
 
     to_perturb = "renewable_profiles"
+    target = "re-profile"
     FILTER_COL = "category"
+    data = SCENARIO_DATA["renewable_profiles"]
 
     library_dir: Path = Path(__file__).parent / "reference_data" / "profiles" / "renewable"
     k: int = 1  # blending real profiles could push an hourly value above 1 (physically invalid)
 
-    # capacity factor per category
-    SCENARIOS = {
-        "solar": {"low": 0.15, "mid": 0.2, "high": 0.25},
-        "wind": {"low": 0.2, "mid": 0.3, "high": 0.4},
-    }
+    def sample(self, features, times, filter_value=None):
+        profile = super().sample(features, times, filter_value)
+        return None if profile is None else np.clip(profile, 0.0, 1.0)  # some library days exceed 1 (e.g. CSP)
 
-    def scenario_names(self, filter_value=None):
-        return list(self.SCENARIOS[filter_value])
+    def annual_capacity_factor(self, cf, category, options, rng):
+        """An annual capacity factor set / perturbed per options (unchanged for a category without a reference)."""
+        if category not in self.data:
+            return cf
+        return float(np.clip(sample_value(cf, self.data[category], rng, options.level(self.target), options.scale(self.target)), 0.001, 0.999))
 
-    def named_scenario(self, name, filter_value=None):
-        return {"capacity_factor": self.SCENARIOS[filter_value][name]}
+    def day_targets(self, df, options, rng):
+        profiles = df.groupby("profile_id").agg(cf=("value", "mean"), tech=("tech", "first"))
+        ratio = {pid: self.annual_capacity_factor(p.cf, renewable_category(p.tech), options, rng) / p.cf if p.cf > 0 else 1.0
+                 for pid, p in profiles.iterrows()}
+        return lambda key, features: {"capacity_factor": float(np.clip(features["capacity_factor"] * ratio[key["profile_id"]], 0.001, 0.999))}
 
     def prepare_profiles(self, df):
         """renewable_profiles.csv: profile_id, tech, zone, time, value -- one day per profile_id."""
@@ -201,15 +202,6 @@ class ReProfileSampler(ProfileSampler):
 
     def extract_features(self, times, values):
         return {"capacity_factor": float(np.mean(values))}
-
-    def randomize_features(self, features, rng, scale):
-        # largest shift: 50% of the day's own capacity factor (relative, since solar and wind differ)
-        cf = features["capacity_factor"]
-        shift = rng.choice([-1, 1]) * abs(rng.normal(scale * 0.5, 0.05)) * cf
-        capacity_factor = cf + shift
-        if not 0.001 <= capacity_factor <= 0.999:
-            capacity_factor = cf - shift  # shift the other way instead
-        return {"capacity_factor": float(np.clip(capacity_factor, 0.001, 0.999))}
 
     def feature_distance(self, target_features, library_features):
         return (library_features["capacity_factor"] - target_features["capacity_factor"]).abs()
@@ -249,6 +241,7 @@ def time_align(times, values, target_times):
     return np.interp(target_times, looped_times, looped_values)
 
 
+@cache
 def load_profile_library(library_dir):
     """Reshape a library's (metadata.csv, curves.csv) into one DataFrame with times/values array columns."""
     library_dir = Path(library_dir)
@@ -263,25 +256,28 @@ def load_profile_library(library_dir):
 
 
 class HydroProfileSampler:
-    """Sample hydro and ror's availability: a flat profile at an annual capacity factor, with low /
-    mid / high from technology/tech_parameters.csv (cf_low / cf_mid / cf_high). One draw is shared by
-    every hydro and ror profile."""
+    """Sample hydro and ror's availability (target hydro): a flat profile at an annual capacity factor,
+    with low / mid / high from technology/tech_parameters.csv (cf_low / cf_mid / cf_high). One draw is
+    shared by every hydro and ror profile."""
 
     to_perturb = "renewable_profiles"
+    target = "hydro"
     TECHS = ["hydro", "ror"]
 
-    def reference(self):
+    def levels(self):
         return {level: tech_parameter("hydro", f"cf_{level}") for level in ["low", "mid", "high"]}
 
-    def sample(self, level, rng, scale=1.0):
-        """Annual capacity factor (random draws around mid)."""
-        ref = self.reference()
-        return float(sample_value(level, ref["mid"], ref, rng, scale))
+    def sample(self, options, rng):
+        """Annual capacity factor per options, starting from mid."""
+        levels = self.levels()
+        return float(sample_value(levels["mid"], levels, rng, options.level(self.target), options.scale(self.target)))
 
-    def resample(self, seer_instance, rng, level, scale=1.0):
+    def resample(self, seer_instance, options, rng):
         """Return a copy of seer_instance with its hydro and ror profiles rescaled to a capacity factor
-        drawn at level (random draws around their current mean), keeping each profile's shape."""
+        set per options (starting from their current mean), keeping each profile's shape."""
         out = seer_instance.copy()
+        if not options.active(self.target):
+            return out
         gens = out.generator_constants
         ids = gens.loc[gens["tech"].isin(self.TECHS) & gens["isre"].astype(bool), "profile_id"].dropna().unique()
         df = getattr(out, self.to_perturb)
@@ -290,7 +286,7 @@ class HydroProfileSampler:
             warnings.warn("no hydro / ror generators with a profile -- hydro left unchanged")
             return out
         start = df.loc[rows, "value"].mean()
-        cf = sample_value(level, start, self.reference(), rng, scale)
+        cf = sample_value(start, self.levels(), rng, options.level(self.target), options.scale(self.target))
         df.loc[rows, "value"] = (df.loc[rows, "value"] * cf / start).clip(upper=1.0)
         setattr(out, self.to_perturb, df)
         return out

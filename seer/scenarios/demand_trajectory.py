@@ -1,10 +1,10 @@
-"""Sample and resample demand_forecast.csv's annual peak trajectory, by its growth rate (low / mid /
-high from reference_data/scenarios.yaml).
+"""Sample and resample demand_forecast.csv's annual peak trajectory, by its growth rate (target
+demand-growth; low / mid / high from reference_data/scenario_data.yaml).
 """
 import numpy as np
 import pandas as pd
 
-from .spec import REFERENCE, sample_value
+from .scenario_options import SCENARIO_DATA, sample_value
 
 
 def scale_demand_growth(demand_forecast, exponent):
@@ -23,32 +23,39 @@ def scale_demand_growth(demand_forecast, exponent):
 
 
 class DemandTrajectorySampler:
-    """Sample demand_forecast.csv's annual peak trajectory, parametrized by its growth rate."""
+    """Sample demand_forecast.csv's annual peak trajectory, parametrized by its growth rate (target
+    demand-growth)."""
 
     to_perturb = "demand_forecast"
-    ref = REFERENCE["demand_trajectory"]["growth_rate"]
+    target = "demand-growth"
+    levels = SCENARIO_DATA["demand_trajectory"]["growth_rate"]
 
-    def sample(self, level, start_value, years, rng, scale=1.0):
-        """Peak trajectory from start_value in years[0], growing at a growth rate drawn at level
-        (random draws around mid)."""
-        growth_rate = sample_value(level, self.ref["mid"], self.ref, rng, scale)
+    def sample(self, start_value, years, options, rng):
+        """Peak trajectory from start_value in years[0], growing at a rate set by options (from mid)."""
+        growth_rate = sample_value(self.levels["mid"], self.levels, rng, options.level(self.target), options.scale(self.target))
         return pd.Series({y: start_value * (1 + growth_rate) ** (y - years[0]) for y in years})
 
-    def resample(self, seer_instance, rng, level, scale=1.0):
-        """Return a copy of seer_instance with each zone's peak trajectory regrown at a growth rate
-        drawn at level (random draws around the zone's own rate), keeping the trajectory's shape."""
+    def resample(self, seer_instance, options, rng):
+        """Return a copy of seer_instance with each zone's peak trajectory regrown at a rate set by
+        options (from the zone's own average rate), keeping the trajectory's shape."""
         out = seer_instance.copy()
+        if not options.active(self.target):
+            return out
         df = getattr(out, self.to_perturb)
         for _, group in df.groupby(["zone", "type"]):
             group = group.sort_values("year")
             n_years = group["year"].iloc[-1] - group["year"].iloc[0]
+            if n_years == 0:
+                continue  # a single year has no growth to change
             # Step 1: the trajectory's own average growth rate
             growth_rate = (group["value"].iloc[-1] / group["value"].iloc[0]) ** (1 / n_years) - 1
             # Step 2: draw the new growth rate
-            new_growth_rate = sample_value(level, growth_rate, self.ref, rng, scale)
-            # Step 3: rescale the trajectory's growth, keeping its shape
-            exponent = np.log(1 + new_growth_rate) / np.log(1 + growth_rate)
-            df.loc[group.index, "value"] = scale_demand_growth(group, exponent)["value"]
+            new_growth_rate = sample_value(growth_rate, self.levels, rng, options.level(self.target), options.scale(self.target))
+            # Step 3: rescale the trajectory's growth, keeping its shape -- a flat one has no shape to keep
+            if abs(growth_rate) < 1e-9:
+                values = group["value"].iloc[0] * (1 + new_growth_rate) ** (group["year"] - group["year"].iloc[0])
+            else:
+                values = scale_demand_growth(group, np.log(1 + new_growth_rate) / np.log(1 + growth_rate))["value"]
+            df.loc[group.index, "value"] = values
         setattr(out, self.to_perturb, df)
         return out
-

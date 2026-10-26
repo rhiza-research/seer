@@ -1,8 +1,10 @@
 """Create a seer-schema instance from scratch: zones, network, national demand and existing plants
 from gridflow, everything else sampled from reference data. Everything is set per zone.
 Examples:
-    create("TUR", "high-capex, low-demand-growth", seed=0)
-    create("TUR", "random, scale-0.5", seed=0, n_days=4, weights=[90, 92, 92, 91])
+    create("TUR", scenario=["capex-high", "demand-growth-low"], seed=0)
+    create("TUR", scenario="all-random", perturbation=0.5, seed=0, n_days=4, weights=[90, 92, 92, 91])
+
+See scenario_options for the spec format, targets and groups.
 """
 import os
 import uuid
@@ -17,27 +19,27 @@ from ..schema import SeerInstance
 from . import settings as scenario_settings
 from .costs import CapexSampler, MarginalSampler, per_key_rng, tech_parameter
 from .demand_trajectory import DemandTrajectorySampler
-from .perturb import parse
 from .profiles import HydroProfileSampler, LoadProfileSampler, ReProfileSampler, renewable_category
-from .spec import REFERENCE, sample_value
+from .scenario_options import SCENARIO_DATA, parse
 
 GRIDFLOW_DATA = Path(os.environ.get("GRIDFLOW_DATA", Path(__file__).parents[3] / "gridflow" / "data" / "global"))
 RE_POTENTIAL_COLUMN = {"solar": "solar-utility", "wind": "onwind"}  # gridflow's zone_re_potential column per category
 UNKNOWN_START_YEAR = 2010  # schema README convention for an existing unit with no known start year
 NEVER_RETIRES = 100  # schema README convention for an existing unit with no retirement date
+# levels for targets the scenario doesn't set; re-profile has none, so gridflow's capacity factors stand
+DEFAULT_LEVELS = {
+    "dr": "mid", "voll": "mid", "demand-growth": "mid", "demand-profile": "random", "hydro": "mid",
+    "capex-start": "mid", "capex-pathway": "mid", "fuel-start": "mid", "fuel-pathway": "mid",
+}
 
 
-def create(country, spec=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 2040), n_days=12, weights=None,
-           build_options=None, gridflow_data=GRIDFLOW_DATA):
-    """Return a new seer instance for country, an ISO3 code (as gridflow expects).
-    Targets not in spec are sampled at mid; the demand profile defaults to random, and renewable
-    profiles to gridflow's capacity factors. build_options: techs offered for building in every
-    zone (default: scenarios.yaml's build_options)."""
-    options = {
-        "dr": "mid", "voll": "mid", "demand-growth": "mid", "demand-profile": "random",
-        "capex-start": "mid", "capex-pathway": "mid", "fuel-start": "mid", "fuel-pathway": "mid", "hydro": "mid",
-        **parse(spec),
-    }
+def create(country, scenario=None, perturbation=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 2040), n_days=12,
+           weights=None, build_options=None, gridflow_data=GRIDFLOW_DATA):
+    """Return a new seer instance for country, an ISO3 code (as gridflow expects), with scenario's
+    levels set and perturbation's scales applied. Targets the scenario doesn't set take
+    DEFAULT_LEVELS. build_options: techs offered for building in every zone (default: scenario_data.yaml's
+    build_options)."""
+    options = parse(scenario, perturbation, defaults=DEFAULT_LEVELS)
     rng = np.random.default_rng(seed)
 
     # Step 1 - Get gridflow starting model for the country
@@ -84,7 +86,7 @@ def create(country, spec=None, seed=None, n_zones=5, years=(2025, 2030, 2035, 20
     # renewable profiles
     renewable_profiles = create_renewable_profiles(region, times, options, rng)
     # generators and storage: existing units, plus build options in every zone
-    build_options = REFERENCE["build_options"] if build_options is None else build_options
+    build_options = SCENARIO_DATA["build_options"] if build_options is None else build_options
     first_year = int(years["year"].iloc[0])
     generator_constants = create_generator_constants(region, build_options, first_year)
     generator_costs = create_generator_costs(generator_constants, years, options, rng)
@@ -108,7 +110,7 @@ def create_demand_profile(zones, times, options, rng):
     n_days = len(times) // len(hours)
     frames = []
     for zone in zones["zone"]:
-        values = np.concatenate([sampler.sample(options["demand-profile"], hours, rng=rng, scale=options["scale"]) for _ in range(n_days)])
+        values = np.concatenate([sampler.sample(sampler.target_features(sampler.start_features(), options, rng), hours) for _ in range(n_days)])
         frames.append(pd.DataFrame({"zone": zone, "time": times["time"], "value": values}))
     return pd.concat(frames, ignore_index=True)
 
@@ -125,7 +127,7 @@ def create_demand_forecast(region, demand_profile, times, years, options, rng):
         energy_mwh = country["demand_twh"] * 1e6 * share
         peak = energy_mwh / (demand_profile.loc[demand_profile["zone"] == zone, "value"].to_numpy() @ hours)
         demand_year = int(country["demand_year"])
-        trajectory = sampler.sample(options["demand-growth"], peak, [demand_year, *years["year"]], rng, options["scale"])
+        trajectory = sampler.sample(peak, [demand_year, *years["year"]], options, rng)
         rows += [(zone, "peak", y, trajectory[y]) for y in years["year"]]
     return pd.DataFrame(rows, columns=["zone", "type", "year", "value"])
 
@@ -136,19 +138,17 @@ def profile_id(zone, category):
 """Supply"""
 
 def create_renewable_profiles(region, times, options, rng):
-    """One profile per zone per category: solar and wind matched on gridflow's capacity factor --
-    or, if the spec sets re-profile, on a capacity factor sampled at that level around it -- and
-    hydro (for hydro and ror) flat at a capacity factor sampled at the hydro level, shared by every zone."""
+    """One profile per zone per category: solar and wind matched on gridflow's capacity factor (set /
+    perturbed if options' re-profile is), and hydro (for hydro and ror) flat at a capacity factor per
+    options' hydro, shared by every zone."""
     hours = np.arange(24.0)
     sampler = ReProfileSampler()
     n_days = len(times) // len(hours)
-    hydro_cf = HydroProfileSampler().sample(options["hydro"], rng, options["scale"])
+    hydro_cf = HydroProfileSampler().sample(options, rng)
     frames = []
     for zone, potential in region.zone_re_potential.iterrows():
         for category, column in RE_POTENTIAL_COLUMN.items():
-            cf = potential[column]
-            if "re-profile" in options:
-                cf = sample_value(options["re-profile"], cf, REFERENCE["renewable_profiles"][category], rng, options["scale"])
+            cf = sampler.annual_capacity_factor(potential[column], category, options, rng)
             curve = sampler.sample({"capacity_factor": cf}, hours, category)
             frames.append(pd.DataFrame({
                 "profile_id": profile_id(zone, category), "zone": zone, "tech": column, "generator": None,
@@ -193,10 +193,10 @@ def create_generator_costs(generator_constants, years, options, rng):
     for g in generator_constants.itertuples():
         capital = np.zeros(len(years))
         if g.expandable:
-            capital = capex.sample(options["capex-start"], options["capex-pathway"], g.tech, years, rng_for(g.tech), options["scale"])
+            capital = capex.sample(g.tech, years, options, rng_for(g.tech))
         cost = np.zeros(len(years))
-        if marginal.reference(g.tech, g.fuel, years) is not None:
-            cost = marginal.sample(options["fuel-start"], options["fuel-pathway"], g.tech, g.fuel, years, rng_for(g.fuel), options["scale"])
+        if marginal.levels(g.tech, g.fuel, years) is not None:
+            cost = marginal.sample(g.tech, g.fuel, years, options, rng_for(g.fuel))
         rows += [[g.generator, "capital", *capital], [g.generator, "marginal", *cost]]
     return pd.DataFrame(rows, columns=["generator", "cost_type", *[str(y) for y in years]])
 
@@ -219,6 +219,6 @@ def create_storage_costs(storage_constants, years, options, rng):
     rng_for = per_key_rng(rng)
     rows = []
     for s in storage_constants.itertuples():
-        capital = capex.sample(options["capex-start"], options["capex-pathway"], s.tech, years, rng_for(s.tech), options["scale"])
+        capital = capex.sample(s.tech, years, options, rng_for(s.tech))
         rows += [[s.storage, "capital", *capital], [s.storage, "marginal", *np.zeros(len(years))]]
     return pd.DataFrame(rows, columns=["storage", "cost_type", *[str(y) for y in years]])
