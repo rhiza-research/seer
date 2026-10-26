@@ -1,21 +1,23 @@
-"""Sample and resample demand_forecast.csv's annual peak trajectory, by its growth rate. Parameters:
-demand_growth.
+"""Sample and resample each zone's annual peak demand trajectory, by its growth rate.
+
+Parameter targets: demand_growth
+Seer schema files: demand_forecast.csv
 """
 import numpy as np
 import pandas as pd
 
 
-def sample(peak, years, options, rng=None):
-    """Peak trajectory from peak in years[0], growing at a rate per options."""
-    growth_rate = options.sample("demand_growth", rng=rng)
-    return pd.Series({y: peak * (1 + growth_rate) ** (y - years[0]) for y in years})
+def sample(first_peak, years, scenario_options):
+    """Peak trajectory from first_peak (the peak in years[0]), growing at a rate per scenario_options."""
+    growth_rate = scenario_options.sample("demand_growth")
+    return pd.Series({y: first_peak * (1 + growth_rate) ** (y - years[0]) for y in years})
 
 
-def resample(instance, options, rng=None):
-    """Copy of instance with each zone's peak trajectory regrown at a rate per options (from the
+def resample(instance, scenario_options):
+    """Copy of instance with each zone's peak trajectory regrown at a rate per scenario_options (from the
     zone's own average rate), keeping the trajectory's shape."""
     out = instance.copy()
-    if not options.active("demand_growth"):
+    if not scenario_options.active("demand_growth"):
         return out
     df = out.demand_forecast
     for _, group in df.groupby(["zone", "type"]):
@@ -26,7 +28,7 @@ def resample(instance, options, rng=None):
 
         # Step 1 - the trajectory's own average growth rate, and the new one
         growth_rate = (group["value"].iloc[-1] / group["value"].iloc[0]) ** (1 / years.iloc[-1]) - 1
-        new_growth_rate = options.sample("demand_growth", initial=growth_rate, rng=rng)
+        new_growth_rate = scenario_options.sample("demand_growth", initial=growth_rate)
 
         # Step 2 - regrow, scaling the trajectory's own shape (a flat one has none: grow it smoothly)
         ratio = group["value"] / group["value"].iloc[0]
