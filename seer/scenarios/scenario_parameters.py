@@ -4,10 +4,10 @@ scenario and perturbation dicts into one ScenarioOptions, which create, perturb 
     scenario = {"fuel:gas": "high", "capex:solar-utility|onwind": "high", "dr": "low"}
     perturbation = {"capex_pathway": 0.3}        # or one number for every parameter
 
-Keys are a parameter or group, optionally qualified by ":key" (a tech, fuel or solar / wind; "|"
-lists several). Values are a scenario level (low / mid / high / random, or a demand_profile shape)
-or a perturbation scale (0 to 1). More specific entries override less specific ones: keyed over
-unkeyed, then a parameter over a group, a smaller group over a larger one.
+Dict keys are a parameter or group, optionally for specific items after ":" (a tech, fuel or solar /
+wind; "|" lists several). Values are a scenario level (low / mid / high / random, or a demand_profile
+shape) or a perturbation scale (0 to 1). More specific entries override less specific ones: for an
+item over for every item, then a parameter over a group, a smaller group over a larger one.
 """
 from dataclasses import dataclass, field
 from functools import cache
@@ -29,53 +29,29 @@ def load_table(name):
     return pd.read_csv(DATA_DIR / name)
 
 
-def tech_parameter(tech, column):
+def get_tech_parameter(tech, column):
     params = load_table("technology/tech_parameters.csv").set_index("tech")
     return params.loc[tech, column] if tech in params.index and pd.notna(params.loc[tech, column]) else None
 
 
-def table_levels(table, key, parameter, years):
-    """(start, pathway) low / mid / high for key's parameter in a technology or fuel table (table:
-    "tech" or "fuel"); None if absent. start is the value in years[0] (the table's base-year value
-    moved along the mid pathway), pathway the ratio to years[0], held flat outside the table's years."""
-    starts, pathways = {"tech": ("technology/tech_cost_starts.csv", "technology/tech_cost_pathways.csv"),
-                        "fuel": ("fuels/fuel_cost_starts.csv", "fuels/fuel_cost_pathways.csv")}[table]
-    starts, pathways = load_table(starts), load_table(pathways)
-    rows = starts[(starts[table] == key) & (starts["parameter"] == parameter)]
-    if rows.empty:
-        return None
-    path_rows = pathways[(pathways[table] == key) & (pathways["parameter"] == parameter)].set_index("scenario")
-    table_years = [int(c) for c in path_rows.columns if c.isdigit()]
-    pathway = {}
-    for level in ["low", "mid", "high"]:
-        curve = pd.Series(path_rows.loc[level, [str(y) for y in table_years]].to_numpy(dtype=float), index=table_years)
-        pathway[level] = curve.reindex(sorted(set(table_years) | set(years))).interpolate(method="index").ffill().bfill().loc[years].to_numpy()
-    start = {level: rows.iloc[0][level] * pathway["mid"][0] for level in ["low", "mid", "high"]}
-    return start, {level: p / p[0] for level, p in pathway.items()}
-
-
-def vom_trajectory(tech, years):
-    """tech's mid variable O&M trajectory ($/MWh); 0 if it has none."""
-    levels = table_levels("tech", tech, "vom", years)
-    return np.zeros(len(years)) if levels is None else levels[0]["mid"] * levels[1]["mid"]
-
-
 # ---------------------------------------------------------------- parameters
 
-LEVELS = ["low", "mid", "high", "random"]
-PARAMETERS = {  # parameter -> (scenario levels it accepts, what its key is)
-    "dr": (LEVELS, None),
-    "voll": (LEVELS, None),
-    "demand_growth": (LEVELS, None),
-    "demand_profile": (LEVELS + list(SCENARIO_DATA["demand_profile"]["shapes"]), None),
-    "re_profile": (LEVELS, "category"),
-    "hydro": (LEVELS, None),
-    "capex_start": (LEVELS, "tech"),
-    "capex_pathway": (LEVELS, "tech"),
-    "fuel_start": (LEVELS, "fuel"),
-    "fuel_pathway": (LEVELS, "fuel"),
+SCENARIO_LEVELS = ["low", "mid", "high", "random"]
+PARAMETERS = {  # parameter -> (scenario levels it accepts, what its items are)
+    "dr": (SCENARIO_LEVELS, None),
+    "voll": (SCENARIO_LEVELS, None),
+    "demand_growth": (SCENARIO_LEVELS, None),
+    "demand_profile": (SCENARIO_LEVELS + list(SCENARIO_DATA["demand_profile"]["shapes"]), None),
+    "re_profile": (SCENARIO_LEVELS, "category"),
+    "hydro": (SCENARIO_LEVELS, None),
+    "capex_start": (SCENARIO_LEVELS, "tech"),
+    "capex_pathway": (SCENARIO_LEVELS, "tech"),
+    "fuel_start": (SCENARIO_LEVELS, "fuel"),
+    "fuel_pathway": (SCENARIO_LEVELS, "fuel"),
 }
-GROUPS = {
+# parameters that must be resampled together so that prices are consistent across techs / fuels
+SHARED_DRAW_PARAMETERS = ["capex_start", "capex_pathway", "fuel_start", "fuel_pathway"]
+PARAM_GROUPS = {
     "settings": ["dr", "voll"],
     "demand": ["demand_growth", "demand_profile"],
     "renewables": ["re_profile", "hydro"],
@@ -86,32 +62,29 @@ GROUPS = {
 }
 
 
-def valid_keys(kind):
-    return {"tech": set(load_table("technology/tech_cost_starts.csv")["tech"]),
-            "fuel": set(load_table("fuels/fuel_cost_starts.csv")["fuel"]),
-            "category": set(SCENARIO_DATA["re_profile"])}[kind]
+def get_valid_items(item_type):
+    return {"tech": set(load_table(COST_TABLES["tech"][0])["tech"]),
+            "fuel": set(load_table(COST_TABLES["fuel"][0])["fuel"]),
+            "category": set(SCENARIO_DATA["re_profile"])}[item_type]
 
 
-SHARED_DRAW_PARAMETERS = ["capex_start", "capex_pathway", "fuel_start", "fuel_pathway"]  # one draw per tech / fuel
-
-
-def parameter_levels(parameter, key=None, years=None):
-    """{"low", "mid", "high"} for parameter (and key: a tech, fuel or solar / wind), in model units;
-    None if key has no reference. Cost parameters are trajectories over years."""
+def get_parameter_levels(parameter, item=None, years=None):
+    """{"low", "mid", "high"} for parameter (and item: a tech, fuel or solar / wind), in model units;
+    None if item has no reference. Cost parameters are trajectories over years."""
     if parameter in ("dr", "voll", "demand_growth", "demand_profile"):
         return {level: SCENARIO_DATA[parameter][level] for level in ["low", "mid", "high"]}
     if parameter == "re_profile":
-        return SCENARIO_DATA["re_profile"].get(key)
+        return SCENARIO_DATA["re_profile"].get(item)
     if parameter == "hydro":
-        return {level: tech_parameter("hydro", f"cf_{level}") for level in ["low", "mid", "high"]}
+        return {level: get_tech_parameter("hydro", f"cf_{level}") for level in ["low", "mid", "high"]}
     if parameter in ("capex_start", "capex_pathway"):
-        levels = table_levels("tech", key, "capex", years)
+        levels = get_cost_start_and_pathway("tech", item, "capex", years)
         if levels is None:
             return None
-        per_mw = 1000 / (tech_parameter(key, "duration_hours") or 1)  # $/kW -> $/MW, or $/MWh of energy for storage
+        per_mw = 1000 / (get_tech_parameter(item, "duration_hours") or 1)  # $/kW -> $/MW, or $/MWh of energy for storage
         return {level: v * per_mw for level, v in levels[0].items()} if parameter == "capex_start" else levels[1]
     if parameter in ("fuel_start", "fuel_pathway"):
-        levels = table_levels("fuel", key, "price", years)
+        levels = get_cost_start_and_pathway("fuel", item, "price", years)
         return None if levels is None else levels[0] if parameter == "fuel_start" else levels[1]
     raise ValueError(f"unknown parameter {parameter!r}")
 
@@ -120,34 +93,34 @@ def parameter_levels(parameter, key=None, years=None):
 
 @dataclass(frozen=True)
 class ScenarioOptions:
-    """Scenario levels and perturbation scales, by (parameter, key); key None applies to every key.
+    """Scenario levels and perturbation scales, by (parameter, item); item None applies to every item.
     rng draws in sequence; SHARED_DRAW_PARAMETERS draw from a generator seeded once per (parameter,
-    key), so every value with the same key (e.g. a tech's capex in every zone) gets the same draw."""
+    item), so every value for the same item (e.g. a tech's capex in every zone) gets the same draw."""
 
     scenario: dict = field(default_factory=dict)
     perturbation: dict = field(default_factory=dict)
     rng: np.random.Generator = field(default_factory=np.random.default_rng)
-    key_seeds: dict = field(default_factory=dict)
+    item_seeds: dict = field(default_factory=dict)
 
-    def level(self, parameter, key=None):
-        return self.scenario.get((parameter, key), self.scenario.get((parameter, None)))
+    def level(self, parameter, item=None):
+        return self.scenario.get((parameter, item), self.scenario.get((parameter, None)))
 
-    def scale(self, parameter, key=None):
-        return self.perturbation.get((parameter, key), self.perturbation.get((parameter, None)))
+    def scale(self, parameter, item=None):
+        return self.perturbation.get((parameter, item), self.perturbation.get((parameter, None)))
 
     def active(self, *parameters):
         return any(p in parameters for p, _ in self.scenario) or any(p in parameters and s for (p, _), s in self.perturbation.items())
 
-    def sample(self, parameter, initial=None, key=None, years=None):
-        """sample_value with this parameter's (and key's) scenario level and perturbation scale."""
+    def sample(self, parameter, initial=None, item=None, years=None):
+        """sample_value with this parameter's (and item's) scenario level and perturbation scale."""
         rng = self.rng
-        if parameter in SHARED_DRAW_PARAMETERS and key is not None:
-            rng = np.random.default_rng(self.key_seeds.setdefault((parameter, key), int(self.rng.integers(2**63))))
-        return sample_value(parameter, initial, self.level(parameter, key), self.scale(parameter, key), key, years, rng)
+        if parameter in SHARED_DRAW_PARAMETERS and item is not None:
+            rng = np.random.default_rng(self.item_seeds.setdefault((parameter, item), int(self.rng.integers(2**63))))
+        return sample_value(parameter, initial, self.level(parameter, item), self.scale(parameter, item), item, years, rng)
 
 
 def parse(scenario=None, perturbation=None, defaults=None, seed=None):
-    """ScenarioOptions from scenario {parameter[:key]: level} and perturbation {parameter[:key]: scale}
+    """ScenarioOptions from scenario {parameter[:item]: level} and perturbation {parameter[:item]: scale}
     (or one scale for every parameter). defaults: {parameter: level} where the scenario sets none;
     seed: for the ScenarioOptions' random draws."""
     if isinstance(perturbation, (int, float)):
@@ -156,33 +129,33 @@ def parse(scenario=None, perturbation=None, defaults=None, seed=None):
         if spec is not None and not isinstance(spec, dict):
             raise TypeError(f"{name} must be a dict (or, for perturbation, a number), got {type(spec).__name__}")
 
-    # Step 1 - expand each entry to (parameter, key) pairs, ranked by how specific it is
+    # Step 1 - expand each entry to (parameter, item) pairs, ranked by how specific it is
     entries = []
     for kind, spec in [("scenario", scenario or {}), ("perturbation", perturbation or {})]:
         for name, value in spec.items():
-            name, _, keys = name.partition(":")
-            if name not in PARAMETERS and name not in GROUPS:
-                raise ValueError(f"unknown {kind} parameter {name!r}; parameters: {list(PARAMETERS)}, groups: {list(GROUPS)}")
-            parameters = GROUPS.get(name, [name])
-            keys = keys.split("|") if keys else [None]
-            if keys != [None]:
-                key_kinds = {PARAMETERS[p][1] for p in parameters}
-                if len(key_kinds) != 1 or None in key_kinds:
-                    raise ValueError(f"{name!r} takes no single kind of key, so {name}:{'|'.join(keys)} is ambiguous")
-                unknown = set(keys) - valid_keys(key_kinds.pop())
+            name, _, items = name.partition(":")
+            if name not in PARAMETERS and name not in PARAM_GROUPS:
+                raise ValueError(f"unknown {kind} parameter {name!r}; parameters: {list(PARAMETERS)}, groups: {list(PARAM_GROUPS)}")
+            parameters = PARAM_GROUPS.get(name, [name])
+            items = items.split("|") if items else [None]
+            if items != [None]:
+                item_types = {PARAMETERS[p][1] for p in parameters}
+                if len(item_types) != 1 or None in item_types:
+                    raise ValueError(f"{name!r} takes no single type of item, so {name}:{'|'.join(items)} is ambiguous")
+                unknown = set(items) - get_valid_items(item_types.pop())
                 if unknown:
-                    raise ValueError(f"unknown key(s) {sorted(unknown)} for {name!r}")
-            rank = (keys != [None], -len(parameters))  # keyed beats unkeyed; a smaller group beats a larger one
-            entries += [(kind, rank, p, key, check(kind, p, value)) for key in keys for p in parameters]
+                    raise ValueError(f"unknown item(s) {sorted(unknown)} for {name!r}")
+            rank = (items != [None], -len(parameters))  # for an item beats for every item; a smaller group beats a larger one
+            entries += [(kind, rank, p, item, check(kind, p, value)) for item in items for p in parameters]
 
     # Step 2 - apply least specific first so more specific entries override; same rank must agree
     out = {"scenario": {(p, None): level for p, level in (defaults or {}).items()}, "perturbation": {}}
     set_at = {}
-    for kind, rank, parameter, key, value in sorted(entries, key=lambda e: e[1]):
-        if set_at.get((kind, parameter, key)) == rank and out[kind][(parameter, key)] != value:
-            raise ValueError(f"conflicting {kind} values for {parameter}{':' + key if key else ''}")
-        out[kind][(parameter, key)] = value
-        set_at[(kind, parameter, key)] = rank
+    for kind, rank, parameter, item, value in sorted(entries, key=lambda e: e[1]):
+        if set_at.get((kind, parameter, item)) == rank and out[kind][(parameter, item)] != value:
+            raise ValueError(f"conflicting {kind} values for {parameter}{':' + item if item else ''}")
+        out[kind][(parameter, item)] = value
+        set_at[(kind, parameter, item)] = rank
     return ScenarioOptions(scenario=out["scenario"], perturbation=out["perturbation"], rng=np.random.default_rng(seed))
 
 
@@ -194,13 +167,20 @@ def check(kind, parameter, value):
     return value
 
 
-def sample_value(parameter, initial=None, scenario=None, perturbation=None, key=None, years=None, rng=None):
-    """Base value: the scenario level's value if given (random: uniform over the levels' range), else
-    initial, else the parameter's mid. Then perturbed: uniform around the base, up to perturbation
-    (0-1) x the distance to the levels' range on each side. Works elementwise on arrays (cost
-    trajectories) with one draw shared by every element, so a trajectory stays smooth."""
+def sample_value(parameter, initial=None, scenario=None, perturbation=None, item=None, years=None, rng=None):
+    """Return a value for parameter, using its low / mid / high levels from get_parameter_levels
+    (for item, e.g. a tech, and over years, for a cost trajectory).
+
+    Step 1 - base value, from either an explicit scenario or the initial value:
+        scenario "low" / "mid" / "high": that level's value, times a small random noise (1 +/- noise)
+        scenario "random": a uniformly random value between low and high
+        no scenario: initial (or the mid level's value if there's no initial value)
+    Step 2 - perturbation (0 to 1) around the base value:
+        uniform in [base - perturbation x (base - low), base + perturbation x (high - base)]
+    A cost trajectory (an array over years) uses one random draw for every year, so it stays smooth.
+    """
     rng = rng or np.random.default_rng()
-    levels = parameter_levels(parameter, key, years)
+    levels = get_parameter_levels(parameter, item, years)
     low = np.minimum(np.minimum(levels["low"], levels["high"]), levels["mid"])
     high = np.maximum(np.maximum(levels["low"], levels["high"]), levels["mid"])
 
@@ -216,3 +196,49 @@ def sample_value(parameter, initial=None, scenario=None, perturbation=None, key=
         above = value + perturbation * (np.maximum(high, value) - value)
         value = below + rng.uniform() * (above - below)
     return value
+
+
+# ---------------------------------------------------------------- cost trajectories
+
+COST_TABLES = {  # cost table -> (starts, pathways) files
+    "tech": ("technology/tech_cost_starts.csv", "technology/tech_cost_pathways.csv"),
+    "fuel": ("fuels/fuel_cost_starts.csv", "fuels/fuel_cost_pathways.csv"),
+}
+
+
+def get_cost_start_and_pathway(table, item, parameter, years):
+    """For a tech or fuel cost (table "tech" / "fuel"; item, parameter e.g. "CCGT", "capex"), return the
+    starting year cost and the cost pathway for each level (low, mid, high), interpolated onto years.
+    None if the cost isn't in the tables.
+
+    start: the cost in years[0]. pathway: the cost relative to years[0] (1.0 in years[0]).
+    """
+    def scenario_curves(name):
+        df = load_table(name)
+        rows = df[(df[table] == item) & (df["parameter"] == parameter)].set_index("scenario")
+        table_years = [int(c) for c in rows.columns if c.isdigit()]
+        curves = {}
+        for level in ["low", "mid", "high"]:
+            curve = pd.Series(rows.loc[level, [str(y) for y in table_years]].to_numpy(dtype=float), index=table_years)
+            curves[level] = curve.reindex(sorted(set(table_years) | set(years))).interpolate(method="index").ffill().bfill().loc[years].to_numpy()
+        return curves
+
+    starts_file, pathways_file = COST_TABLES[table]
+    starts = load_table(starts_file)
+    if not ((starts[table] == item) & (starts["parameter"] == parameter)).any():
+        return None
+
+    # Step 1 - start (base-year cost) and pathway for each level, onto years
+    start, pathway = scenario_curves(starts_file), scenario_curves(pathways_file)
+
+    # Step 2 - determine starting year cost using reference data (2025 cost + mid cost trajectory);
+    # renormalize trajectory to starting year
+    start = {level: s[0] * pathway["mid"][0] for level, s in start.items()}
+    pathway = {level: p / p[0] for level, p in pathway.items()}
+    return start, pathway
+
+
+def get_vom_trajectory(tech, years):
+    """tech's mid variable O&M trajectory ($/MWh); 0 if it has none."""
+    levels = get_cost_start_and_pathway("tech", tech, "vom", years)
+    return np.zeros(len(years)) if levels is None else levels[0]["mid"] * levels[1]["mid"]

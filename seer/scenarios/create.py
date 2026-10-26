@@ -18,7 +18,7 @@ from ..models.utils.time_utils import to_profile_times
 from ..schema import SeerInstance
 from . import costs, demand_trajectory, profiles
 from . import settings as scenario_settings
-from .scenario_parameters import load_table, parse, tech_parameter
+from .scenario_parameters import get_tech_parameter, load_table, parse
 
 GRIDFLOW_DATA = Path(os.environ.get("GRIDFLOW_DATA", Path(__file__).parents[3] / "gridflow" / "data" / "global"))
 RE_POTENTIAL_COLUMN = {"solar": "solar-utility", "wind": "onwind"}  # gridflow's zone_re_potential column per category
@@ -152,10 +152,10 @@ def create_generator_constants(region, build_options, first_year):
     df = plants.groupby(["zone", "tech", "fuel", "start_year", "life"], as_index=False)["Capacity"].sum().rename(columns={"Capacity": "capacity"})
     df["generator"] = df["zone"] + "_" + df["tech"] + "_" + df["fuel"] + "_" + df["start_year"].astype(str) + "_" + df["life"].astype(str)
     df["expandable"] = False
-    techs = [t for t in build_options if tech_parameter(t, "type") == "generator"]
+    techs = [t for t in build_options if get_tech_parameter(t, "type") == "generator"]
     build_rows = pd.DataFrame([{
-        "generator": f"{zone}_{tech}_new", "zone": zone, "tech": tech, "fuel": tech_parameter(tech, "fuel") or "",
-        "capacity": np.nan, "expandable": True, "start_year": first_year, "life": int(tech_parameter(tech, "life")),
+        "generator": f"{zone}_{tech}_new", "zone": zone, "tech": tech, "fuel": get_tech_parameter(tech, "fuel") or "",
+        "capacity": np.nan, "expandable": True, "start_year": first_year, "life": int(get_tech_parameter(tech, "life")),
     } for zone in region.zones.index for tech in techs])
     df = pd.concat([df, build_rows], ignore_index=True)
     category = df["tech"].map(lambda t: "hydro" if t in profiles.HYDRO_TECHS else profiles.renewable_category(t))
@@ -178,11 +178,11 @@ def create_generator_costs(generator_constants, years, scenario_options):
 
 def create_storage_constants(zones, build_options, first_year):
     """No existing storage from gridflow; a build option per zone for each storage tech in build_options."""
-    techs = [t for t in build_options if tech_parameter(t, "type") == "storage"]
+    techs = [t for t in build_options if get_tech_parameter(t, "type") == "storage"]
     return pd.DataFrame([{
         "storage": f"{zone}_{tech}_new", "zone": zone, "tech": tech, "capacity_mw": np.nan,
-        "duration_hours": tech_parameter(tech, "duration_hours"), "efficiency": tech_parameter(tech, "efficiency"),
-        "expandable": True, "start_year": first_year, "life": int(tech_parameter(tech, "life")),
+        "duration_hours": get_tech_parameter(tech, "duration_hours"), "efficiency": get_tech_parameter(tech, "efficiency"),
+        "expandable": True, "start_year": first_year, "life": int(get_tech_parameter(tech, "life")),
     } for zone in zones["zone"] for tech in techs],
         columns=["storage", "zone", "tech", "capacity_mw", "duration_hours", "efficiency", "expandable", "start_year", "life"])
 

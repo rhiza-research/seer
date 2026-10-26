@@ -31,7 +31,7 @@ Generates seer-schema instances from a `scenario` (parameter -> level, e.g. `{"f
 - **`create.py`** - `create(country, scenario, perturbation)` builds a new instance from gridflow
   (zones, network, demand, existing plants) plus sampled reference data.
 - **`perturb.py`** - `perturb(instance, scenario, perturbation)` sets / perturbs an existing instance.
-- **`scenario_parameters.py`** - reference data; parameters, groups and keys, and `parameter_levels`
+- **`scenario_parameters.py`** - reference data; parameters, groups and items, and `get_parameter_levels`
   (every parameter's low / mid / high); `parse` (dicts -> one `ScenarioOptions`) and `sample_value`,
   the one rule for setting / perturbing a value.
 - **`settings.py`, `demand_trajectory.py`, `profiles.py`, `costs.py`** - each parameter's `sample`

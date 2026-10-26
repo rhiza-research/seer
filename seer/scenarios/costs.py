@@ -7,7 +7,7 @@ import warnings
 
 import numpy as np
 
-from .scenario_parameters import parameter_levels, tech_parameter, vom_trajectory
+from .scenario_parameters import get_parameter_levels, get_tech_parameter, get_vom_trajectory
 
 
 def sample_capex(tech, years, scenario_options):
@@ -34,7 +34,7 @@ def resample_capex(instance, scenario_options):
             unit = constants.loc[row[id_col]]
             if not unit["expandable"]:
                 continue
-            if parameter_levels("capex_start", unit["tech"], years) is None:
+            if get_parameter_levels("capex_start", unit["tech"], years) is None:
                 warnings.warn(f"no capex levels for tech {unit['tech']!r} -- leaving {row[id_col]!r} unchanged")
                 continue
             # get current capex
@@ -49,8 +49,8 @@ def resample_capex(instance, scenario_options):
 
 def sample_marginal(tech, fuel, years, scenario_options):
     """Marginal cost trajectory, requiring sampling of fuel cost start and pathway."""
-    heat_rate, vom = tech_parameter(tech, "heat_rate"), vom_trajectory(tech, years)
-    if heat_rate is None or parameter_levels("fuel_start", fuel, years) is None:
+    heat_rate, vom = get_tech_parameter(tech, "heat_rate"), get_vom_trajectory(tech, years)
+    if heat_rate is None or get_parameter_levels("fuel_start", fuel, years) is None:
         return vom
     # sample start and pathway
     start = scenario_options.sample("fuel_start", item=fuel, years=years)
@@ -73,11 +73,11 @@ def resample_marginal(instance, scenario_options):
         # get unit
         unit = constants.loc[row["generator"]]
         # get heat rate and fuel price
-        heat_rate = tech_parameter(unit["tech"], "heat_rate")
-        if heat_rate is None or parameter_levels("fuel_start", unit["fuel"], years) is None:
+        heat_rate = get_tech_parameter(unit["tech"], "heat_rate")
+        if heat_rate is None or get_parameter_levels("fuel_start", unit["fuel"], years) is None:
             continue
         # get current fuel price and VOM
-        vom = vom_trajectory(unit["tech"], years)
+        vom = get_vom_trajectory(unit["tech"], years)
         curr_fuel_cost = np.clip((row[year_cols].to_numpy(dtype=float) - vom) / heat_rate, 1e-6, None)
         # sample start and pathway
         start = scenario_options.sample("fuel_start", initial=curr_fuel_cost[0], item=unit["fuel"], years=years)

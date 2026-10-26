@@ -1,8 +1,7 @@
-"""Sample and resample demand_profile.csv and renewable_profiles.csv. Parameters: demand_profile,
-re_profile (key: solar / wind), hydro.
+"""Sample and resample daily demand and renewable (solar, wind, hydro) profiles.
 
-Demand and solar / wind days are matched to real days in a profile library (reference_data/profiles)
-on target features; hydro (and ror) availability is flat at a capacity factor.
+Parameter targets: demand_profile, re_profile (item: solar / wind), hydro
+Seer schema files: demand_profile.csv, renewable_profiles.csv
 """
 import warnings
 from dataclasses import dataclass
@@ -13,8 +12,7 @@ import numpy as np
 import pandas as pd
 
 from ..models.utils.time_utils import parse_time_string
-from .scenario_data import SCENARIO_DATA, parameter_levels
-from .scenario_options import sample_value
+from .scenario_parameters import SCENARIO_DATA, get_parameter_levels, sample_value
 
 HOURS = np.arange(24.0)
 HYDRO_TECHS = ["hydro", "ror"]
@@ -23,46 +21,45 @@ HYDRO_TECHS = ["hydro", "ror"]
 # --- demand profile: daily shape by load factor (mean / max) and peak hour ---
 
 
-def sample_demand_profile(times, options, rng=None):
-    """One zone's demand profile over times: a library day per representative day, per options."""
+def sample_demand_profile(times, scenario_options):
+    """One zone's demand profile over times: a library day per representative day, per scenario_options."""
     start = {"load_factor": SCENARIO_DATA["demand_profile"]["mid"], "peak_hour": float(SCENARIO_DATA["demand_profile"]["peak_hour"])}
-    return np.concatenate([LOAD.sample(demand_profile_target(start, options, rng), HOURS) for _ in range(len(times) // len(HOURS))])
+    return np.concatenate([LOAD.sample(demand_profile_target(start, scenario_options), HOURS) for _ in range(len(times) // len(HOURS))])
 
 
-def resample_demand_profile(instance, options, rng=None):
-    """Copy of instance with every demand day re-matched to target features per options, from its own."""
-    if not options.active("demand_profile"):
+def resample_demand_profile(instance, scenario_options):
+    """Copy of instance with every demand day re-matched to target features per scenario_options, from its own."""
+    if not scenario_options.active("demand_profile"):
         return instance.copy()
-    return LOAD.resample(instance, lambda key, features: demand_profile_target(features, options, rng))
+    return LOAD.resample(instance, lambda day, features: demand_profile_target(features, scenario_options))
 
 
-def demand_profile_target(features, options, rng=None):
-    """features set to options' level or shape, then perturbed: load factor within its levels, peak
+def demand_profile_target(features, scenario_options):
+    """features set to scenario_options' level or shape, then perturbed: load factor within its levels, peak
     hour shifted by up to perturbation x peak_hour_shift."""
-    data, level, scale = SCENARIO_DATA["demand_profile"], options.level("demand_profile"), options.scale("demand_profile")
+    data, level, scale = SCENARIO_DATA["demand_profile"], scenario_options.level("demand_profile"), scenario_options.scale("demand_profile")
     if level in data["shapes"]:
         features, level = {k: float(v) for k, v in data["shapes"][level].items()}, None
-    rng = rng or np.random.default_rng()
-    load_factor = float(np.clip(sample_value("demand_profile", features["load_factor"], level, scale, rng=rng), 0.01, 1.0))
-    shift = scale * data["peak_hour_shift"] * rng.uniform(-1, 1) if scale else 0.0
+    load_factor = float(np.clip(sample_value("demand_profile", features["load_factor"], level, scale, rng=scenario_options.rng), 0.01, 1.0))
+    shift = scale * data["peak_hour_shift"] * scenario_options.rng.uniform(-1, 1) if scale else 0.0
     return {"load_factor": load_factor, "peak_hour": (features["peak_hour"] + shift) % 24}
 
 
 # --- renewable profiles: solar / wind days by capacity factor ---
 
 
-def sample_re_profile(capacity_factor, category, times, options, rng=None):
-    """A solar / wind profile over times at an annual capacity factor set / perturbed per options
+def sample_re_profile(capacity_factor, category, times, scenario_options):
+    """A solar / wind profile over times at an annual capacity factor set / perturbed per scenario_options
     (from capacity_factor): one library day, repeated."""
-    if parameter_levels("re_profile", category) is not None:
-        capacity_factor = float(np.clip(options.sample("re_profile", initial=capacity_factor, key=category, rng=rng), 0.001, 0.999))
+    if get_parameter_levels("re_profile", category) is not None:
+        capacity_factor = float(np.clip(scenario_options.sample("re_profile", initial=capacity_factor, item=category), 0.001, 0.999))
     return np.tile(RE.sample({"capacity_factor": capacity_factor}, HOURS, category), len(times) // len(HOURS))
 
 
-def resample_re_profile(instance, options, rng=None):
+def resample_re_profile(instance, scenario_options):
     """Copy of instance with each solar / wind profile's annual capacity factor set / perturbed per
-    options, every day moving by the same ratio and re-matched to the library."""
-    if not options.active("re_profile"):
+    scenario_options, every day moving by the same ratio and re-matched to the library."""
+    if not scenario_options.active("re_profile"):
         return instance.copy()
 
     # Step 1 - each profile's annual capacity factor, and the ratio to its new one
@@ -70,12 +67,12 @@ def resample_re_profile(instance, options, rng=None):
     ratio = {}
     for pid, p in profiles.iterrows():
         category = renewable_category(p.tech)
-        if p.cf > 0 and parameter_levels("re_profile", category) is not None:
-            ratio[pid] = float(np.clip(options.sample("re_profile", initial=p.cf, key=category, rng=rng), 0.001, 0.999)) / p.cf
+        if p.cf > 0 and get_parameter_levels("re_profile", category) is not None:
+            ratio[pid] = float(np.clip(scenario_options.sample("re_profile", initial=p.cf, item=category), 0.001, 0.999)) / p.cf
 
     # Step 2 - move every day by its profile's ratio
-    return RE.resample(instance, lambda key, features: {
-        "capacity_factor": float(np.clip(features["capacity_factor"] * ratio.get(key["profile_id"], 1.0), 0.001, 0.999))})
+    return RE.resample(instance, lambda day, features: {
+        "capacity_factor": float(np.clip(features["capacity_factor"] * ratio.get(day["profile_id"], 1.0), 0.001, 0.999))})
 
 
 def renewable_category(tech):
@@ -91,16 +88,16 @@ def renewable_category(tech):
 # --- hydro: flat availability at a capacity factor, one draw for every hydro and ror profile ---
 
 
-def sample_hydro(options, rng=None):
-    """Hydro / ror annual capacity factor per options."""
-    return float(options.sample("hydro", rng=rng))
+def sample_hydro(scenario_options):
+    """Hydro / ror annual capacity factor per scenario_options."""
+    return float(scenario_options.sample("hydro"))
 
 
-def resample_hydro(instance, options, rng=None):
-    """Copy of instance with hydro / ror profiles rescaled to a capacity factor per options (from their
+def resample_hydro(instance, scenario_options):
+    """Copy of instance with hydro / ror profiles rescaled to a capacity factor per scenario_options (from their
     current mean), keeping each profile's shape."""
     out = instance.copy()
-    if not options.active("hydro"):
+    if not scenario_options.active("hydro"):
         return out
     gens, df = out.generator_constants, out.renewable_profiles
     rows = df["profile_id"].isin(gens.loc[gens["tech"].isin(HYDRO_TECHS) & gens["isre"].astype(bool), "profile_id"])
@@ -108,7 +105,7 @@ def resample_hydro(instance, options, rng=None):
         warnings.warn("no hydro / ror generators with a profile -- hydro left unchanged")
         return out
     initial = df.loc[rows, "value"].mean()
-    df.loc[rows, "value"] = (df.loc[rows, "value"] * options.sample("hydro", initial=initial, rng=rng) / initial).clip(upper=1.0)
+    df.loc[rows, "value"] = (df.loc[rows, "value"] * scenario_options.sample("hydro", initial=initial) / initial).clip(upper=1.0)
     return out
 
 
@@ -143,11 +140,11 @@ class ProfileSampler:
         return np.average(profiles, axis=0, weights=weights / weights.sum())
 
     def resample(self, instance, day_target):
-        """Copy of instance with every day re-matched to day_target(day key, day features)."""
+        """Copy of instance with every day re-matched to day_target(day, day features)."""
         out = instance.copy()
         df = getattr(out, self.to_perturb)
-        for key, times, values, day_rows in self.prepare_profiles(df):
-            matched = self.sample(day_target(key, self.extract_features(times, values)), times, self.filter_value(day_rows))
+        for day, times, values, day_rows in self.prepare_profiles(df):
+            matched = self.sample(day_target(day, self.extract_features(times, values)), times, self.filter_value(day_rows))
             if matched is not None:
                 df.loc[day_rows.index, "value"] = self.rescale(matched, times, values)
         return out
@@ -210,22 +207,23 @@ LOAD, RE = LoadProfileSampler(), ReProfileSampler()
 
 
 def split_into_days(df, group_cols, value_col="value", min_points=2):
-    """Yield (key, times, values, day_rows) per represented day: group by group_cols + parsed (month, day)."""
+    """Yield (day, times, values, day_rows) per represented day -- day: {group_cols..., month, day} -- grouping by
+    group_cols + parsed (month, day)."""
     parsed = [parse_time_string(t) for t in df["time"]]
     df = df.copy()
     df["_month"] = [p[0] for p in parsed]
     df["_day"] = [p[1] for p in parsed]
     df["_time"] = [p[2] + p[3] / 60 + p[4] / 3600 for p in parsed]  # fractional hour-of-day, keeps sub-hourly data distinct
 
-    for raw_key, day_rows in df.groupby(group_cols + ["_month", "_day"], dropna=False):
-        key = dict(zip(group_cols + ["month", "day"], raw_key if isinstance(raw_key, tuple) else (raw_key,)))
+    for group, day_rows in df.groupby(group_cols + ["_month", "_day"], dropna=False):
+        day = dict(zip(group_cols + ["month", "day"], group if isinstance(group, tuple) else (group,)))
         times = day_rows["_time"].to_numpy(dtype=float)
         if (times < 0).any() or (times >= 24).any():
-            warnings.warn(f"day {key!r} has hour values outside [0, 24) -- skipping.")
+            warnings.warn(f"day {day!r} has hour values outside [0, 24) -- skipping.")
             continue
         if day_rows["_time"].duplicated().any() or len(day_rows) < min_points:
             continue  # not a genuine single day
-        yield key, times, day_rows[value_col].to_numpy(dtype=float), day_rows
+        yield day, times, day_rows[value_col].to_numpy(dtype=float), day_rows
 
 
 def time_align(times, values, target_times):
