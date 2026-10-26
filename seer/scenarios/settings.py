@@ -1,26 +1,29 @@
-"""Sample and resample parameters in seer schema "settings". Parameters: dr, voll.
+"""Sample and resample the discount rate and value of lost load.
+
+Parameter targets: dr, voll
+Seer schema files: settings.csv
 """
 import pandas as pd
 
+# set of parameters in seer's settings that can be perturbed
 parameters = ["dr", "voll"]
 
 
-def sample(options, rng=None):
-    """settings.csv per options."""
-    return pd.DataFrame({"parameters": parameters, "value": [float(options.sample(p, rng=rng)) for p in parameters]})
+def sample(scenario_options):
+    """settings.csv per scenario_options."""
+    return pd.DataFrame({"parameters": parameters, "value": [float(scenario_options.sample(p)) for p in parameters]})
 
 
-def resample(instance, options, rng=None):
-    """Copy of instance with settings set / perturbed per options, from the instance's own values."""
+def resample(instance, scenario_options):
+    """Resample parameters based on scenario_options around original instance values."""
     out = instance.copy()
     for parameter in parameters:
-        if not options.active(parameter):
+        # skip if user has not specified this parameter as target
+        if not scenario_options.active(parameter):
             continue
+        # get initial value
         rows = out.settings["parameters"] == parameter
-        initial = float(out.settings.loc[rows, "value"].iloc[0]) if rows.any() else None
-        value = float(options.sample(parameter, initial=initial, rng=rng))
-        if rows.any():
-            out.settings.loc[rows, "value"] = value
-        else:
-            out.settings = pd.concat([out.settings, pd.DataFrame({"parameters": [parameter], "value": [value]})], ignore_index=True)
+        initial = float(out.settings.loc[rows, "value"].iloc[0])
+        # set new value
+        out.settings.loc[rows, "value"] = float(scenario_options.sample(parameter, initial=initial))
     return out
