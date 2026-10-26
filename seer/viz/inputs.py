@@ -52,8 +52,9 @@ def _time_axis(ax, times):
     ax.set_xlim(-0.5, len(times) - 0.5)
 
 
-def plot_demand_trajectory(demand_forecast):
-    """Annual peak demand by zone."""
+def plot_demand_trajectory(demand_forecast, legend="best"):
+    """Annual peak demand by zone. `legend`: "best" (inside the axes), "bottom" (below the
+    plot, for many zones) or None."""
     peak = demand_forecast[demand_forecast["type"] == "peak"]
     zones = sorted(peak["zone"].unique())
     colors = zone_colors(zones)
@@ -66,13 +67,15 @@ def plot_demand_trajectory(demand_forecast):
     ax.set_xlabel("Year")
     ax.set_ylabel("Peak demand (MW)")
     ax.set_ylim(bottom=0)
-    if len(zones) > 1:
+    if len(zones) > 1 and legend == "bottom":
+        ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.25), ncol=min(len(zones), 6), fontsize=7)
+    elif len(zones) > 1 and legend:
         ax.legend(title="Zone")
     fig.tight_layout()
     return fig
 
 
-def plot_demand_profiles(demand_profile, times):
+def plot_demand_profiles(demand_profile, times, legend=True):
     """Normalized hourly demand profile for every modeled timepoint, by zone. Zones with
     identical profiles are drawn as one line labeled with all of them, so none look missing."""
     time_order = times["time"].tolist()
@@ -97,7 +100,7 @@ def plot_demand_profiles(demand_profile, times):
     ax.set_title("Hourly demand profiles (modeled days)")
     ax.set_ylabel("Demand (fraction of annual peak)")
     ax.set_ylim(bottom=0)
-    if len(zones) > 1:
+    if len(zones) > 1 and legend:
         ax.legend(title="Zone", loc="upper left", bbox_to_anchor=(1.01, 1), frameon=False)
     fig.tight_layout()
     return fig
@@ -177,7 +180,7 @@ def plot_capacity_mix(generator_constants, storage_constants, first_year):
     return fig
 
 
-def plot_re_profiles(renewable_profiles, generator_constants, times):
+def plot_re_profiles(renewable_profiles, generator_constants, times, legend=True):
     """Every renewable profile used by a generator, one panel per tech (in that tech's color).
     Thin lines are individual profiles, colored lines each zone's mean for that tech (zones
     distinguished by line style when there are several)."""
@@ -207,7 +210,7 @@ def plot_re_profiles(renewable_profiles, generator_constants, times):
         ax.set_ylim(0, 1.02)
         ax.set_yticks([0, 0.5, 1])
         ax.set_title(f"{tech}  (n={t['profile_id'].nunique()})", fontsize=8.5, color=color)
-        if len(zones) > 1:
+        if len(zones) > 1 and legend:
             ax.legend(loc="upper right", fontsize=8)
     axes[0, 0].figure.suptitle("Renewable profiles by tech", x=0.01, ha="left", fontsize=9.5, weight="bold")
     fig.supylabel("Capacity factor", fontsize=8.5)

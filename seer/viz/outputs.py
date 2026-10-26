@@ -165,8 +165,15 @@ def comparison_rows(summaries, runs):
     return rows
 
 
-def _draw_capacity_built(ax, built_by_year, years, techs):
-    """Stacked (by tech) and grouped (by zone, side by side within each year) bars on `ax`."""
+# above this many zones, capacity-built bars are summed over zones rather than drawn side by side
+MAX_GROUPED_ZONES = 20
+
+
+def _draw_capacity_built(ax, built_by_year, years, techs, max_zones=MAX_GROUPED_ZONES):
+    """Stacked (by tech) and grouped (by zone, side by side within each year) bars on `ax`.
+    With more than `max_zones` zones the bars would be too thin to see, so zones are summed."""
+    if built_by_year["zone"].nunique() > max_zones:
+        built_by_year = built_by_year.groupby(["tech", "year"], as_index=False)["built"].sum().assign(zone="")
     zones = sorted(built_by_year["zone"].unique()) or [""]
     group_width = 0.8
     bar_width = group_width / len(zones)
@@ -202,6 +209,8 @@ def plot_capacity_built(built_by_case, years, title="Capacity built by year"):
             if not techs:
                 ax.text(0.5, 0.5, "No capacity built", transform=ax.transAxes, ha="center", va="center", color="0.5")
                 ax.set_ylim(0, 1)
+        for ax in axes[row][len(built_by_model):]:
+            ax.set_visible(False)  # model not solved for this case
         axes[row][0].set_ylabel("Capacity added (MW)")
     if techs:
         handles = [plt.Rectangle((0, 0), 1, 1, color=tech_color(t)) for t in techs]

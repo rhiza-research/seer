@@ -42,7 +42,8 @@ def to_start_year_and_life(df, name_col, source=""):
         warnings.warn(f"{source}: no start_year, set to {DEFAULT_START_YEAR}: {sorted(df.loc[no_start, name_col])}")
     start = start.fillna(DEFAULT_START_YEAR)
 
-    never = existing & (retire.isna() | (retire >= NO_RETIREMENT_YEAR))
+    # a raw 0 is EPM's blank (Senegal: every existing unit), not a retirement year
+    never = existing & (retire.isna() | (retire <= 0) | (retire >= NO_RETIREMENT_YEAR))
     life[existing] = retire[existing] - start[existing] + 1
     life[never] = NEVER_RETIRES_LIFE
     bad = existing & ~never & (life < 1)

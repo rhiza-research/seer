@@ -24,6 +24,11 @@ def parse_time_string(s):
     return tuple(int(g) for g in m.groups())
 
 
+def to_profile_times(datetimes):
+    """times.csv labels ("MM-DD HH:MM:SS", no year) for datetimes."""
+    return pd.DatetimeIndex(datetimes).strftime(TIME_FORMAT).tolist()
+
+
 def format_time_string(month, day, hour, minute=0, second=0):
     """Inverse of parse_time_string."""
     return f"{month:02d}-{day:02d} {hour:02d}:{minute:02d}:{second:02d}"
