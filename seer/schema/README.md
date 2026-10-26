@@ -37,8 +37,8 @@ This file holds the model's global settings. Each row is one parameter.
 | `parameters` | parameter name |
 | `value` | parameter value |
 
-**Required:** a discount rate parameter (`dr`). *Optional:* `voll`, the value of lost load in
-$/MWh -- the cost of each MWh of unserved demand (absent means $1,000,000/MWh).
+**Required:** a discount rate parameter (`dr`), and `voll`, the value of lost load in $/MWh -- the
+cost of each MWh of unserved demand.
 
 ## time and space parameters
 ### `zones.csv`

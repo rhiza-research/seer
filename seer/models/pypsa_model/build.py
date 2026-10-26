@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import pypsa
 
-from ..utils.settings_utils import get_voll
 from ..utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times, resolve_profile
 
 
@@ -59,7 +58,7 @@ def build(data_path, annualize_capex=False):
     """DEMAND: Set up demand trajectory.
     """
     set_demand(model, input_data["demand_forecast"], input_data["demand_profile"], calendar)
-    add_load_shedding(model, get_voll(input_data["settings"]))
+    add_load_shedding(model, float(input_data["settings"].set_index("parameters")["value"]["voll"]))
 
     """RENEWABLES: Prepare renewable profiles for use in generator setup.
     """

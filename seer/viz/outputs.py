@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..models.utils.settings_utils import get_voll
 from ..models.utils.time_utils import build_snapshot_calendar, compute_time_weights, load_time_weights, load_times
 from .inputs import FIGSIZE, _stack_key
 from .plot import _tech_stack_key, draw_dispatch_year, tech_color
@@ -108,7 +107,7 @@ def summarize(results, data_path):
         lost_by_year = (lost["lost_load"] * hours).groupby(lost["year"]).sum().to_dict()  # MWh
         lost_mwh = float((lost["lost_load"] * hours).sum())
         lost_load_gwh = lost_mwh / 1e3
-        lost_load_cost = lost_mwh * get_voll(pd.read_csv(data_path / "settings.csv"))
+        lost_load_cost = lost_mwh * float(pd.read_csv(data_path / "settings.csv").set_index("parameters")["value"]["voll"])
 
     return {
         "years": years,

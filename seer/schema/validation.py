@@ -75,14 +75,16 @@ def _check_settings(instance, errors):
         return
     if not (df["parameters"].astype(str).str.upper() == "DR").any():
         errors.append("settings.csv: missing required 'dr' (discount rate) parameter")
-    # voll (value of lost load, $/MWh) is optional, but must be a positive number if given
+    # a value of lost load (voll, $/MWh) must be present, and a positive number
     voll = df.loc[df["parameters"].astype(str).str.lower() == "voll", "value"]
     def _positive(x):
         try:
             return float(x) > 0
         except (TypeError, ValueError):
             return False
-    if not all(_positive(x) for x in voll.tolist()):
+    if voll.empty:
+        errors.append("settings.csv: missing required 'voll' (value of lost load) parameter")
+    elif not all(_positive(x) for x in voll.tolist()):
         errors.append(f"settings.csv: 'voll' must be a positive number, got {voll.tolist()}")
 
 

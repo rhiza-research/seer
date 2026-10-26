@@ -24,16 +24,20 @@ Converting external models into the seer schema lives in the top-level `inputs/`
 (`gdx`, `epm2seer`), not in `seer/` -- see the repo [README](../README.md).
 
 ## `seer/scenarios/`
-Generates seer-schema instances from spec strings like `"high-capex-start, random-demand-profile"`:
+Generates seer-schema instances from a `scenario` (parameter -> level, e.g. `{"fuel:gas": "high",
+"capex:solar-utility|onwind": "low"}`) and a `perturbation` (parameter -> 0-1 scale, e.g.
+`{"capex_pathway": 0.3}`, or one number for every parameter):
 
-- **`create.py`** - `create(country, spec)` builds a new instance from gridflow (zones, network,
-  demand, existing plants) plus sampled reference data.
-- **`perturb.py`** - `perturb(instance, spec)` resamples an existing instance.
-- **`settings.py`, `demand_trajectory.py`, `profiles.py`, `costs.py`** - the samplers both call,
-  each with a `sample` (create) and `resample` (perturb).
-- **`spec.py`** - spec tokenizing and the shared low / mid / high / random rule (`sample_value`).
+- **`create.py`** - `create(country, scenario, perturbation)` builds a new instance from gridflow
+  (zones, network, demand, existing plants) plus sampled reference data.
+- **`perturb.py`** - `perturb(instance, scenario, perturbation)` sets / perturbs an existing instance.
+- **`scenario_options.py`** - parameters, groups and keys; `parse` (dicts -> one `ScenarioOptions`)
+  and `sample_value`, the one rule for setting / perturbing a value.
+- **`scenario_data.py`** - reference data, and `parameter_levels`: every parameter's low / mid / high.
+- **`settings.py`, `demand_trajectory.py`, `profiles.py`, `costs.py`** - each parameter's `sample`
+  (create) and `resample` (perturb) functions.
 
-Reference data lives in `seer/scenarios/reference_data/`: `scenarios.yaml` (low / mid / high
+Reference data lives in `seer/scenarios/reference_data/`: `scenario_data.yaml` (low / mid / high
 values), `technology/` (tech parameters, cost start values and pathways), `fuels/` (fuel price
 start values and pathways) and `profiles/` (demand and renewable daily-profile libraries).
 
