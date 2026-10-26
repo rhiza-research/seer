@@ -4,7 +4,7 @@ Examples:
     create("TUR", scenario={"capex": "high", "demand_growth": "low"}, seed=0)
     create("TUR", scenario={"all": "random"}, perturbation=0.5, seed=0, n_days=4, weights=[90, 92, 92, 91])
 
-See scenario_options for parameters, groups and keys.
+See scenario_parameters for parameters, groups and keys.
 """
 import os
 import uuid
@@ -18,8 +18,7 @@ from ..models.utils.time_utils import to_profile_times
 from ..schema import SeerInstance
 from . import costs, demand_trajectory, profiles
 from . import settings as scenario_settings
-from .scenario_data import load_table, tech_parameter
-from .scenario_options import parse, per_key_rng
+from .scenario_parameters import load_table, parse, tech_parameter
 
 GRIDFLOW_DATA = Path(os.environ.get("GRIDFLOW_DATA", Path(__file__).parents[3] / "gridflow" / "data" / "global"))
 RE_POTENTIAL_COLUMN = {"solar": "solar-utility", "wind": "onwind"}  # gridflow's zone_re_potential column per category
@@ -38,8 +37,7 @@ def create(country, scenario=None, perturbation=None, seed=None, n_zones=5, year
     levels set and perturbation's scales applied. Parameters the scenario doesn't set take
     DEFAULT_LEVELS. build_options: techs offered for building in every zone (default: tech_parameters.csv's
     build_option techs)."""
-    options = parse(scenario, perturbation, defaults=DEFAULT_LEVELS)
-    rng = np.random.default_rng(seed)
+    scenario_options = parse(scenario, perturbation, defaults=DEFAULT_LEVELS, seed=seed)
 
     # Step 1 - Get gridflow starting model for the country
     region = gridflow.model.region([country],
@@ -53,7 +51,7 @@ def create(country, scenario=None, perturbation=None, seed=None, n_zones=5, year
     region.set_zone_plants()
 
     # Step 2 - planning settings: discount rate and voll
-    settings = scenario_settings.sample(options, rng)
+    settings = scenario_settings.sample(scenario_options)
 
     # Step 3 - Establish time and space parameters
     # space - zones and network
@@ -77,23 +75,23 @@ def create(country, scenario=None, perturbation=None, seed=None, n_zones=5, year
 
     # Step 4 - Demand
     # demand profiles - a library day per zone per representative day
-    demand_profile = pd.concat([pd.DataFrame({"zone": zone, "time": times["time"], "value": profiles.sample_demand_profile(times, options, rng)})
+    demand_profile = pd.concat([pd.DataFrame({"zone": zone, "time": times["time"], "value": profiles.sample_demand_profile(times, scenario_options)})
                                 for zone in zones["zone"]], ignore_index=True)
     # demand trajectory
-    demand_forecast = create_demand_forecast(region, demand_profile, times, years, options, rng)
+    demand_forecast = create_demand_forecast(region, demand_profile, times, years, scenario_options)
 
     # Step 5 - Supply
     # renewable profiles
-    renewable_profiles = create_renewable_profiles(region, times, options, rng)
-    # generators and storage: existing units, plus build options in every zone
+    renewable_profiles = create_renewable_profiles(region, times, scenario_options)
+    # generators and storage: existing units, plus build scenario_options in every zone
     if build_options is None:
         tech_parameters = load_table("technology/tech_parameters.csv")
         build_options = list(tech_parameters.loc[tech_parameters["build_option"], "tech"])
     first_year = int(years["year"].iloc[0])
     generator_constants = create_generator_constants(region, build_options, first_year)
-    generator_costs = create_generator_costs(generator_constants, years, options, rng)
+    generator_costs = create_generator_costs(generator_constants, years, scenario_options)
     storage_constants = create_storage_constants(zones, build_options, first_year)
-    storage_costs = create_storage_costs(storage_constants, years, options, rng)
+    storage_costs = create_storage_costs(storage_constants, years, scenario_options)
 
     return SeerInstance(
         settings=settings, zones=zones, years=years, times=times, network=network,
@@ -105,7 +103,7 @@ def create(country, scenario=None, perturbation=None, seed=None, n_zones=5, year
 
 """Demand"""
 
-def create_demand_forecast(region, demand_profile, times, years, options, rng):
+def create_demand_forecast(region, demand_profile, times, years, scenario_options):
     """Each zone's peak in gridflow's demand year: its share of national energy divided by its
     profile's annual energy per MW of peak; then grown to the modeled years."""
     national = region.countries.set_index("ISO_A3")
@@ -116,7 +114,7 @@ def create_demand_forecast(region, demand_profile, times, years, options, rng):
         energy_mwh = country["demand_twh"] * 1e6 * share
         peak = energy_mwh / (demand_profile.loc[demand_profile["zone"] == zone, "value"].to_numpy() @ hours)
         demand_year = int(country["demand_year"])
-        trajectory = demand_trajectory.sample(peak, [demand_year, *years["year"]], options, rng)
+        trajectory = demand_trajectory.sample(peak, [demand_year, *years["year"]], scenario_options)
         rows += [(zone, "peak", y, trajectory[y]) for y in years["year"]]
     return pd.DataFrame(rows, columns=["zone", "type", "year", "value"])
 
@@ -126,16 +124,16 @@ def profile_id(zone, category):
 
 """Supply"""
 
-def create_renewable_profiles(region, times, options, rng):
+def create_renewable_profiles(region, times, scenario_options):
     """One profile per zone per category: solar and wind from gridflow's capacity factor, and hydro
-    (for hydro and ror) flat at one capacity factor for every zone -- each per options."""
-    hydro_cf = profiles.sample_hydro(options, rng)
+    (for hydro and ror) flat at one capacity factor for every zone -- each per scenario_options."""
+    hydro_cf = profiles.sample_hydro(scenario_options)
     frames = []
     for zone, potential in region.zone_re_potential.iterrows():
         for category, column in RE_POTENTIAL_COLUMN.items():
             frames.append(pd.DataFrame({
                 "profile_id": profile_id(zone, category), "zone": zone, "tech": column, "generator": None,
-                "time": times["time"], "value": profiles.sample_re_profile(potential[column], category, times, options, rng),
+                "time": times["time"], "value": profiles.sample_re_profile(potential[column], category, times, scenario_options),
             }))
         frames.append(pd.DataFrame({
             "profile_id": profile_id(zone, "hydro"), "zone": zone, "tech": "hydro", "generator": None,
@@ -155,26 +153,25 @@ def create_generator_constants(region, build_options, first_year):
     df["generator"] = df["zone"] + "_" + df["tech"] + "_" + df["fuel"] + "_" + df["start_year"].astype(str) + "_" + df["life"].astype(str)
     df["expandable"] = False
     techs = [t for t in build_options if tech_parameter(t, "type") == "generator"]
-    options = pd.DataFrame([{
+    build_rows = pd.DataFrame([{
         "generator": f"{zone}_{tech}_new", "zone": zone, "tech": tech, "fuel": tech_parameter(tech, "fuel") or "",
         "capacity": np.nan, "expandable": True, "start_year": first_year, "life": int(tech_parameter(tech, "life")),
     } for zone in region.zones.index for tech in techs])
-    df = pd.concat([df, options], ignore_index=True)
+    df = pd.concat([df, build_rows], ignore_index=True)
     category = df["tech"].map(lambda t: "hydro" if t in profiles.HYDRO_TECHS else profiles.renewable_category(t))
     df["isre"] = category.notna()
     df["profile_id"] = [profile_id(z, c) if c else None for z, c in zip(df["zone"], category)]
     return df[["generator", "zone", "tech", "fuel", "capacity", "expandable", "isre", "profile_id", "start_year", "life"]]
 
 
-def create_generator_costs(generator_constants, years, options, rng):
-    """Capital (build options only) and marginal cost trajectories, one draw per tech (capital) and per
+def create_generator_costs(generator_constants, years, scenario_options):
+    """Capital (build scenario_options only) and marginal cost trajectories, one draw per tech (capital) and per
     fuel (marginal), shared across zones."""
     years = list(years["year"])
-    rng_for = per_key_rng(rng)
     rows = []
     for g in generator_constants.itertuples():
-        capital = costs.sample_capex(g.tech, years, options, rng_for(g.tech)) if g.expandable else np.zeros(len(years))
-        marginal = costs.sample_marginal(g.tech, g.fuel, years, options, rng_for(g.fuel))
+        capital = costs.sample_capex(g.tech, years, scenario_options) if g.expandable else np.zeros(len(years))
+        marginal = costs.sample_marginal(g.tech, g.fuel, years, scenario_options)
         rows += [[g.generator, "capital", *capital], [g.generator, "marginal", *marginal]]
     return pd.DataFrame(rows, columns=["generator", "cost_type", *[str(y) for y in years]])
 
@@ -190,12 +187,11 @@ def create_storage_constants(zones, build_options, first_year):
         columns=["storage", "zone", "tech", "capacity_mw", "duration_hours", "efficiency", "expandable", "start_year", "life"])
 
 
-def create_storage_costs(storage_constants, years, options, rng):
+def create_storage_costs(storage_constants, years, scenario_options):
     """Capital ($/MWh of energy, one draw per tech, shared across zones) and zero marginal cost."""
     years = list(years["year"])
-    rng_for = per_key_rng(rng)
     rows = []
     for s in storage_constants.itertuples():
-        capital = costs.sample_capex(s.tech, years, options, rng_for(s.tech))
+        capital = costs.sample_capex(s.tech, years, scenario_options)
         rows += [[s.storage, "capital", *capital], [s.storage, "marginal", *np.zeros(len(years))]]
     return pd.DataFrame(rows, columns=["storage", "cost_type", *[str(y) for y in years]])

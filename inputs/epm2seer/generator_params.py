@@ -284,7 +284,8 @@ def _derive_flags(gc, data_path):
     # EPM only applies its build-limit constraints where the value is nonzero ($-conditioned),
     # so 0 means unconstrained too, not "never build". An explicit Inf (Senegal, Poland) is
     # blank as well. Only meaningful for build options.
-    is_inf = lambda col: gc[col].astype(float) == float("inf")
+    # to_numeric, not astype(float): an all-blank column (Rwanda: no build options) holds pd.NA
+    is_inf = lambda col: pd.to_numeric(gc[col], errors="coerce") == float("inf")
     gc.loc[~has_annual | ~gc["expandable"] | is_inf("BuildLimitperYear"), "BuildLimitperYear"] = pd.NA
     gc.loc[~has_total | ~gc["expandable"] | is_inf("MaxTotalBuild"), "MaxTotalBuild"] = pd.NA
     gc.loc[gc["expandable"], "Capacity"] = pd.NA   # only existing generators have a capacity
