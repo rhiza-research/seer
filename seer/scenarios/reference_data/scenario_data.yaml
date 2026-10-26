@@ -1,5 +1,5 @@
 # Scenario parameters' low / mid / high values, keyed by parameter name (see
-# seer/scenarios/scenario_options.py sample_value):
+# seer/scenarios/scenario_parameters.py sample_value):
 #
 # scenario level low / mid / high: the level's value, times (1 + U(-noise, noise)).
 # scenario level random: uniform between the lowest and highest level.

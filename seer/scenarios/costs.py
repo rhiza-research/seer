@@ -7,7 +7,7 @@ import warnings
 
 import numpy as np
 
-from .scenario_data import parameter_levels, tech_parameter, vom_trajectory
+from .scenario_parameters import parameter_levels, tech_parameter, vom_trajectory
 
 
 def sample_capex(tech, years, scenario_options):

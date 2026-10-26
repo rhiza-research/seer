@@ -7,7 +7,7 @@ Examples:
 See scenario_options for parameters, groups and keys. Parameters in neither are left as they are.
 """
 from . import costs, demand_trajectory, profiles, settings
-from .scenario_options import parse
+from .scenario_parameters import parse
 
 
 def perturb(seer_instance, scenario=None, perturbation=None, seed=None):
