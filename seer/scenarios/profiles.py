@@ -62,17 +62,24 @@ def resample_re_profile(instance, scenario_options):
     if not scenario_options.active("re_profile"):
         return instance.copy()
 
-    # Step 1 - each profile's annual capacity factor, and the ratio to its new one
-    profiles = instance.renewable_profiles.groupby("profile_id").agg(cf=("value", "mean"), tech=("tech", "first"))
+    # Step 1 - each profile's annual capacity factor, and the ratio to its new one. Category comes from the
+    # generators using the profile: a generator-specific profile has no tech of its own (tech is NaN)
+    category = profile_categories(instance)
     ratio = {}
-    for pid, p in profiles.iterrows():
-        category = renewable_category(p.tech)
-        if p.cf > 0 and get_parameter_levels("re_profile", category) is not None:
-            ratio[pid] = float(np.clip(scenario_options.sample("re_profile", initial=p.cf, item=category), 0.001, 0.999)) / p.cf
+    for pid, cf in instance.renewable_profiles.groupby("profile_id")["value"].mean().items():
+        if cf > 0 and get_parameter_levels("re_profile", category.get(pid)) is not None:
+            ratio[pid] = float(np.clip(scenario_options.sample("re_profile", initial=cf, item=category[pid]), 0.001, 0.999)) / cf
 
     # Step 2 - move every day by its profile's ratio
     return RE.resample(instance, lambda day, features: {
-        "capacity_factor": float(np.clip(features["capacity_factor"] * ratio.get(day["profile_id"], 1.0), 0.001, 0.999))})
+        "capacity_factor": float(np.clip(features["capacity_factor"] * ratio.get(day["profile_id"], 1.0), 0.001, 0.999))},
+        day_filter=lambda day: category.get(day["profile_id"]))
+
+
+def profile_categories(instance):
+    """profile_id -> solar / wind / None, from the tech of the generators using each profile."""
+    gens = instance.generator_constants.dropna(subset=["profile_id"]).drop_duplicates("profile_id")
+    return {pid: renewable_category(tech) for pid, tech in zip(gens["profile_id"], gens["tech"])}
 
 
 def renewable_category(tech):
@@ -116,7 +123,7 @@ class ProfileSampler:
     """Match target features to real days in a profile library."""
 
     to_perturb: str  # SeerInstance attribute
-    FILTER_COL: str | None = None  # library column restricting candidates, via filter_value
+    FILTER_COL: str | None = None  # library column restricting candidates, via resample's day_filter
 
     @cached_property
     def library(self):
@@ -139,18 +146,16 @@ class ProfileSampler:
         weights = 1.0 / (dist.loc[nearest].to_numpy() + 1e-6)
         return np.average(profiles, axis=0, weights=weights / weights.sum())
 
-    def resample(self, instance, day_target):
-        """Copy of instance with every day re-matched to day_target(day, day features)."""
+    def resample(self, instance, day_target, day_filter=lambda day: None):
+        """Copy of instance with every day re-matched to day_target(day, day features), among library days
+        matching day_filter(day)."""
         out = instance.copy()
         df = getattr(out, self.to_perturb)
         for day, times, values, day_rows in self.prepare_profiles(df):
-            matched = self.sample(day_target(day, self.extract_features(times, values)), times, self.filter_value(day_rows))
+            matched = self.sample(day_target(day, self.extract_features(times, values)), times, day_filter(day))
             if matched is not None:
                 df.loc[day_rows.index, "value"] = self.rescale(matched, times, values)
         return out
-
-    def filter_value(self, day_rows):
-        return None
 
     def rescale(self, profile, times, values):
         return profile
@@ -195,9 +200,6 @@ class ReProfileSampler(ProfileSampler):
 
     def feature_distance(self, target, library_features):
         return (library_features["capacity_factor"] - target["capacity_factor"]).abs()
-
-    def filter_value(self, day_rows):
-        return renewable_category(day_rows["tech"].iloc[0])
 
 
 LOAD, RE = LoadProfileSampler(), ReProfileSampler()

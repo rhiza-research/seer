@@ -39,7 +39,7 @@ Generates seer-schema instances from a `scenario` (parameter -> level, e.g. `{"f
 
 Reference data lives in `seer/scenarios/reference_data/`: `scenario_data.yaml` (low / mid / high
 values), `technology/` (tech parameters, cost start values and pathways), `fuels/` (fuel price
-start values and pathways) and `profiles/` (demand and renewable daily-profile libraries).
+start values and pathways), `network/` (line cost start values and pathways) and `profiles/` (demand and renewable daily-profile libraries).
 
 ## `seer/models/`
 Builds a solvable model from a seer schema model specification. A seer schema can be instantiated

@@ -27,7 +27,7 @@ NEVER_RETIRES = 100  # schema README convention for an existing unit with no ret
 # levels for parameters the scenario doesn't set; re_profile has none, so gridflow's capacity factors stand
 DEFAULT_LEVELS = {
     "dr": "mid", "voll": "mid", "demand_growth": "mid", "demand_profile": "random", "hydro": "mid",
-    "capex_start": "mid", "capex_pathway": "mid", "fuel_start": "mid", "fuel_pathway": "mid",
+    "capex_start": "mid", "capex_pathway": "mid", "fuel_start": "mid", "fuel_pathway": "mid", "line_capex": "mid",
 }
 
 
@@ -58,11 +58,18 @@ def create(country, scenario=None, perturbation=None, seed=None, n_zones=5, year
     zones = pd.DataFrame({"zone": region.zones.index, 
                           "country": region.zones["country"].to_numpy(),
                           "name": region.zones.index})
-    # network - existing lines from gridflow's zone-to-zone transfer capacity, each zone pair once
-    lines = region.grid.flow.rename_axis(index="from", columns="to").stack().rename("capacity").reset_index()
-    network = lines[(lines["from"] < lines["to"]) & (lines["capacity"] > 0)].reset_index(drop=True)
     # time - years and days
     years = pd.DataFrame({"year": [int(y) for y in years]})
+    # network - a line for each zone pair with existing capacity or a shared border: gridflow's
+    # transfer capacity, expandable at line_capex x gridflow's centroid-to-centroid length
+    flow, length, geometry = region.grid.flow, region.grid.length, region.zones.geometry
+    pairs = [(a, b) for i, a in enumerate(flow.index) for b in flow.index[i + 1:]
+             if flow.loc[a, b] > 0 or geometry[a].intersects(geometry[b])]
+    network = pd.DataFrame({
+        "from": [a for a, _ in pairs], "to": [b for _, b in pairs], "capacity": [flow.loc[a, b] for a, b in pairs],
+        "expandable": True,
+        "capital": [costs.sample_line_capex(length.loc[a, b], list(years["year"]), scenario_options) for a, b in pairs],
+    })
     # days - n_days representative days; spread evenly over year with equal weight by default
     weights = np.ones(n_days) if weights is None else np.asarray(weights, dtype=float)
     # evenly spaced representative days - the dates assigned to each day have no model meaning

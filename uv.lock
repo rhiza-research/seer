@@ -1526,7 +1526,7 @@ grpc = [
 [[package]]
 name = "gridflow"
 version = "0.1.0"
-source = { git = "https://github.com/ESMAP-World-Bank-Group/gridflow.git?rev=network-zoning-method#a4636f31fae972caddc15eed3f8f7ed8b79476e5" }
+source = { git = "https://github.com/ESMAP-World-Bank-Group/gridflow.git?rev=network-zoning-method#cb669759e423565221d6fa763955379a4f1bb0a8" }
 dependencies = [
     { name = "certifi" },
     { name = "dask" },

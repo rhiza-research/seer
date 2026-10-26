@@ -7,7 +7,8 @@
 #   to the lowest / highest level on each side.
 #
 # Cost parameters (capex_*, fuel_*) live in technology/tech_cost_starts.csv, tech_cost_pathways.csv
-# and fuels/fuel_cost_starts.csv, fuel_cost_pathways.csv; hydro in technology/tech_parameters.csv.
+# and fuels/fuel_cost_starts.csv, fuel_cost_pathways.csv; line_capex in network/line_cost_starts.csv,
+# line_cost_pathways.csv; hydro in technology/tech_parameters.csv.
 #
 # All values are placeholders, to be replaced with sourced numbers.
 

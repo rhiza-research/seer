@@ -1,7 +1,8 @@
 """Sample and resample capital and marginal cost trajectories (start x pathway).
 
-Parameter targets: capex_start, capex_pathway (item: tech), fuel_start, fuel_pathway (item: fuel)
-Seer schema files: generator_costs.csv, storage_costs.csv
+Parameter targets: capex_start, capex_pathway (item: tech), fuel_start, fuel_pathway (item: fuel),
+    line_capex (item: line)
+Seer schema files: generator_costs.csv, storage_costs.csv, network.csv
 """
 import warnings
 
@@ -85,3 +86,28 @@ def resample_marginal(instance, scenario_options):
         # set new marginal cost using start and pathway
         costs.loc[i, year_cols] = heat_rate * start * pathway / pathway[0] + vom
     return out
+
+
+def sample_line_capex(length_km, years, scenario_options, line="HVAC overhead"):
+    """A line's capital cost ($/MW): line_capex ($/MW/km, in years[0]) x its length."""
+    return scenario_options.sample("line_capex", item=line, years=years) * length_km
+
+
+def resample_line_capex(instance, scenario_options, line="HVAC overhead"):
+    """Given an instance, rescale every expandable line's capital by line_capex relative to its mid level
+    (one draw for every line)."""
+    out = instance.copy()
+    # resample only if user has specified line_capex as target, and the network has expandable lines
+    if not scenario_options.active("line_capex") or not {"expandable", "capital"} <= set(out.network.columns):
+        return out
+
+    # scaling factor: sampled line_capex over its mid level
+    years = list(out.years["year"])
+    mid = get_parameter_levels("line_capex", line, years)["mid"]
+    factor = scenario_options.sample("line_capex", initial=mid, item=line, years=years) / mid
+
+    # rescale expandable lines' capital
+    rows = out.network["expandable"].fillna(False).astype(bool)
+    out.network.loc[rows, "capital"] = out.network.loc[rows, "capital"] * factor
+    return out
+

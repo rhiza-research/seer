@@ -48,16 +48,17 @@ PARAMETERS = {  # parameter -> (scenario levels it accepts, what its items are)
     "capex_pathway": (SCENARIO_LEVELS, "tech"),
     "fuel_start": (SCENARIO_LEVELS, "fuel"),
     "fuel_pathway": (SCENARIO_LEVELS, "fuel"),
+    "line_capex": (SCENARIO_LEVELS, "line"),
 }
 # parameters that must be resampled together so that prices are consistent across techs / fuels
-SHARED_DRAW_PARAMETERS = ["capex_start", "capex_pathway", "fuel_start", "fuel_pathway"]
+SHARED_DRAW_PARAMETERS = ["capex_start", "capex_pathway", "fuel_start", "fuel_pathway", "line_capex"]
 PARAM_GROUPS = {
     "settings": ["dr", "voll"],
     "demand": ["demand_growth", "demand_profile"],
     "renewables": ["re_profile", "hydro"],
     "capex": ["capex_start", "capex_pathway"],
     "fuel": ["fuel_start", "fuel_pathway"],
-    "cost": ["capex_start", "capex_pathway", "fuel_start", "fuel_pathway"],
+    "cost": ["capex_start", "capex_pathway", "fuel_start", "fuel_pathway", "line_capex"],
     "all": list(PARAMETERS),
 }
 
@@ -65,6 +66,7 @@ PARAM_GROUPS = {
 def get_valid_items(item_type):
     return {"tech": set(load_table(COST_TABLES["tech"][0])["tech"]),
             "fuel": set(load_table(COST_TABLES["fuel"][0])["fuel"]),
+            "line": set(load_table(COST_TABLES["line"][0])["line"]),
             "category": set(SCENARIO_DATA["re_profile"])}[item_type]
 
 
@@ -86,6 +88,9 @@ def get_parameter_levels(parameter, item=None, years=None):
     if parameter in ("fuel_start", "fuel_pathway"):
         levels = get_cost_start_and_pathway("fuel", item, "price", years)
         return None if levels is None else levels[0] if parameter == "fuel_start" else levels[1]
+    if parameter == "line_capex":  # $/MW/km in years[0]; a line's capital is this x its length
+        levels = get_cost_start_and_pathway("line", item, "capex", years)
+        return None if levels is None else levels[0]
     raise ValueError(f"unknown parameter {parameter!r}")
 
 
@@ -203,11 +208,12 @@ def sample_value(parameter, initial=None, scenario=None, perturbation=None, item
 COST_TABLES = {  # cost table -> (starts, pathways) files
     "tech": ("technology/tech_cost_starts.csv", "technology/tech_cost_pathways.csv"),
     "fuel": ("fuels/fuel_cost_starts.csv", "fuels/fuel_cost_pathways.csv"),
+    "line": ("network/line_cost_starts.csv", "network/line_cost_pathways.csv"),
 }
 
 
 def get_cost_start_and_pathway(table, item, parameter, years):
-    """For a tech or fuel cost (table "tech" / "fuel"; item, parameter e.g. "CCGT", "capex"), return the
+    """For a tech, fuel or line cost (table "tech" / "fuel" / "line"; item, parameter e.g. "CCGT", "capex"), return the
     starting year cost and the cost pathway for each level (low, mid, high), interpolated onto years.
     None if the cost isn't in the tables.
 
