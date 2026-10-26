@@ -123,9 +123,10 @@ def build_storage_params(data_path="data/Gambia/", years=None, valid_zones=None)
     # unit isn't built in discrete increments, it just has its own fixed capacity (same as
     # generator_params.py)
     storage_constants.loc[~storage_constants["expandable"], "UnitSize"] = pd.NA
-    # likewise the build limits -- only meaningful for build options
-    storage_constants.loc[~has_annual | ~storage_constants["expandable"], "BuildLimitperYear"] = pd.NA
-    storage_constants.loc[~has_total | ~storage_constants["expandable"], "MaxTotalBuild"] = pd.NA
+    # likewise the build limits -- only meaningful for build options; an explicit Inf is blank too
+    is_inf = lambda col: storage_constants[col].astype(float) == float("inf")
+    storage_constants.loc[~has_annual | ~storage_constants["expandable"] | is_inf("BuildLimitperYear"), "BuildLimitperYear"] = pd.NA
+    storage_constants.loc[~has_total | ~storage_constants["expandable"] | is_inf("MaxTotalBuild"), "MaxTotalBuild"] = pd.NA
     # rename to seer-schema column names, matching generator_constants conventions
     storage_constants.rename(columns={
         "Capacity": "capacity_mw",

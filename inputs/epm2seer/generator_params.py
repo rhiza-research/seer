@@ -282,9 +282,11 @@ def _derive_flags(gc, data_path):
     # annual_build_limit / total_build_limit are only kept where explicitly given -- absent
     # means unconstrained (see seer/schema/README.md; the model backends read blank as inf).
     # EPM only applies its build-limit constraints where the value is nonzero ($-conditioned),
-    # so 0 means unconstrained too, not "never build". Only meaningful for build options.
-    gc.loc[~has_annual | ~gc["expandable"], "BuildLimitperYear"] = pd.NA
-    gc.loc[~has_total | ~gc["expandable"], "MaxTotalBuild"] = pd.NA
+    # so 0 means unconstrained too, not "never build". An explicit Inf (Senegal, Poland) is
+    # blank as well. Only meaningful for build options.
+    is_inf = lambda col: gc[col].astype(float) == float("inf")
+    gc.loc[~has_annual | ~gc["expandable"] | is_inf("BuildLimitperYear"), "BuildLimitperYear"] = pd.NA
+    gc.loc[~has_total | ~gc["expandable"] | is_inf("MaxTotalBuild"), "MaxTotalBuild"] = pd.NA
     gc.loc[gc["expandable"], "Capacity"] = pd.NA   # only existing generators have a capacity
     gc.loc[~gc["expandable"], "UnitSize"] = pd.NA  # only expandable generators have a unit_size
     # ramp rates are a fraction of capacity per hour, both positive (the down rate is a magnitude,
