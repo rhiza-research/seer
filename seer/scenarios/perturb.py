@@ -4,7 +4,7 @@ Examples:
     perturb(instance, perturbation={"capex_pathway": 0.3}, seed=0)
     perturb(instance, scenario={"hydro": "low"}, perturbation=0.2, seed=0)
 
-See scenario_parameters for parameters, groups and keys. Parameters in neither are left as they are.
+See scenario_parameters for parameters, groups and items. Parameters in neither are left as they are.
 """
 from . import costs, demand_trajectory, profiles, settings
 from .scenario_parameters import parse

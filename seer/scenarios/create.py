@@ -4,7 +4,7 @@ Examples:
     create("TUR", scenario={"capex": "high", "demand_growth": "low"}, seed=0)
     create("TUR", scenario={"all": "random"}, perturbation=0.5, seed=0, n_days=4, weights=[90, 92, 92, 91])
 
-See scenario_parameters for parameters, groups and keys.
+See scenario_parameters for parameters, groups and items.
 """
 import os
 import uuid

@@ -1,6 +1,6 @@
 """Sample and resample capital and marginal cost trajectories (start x pathway).
 
-Parameter targets: capex_start, capex_pathway (key: tech), fuel_start, fuel_pathway (key: fuel)
+Parameter targets: capex_start, capex_pathway (item: tech), fuel_start, fuel_pathway (item: fuel)
 Seer schema files: generator_costs.csv, storage_costs.csv
 """
 import warnings
@@ -12,8 +12,8 @@ from .scenario_parameters import parameter_levels, tech_parameter, vom_trajector
 
 def sample_capex(tech, years, scenario_options):
     """Capital cost trajectory, requiring sampling of start and trajectory."""
-    start = scenario_options.sample("capex_start", key=tech, years=years)
-    pathway = scenario_options.sample("capex_pathway", key=tech, years=years)
+    start = scenario_options.sample("capex_start", item=tech, years=years)
+    pathway = scenario_options.sample("capex_pathway", item=tech, years=years)
     return start * pathway / pathway[0]
 
 
@@ -40,8 +40,8 @@ def resample_capex(instance, scenario_options):
             # get current capex
             curr_capex = row[year_cols].to_numpy(dtype=float)
             # sample start and pathway
-            start = scenario_options.sample("capex_start", initial=curr_capex[0], key=unit["tech"], years=years)
-            pathway = scenario_options.sample("capex_pathway", initial=curr_capex / curr_capex[0], key=unit["tech"], years=years)
+            start = scenario_options.sample("capex_start", initial=curr_capex[0], item=unit["tech"], years=years)
+            pathway = scenario_options.sample("capex_pathway", initial=curr_capex / curr_capex[0], item=unit["tech"], years=years)
             # set new capex using start and pathway
             costs.loc[i, year_cols] = start * pathway / pathway[0]
     return out
@@ -53,8 +53,8 @@ def sample_marginal(tech, fuel, years, scenario_options):
     if heat_rate is None or parameter_levels("fuel_start", fuel, years) is None:
         return vom
     # sample start and pathway
-    start = scenario_options.sample("fuel_start", key=fuel, years=years)
-    pathway = scenario_options.sample("fuel_pathway", key=fuel, years=years)
+    start = scenario_options.sample("fuel_start", item=fuel, years=years)
+    pathway = scenario_options.sample("fuel_pathway", item=fuel, years=years)
     # return marginal cost
     return heat_rate * start * pathway / pathway[0] + vom
 
@@ -80,8 +80,8 @@ def resample_marginal(instance, scenario_options):
         vom = vom_trajectory(unit["tech"], years)
         curr_fuel_cost = np.clip((row[year_cols].to_numpy(dtype=float) - vom) / heat_rate, 1e-6, None)
         # sample start and pathway
-        start = scenario_options.sample("fuel_start", initial=curr_fuel_cost[0], key=unit["fuel"], years=years)
-        pathway = scenario_options.sample("fuel_pathway", initial=curr_fuel_cost / curr_fuel_cost[0], key=unit["fuel"], years=years)
+        start = scenario_options.sample("fuel_start", initial=curr_fuel_cost[0], item=unit["fuel"], years=years)
+        pathway = scenario_options.sample("fuel_pathway", initial=curr_fuel_cost / curr_fuel_cost[0], item=unit["fuel"], years=years)
         # set new marginal cost using start and pathway
         costs.loc[i, year_cols] = heat_rate * start * pathway / pathway[0] + vom
     return out
