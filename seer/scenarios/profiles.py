@@ -16,6 +16,7 @@ from .scenario_parameters import SCENARIO_DATA, get_parameter_levels, sample_val
 
 HOURS = np.arange(24.0)
 HYDRO_TECHS = ["hydro", "ror"]
+LIBRARY_NOON = 12.0  # library days are aligned so solar output centres on this hour
 
 
 # --- demand profile: daily shape by load factor (mean / max) and peak hour ---
@@ -58,7 +59,7 @@ def sample_re_profile(capacity_factor, category, times, scenario_options):
 
 def resample_re_profile(instance, scenario_options):
     """Copy of instance with each solar / wind profile's annual capacity factor set / perturbed per
-    scenario_options, every day moving by the same ratio and re-matched to the library."""
+    scenario_options, every day moving by the same ratio and re-matched to the (clock-shifted) library."""
     if not scenario_options.active("re_profile"):
         return instance.copy()
 
@@ -70,10 +71,23 @@ def resample_re_profile(instance, scenario_options):
         if cf > 0 and get_parameter_levels("re_profile", category.get(pid)) is not None:
             ratio[pid] = float(np.clip(scenario_options.sample("re_profile", initial=cf, item=category[pid]), 0.001, 0.999)) / cf
 
-    # Step 2 - move every day by its profile's ratio
+    # Step 2 - one clock shift for the instance (models differ, e.g. UTC): its solar output's mean hour - LIBRARY_NOON
+    solar = instance.renewable_profiles[instance.renewable_profiles["profile_id"].map(category) == "solar"]
+    days = [(block_midpoints(times), values) for _, times, values, _ in RE.prepare_profiles(solar) if values.sum() > 0]
+    shift = np.average(np.concatenate([h for h, _ in days]), weights=np.concatenate([v for _, v in days])) - LIBRARY_NOON if days else 0.0
+
+    # Step 3 - move every day by its profile's ratio
     return RE.resample(instance, lambda day, features: {
         "capacity_factor": float(np.clip(features["capacity_factor"] * ratio.get(day["profile_id"], 1.0), 0.001, 0.999))},
-        day_filter=lambda day: category.get(day["profile_id"]))
+        day_filter=lambda day: category.get(day["profile_id"]), shift=shift)
+
+
+def block_midpoints(times):
+    """Each time point moved to the middle of the block it stands for (until the next point)."""
+    times = np.asarray(times, dtype=float)
+    order = np.sort(times)
+    step = np.diff(np.append(order, order[0] + 24))
+    return times + step[np.searchsorted(order, times)] / 2
 
 
 def profile_categories(instance):
@@ -140,19 +154,20 @@ class ProfileSampler:
             return None
         dist = self.feature_distance(features, self.library_features.loc[library.index])
         nearest = dist.nsmallest(self.k).index
-        profiles = [time_align(library.loc[i, "times"], library.loc[i, "values"], times) for i in nearest]
+        profiles = [time_align(block_midpoints(library.loc[i, "times"]), library.loc[i, "values"], block_midpoints(times))
+                    for i in nearest]
         if self.k == 1:
             return profiles[0]
         weights = 1.0 / (dist.loc[nearest].to_numpy() + 1e-6)
         return np.average(profiles, axis=0, weights=weights / weights.sum())
 
-    def resample(self, instance, day_target, day_filter=lambda day: None):
+    def resample(self, instance, day_target, day_filter=lambda day: None, shift=0.0):
         """Copy of instance with every day re-matched to day_target(day, day features), among library days
-        matching day_filter(day)."""
+        matching day_filter(day), shifted later by shift hours."""
         out = instance.copy()
         df = getattr(out, self.to_perturb)
         for day, times, values, day_rows in self.prepare_profiles(df):
-            matched = self.sample(day_target(day, self.extract_features(times, values)), times, day_filter(day))
+            matched = self.sample(day_target(day, self.extract_features(times, values)), (times - shift) % 24, day_filter(day))
             if matched is not None:
                 df.loc[day_rows.index, "value"] = self.rescale(matched, times, values)
         return out
@@ -187,6 +202,20 @@ class ReProfileSampler(ProfileSampler):
     FILTER_COL = "category"
     library_dir: Path = Path(__file__).parent / "reference_data" / "profiles" / "renewable"
     k: int = 1  # blending could push an hourly value above 1
+
+    @cached_property
+    def library(self):
+        """The library, each source country's days shifted so its solar output centres on LIBRARY_NOON."""
+        library = load_profile_library(self.library_dir).copy()
+        for _, rows in library.groupby("source_country"):
+            solar = rows[rows["category"] == "solar"]
+            if solar.empty:
+                continue
+            hours = np.concatenate([block_midpoints(t) for t in solar["times"]])
+            shift = LIBRARY_NOON - np.average(hours, weights=np.concatenate(solar["values"].to_list()))
+            for i in rows.index:
+                library.at[i, "times"] = (library.at[i, "times"] + shift) % 24
+        return library
 
     def sample(self, features, times, filter_value=None):
         profile = super().sample(features, times, filter_value)

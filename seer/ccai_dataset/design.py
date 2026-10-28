@@ -14,8 +14,8 @@ Each run in a config:
       noise: 0.02                 # relative noise on every parameter, after scenario and perturbation (0: none)
       solve: true
 
-Every entry's seed derives from (config seed, run name, index), so adding, removing or reordering runs
-never changes another run's entries.
+Every entry's seed derives from (config seed, country, run name, index): countries draw independently, and
+adding, removing or reordering runs never changes another run's entries.
 """
 import itertools
 import zlib
@@ -26,8 +26,9 @@ SWEEP_MODES = ["grid", "iterate"]
 RUN_KEYS = {"name", "scenario", "perturbation", "iters", "noise", "solve"}
 
 
-def entry_seed(root_seed, run_name, index):
-    return int(np.random.SeedSequence([root_seed, zlib.crc32(run_name.encode()), index]).generate_state(1, np.uint64)[0])
+def entry_seed(root_seed, country, run_name, index):
+    ints = [root_seed, zlib.crc32(country.encode()), zlib.crc32(run_name.encode()), index]
+    return int(np.random.SeedSequence(ints).generate_state(1, np.uint64)[0])
 
 
 def scenarios(scenario):
@@ -65,7 +66,7 @@ def build_entries(config):
             for _ in range(run.get("iters", 1)):
                 entries.append({"id": f"{run['name']}_{index:05d}", "run": run["name"], "scenario_name": scenario_name(scenario),
                                 "scenario": scenario, "perturbation": run.get("perturbation", {}),
-                                "noise": run["noise"], "seed": entry_seed(config["seed"], run["name"], index),
+                                "noise": run["noise"], "seed": entry_seed(config["seed"], config["country"], run["name"], index),
                                 "solve": bool(run.get("solve", False))})
                 index += 1
     return entries
