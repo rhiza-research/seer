@@ -340,6 +340,12 @@ def _check_storage_constants(instance, zones, errors):
             negative = df[col].astype(float) < 0
             if negative.any():
                 errors.append(f"storage_constants.csv: negative '{col}' for storage unit(s): {sorted(df.loc[negative, 'storage'])}")
+    # efficiency is optional (absent means 1, lossless) -- where given, a round trip in (0, 1]
+    if "efficiency" in df.columns:
+        eff = df["efficiency"].astype(float)
+        bad = eff.notna() & ~((eff > 0) & (eff <= 1))
+        if bad.any():
+            errors.append(f"storage_constants.csv: 'efficiency' outside (0, 1] for storage unit(s): {sorted(df.loc[bad, 'storage'])}")
 
     # an existing unit (expandable=False) must have a capacity_mw and duration_hours
     for col in ["capacity_mw", "duration_hours"]:

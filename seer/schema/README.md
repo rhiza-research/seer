@@ -225,7 +225,7 @@ Each row is one storage unit (existing or a build option), analogous to
 | `annual_build_limit_mwh` | max MWh addable per year. *Optional* -- absent means unconstrained (`inf`) |
 | `total_build_limit_mwh` | max MWh addable over the whole horizon (summed across build years). *Optional* -- absent means unconstrained (`inf`) |
 | **optional, any storage unit** | |
-| `efficiency` | round-trip efficiency, applied to both charging and discharging (unitless, 0–1) |
+| `efficiency` | round-trip efficiency (unitless, 0–1], taken once, on charging: of each MWh charged, `efficiency` MWh can be discharged. *Optional* -- absent means 1 (lossless) |
 | `unit_size_mwh` | MWh increment used for modular capacity expansion |
 
 `tech`\* is aligned to [PyPSA's technology-data](https://github.com/PyPSA/technology-data)
