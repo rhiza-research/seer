@@ -168,8 +168,7 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     model.storage_total_power_capacity = pyo.Expression(model.storage, model.years, rule=storage_power_capacity_rule)
 
     """Objective"""
-    # total cost, discounted to the first modeled year: the sum of these named cost terms (reported in the
-    # output tables' summary)
+    # total cost discounted to the first year: the sum of these named terms (reported in the summary table)
     model.variable_cost = pyo.Expression(rule=lambda model: sum(
         model.year_discount_factor[year] * model.time_weight[year, hour]
         * model.generator_marginal_cost[gen, year] * model.generation_output[gen, year, hour]
@@ -209,8 +208,7 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
         sense=pyo.minimize
     )
 
-    # duals of the constraints (supply_equals_demand's are the zonal prices), for an LP only: a MILP
-    # (discrete_additions) has none
+    # duals (supply_equals_demand's are the zonal prices); a MILP has none
     if not discrete_additions:
         model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)
 

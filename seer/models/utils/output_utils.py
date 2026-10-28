@@ -37,8 +37,8 @@ SUMMARY_UNITS = {"objective": "$ (discounted to the first year)", "generator_cap
 
 
 def summary_table(objective, costs, demand, lost_load):
-    """The summary output table: the objective, its cost terms (costs: {term: $}), and demand and lost load
-    energy summed over every modeled year -- one row per metric, as (metric, value, unit)."""
+    """The summary table: one (metric, value, unit) row each for the objective, its cost terms ({term: $}),
+    and demand and lost load energy over all modeled years."""
     values = {"objective": objective, **costs, "demand": demand, "lost_load": lost_load}
     return pd.DataFrame({"metric": list(values), "value": [float(v) for v in values.values()],
                          "unit": [SUMMARY_UNITS[m] for m in values]})

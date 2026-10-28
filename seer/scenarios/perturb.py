@@ -17,11 +17,11 @@ SCHEMA_TABLES = ["settings", "demand_forecast", "demand_profile", "renewable_pro
 
 
 def perturb(seer_instance, scenario=None, perturbation=None, seed=None, significant_figures=6,
-            cost_dataset=DEFAULT_COST_DATASET):
+            cost_dataset=DEFAULT_COST_DATASET, noise=None):
     """Copy of seer_instance with scenario's levels set, then perturbation's scales applied, and
     SCHEMA_TABLES' float values rounded to significant_figures (None: no rounding). Cost levels come
-    from cost_dataset (see scenario_parameters.COST_DATASETS)."""
-    scenario_options = parse(scenario, perturbation, seed=seed, cost_dataset=cost_dataset)
+    from cost_dataset; scenario levels get relative noise (default: scenario_data.yaml's)."""
+    scenario_options = parse(scenario, perturbation, seed=seed, cost_dataset=cost_dataset, noise=noise)
     out = seer_instance.copy()
 
     # settings

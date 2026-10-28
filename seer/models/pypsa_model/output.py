@@ -43,14 +43,14 @@ def _consolidate_capacity_by_year(model, static_df):
 
 def _consolidate_timeseries_by_base_name(static_df, t_df):
     """t_df: e.g. model.generators_t.p, indexed by model.snapshots. Collapses vintage columns
-    to their base name (summing overlaps) and reindexes to (year, hour, datetime) (see _time_index)."""
+    to their base name (summing overlaps), indexed as in _time_index."""
     base_name_map = {name: _base_name(name, static_df.loc[name]) for name in t_df.columns}
     return _time_index(t_df.rename(columns=base_name_map).T.groupby(level=0).sum().T)
 
 
 def _time_index(renamed):
-    """renamed (indexed by model.snapshots), reindexed to (year, hour, datetime): hour is 1-indexed within
-    each year (matching the pyomo side's convention), datetime is the real timestamp model.snapshots carries."""
+    """renamed (indexed by model.snapshots) indexed by (year, hour, datetime); hour is 1-indexed within each
+    year, as on the pyomo side."""
     years = renamed.index.get_level_values(0)
     datetimes = renamed.index.get_level_values(1)
     hours = pd.Series(range(len(renamed)), index=renamed.index).groupby(years).cumcount() + 1
@@ -142,7 +142,7 @@ def build_output_tables(model, data_path):
     else:
         line_capacity = pd.DataFrame(columns=["from", "to", "year", "capacity"])
 
-    # line flow: a Link's p0 is its flow bus0 -> bus1 (positive from -> to), one row per (zone pair, time)
+    # a Link's p0 is its flow bus0 -> bus1; summed per zone pair as in line_capacity
     if len(model.links):
         flow = _consolidate_timeseries_by_base_name(links, model.links_t.p0[links.index])
         line_flow = flow.reset_index().melt(id_vars=["year", "hour", "datetime"], var_name="line", value_name="flow")
@@ -158,8 +158,7 @@ def build_output_tables(model, data_path):
     storage_soc["tech"] = storage_soc["storage"].map(sto_genmap["tech"])
     storage_soc = storage_soc[["zone", "tech", "storage", "year", "hour", "datetime", "soc"]]
 
-    # zonal price: PyPSA's marginal_price is the nodal balance dual already divided by the snapshot and
-    # investment-period objective weightings, i.e. undiscounted $/MWh per real hour -- as on the pyomo side
+    # marginal_price is already divided by the objective weightings ($/MWh), as on the pyomo side
     prices = _time_index(model.buses_t.marginal_price[model.loads["bus"].unique()].copy()).reset_index().melt(
         id_vars=["year", "hour", "datetime"], var_name="zone", value_name="price"
     )[["zone", "year", "hour", "datetime", "price"]]
@@ -173,14 +172,13 @@ def build_output_tables(model, data_path):
         "line_flow": line_flow,
         "storage_soc": storage_soc,
         "prices": prices,
-        "summary": _summary(model, is_shedding),
+        "summary": summary(model, is_shedding),
     }, data_path)
 
 
-def _summary(model, is_shedding):
-    """The summary table: the objective split into the pyomo backend's cost terms, from PyPSA's own
-    weightings -- each snapshot by its objective weighting x its investment period's; each component's
-    capital_cost x p_nom_opt by the weightings of every period it's active in (see build.build_year_capital_cost)."""
+def summary(model, is_shedding):
+    """The summary table: the objective split into the pyomo backend's cost terms, using PyPSA's snapshot and
+    investment-period weightings (see build.build_year_capital_cost)."""
     period_weight = model.investment_period_weightings["objective"]
     snapshot_weight = model.snapshot_weightings["objective"] * model.snapshots.get_level_values(0).map(period_weight).values
 

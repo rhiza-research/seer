@@ -79,7 +79,7 @@ def build_output_tables(instance, data_path):
     # one row per (zone pair, year): sum a pair's lines with different start years
     line_capacity = line_capacity.groupby(["from", "to", "year"], as_index=False, sort=False)["capacity"].sum()
 
-    # line flow: positive from -> to, one row per (zone pair, time) as line_capacity
+    # positive from -> to, summed per zone pair as in line_capacity
     line_flow = pd.DataFrame([
         {
             "from": line_from[line], "to": line_to[line], "year": year, "hour": hour,
@@ -97,8 +97,7 @@ def build_output_tables(instance, data_path):
         for s in instance.storage for year, hour in instance.times
     ], columns=["zone", "tech", "storage", "year", "hour", "datetime", "soc"])
 
-    # zonal price: supply_equals_demand's dual, undiscounted and per real hour ($/MWh) -- the objective
-    # weights each (year, hour) by year_discount_factor x time_weight. None without duals (a MILP)
+    # supply_equals_demand's dual / (year_discount_factor x time_weight) = $/MWh; None for a MILP
     duals = getattr(instance, "dual", None)
     prices = pd.DataFrame([
         {
@@ -119,11 +118,18 @@ def build_output_tables(instance, data_path):
         "line_flow": line_flow,
         "storage_soc": storage_soc,
         "prices": prices,
-        "summary": summary_table(
-            objective=pyo.value(instance.objective),
-            costs={name: pyo.value(getattr(instance, name))
-                   for name in ["generator_capex", "storage_capex", "line_capex", "variable_cost", "lost_load_cost"]},
-            demand=sum(pyo.value(instance.time_weight[t]) * pyo.value(instance.demand[z, t]) for z in instance.zones for t in instance.times),
-            lost_load=sum(pyo.value(instance.time_weight[t]) * pyo.value(instance.lost_load[z, t]) for z in instance.zones for t in instance.times),
-        ),
+        "summary": summary(instance),
     }, data_path)
+
+
+def summary(instance):
+    """The summary table, from the objective's named cost terms (see abstract_model.py)."""
+    def weighted_energy(var):
+        return sum(pyo.value(instance.time_weight[t]) * pyo.value(var[z, t]) for z in instance.zones for t in instance.times)
+
+    return summary_table(
+        objective=pyo.value(instance.objective),
+        costs={name: pyo.value(getattr(instance, name))
+               for name in ["generator_capex", "storage_capex", "line_capex", "variable_cost", "lost_load_cost"]},
+        demand=weighted_energy(instance.demand), lost_load=weighted_energy(instance.lost_load),
+    )
