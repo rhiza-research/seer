@@ -1,27 +1,31 @@
-"""Perturb an existing seer-schema instance: set parameters to fixed scenario levels and / or perturb them.
+"""Perturb an existing seer-schema instance: set parameters to fixed scenario levels, perturb chosen ones,
+and / or add noise to all of them.
 Examples:
     perturb(instance, scenario={"fuel:gas": "high", "demand_growth": "low"}, seed=0)
     perturb(instance, perturbation={"capex_pathway": 0.3}, seed=0)
-    perturb(instance, scenario={"hydro": "low"}, perturbation=0.2, seed=0)
+    perturb(instance, scenario={"hydro": "low"}, perturbation=0.2, noise=0.02, seed=0)
 
-See scenario_parameters for parameters, groups and items. Parameters in neither are left as they are.
-Values in schema tables are rounded to significant_figures, so written instances stay
-compact (and compress well).
+See scenario_parameters for parameters, groups and items (parameters in neither are left as they are), and
+noise.py for how noise jitters each one. Values in schema tables are rounded to significant_figures, so
+written instances stay compact (and compress well).
 """
 import numpy as np
 
 from . import costs, demand_trajectory, profiles, settings
+from .noise import add_noise
 from .scenario_parameters import DEFAULT_COST_DATASET, parse
+
+NOISE_STREAM = 1  # noise draws from their own random stream, so they don't shift the scenario / perturbation draws
 
 SCHEMA_TABLES = ["settings", "demand_forecast", "demand_profile", "renewable_profiles", "generator_costs", "storage_costs"]
 
 
 def perturb(seer_instance, scenario=None, perturbation=None, seed=None, significant_figures=6,
-            cost_dataset=DEFAULT_COST_DATASET, noise=None):
-    """Copy of seer_instance with scenario's levels set, then perturbation's scales applied, and
-    SCHEMA_TABLES' float values rounded to significant_figures (None: no rounding). Cost levels come
-    from cost_dataset; scenario levels get relative noise (default: scenario_data.yaml's)."""
-    scenario_options = parse(scenario, perturbation, seed=seed, cost_dataset=cost_dataset, noise=noise)
+            cost_dataset=DEFAULT_COST_DATASET, noise=0):
+    """Copy of seer_instance with scenario's levels set, then perturbation's scales applied, then relative
+    noise added to every parameter, and SCHEMA_TABLES' float values rounded to significant_figures (None: no
+    rounding). Cost levels come from cost_dataset."""
+    scenario_options = parse(scenario, perturbation, seed=seed, cost_dataset=cost_dataset)
     out = seer_instance.copy()
 
     # settings
@@ -39,6 +43,9 @@ def perturb(seer_instance, scenario=None, perturbation=None, seed=None, signific
     out = costs.resample_capex(out, scenario_options)
     out = costs.resample_marginal(out, scenario_options)
     out = costs.resample_line_capex(out, scenario_options)
+
+    # noise, on everything
+    out = add_noise(out, noise, np.random.default_rng(None if seed is None else [seed, NOISE_STREAM]))
 
     # rounding
     if significant_figures is not None:

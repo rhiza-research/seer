@@ -116,7 +116,6 @@ class ScenarioOptions:
     rng: np.random.Generator = field(default_factory=np.random.default_rng)
     item_seeds: dict = field(default_factory=dict)
     cost_dataset: str = DEFAULT_COST_DATASET
-    noise: float = SCENARIO_DATA["noise"]
 
     def level(self, parameter, item=None):
         return self.scenario.get((parameter, item), self.scenario.get((parameter, None)))
@@ -133,13 +132,13 @@ class ScenarioOptions:
         if parameter in SHARED_DRAW_PARAMETERS and item is not None:
             rng = np.random.default_rng(self.item_seeds.setdefault((parameter, item), int(self.rng.integers(2**63))))
         return sample_value(parameter, initial, self.level(parameter, item), self.scale(parameter, item), item, years, rng,
-                            self.cost_dataset, self.noise)
+                            self.cost_dataset)
 
 
-def parse(scenario=None, perturbation=None, defaults=None, seed=None, cost_dataset=DEFAULT_COST_DATASET, noise=None):
+def parse(scenario=None, perturbation=None, defaults=None, seed=None, cost_dataset=DEFAULT_COST_DATASET):
     """ScenarioOptions from scenario {parameter[:item]: level} and perturbation {parameter[:item]: scale}
     (or one scale for every parameter). defaults: {parameter: level} where the scenario sets none;
-    seed: for its random draws; cost_dataset: reference costs; noise: relative noise on scenario levels."""
+    seed: for its random draws; cost_dataset: reference costs."""
     if cost_dataset not in COST_DATASETS:
         raise ValueError(f"cost_dataset must be one of {COST_DATASETS}, got {cost_dataset!r}")
     if isinstance(perturbation, (int, float)):
@@ -176,7 +175,7 @@ def parse(scenario=None, perturbation=None, defaults=None, seed=None, cost_datas
         out[kind][(parameter, item)] = value
         set_at[(kind, parameter, item)] = rank
     return ScenarioOptions(scenario=out["scenario"], perturbation=out["perturbation"], rng=np.random.default_rng(seed),
-                           cost_dataset=cost_dataset, noise=SCENARIO_DATA["noise"] if noise is None else noise)
+                           cost_dataset=cost_dataset)
 
 
 def check(kind, parameter, value):
@@ -188,12 +187,12 @@ def check(kind, parameter, value):
 
 
 def sample_value(parameter, initial=None, scenario=None, perturbation=None, item=None, years=None, rng=None,
-                 cost_dataset=DEFAULT_COST_DATASET, noise=None):
+                 cost_dataset=DEFAULT_COST_DATASET):
     """Return a value for parameter, using its low / mid / high levels from get_parameter_levels
     (for item, e.g. a tech, and over years, for a cost trajectory, from cost_dataset).
 
     Step 1 - base value, from either an explicit scenario or the initial value:
-        scenario "low" / "mid" / "high": that level's value, times a small random noise (1 +/- noise)
+        scenario "low" / "mid" / "high": that level's value
         scenario "random": a uniformly random value between low and high
         no scenario: initial (or the mid level's value if there's no initial value)
     Step 2 - perturbation (0 to 1) around the base value:
@@ -208,8 +207,7 @@ def sample_value(parameter, initial=None, scenario=None, perturbation=None, item
     if scenario == "random":
         value = low + rng.uniform() * (high - low)
     elif scenario is not None:
-        noise = SCENARIO_DATA["noise"] if noise is None else noise
-        value = levels[scenario] * (1 + rng.uniform(-noise, noise))
+        value = levels[scenario]
     else:
         value = levels["mid"] if initial is None else initial
 

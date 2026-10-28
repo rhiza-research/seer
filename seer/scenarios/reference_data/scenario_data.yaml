@@ -1,7 +1,7 @@
 # Scenario parameters' low / mid / high values, keyed by parameter name (see
 # seer/scenarios/scenario_parameters.py sample_value):
 #
-# scenario level low / mid / high: the level's value, times (1 + U(-noise, noise)).
+# scenario level low / mid / high: the level's value (noise, if any, is added after: see seer/scenarios/noise.py).
 # scenario level random: uniform between the lowest and highest level.
 # perturbation p (0-1), applied after the level: uniform around the value, up to p x the distance
 #   to the lowest / highest level on each side.
@@ -30,8 +30,6 @@
 # [WB-PV]     World Bank / ESMAP / Solargis, Global Photovoltaic Power Potential by Country (2020)
 # [lib]       this repo's profile libraries, profiles/{demand,renewable}/daily_profile_*.csv
 #             (built from EPM country profiles)
-
-noise: 0.02  # relative noise on low / mid / high
 
 # real discount rate
 # low: concessional / social rate; [Fed-2014] argues ~5% real for developing countries.
