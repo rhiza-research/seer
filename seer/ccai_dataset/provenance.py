@@ -109,11 +109,13 @@ def read_zipped(data):
 
 
 def regenerate(config, perturbation_id, models_dir=MODELS_DIR):
-    """The perturbed SeerInstance with perturbation_id, from a country's config.yaml (dict, with its
-    provenance), run with seer at provenance.optimizer.commit and models_dir at provenance.base_instance.commit."""
-    base_commit = config["provenance"]["base_instance"]["commit"]
-    if commit(models_dir) != base_commit:
-        raise ValueError(f"{models_dir} is at {commit(models_dir)}: check out {base_commit} first")
+    """The perturbed SeerInstance with perturbation_id, from a country's config.yaml (dict, with its provenance),
+    run with seer at provenance.optimizer's verified_commit (if any, else its commit) and models_dir at
+    provenance.base_instance's."""
+    base = config["provenance"]["base_instance"]
+    base_commits = {base["commit"], base.get("verified_commit", base["commit"])}
+    if commit(models_dir) not in base_commits:
+        raise ValueError(f"{models_dir} is at {commit(models_dir)}: check out {base.get('verified_commit', base['commit'])} first")
     entry = next(e for e in build_entries(config) if e["id"] == perturbation_id)
     instance = SeerInstance.read(Path(models_dir) / config["base"]["path"])
     return perturb(instance, entry["scenario"], entry["perturbation"], entry["seed"], config["significant_figures"],

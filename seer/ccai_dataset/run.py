@@ -43,9 +43,11 @@ from contextlib import contextmanager
 from pathlib import Path
 
 import fsspec
+import numpy as np
 import pandas as pd
 import yaml
 
+from ..schema import SeerInstance
 from ..scenarios import perturb
 from ..scenarios.perturb import round_significant
 from . import plan, provenance
@@ -246,21 +248,25 @@ def run_parallel(executor, tasks, on_progress=None, on_done=None):
     return results, errors
 
 
-def start_dataset(fs, root, config, config_text, models_dir):
+VERIFY_SAMPLE = 25  # existing perturbations regenerated to check a dataset still reproduces at a new commit
+
+
+def start_dataset(fs, root, perturbations, config, config_text, models_dir):
     """Write config.yaml: the config as given, plus its provenance. A dataset already there is only extended:
-    its provenance (the commits it was made at) is kept, and it's refused (SystemExit) if anything that decides
-    its results differs -- the base instance or seer's results code (provenance.RESULT_PATHS) since those
-    commits, the config's settings, or a run (a run may only gain iters; none may disappear)."""
+    its provenance is kept, and it's refused (SystemExit) if the config's settings or runs differ (a run may only
+    gain iters; none may disappear). If results code or data changed since the dataset's commits (or their
+    verified_commit) -- seer's provenance.RESULT_PATHS, or the country's base instance -- a sample of its
+    perturbations is regenerated with the current code: identical, and the current commits become verified_commit;
+    otherwise it's refused."""
     record = provenance.provenance_record(config, models_dir)
     path = posixpath.join(root, "config.yaml")
     if fs.exists(path):
         old = yaml.safe_load(fs.cat(path))
+        changed_repos = []
         for repo, repo_dir in [("optimizer", provenance.SEER_DIR), ("base_instance", models_dir)]:
-            old_commit = old["provenance"][repo]["commit"]
-            paths = provenance.RESULT_PATHS.get(repo, [config["base"]["path"]])
-            if not provenance.unchanged_since(repo_dir, old_commit, paths):
-                raise SystemExit(f"{path}: {repo} code or data changed since its commit {old_commit[:7]} "
-                                 f"({', '.join(paths)}): use a new --out, or check out that commit")
+            checked = old["provenance"][repo].get("verified_commit", old["provenance"][repo]["commit"])
+            if not provenance.unchanged_since(repo_dir, checked, provenance.RESULT_PATHS.get(repo, [config["base"]["path"]])):
+                changed_repos.append(repo)
         settings = [k for k in old if k not in ("runs", "provenance") and old[k] != config.get(k)]
         old_runs, new_runs = {r["name"]: r for r in old["runs"]}, {r["name"]: r for r in config["runs"]}
         changed = [name for name, run in old_runs.items() if name not in new_runs
@@ -269,10 +275,45 @@ def start_dataset(fs, root, config, config_text, models_dir):
         if settings or changed:
             raise SystemExit(f"{path}: settings {settings} or runs {changed} differ from the dataset's (runs may only "
                              f"gain iters; none may disappear): use the dataset's config, or a new --out")
+        if changed_repos:
+            mismatched, checked = verify_sample(fs, perturbations, config, Path(models_dir) / config["base"]["path"])
+            if mismatched:
+                raise SystemExit(f"{path}: {', '.join(changed_repos)} changed since the dataset's commits, and "
+                                 f"{len(mismatched)} of {checked} sampled perturbations no longer reproduce "
+                                 f"({', '.join(mismatched[:5])}): use a new --out, or check out the dataset's commits")
+            print(f"[{config['country']}] {', '.join(changed_repos)} changed since the dataset's commits; "
+                  f"{checked} sampled perturbations still reproduce exactly", flush=True)
+            for repo in changed_repos:
+                old["provenance"][repo]["verified_commit"] = record[repo]["commit"]
         record = old["provenance"]
     write(fs, path, config_text.rstrip() + "\n\n# added by seer.ccai_dataset.run\n"
           + yaml.safe_dump({"provenance": record}, sort_keys=False))
     return record
+
+
+def verify_sample(fs, perturbations, config, base_dir, n=VERIFY_SAMPLE):
+    """Regenerate up to n of the dataset's existing perturbations (spread across its runs) with the current code
+    and compare them with their inputs.zip. Returns (ids that differ, how many were checked)."""
+    have = ids_with(fs, perturbations, "inputs.zip")
+    by_run = {}
+    for e in build_entries(config):
+        if e["id"] in have:
+            by_run.setdefault(e["run"], []).append(e)
+    rng = np.random.default_rng(0)
+    sample = []
+    while len(sample) < n and any(by_run.values()):
+        for run in sorted(by_run):  # round-robin over runs, a random perturbation from each
+            if by_run[run] and len(sample) < n:
+                sample.append(by_run[run].pop(rng.integers(len(by_run[run]))))
+    base = SeerInstance.read(base_dir)
+    mismatched = []
+    for e in sample:
+        instance = perturb(base, e["scenario"], e["perturbation"], e["seed"], config["significant_figures"],
+                           config["cost_dataset"], e["noise"])
+        csvs = {name: df.to_csv(index=False) for name, df in instance.as_dict().items() if not (name == "network" and df.empty)}
+        if csvs != read_csvs(fs.cat(have[e["id"]])):
+            mismatched.append(e["id"])
+    return mismatched, len(sample)
 
 
 class Country:
@@ -287,7 +328,7 @@ class Country:
             raise SystemExit(f"[{self.name}] no runs named {sorted(unknown)}")
         self.out_url = f"{str(out_root).rstrip('/')}/{self.name}"
         self.fs, self.root, self.perturbations = open_out(self.out_url)
-        self.record = start_dataset(self.fs, self.root, config, config_text, models_dir)
+        self.record = start_dataset(self.fs, self.root, self.perturbations, config, config_text, models_dir)
         self.base_zip = provenance.zip_dir(Path(models_dir) / config["base"]["path"])
         self.entries = build_entries(config)
         self.work = [e for e in self.entries if (runs is None or e["run"] in runs)

@@ -38,8 +38,10 @@ def resample_capex(instance, scenario_options):
             if get_parameter_levels("capex_start", unit["tech"], years) is None:
                 warnings.warn(f"no capex levels for tech {unit['tech']!r} -- leaving {row[id_col]!r} unchanged")
                 continue
-            # get current capex
+            # get current capex; a build option that's free from the start (e.g. a committed project) stays free
             curr_capex = row[year_cols].to_numpy(dtype=float)
+            if curr_capex[0] == 0:
+                continue
             # sample start and pathway
             start = scenario_options.sample("capex_start", initial=curr_capex[0], item=unit["tech"], years=years)
             pathway = scenario_options.sample("capex_pathway", initial=curr_capex / curr_capex[0], item=unit["tech"], years=years)
