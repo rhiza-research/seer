@@ -168,46 +168,51 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     model.storage_total_power_capacity = pyo.Expression(model.storage, model.years, rule=storage_power_capacity_rule)
 
     """Objective"""
-    def objective_rule(model):
-        # total cost objective, discounted to the first modeled year
-        opex = sum(
-            model.year_discount_factor[year] * model.time_weight[year, hour]
-            * model.generator_marginal_cost[gen, year] * model.generation_output[gen, year, hour]
-            for gen in model.generators
-            for year, hour in model.times
-        )
-        capex = sum(
-            model.year_discount_factor[year]
-            * model.generator_capex_cost[gen, year] * model.generation_added_capacity[gen, year]
-            for gen in model.new_generators
-            for year in model.years
-        )
-        lost_load_cost = sum(
-            model.year_discount_factor[year] * model.time_weight[year, hour] * model.voll * model.lost_load[zone, year, hour]
-            for zone in model.zones
-            for year, hour in model.times
-        )
-        storage_capex = sum(
-            model.year_discount_factor[year]
-            * model.storage_capex_cost[s, year] * model.storage_added_capacity[s, year]
-            for s in model.new_storage
-            for year in model.years
-        )
-        # storage_marginal_cost is 0 for now; not yet wired to a throughput term (see storage_change's signed
-        # definition) - left out of the objective until that's decided, since it would currently be a no-op anyway
-        line_capex = sum(
-            model.year_discount_factor[year]
-            * model.line_capex_cost[line, year] * model.line_added_capacity[line, year]
-            for line in model.new_lines
-            for year in model.years
-        )
-        return opex + capex + lost_load_cost + storage_capex + line_capex
+    # total cost, discounted to the first modeled year: the sum of these named cost terms (reported in the
+    # output tables' summary)
+    model.variable_cost = pyo.Expression(rule=lambda model: sum(
+        model.year_discount_factor[year] * model.time_weight[year, hour]
+        * model.generator_marginal_cost[gen, year] * model.generation_output[gen, year, hour]
+        for gen in model.generators
+        for year, hour in model.times
+    ))
+    model.generator_capex = pyo.Expression(rule=lambda model: sum(
+        model.year_discount_factor[year]
+        * model.generator_capex_cost[gen, year] * model.generation_added_capacity[gen, year]
+        for gen in model.new_generators
+        for year in model.years
+    ))
+    model.lost_load_cost = pyo.Expression(rule=lambda model: sum(
+        model.year_discount_factor[year] * model.time_weight[year, hour] * model.voll * model.lost_load[zone, year, hour]
+        for zone in model.zones
+        for year, hour in model.times
+    ))
+    model.storage_capex = pyo.Expression(rule=lambda model: sum(
+        model.year_discount_factor[year]
+        * model.storage_capex_cost[s, year] * model.storage_added_capacity[s, year]
+        for s in model.new_storage
+        for year in model.years
+    ))
+    # storage_marginal_cost is 0 for now; not yet wired to a throughput term (see storage_change's signed
+    # definition) - left out of the objective until that's decided, since it would currently be a no-op anyway
+    model.line_capex = pyo.Expression(rule=lambda model: sum(
+        model.year_discount_factor[year]
+        * model.line_capex_cost[line, year] * model.line_added_capacity[line, year]
+        for line in model.new_lines
+        for year in model.years
+    ))
 
     # least cost objective
     model.objective = pyo.Objective(
-        rule=objective_rule,
+        rule=lambda model: model.variable_cost + model.generator_capex + model.lost_load_cost + model.storage_capex
+        + model.line_capex,
         sense=pyo.minimize
     )
+
+    # duals of the constraints (supply_equals_demand's are the zonal prices), for an LP only: a MILP
+    # (discrete_additions) has none
+    if not discrete_additions:
+        model.dual = pyo.Suffix(direction=pyo.Suffix.IMPORT)
 
 
     """Constraints"""

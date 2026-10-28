@@ -1,6 +1,6 @@
 """Standardized long-format output tables for a solved PyPSA seer model (see
 seer/models/README.md for the output schema): generator_capacity, storage_capacity, dispatch,
-line_capacity, lost_load.
+line_capacity, lost_load, line_flow, storage_soc, prices, summary.
 
 PyPSA needs one component per (build option, investment-period vintage) for anything
 expandable; the _consolidate_* helpers below collapse these back into a single logical row
@@ -9,7 +9,7 @@ per base name, matching the fixed per-option naming used on the pyomo side.
 
 import pandas as pd
 
-from ..utils.output_utils import add_input_metadata
+from ..utils.output_utils import add_input_metadata, summary_table
 from .build import LOAD_SHEDDING
 
 
@@ -43,12 +43,14 @@ def _consolidate_capacity_by_year(model, static_df):
 
 def _consolidate_timeseries_by_base_name(static_df, t_df):
     """t_df: e.g. model.generators_t.p, indexed by model.snapshots. Collapses vintage columns
-    to their base name (summing overlaps) and reindexes to (year, hour, datetime): hour is
-    1-indexed within each year (matching the pyomo side's convention), datetime is the real
-    timestamp already carried by model.snapshots."""
+    to their base name (summing overlaps) and reindexes to (year, hour, datetime) (see _time_index)."""
     base_name_map = {name: _base_name(name, static_df.loc[name]) for name in t_df.columns}
-    renamed = t_df.rename(columns=base_name_map).T.groupby(level=0).sum().T
+    return _time_index(t_df.rename(columns=base_name_map).T.groupby(level=0).sum().T)
 
+
+def _time_index(renamed):
+    """renamed (indexed by model.snapshots), reindexed to (year, hour, datetime): hour is 1-indexed within
+    each year (matching the pyomo side's convention), datetime is the real timestamp model.snapshots carries."""
     years = renamed.index.get_level_values(0)
     datetimes = renamed.index.get_level_values(1)
     hours = pd.Series(range(len(renamed)), index=renamed.index).groupby(years).cumcount() + 1
@@ -140,10 +142,63 @@ def build_output_tables(model, data_path):
     else:
         line_capacity = pd.DataFrame(columns=["from", "to", "year", "capacity"])
 
+    # line flow: a Link's p0 is its flow bus0 -> bus1 (positive from -> to), one row per (zone pair, time)
+    if len(model.links):
+        flow = _consolidate_timeseries_by_base_name(links, model.links_t.p0[links.index])
+        line_flow = flow.reset_index().melt(id_vars=["year", "hour", "datetime"], var_name="line", value_name="flow")
+        line_flow["from"] = line_flow["line"].map(line_ends["bus0"])
+        line_flow["to"] = line_flow["line"].map(line_ends["bus1"])
+        line_flow = line_flow.groupby(["from", "to", "year", "hour", "datetime"], as_index=False, sort=False)["flow"].sum()
+    else:
+        line_flow = pd.DataFrame(columns=["from", "to", "year", "hour", "datetime", "flow"])
+
+    soc = _consolidate_timeseries_by_base_name(model.storage_units, model.storage_units_t.state_of_charge)
+    storage_soc = soc.reset_index().melt(id_vars=["year", "hour", "datetime"], var_name="storage", value_name="soc")
+    storage_soc["zone"] = storage_soc["storage"].map(sto_genmap["zone"])
+    storage_soc["tech"] = storage_soc["storage"].map(sto_genmap["tech"])
+    storage_soc = storage_soc[["zone", "tech", "storage", "year", "hour", "datetime", "soc"]]
+
+    # zonal price: PyPSA's marginal_price is the nodal balance dual already divided by the snapshot and
+    # investment-period objective weightings, i.e. undiscounted $/MWh per real hour -- as on the pyomo side
+    prices = _time_index(model.buses_t.marginal_price[model.loads["bus"].unique()].copy()).reset_index().melt(
+        id_vars=["year", "hour", "datetime"], var_name="zone", value_name="price"
+    )[["zone", "year", "hour", "datetime", "price"]]
+
     return add_input_metadata({
         "line_capacity": line_capacity,
         "generator_capacity": generator_capacity,
         "storage_capacity": storage_capacity,
         "dispatch": dispatch,
         "lost_load": lost_load,
+        "line_flow": line_flow,
+        "storage_soc": storage_soc,
+        "prices": prices,
+        "summary": _summary(model, is_shedding),
     }, data_path)
+
+
+def _summary(model, is_shedding):
+    """The summary table: the objective split into the pyomo backend's cost terms, from PyPSA's own
+    weightings -- each snapshot by its objective weighting x its investment period's; each component's
+    capital_cost x p_nom_opt by the weightings of every period it's active in (see build.build_year_capital_cost)."""
+    period_weight = model.investment_period_weightings["objective"]
+    snapshot_weight = model.snapshot_weightings["objective"] * model.snapshots.get_level_values(0).map(period_weight).values
+
+    marginal = model.get_switchable_as_dense("Generator", "marginal_cost")
+    energy_cost = (model.generators_t.p * marginal).mul(snapshot_weight, axis=0).sum()
+
+    def capex(static_df):
+        active = sum(((static_df["build_year"] <= period) & (period < static_df["build_year"] + static_df["lifetime"])) * weight
+                     for period, weight in period_weight.items())
+        return float((static_df["p_nom_opt"].fillna(0) * static_df["capital_cost"] * active).sum())
+
+    load = model.loads_t.p_set.mul(model.snapshot_weightings["objective"], axis=0).sum().sum()
+    shed = model.generators_t.p.loc[:, is_shedding[is_shedding].index].mul(model.snapshot_weightings["objective"], axis=0)
+    return summary_table(
+        objective=model.objective + getattr(model, "objective_constant", 0.0),
+        costs={"generator_capex": capex(model.generators[~is_shedding]), "storage_capex": capex(model.storage_units),
+               "line_capex": capex(model.links) if len(model.links) else 0.0,
+               "variable_cost": float(energy_cost[is_shedding.index[~is_shedding]].sum()),
+               "lost_load_cost": float(energy_cost[is_shedding.index[is_shedding]].sum())},
+        demand=float(load), lost_load=float(shed.sum().sum()),
+    )

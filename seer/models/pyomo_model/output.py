@@ -1,11 +1,11 @@
 """Standardized long-format output tables for a solved pyomo seer model (see
 seer/models/README.md for the output schema): generator_capacity, storage_capacity, dispatch,
-line_capacity, lost_load.
+line_capacity, lost_load, line_flow, storage_soc, prices, summary.
 """
 
 import pandas as pd
 
-from ..utils.output_utils import add_input_metadata
+from ..utils.output_utils import add_input_metadata, summary_table
 import pyomo.environ as pyo
 
 
@@ -13,7 +13,8 @@ def build_output_tables(instance, data_path):
     """Build the three seer output tables from a solved pyomo model instance. zone/tech/fuel
     come from the seer-schema inputs at `data_path` (see output_utils.add_input_metadata).
 
-    Returns {"line_capacity", "generator_capacity", "storage_capacity", "dispatch", "lost_load"}: df.
+    Returns {"line_capacity", "generator_capacity", "storage_capacity", "dispatch", "lost_load", "line_flow",
+    "storage_soc", "prices", "summary"}: df.
     """
     generator_zone = instance.generator_zone.extract_values()
     generator_tech = instance.generator_tech.extract_values()
@@ -78,10 +79,51 @@ def build_output_tables(instance, data_path):
     # one row per (zone pair, year): sum a pair's lines with different start years
     line_capacity = line_capacity.groupby(["from", "to", "year"], as_index=False, sort=False)["capacity"].sum()
 
+    # line flow: positive from -> to, one row per (zone pair, time) as line_capacity
+    line_flow = pd.DataFrame([
+        {
+            "from": line_from[line], "to": line_to[line], "year": year, "hour": hour,
+            "datetime": snapshot_datetime[year, hour], "flow": pyo.value(instance.line_flow[line, year, hour]),
+        }
+        for line in instance.lines for year, hour in instance.times
+    ], columns=["from", "to", "year", "hour", "datetime", "flow"])
+    line_flow = line_flow.groupby(["from", "to", "year", "hour", "datetime"], as_index=False, sort=False)["flow"].sum()
+
+    storage_soc = pd.DataFrame([
+        {
+            "zone": storage_zone[s], "tech": storage_tech[s], "storage": s, "year": year, "hour": hour,
+            "datetime": snapshot_datetime[year, hour], "soc": pyo.value(instance.soc[s, year, hour]),
+        }
+        for s in instance.storage for year, hour in instance.times
+    ], columns=["zone", "tech", "storage", "year", "hour", "datetime", "soc"])
+
+    # zonal price: supply_equals_demand's dual, undiscounted and per real hour ($/MWh) -- the objective
+    # weights each (year, hour) by year_discount_factor x time_weight. None without duals (a MILP)
+    duals = getattr(instance, "dual", None)
+    prices = pd.DataFrame([
+        {
+            "zone": zone, "year": year, "hour": hour, "datetime": snapshot_datetime[year, hour],
+            "price": duals[instance.supply_equals_demand[zone, year, hour]]
+            / (pyo.value(instance.year_discount_factor[year]) * pyo.value(instance.time_weight[year, hour]))
+            if duals is not None and instance.supply_equals_demand[zone, year, hour] in duals else None,
+        }
+        for zone in instance.zones for year, hour in instance.times
+    ], columns=["zone", "year", "hour", "datetime", "price"])
+
     return add_input_metadata({
         "line_capacity": line_capacity,
         "generator_capacity": generator_capacity,
         "storage_capacity": storage_capacity,
         "dispatch": dispatch,
         "lost_load": lost_load,
+        "line_flow": line_flow,
+        "storage_soc": storage_soc,
+        "prices": prices,
+        "summary": summary_table(
+            objective=pyo.value(instance.objective),
+            costs={name: pyo.value(getattr(instance, name))
+                   for name in ["generator_capex", "storage_capex", "line_capex", "variable_cost", "lost_load_cost"]},
+            demand=sum(pyo.value(instance.time_weight[t]) * pyo.value(instance.demand[z, t]) for z in instance.zones for t in instance.times),
+            lost_load=sum(pyo.value(instance.time_weight[t]) * pyo.value(instance.lost_load[z, t]) for z in instance.zones for t in instance.times),
+        ),
     }, data_path)
