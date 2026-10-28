@@ -1,10 +1,13 @@
-"""Generate one country's perturbations, one or more per scenario of each of the config's runs (see
+"""Generate countries' perturbations, one or more per scenario of each of their configs' runs (see
 design.py), and solve the runs marked solve, locally or on Coiled.
 
 Usage:
     python -m seer.ccai_dataset.run seer/ccai_dataset/configs/Botswana.yaml --plan   # what it would make
     python -m seer.ccai_dataset.run seer/ccai_dataset/configs/Botswana.yaml --workers 8
-    python -m seer.ccai_dataset.run <config> --coiled --workers 20 --out gs://seer-datalake/ccai_dataset
+    python -m seer.ccai_dataset.run <config> [<config> ...] --coiled --workers 20 --out gs://seer-datalake/ccai_dataset
+
+Several configs (countries) share one executor, their tasks interleaved; on Coiled the cluster is named after
+them (ccai-botswana-burkina-faso) so a restarted run reconnects to it. Each country is its own dataset.
 
 The base instance is the config's base path in a local clone of seer-planning-models (--models-dir). Before a
 run, seer and that clone must be committed and pushed (--test skips this, for trial runs), so the commits
@@ -29,6 +32,7 @@ import gc
 import io
 import json
 import posixpath
+import re
 import tempfile
 import time
 import zipfile
@@ -185,7 +189,7 @@ def round_floats(df, significant_figures):
 
 
 @contextmanager
-def make_executor(workers, coiled=False, cluster_name="seer-ccai-dataset", region="us-west2"):
+def make_executor(workers, coiled=False, cluster_name=None, region="us-west2"):
     """A concurrent.futures executor: local processes, or a Coiled cluster (as in ahana/benchmarking's
     experiments/benchmarking.py, forwarding Google credentials so workers can use gs://)."""
     if not coiled:
@@ -207,16 +211,14 @@ def make_executor(workers, coiled=False, cluster_name="seer-ccai-dataset", regio
         client.close()  # the cluster keeps running until its idle_timeout
 
 
-def run_parallel(executor, fn, arg_list, on_progress=None, on_done=None):
-    """fn(*args) for each args on executor. Returns ({args[1]: result}, {args[1]: error}) -- args[1] is the
-    perturbation (or its id); a task that raises (or whose worker dies) is recorded, not raised. Calls
-    on_done(done, total, key, result, error) as each task finishes; every 5% of tasks, prints progress and calls
-    on_progress()."""
-    futures = {executor.submit(fn, *args): args[1] for args in arg_list}
+def run_parallel(executor, tasks, on_progress=None, on_done=None):
+    """Run tasks [(key, fn, args)] on executor. Returns ({key: result}, {key: error}): a task that raises (or
+    whose worker dies) is recorded, not raised. Calls on_done(done, total, key, result, error) as each task
+    finishes; every 5% of tasks, prints progress and calls on_progress()."""
+    futures = {executor.submit(fn, *args): key for key, fn, args in tasks}
     results, errors = {}, {}
     for done, future in enumerate(as_completed(futures), 1):
         key = futures[future]
-        key = key["id"] if isinstance(key, dict) else key
         try:
             results[key] = future.result()
         except Exception as e:
@@ -250,73 +252,96 @@ def start_dataset(fs, root, config, config_text, models_dir):
     return record
 
 
-def run(config, config_text, out_root, executor, models_dir, retry_failed=False):
-    """Generate config's perturbations and solve the ones marked solve, into out_root/<country>, resuming from
-    whatever the bucket already holds."""
-    out_url = f"{str(out_root).rstrip('/')}/{config['country']}"
-    fs, root, perturbations = open_out(out_url)
-    record = start_dataset(fs, root, config, config_text, models_dir)
-    base_zip = provenance.zip_dir(Path(models_dir) / config["base"]["path"])
-    entries = build_entries(config)
+class Country:
+    """One country's dataset in a run: its config, output location and perturbations."""
 
-    def write_index():
-        index = build_index(fs, perturbations, entries)
-        write(fs, posixpath.join(root, "index.csv"), index.to_csv(index=False))
+    def __init__(self, config, config_text, out_root, models_dir):
+        self.config, self.name = config, config["country"]
+        self.out_url = f"{str(out_root).rstrip('/')}/{self.name}"
+        self.fs, self.root, self.perturbations = open_out(self.out_url)
+        self.record = start_dataset(self.fs, self.root, config, config_text, models_dir)
+        self.base_zip = provenance.zip_dir(Path(models_dir) / config["base"]["path"])
+        self.entries = build_entries(config)
+
+    def ids_with(self, filename):
+        return ids_with(self.fs, self.perturbations, filename)
+
+    def log(self, message):
+        print(f"[{self.name}] {message}", flush=True)
+
+    def write_index(self):
+        index = build_index(self.fs, self.perturbations, self.entries)
+        write(self.fs, posixpath.join(self.root, "index.csv"), index.to_csv(index=False))
         return index
 
+
+def run(countries, executor, retry_failed=False):
+    """Generate every country's perturbations and solve the ones marked solve, resuming from whatever the
+    bucket already holds. Countries share executor: their tasks are interleaved."""
+    def write_indexes():
+        for country in countries:
+            country.write_index()
+
     # Step 1 - generate every perturbation not already written
-    have = ids_with(fs, perturbations, "inputs.zip")
-    todo = [e for e in entries if e["id"] not in have]
-    print(f"[{config['country']}] generating {len(todo)} of {len(entries)} perturbations", flush=True)
-    sha, errors = run_parallel(executor, generate_one, [(config, e, base_zip, record["base_instance"]["url"], out_url) for e in todo],
-                               write_index)
-    for pid, error in errors.items():
-        print(f"  generating {pid} failed: {error}", flush=True)
+    tasks = []
+    for country in countries:
+        have = country.ids_with("inputs.zip")
+        todo = [e for e in country.entries if e["id"] not in have]
+        country.log(f"generating {len(todo)} of {len(country.entries)} perturbations")
+        tasks += [((country.name, e["id"]), generate_one,
+                   (country.config, e, country.base_zip, country.record["base_instance"]["url"], country.out_url)) for e in todo]
+    sha, errors = run_parallel(executor, tasks, write_indexes)
+    for (name, pid), error in errors.items():
+        print(f"[{name}] generating {pid} failed: {error}", flush=True)
 
-    # Step 2 - drop duplicates: a perturbation whose inputs equal an earlier one's. Only possible with noise 0
-    # (e.g. a scenario element with nothing to act on in this country), so only those are compared
-    have = ids_with(fs, perturbations, "inputs.zip")
-    first, duplicate_of = {}, {}
-    for e in entries:
-        if e["noise"] == 0 and e["id"] in have:
-            if e["id"] not in sha:  # written by an earlier run
-                sha[e["id"]] = provenance.tables_sha256(read_csvs(fs.cat(have[e["id"]])))
-            if sha[e["id"]] in first:
-                duplicate_of[e["id"]] = first[sha[e["id"]]]
-                fs.rm(posixpath.join(perturbations, e["id"]), recursive=True)
-            else:
-                first[sha[e["id"]]] = e["id"]
-    print(f"[{config['country']}] dropped {len(duplicate_of)} duplicates", flush=True)
+    # Step 2 - drop duplicates, per country: a perturbation whose inputs equal an earlier one's. Only possible with
+    # noise 0 (e.g. a scenario element with nothing to act on in this country), so only those are compared
+    tasks = []
+    for country in countries:
+        have, first, duplicate_of = country.ids_with("inputs.zip"), {}, {}
+        for e in country.entries:
+            if e["noise"] == 0 and e["id"] in have:
+                key = (country.name, e["id"])
+                if key not in sha:  # written by an earlier run
+                    sha[key] = provenance.tables_sha256(read_csvs(country.fs.cat(have[e["id"]])))
+                if sha[key] in first:
+                    duplicate_of[e["id"]] = first[sha[key]]
+                    country.fs.rm(posixpath.join(country.perturbations, e["id"]), recursive=True)
+                else:
+                    first[sha[key]] = e["id"]
+        country.log(f"dropped {len(duplicate_of)} duplicates")
 
-    # Step 3 - solve entries marked solve (a dropped duplicate: its original), not already solved or failed
-    done = set(ids_with(fs, perturbations, "outputs.zip"))
-    failed = ids_with(fs, perturbations, "failed.json")
-    if retry_failed:
-        for path in failed.values():
-            fs.rm(path)
-    else:
-        done |= set(failed)
-    to_solve = list(dict.fromkeys(duplicate_of.get(e["id"], e["id"]) for e in entries if e["solve"]))
-    to_solve = [pid for pid in to_solve if pid not in done and pid in have]
-    print(f"[{config['country']}] solving {len(to_solve)} with {config['solve']['model']}", flush=True)
+        # Step 3 - solve entries marked solve (a dropped duplicate: its original), not already solved or failed
+        done = set(country.ids_with("outputs.zip"))
+        failed = country.ids_with("failed.json")
+        if retry_failed:
+            for path in failed.values():
+                country.fs.rm(path)
+        else:
+            done |= set(failed)
+        to_solve = list(dict.fromkeys(duplicate_of.get(e["id"], e["id"]) for e in country.entries if e["solve"]))
+        to_solve = [pid for pid in to_solve if pid not in done and pid in have]
+        country.log(f"solving {len(to_solve)} with {country.config['solve']['model']}")
+        tasks += [((country.name, pid), solve_one, (country.config, pid, country.out_url)) for pid in to_solve]
     started = time.perf_counter()
 
-    def report(done, total, pid, result, error):
+    def report(done, total, key, result, error):
         status = error and f"task error: {error[:200]}" or f"{result['status']} in {result['seconds']:.0f}s"
-        print(f"[{config['country']}] solve {done}/{total} {pid}: {status} "
-              f"(elapsed {(time.perf_counter() - started) / 60:.1f} min)", flush=True)
+        print(f"[{key[0]}] solve {done}/{total} {key[1]}: {status} (elapsed {(time.perf_counter() - started) / 60:.1f} min)",
+              flush=True)
 
-    _, errors = run_parallel(executor, solve_one, [(config, pid, out_url) for pid in to_solve], write_index, report)
-    for pid, error in errors.items():  # the task itself failed (e.g. its worker died): record it as a failed solve
+    _, errors = run_parallel(executor, tasks, write_indexes, report)
+    by_name = {country.name: country for country in countries}
+    for (name, pid), error in errors.items():  # the task itself failed (e.g. its worker died): a failed solve
         if error.startswith("BrokenProcessPool"):  # a local worker died, and the pool with it: not this solve's fault
-            print(f"  {pid}: local worker pool broke, not recorded; rerun to retry", flush=True)
+            print(f"[{name}] {pid}: local worker pool broke, not recorded; rerun to retry", flush=True)
         else:
-            write_failed(fs, perturbations, pid, error)
+            write_failed(by_name[name].fs, by_name[name].perturbations, pid, error)
 
-    # Step 4 - final index
-    index = write_index()
-    print(f"[{config['country']}] done: {len(index)} perturbations, solves: {index['status'].value_counts().to_dict()} "
-          f"-> {out_url}", flush=True)
+    # Step 4 - final indexes
+    for country in countries:
+        index = country.write_index()
+        country.log(f"done: {len(index)} perturbations, solves: {index['status'].value_counts().to_dict()} -> {country.out_url}")
 
 
 def build_index(fs, perturbations, entries):
@@ -329,29 +354,38 @@ def build_index(fs, perturbations, entries):
     } for e in entries if e["id"] in have], columns=["id", "run", "scenario", "perturbation", "noise", "seed", "status"])
 
 
+def cluster_name(countries):
+    """The default Coiled cluster name for countries: ccai-<country>-<country>..., lower-cased and hyphenated."""
+    return "ccai-" + "-".join(re.sub(r"[^a-z0-9]+", "-", c.lower()).strip("-") for c in countries)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("config", type=Path)
+    parser.add_argument("configs", type=Path, nargs="+", help="one config per country; they share the executor")
     parser.add_argument("--out", default="data/ccai_dataset", help="local directory or gs:// URL")
-    parser.add_argument("--plan", action="store_true", help="print what the config would make, and perturbation ranges; run nothing")
+    parser.add_argument("--plan", action="store_true", help="print what the configs would make, and perturbation ranges; run nothing")
     parser.add_argument("--workers", type=int, default=1, help="local processes, or Coiled workers with --coiled")
     parser.add_argument("--coiled", action="store_true", help="run tasks on a Coiled cluster")
-    parser.add_argument("--cluster-name", default="seer-ccai-dataset", help="Coiled cluster name (with --coiled)")
+    parser.add_argument("--cluster-name", help="Coiled cluster name (with --coiled); default ccai-<countries>")
     parser.add_argument("--region", default="us-west2", help="Coiled cluster region (with --coiled)")
     parser.add_argument("--models-dir", type=Path, default=provenance.MODELS_DIR, help="local clone of seer-planning-models")
     parser.add_argument("--test", action="store_true", help="a trial run: skip the committed-and-pushed checks")
     parser.add_argument("--retry-failed", action="store_true", help="retry solves that failed in an earlier run")
     args = parser.parse_args()
 
-    config_text = args.config.read_text()
-    config = load_config(config_text)
+    texts = [path.read_text() for path in args.configs]
+    configs = [load_config(text) for text in texts]
     if args.plan:
-        return plan.print_plan(config, args.models_dir)
+        for config in configs:
+            plan.print_plan(config, args.models_dir)
+        return
     if not args.test:
         provenance.check_repo(provenance.SEER_DIR)
         provenance.check_repo(args.models_dir)
-    with make_executor(args.workers, args.coiled, args.cluster_name, args.region) as executor:
-        run(config, config_text, args.out, executor, args.models_dir, args.retry_failed)
+    countries = [Country(config, text, args.out, args.models_dir) for config, text in zip(configs, texts)]
+    name = args.cluster_name or cluster_name([c.name for c in countries])
+    with make_executor(args.workers, args.coiled, name, args.region) as executor:
+        run(countries, executor, args.retry_failed)
 
 
 if __name__ == "__main__":
