@@ -154,6 +154,9 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
     storage_zone = storage_constants["zone"].to_dict()
     storage_tech = storage_constants["tech"].to_dict()
     storage_duration_hours = storage_constants["duration_hours"].to_dict()
+    # round-trip efficiency is optional -- absent (blank, or no column at all) means lossless (1)
+    efficiency = storage_constants["efficiency"] if "efficiency" in storage_constants else pd.Series(float("nan"), index=storage_constants.index)
+    storage_efficiency = efficiency.astype(float).fillna(1.0).to_dict()
 
     # only meaningful (and only loaded) for existing storage. capacity_mwh isn't a stored
     # column -- it's derived from capacity_mw * duration_hours wherever it's needed.
@@ -260,6 +263,7 @@ def load_data(data_path, discrete_additions=False, annualize_capex=False):
             "voll": {None: float(settings_df.set_index("parameters")["value"]["voll"])},
             "storage_tech": storage_tech,
             "storage_duration_hours": storage_duration_hours,
+            "storage_efficiency": storage_efficiency,
             "storage_capacity_mwh": storage_capacity_mwh,
             "storage_start_year": storage_start_year,
             "storage_life": storage_life,

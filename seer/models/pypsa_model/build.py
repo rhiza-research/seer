@@ -245,6 +245,10 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
     for i in range(len(storage_constants)):
         sto = storage_constants.iloc[i]
         name, expandable = sto.name, sto.expandable
+        # round-trip efficiency, taken once on charging (as EPM and pyomo do); optional --
+        # absent (blank, or no column at all) means lossless
+        efficiency = sto.get("efficiency")
+        efficiency = 1.0 if efficiency is None or pd.isna(efficiency) else float(efficiency)
 
         if expandable:
             # one PyPSA component per build-year vintage -- no upper bound, same reasoning
@@ -276,7 +280,7 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
                     p_nom_extendable=True, p_nom_mod=(unit_capacity or 0) / hours,
                     p_nom_max=min(annual_limit, total_limit),
                     max_hours=hours,  # fixed duration
-                    efficiency_store=sto.efficiency, efficiency_dispatch=sto.efficiency,
+                    efficiency_store=efficiency, efficiency_dispatch=1.0,
                     # cyclic within each period; add_daily_storage_balance makes it per day
                     cyclic_state_of_charge=True, cyclic_state_of_charge_per_period=True,
                     capital_cost=build_year_capital_cost(model, capex[year] * hours, year, sto.life),
@@ -293,7 +297,7 @@ def build_storage(model, storage_constants, storage_costs, modular_expansion=Fal
                 carrier="battery", build_year=years[0], lifetime=_existing_lifetime(model, years),
                 p_nom=sto.capacity_mw, p_nom_extendable=False,
                 max_hours=sto.duration_hours,
-                efficiency_store=sto.efficiency, efficiency_dispatch=sto.efficiency,
+                efficiency_store=efficiency, efficiency_dispatch=1.0,
                     # cyclic within each period; add_daily_storage_balance makes it per day
                     cyclic_state_of_charge=True, cyclic_state_of_charge_per_period=True,
             )
