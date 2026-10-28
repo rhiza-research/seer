@@ -1,5 +1,6 @@
 """What a config would make, without making it: runs, scenarios, and each perturbation's ranges (run.py --plan)."""
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -20,12 +21,13 @@ def runs_table(config):
                      "scenarios": n_scenarios, "iters": run.get("iters", 1),
                      "perturbations": n_scenarios * run.get("iters", 1),
                      "perturbation": json.dumps(run["perturbation"]) if run.get("perturbation") else "-",
+                     "noise": run["noise"],
                      "solve": bool(run.get("solve", False))})
     lines = ["| " + " | ".join(rows[0]) + " |", "|" + "---|" * len(rows[0])] if rows else []
     return "\n".join(lines + ["| " + " | ".join(str(v) for v in row.values()) + " |" for row in rows])
 
 
-def print_plan(config, max_scenarios=20):
+def print_plan(config, models_dir, max_scenarios=20):
     entries = build_entries(config)
     print(f"{config['country']}: base {config['base']}, cost_dataset {config['cost_dataset']}\n")
     print(runs_table(config))
@@ -40,7 +42,7 @@ def print_plan(config, max_scenarios=20):
             print(f"  {next(e['id'] for e in named if e['scenario_name'] == name)}  {name}")
         if len(names) > max_scenarios:
             print(f"  ... and {len(names) - max_scenarios} more")
-    base = SeerInstance.read(config["base"])
+    base = SeerInstance.read(Path(models_dir) / config["base"]["path"])
     for spec in dict.fromkeys(json.dumps(run["perturbation"]) for run in config["runs"] if run.get("perturbation")):
         around = [r["name"] for r in config["runs"] if json.dumps(r.get("perturbation")) == spec]
         print(f"\nperturbation {spec} (runs {', '.join(around)}): ranges around the base values "

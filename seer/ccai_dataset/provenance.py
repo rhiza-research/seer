@@ -1,7 +1,11 @@
-"""Provenance for perturbed instances: what a perturbation.json records (base instance, perturb arguments,
-code version), and regenerating an instance from one."""
+"""Provenance for a country's dataset: the commits it comes from (seer, and the base instance in
+seer-planning-models), recorded once in its config.yaml, and regenerating any perturbation from that and its id.
+
+Both repos must be committed and pushed before a run (check_repo), so every recorded commit resolves on GitHub.
+"""
 import hashlib
 import io
+import platform
 import subprocess
 import tempfile
 import zipfile
@@ -11,63 +15,66 @@ from pathlib import Path
 
 from ..schema import SeerInstance
 from ..scenarios import perturb
+from .design import build_entries
 
-REPO_DIR = Path(__file__).resolve().parents[2]
-REFERENCE_DATA_DIR = REPO_DIR / "seer" / "scenarios" / "reference_data"
-
-
-def hash_dir(path, pattern="*"):
-    """sha256 over the relative paths and contents of path's files matching pattern, in sorted order."""
-    digest = hashlib.sha256()
-    for file in sorted(p for p in Path(path).rglob(pattern) if p.is_file() and ".cache" not in p.parts):
-        digest.update(str(file.relative_to(path)).encode())
-        digest.update(file.read_bytes())
-    return digest.hexdigest()
+SEER_DIR = Path(__file__).resolve().parents[2]
+MODELS_DIR = SEER_DIR.parent / "seer-planning-models"  # default local clone of the base instances' repo
+MODEL_PATHS = {"pyomo": "seer/models/pyomo_model", "pypsa": "seer/models/pypsa_model"}
+SOLVERS = {"pyomo": "appsi_highs", "pypsa": "highs"}
+PACKAGES = ["seer", "pyomo", "pypsa", "linopy", "highspy", "pandas", "numpy"]
 
 
-def git(*args):
-    return subprocess.run(["git", *args], cwd=REPO_DIR, capture_output=True, text=True, check=True).stdout
+def git(repo_dir, *args):
+    return subprocess.run(["git", *args], cwd=repo_dir, capture_output=True, text=True, check=True).stdout.strip()
 
 
-def code_record():
-    """The running code: git commit, dirty tree (uncommitted or untracked files), reference data hash."""
-    diff = git("diff", "HEAD")
+def remote_url(repo_dir):
+    return git(repo_dir, "remote", "get-url", "origin").removesuffix(".git")
+
+
+def commit(repo_dir):
+    return git(repo_dir, "rev-parse", "HEAD")
+
+
+def check_repo(repo_dir):
+    """Refuse (SystemExit) unless repo_dir has no uncommitted changes and its HEAD is pushed to origin."""
+    if git(repo_dir, "status", "--porcelain"):
+        raise SystemExit(f"{repo_dir} has uncommitted changes: commit and push them first (or --test)")
+    git(repo_dir, "fetch", "--quiet", "origin")
+    if not git(repo_dir, "branch", "--remotes", "--contains", "HEAD"):
+        raise SystemExit(f"{repo_dir}'s HEAD isn't on origin: push it first (or --test)")
+
+
+def provenance_record(config, models_dir):
+    """The provenance block of a country's config.yaml: the commits of the base instance (in seer-planning-models)
+    and of seer (optimizer.commit: also the perturbation code's), links to both, the solver, package versions."""
+    seer_repo, seer_commit = remote_url(SEER_DIR), commit(SEER_DIR)
+    base_repo, base_commit = remote_url(models_dir), commit(models_dir)
+    if base_repo != config["base"]["repo"].removesuffix(".git"):
+        raise SystemExit(f"{models_dir} is a clone of {base_repo}, not the config's base repo {config['base']['repo']}")
+    model = config["solve"]["model"]
     return {
-        "git_commit": git("rev-parse", "HEAD").strip(),
-        "git_dirty": bool(git("status", "--porcelain").strip()),
-        "git_diff_sha256": hashlib.sha256(diff.encode()).hexdigest() if diff else None,
-        "reference_data_sha256": hash_dir(REFERENCE_DATA_DIR),
-        "seer_version": version("seer"),
-    }
-
-
-def perturbation_record(config, entry, base_sha256, inputs_sha256, code):
-    """The perturbation.json for one entry of config's run (see design.build_entries)."""
-    return {
-        "id": entry["id"],
-        "country": config["country"],
-        "design": {k: entry[k] for k in ["run", "scenario_name"]},
-        "base": {"path": config["base"], "sha256": base_sha256},
-        "perturb": {
-            "scenario": entry["scenario"],
-            "perturbation": entry["perturbation"],
-            "seed": entry["seed"],
-            "significant_figures": config["significant_figures"],
-            "cost_dataset": config["cost_dataset"],
-            "noise": entry["noise"],
-        },
-        "inputs_sha256": inputs_sha256,
-        "code": code,
+        "base_instance": {"commit": base_commit, "url": f"{base_repo}/tree/{base_commit}/{config['base']['path']}"},
+        "optimizer": {"name": model, "solver": SOLVERS[model], "commit": seer_commit,
+                      "url": f"{seer_repo}/tree/{seer_commit}/{MODEL_PATHS[model]}"},
+        "environment": {"python": platform.python_version(), **{p: installed(p) for p in PACKAGES}},
         "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
 
 
+def installed(package):
+    try:
+        return version(package)
+    except Exception:
+        return None
+
+
 def tables_sha256(tables):
-    """sha256 of an instance's tables ({name: df}) as written: identical instances share it."""
+    """sha256 of an instance's tables ({name: csv text}): identical instances share it."""
     digest = hashlib.sha256()
-    for name, df in sorted(tables.items()):
+    for name, text in sorted(tables.items()):
         digest.update(name.encode())
-        digest.update(df.to_csv(index=False).encode())
+        digest.update(text.encode())
     return digest.hexdigest()
 
 
@@ -80,22 +87,21 @@ def zip_dir(path, pattern="*.csv"):
     return buffer.getvalue()
 
 
-def read_zipped(data, sha256=None):
-    """The SeerInstance in a zip (bytes) of seer-schema csvs; raises if sha256 is given and its csvs differ."""
+def read_zipped(data):
+    """The SeerInstance in a zip (bytes) of seer-schema csvs."""
     with tempfile.TemporaryDirectory() as tmp:
         with zipfile.ZipFile(io.BytesIO(data)) as z:
             z.extractall(tmp)
-        if sha256 is not None and hash_dir(tmp, "*.csv") != sha256:
-            raise ValueError("base instance doesn't match the record's sha256")
         return SeerInstance.read(tmp)
 
 
-def regenerate(record, base=None):
-    """The perturbed SeerInstance a perturbation.json record describes. base: the dataset's base.zip, or a
-    directory of csvs; default the record's base path in the seer repo. Raises if the base's csvs differ
-    from the record's."""
-    base = Path(base or REPO_DIR / record["base"]["path"])
-    data = base.read_bytes() if base.suffix == ".zip" else zip_dir(base)
-    p = record["perturb"]
-    return perturb(read_zipped(data, record["base"]["sha256"]), p["scenario"], p["perturbation"], p["seed"],
-                   p["significant_figures"], p["cost_dataset"], p["noise"])
+def regenerate(config, perturbation_id, models_dir=MODELS_DIR):
+    """The perturbed SeerInstance with perturbation_id, from a country's config.yaml (dict, with its
+    provenance), run with seer at provenance.optimizer.commit and models_dir at provenance.base_instance.commit."""
+    base_commit = config["provenance"]["base_instance"]["commit"]
+    if commit(models_dir) != base_commit:
+        raise ValueError(f"{models_dir} is at {commit(models_dir)}: check out {base_commit} first")
+    entry = next(e for e in build_entries(config) if e["id"] == perturbation_id)
+    instance = SeerInstance.read(Path(models_dir) / config["base"]["path"])
+    return perturb(instance, entry["scenario"], entry["perturbation"], entry["seed"], config["significant_figures"],
+                   config["cost_dataset"], entry["noise"])

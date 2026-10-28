@@ -6,15 +6,23 @@ Usage:
     python -m seer.ccai_dataset.run seer/ccai_dataset/configs/Botswana.yaml --workers 8
     python -m seer.ccai_dataset.run <config> --coiled --workers 20 --out gs://seer-datalake/ccai_dataset
 
-Writes <out>/<country>/ (out: a local directory or a gs:// URL; layout in dataset_readme.md):
-    config.yaml, README.md, manifest.csv, base.zip
-    perturbations/<id>/perturbation.json, inputs.zip      every perturbation
-    perturbations/<id>/outputs/<model>.json, <model>.zip  solved ones
-ids: <run name>_00000... A perturbation whose inputs equal an earlier one's (e.g. a scenario element with
-nothing to act on in this country) isn't solved again: its run.json says which it duplicates.
+The base instance is the config's base path in a local clone of seer-planning-models (--models-dir). Before a
+run, seer and that clone must be committed and pushed (--test skips this, for trial runs), so the commits
+recorded resolve on GitHub.
 
-Workers (local processes or Coiled workers) read base.zip and write each perturbation's files directly to
-out. Resumable: perturbations whose inputs.zip, and solves whose run.json, already exist are skipped.
+Writes <out>/<country>/ (out: a local directory or a gs:// URL):
+    config.yaml                      the config as given, plus a provenance block (commits and links)
+    index.csv                        one row per perturbation: id, run, scenario, perturbation, noise, seed, status
+    perturbations/<id>/inputs.zip    its seer-schema csvs
+    perturbations/<id>/outputs.zip   solved ones: the model's output tables
+    perturbations/<id>/failed.json   failed solves: the error (infeasible, time limit, worker lost ...)
+A perturbation is regenerated from config.yaml and its id (provenance.regenerate). One whose inputs equal an
+earlier one's (only possible with noise 0) is dropped.
+
+Resumable: the bucket is the only state. Rerunning the same command (at the same commits) skips every
+inputs.zip / outputs.zip / failed.json already written (--retry-failed retries the failed solves); files appear
+only once complete; a failing task is recorded and the run carries on; index.csv is rewritten from the bucket
+as tasks finish.
 """
 import argparse
 import gc
@@ -26,7 +34,6 @@ import time
 import zipfile
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from contextlib import contextmanager
-from functools import cache
 from pathlib import Path
 
 import fsspec
@@ -35,18 +42,19 @@ import yaml
 
 from ..scenarios import perturb
 from ..scenarios.perturb import round_significant
-from ..scenarios.scenario_parameters import SCENARIO_DATA
 from . import plan, provenance
 from .design import build_entries
 
-DEFAULTS = {"seed": 0, "significant_figures": 6, "cost_dataset": "wb_epm", "noise": SCENARIO_DATA["noise"], "runs": [],
-            "solve": {"model": "pyomo", "annualize_capex": False, "years": None}}
-README = (Path(__file__).parent / "dataset_readme.md").read_text()
+DEFAULTS = {"seed": 0, "significant_figures": 6, "cost_dataset": "wb_epm", "runs": [],
+            "solve": {"model": "pyomo", "annualize_capex": False, "years": "all", "time_limit": None}}
 
 
-def load_config(path):
-    config = {**DEFAULTS, **yaml.safe_load(Path(path).read_text())}
+def load_config(text):
+    config = {**DEFAULTS, **yaml.safe_load(text)}
     config["solve"] = {**DEFAULTS["solve"], **config.get("solve", {})}
+    years = config["solve"]["years"]
+    if years != "all" and not (isinstance(years, int) and not isinstance(years, bool) and years > 0):
+        raise ValueError(f"solve: years must be all or a number of years, got {years!r}")
     return config
 
 
@@ -60,103 +68,100 @@ def open_out(out_url):
 
 
 def write(fs, path, data):
+    """Write data to path so it appears only once complete: a gs:// object does by itself; a local file is
+    written aside and renamed into place."""
+    data = data.encode() if isinstance(data, str) else data
     fs.makedirs(posixpath.dirname(path), exist_ok=True)
-    fs.pipe(path, data.encode() if isinstance(data, str) else data)
+    if "file" not in fs.protocol:
+        fs.pipe(path, data)
+        return
+    fs.pipe(path + ".partial", data)
+    fs.mv(path + ".partial", path)
 
 
-def zip_tables(tables, record_name, record):
-    """A zip (bytes) of tables ({name: df}) as csvs, plus record as json."""
+def zip_csvs(csvs):
+    """A zip (bytes) of csvs ({name: csv text})."""
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
-        for name, df in tables.items():
-            z.writestr(f"{name}.csv", df.to_csv(index=False))
-        z.writestr(record_name, json.dumps(record, indent=2))
+        for name, text in csvs.items():
+            z.writestr(f"{name}.csv", text)
     return buffer.getvalue()
 
 
-def instance_tables(instance):
-    """{name: df} as SeerInstance.write writes them (no empty network)."""
-    return {name: df for name, df in instance.as_dict().items() if not (name == "network" and df.empty)}
+def read_csvs(data):
+    """{name: csv text} in a zip (bytes) from zip_csvs."""
+    with zipfile.ZipFile(io.BytesIO(data)) as z:
+        return {name.removesuffix(".csv"): z.read(name).decode() for name in z.namelist()}
 
 
 def ids_with(fs, perturbations, filename):
-    """{id: path} of perturbations that have filename (e.g. inputs.zip, outputs/pyomo.json), in one listing."""
+    """{id: path} of perturbations that have filename (inputs.zip / outputs.zip), in one listing."""
     return {posixpath.relpath(p, perturbations).split("/")[0]: p for p in fs.glob(f"{perturbations}/*/{filename}")}
-
-
-def read_records(fs, perturbations, filename):
-    """{id: json} for every perturbations/<id>/<filename>, in one batched read."""
-    paths = ids_with(fs, perturbations, filename)
-    data = fs.cat(list(paths.values())) if paths else {}
-    return {pid: json.loads(data[path]) for pid, path in paths.items()}
 
 
 # ---------------------------------------------------------------- generate and solve (run on workers)
 
 
-@cache
-def load_base(out_url):
-    """The country's base instance, from its base.zip: read once per worker process."""
-    fs, root, _ = open_out(out_url)
-    return provenance.read_zipped(fs.cat(posixpath.join(root, "base.zip")))
+BASES = {}  # base instance by url: read once per worker process
 
 
-def generate_one(config, entry, base_sha256, code, out_url):
-    """entry's perturbation (see design.build_entries), written to perturbations/<id>/."""
+def generate_one(config, entry, base_zip, base_url, out_url):
+    """entry's perturbation (see design.build_entries), written to perturbations/<id>/inputs.zip.
+    Returns the sha256 of its csvs."""
+    if base_url not in BASES:
+        BASES[base_url] = provenance.read_zipped(base_zip)
     fs, _, perturbations = open_out(out_url)
-    instance = perturb(load_base(out_url), entry["scenario"], entry["perturbation"], entry["seed"],
+    instance = perturb(BASES[base_url], entry["scenario"], entry["perturbation"], entry["seed"],
                        config["significant_figures"], config["cost_dataset"], entry["noise"])
     instance.validate()
-    tables = instance_tables(instance)
-    record = provenance.perturbation_record(config, entry, base_sha256, provenance.tables_sha256(tables), code)
-    directory = posixpath.join(perturbations, entry["id"])
-    write(fs, posixpath.join(directory, "perturbation.json"), json.dumps(record, indent=2))
-    write(fs, posixpath.join(directory, "inputs.zip"), zip_tables(tables, "perturbation.json", record))
+    csvs = {name: df.to_csv(index=False) for name, df in instance.as_dict().items() if not (name == "network" and df.empty)}
+    write(fs, posixpath.join(perturbations, entry["id"], "inputs.zip"), zip_csvs(csvs))
+    return provenance.tables_sha256(csvs)
 
 
-def solve_one(config, perturbation_id, code, out_url):
-    """Solve perturbation_id's inputs.zip with config's model; write outputs/<model>.zip and .json."""
+def solve_one(config, perturbation_id, out_url):
+    """Solve perturbation_id's inputs.zip with config's model: write its output tables (summary with the solve
+    time) to outputs.zip, or the error to failed.json."""
     fs, _, perturbations = open_out(out_url)
     solve, directory = config["solve"], posixpath.join(perturbations, perturbation_id)
-    model = solve["model"]
-    run = {"id": perturbation_id, "model": model, "annualize_capex": solve["annualize_capex"],
-           "years": solve["years"], "code": code}
-    start = time.perf_counter()
     with tempfile.TemporaryDirectory() as tmp:
-        with zipfile.ZipFile(io.BytesIO(fs.cat(posixpath.join(directory, "inputs.zip")))) as z:
-            z.extractall(tmp)
-        if solve["years"]:
-            years = pd.read_csv(f"{tmp}/years.csv")
-            years[years["year"].between(*solve["years"])].to_csv(f"{tmp}/years.csv", index=False)
+        for name, text in read_csvs(fs.cat(posixpath.join(directory, "inputs.zip"))).items():
+            Path(tmp, f"{name}.csv").write_text(text)
+        if solve["years"] != "all":  # solve only the first that many years
+            years = pd.read_csv(f"{tmp}/years.csv").sort_values("year")
+            years.head(solve["years"]).to_csv(f"{tmp}/years.csv", index=False)
         try:
-            tables, objective, solve_time = SOLVERS[model](tmp, solve["annualize_capex"])
-            tables = {name: round_floats(df, config["significant_figures"]) for name, df in tables.items()}
-            run.update(status="optimal", objective=objective, solve_seconds=round(solve_time, 1))
-        except Exception as e:  # infeasible / non-optimal: record it, it's part of the dataset
-            tables = {}
-            run.update(status="failed", error=f"{type(e).__name__}: {e}")
+            tables, solve_time = SOLVERS[solve["model"]](tmp, solve["annualize_capex"], solve["time_limit"])
+        except Exception as e:  # infeasible, non-optimal, time limit
+            write_failed(fs, perturbations, perturbation_id, f"{type(e).__name__}: {e}")
+            return
     gc.collect()  # solved models are large and workers are long-lived
-    run["total_seconds"] = round(time.perf_counter() - start, 1)
-    if tables:
-        write(fs, posixpath.join(directory, "outputs", f"{model}.zip"), zip_tables(tables, "run.json", run))
-    write(fs, posixpath.join(directory, "outputs", f"{model}.json"), json.dumps(run, indent=2))
+    tables["summary"] = pd.concat([tables["summary"], pd.DataFrame(
+        [{"metric": "solve_seconds", "value": round(solve_time, 1), "unit": "s"}])], ignore_index=True)
+    csvs = {name: round_floats(df, config["significant_figures"]).to_csv(index=False) for name, df in tables.items()}
+    write(fs, posixpath.join(directory, "outputs.zip"), zip_csvs(csvs))
 
 
-def solve_pyomo(data_path, annualize_capex):
-    import pyomo.environ as pyo
+def write_failed(fs, perturbations, perturbation_id, error):
+    write(fs, posixpath.join(perturbations, perturbation_id, "failed.json"), json.dumps({"id": perturbation_id, "error": error}))
+
+
+def solve_pyomo(data_path, annualize_capex, time_limit):
     from ..models import pyomo_model
 
     instance = pyomo_model.build(f"{data_path}/", annualize_capex=annualize_capex)
-    _, solve_time = pyomo_model.solve(instance, verbose=False)
-    return pyomo_model.build_output_tables(instance, data_path), pyo.value(instance.objective), solve_time
+    options = {"time_limit": time_limit} if time_limit else None
+    _, solve_time = pyomo_model.solve(instance, verbose=False, solver_options=options)
+    return pyomo_model.build_output_tables(instance, data_path), solve_time
 
 
-def solve_pypsa(data_path, annualize_capex):
+def solve_pypsa(data_path, annualize_capex, time_limit):
     from ..models import pypsa_model
 
     network = pypsa_model.build(f"{data_path}/", annualize_capex=annualize_capex)
-    _, _, solve_time = pypsa_model.solve(network, verbose=False)
-    return pypsa_model.build_output_tables(network, data_path), network.objective, solve_time
+    options = {"time_limit": time_limit} if time_limit else {}
+    _, _, solve_time = pypsa_model.solve(network, verbose=False, solver_options=options)
+    return pypsa_model.build_output_tables(network, data_path), solve_time
 
 
 SOLVERS = {"pyomo": solve_pyomo, "pypsa": solve_pypsa}
@@ -195,75 +200,115 @@ def make_executor(workers, coiled=False, cluster_name="seer-ccai-dataset", regio
         client.close()  # the cluster keeps running until its idle_timeout
 
 
-def run_parallel(executor, fn, arg_list):
-    """fn(*args) for each args on executor, printing progress; raises the first task error."""
-    futures = [executor.submit(fn, *args) for args in arg_list]
+def run_parallel(executor, fn, arg_list, on_progress=None):
+    """fn(*args) for each args on executor. Returns ({args[1]: result}, {args[1]: error}) -- args[1] is the
+    perturbation (or its id); a task that raises (or whose worker dies) is recorded, not raised. Every 5% of
+    tasks: prints progress and calls on_progress()."""
+    futures = {executor.submit(fn, *args): args[1] for args in arg_list}
+    results, errors = {}, {}
     for done, future in enumerate(as_completed(futures), 1):
-        future.result()
+        key = futures[future]
+        key = key["id"] if isinstance(key, dict) else key
+        try:
+            results[key] = future.result()
+        except Exception as e:
+            errors[key] = f"{type(e).__name__}: {e}"
         if done == len(futures) or done % max(1, len(futures) // 20) == 0:
-            print(f"  {done}/{len(futures)}", flush=True)
+            print(f"  {done}/{len(futures)}" + (f" ({len(errors)} errors)" if errors else ""), flush=True)
+            if on_progress:
+                on_progress()
+    return results, errors
 
 
-def run(config, out_root, executor):
-    """Generate config's perturbations and solve the ones marked solve, into out_root/<country>."""
+def start_dataset(fs, root, config, config_text, models_dir):
+    """Write config.yaml: the config as given, plus its provenance. Refuse to resume a dataset made at other
+    commits, or whose runs changed under the same name (their existing perturbations would no longer match)."""
+    record = provenance.provenance_record(config, models_dir)
+    path = posixpath.join(root, "config.yaml")
+    if fs.exists(path):
+        old = yaml.safe_load(fs.cat(path))
+        for repo in ["optimizer", "base_instance"]:
+            if old["provenance"][repo]["commit"] != record[repo]["commit"]:
+                raise SystemExit(f"{path} was made at {repo} commit {old['provenance'][repo]['commit']}, not "
+                                 f"{record[repo]['commit']}: use a new --out, or check out that commit")
+        old_runs = {r["name"]: r for r in old["runs"]}
+        changed = [r["name"] for r in config["runs"] if r["name"] in old_runs and old_runs[r["name"]] != r]
+        if changed:
+            raise SystemExit(f"runs {changed} differ from {path}'s: rename them, or use a new --out")
+    write(fs, path, config_text.rstrip() + "\n\n# added by seer.ccai_dataset.run\n"
+          + yaml.safe_dump({"provenance": record}, sort_keys=False))
+    return record
+
+
+def run(config, config_text, out_root, executor, models_dir, retry_failed=False):
+    """Generate config's perturbations and solve the ones marked solve, into out_root/<country>, resuming from
+    whatever the bucket already holds."""
     out_url = f"{str(out_root).rstrip('/')}/{config['country']}"
     fs, root, perturbations = open_out(out_url)
-    model = config["solve"]["model"]
-    write(fs, posixpath.join(root, "config.yaml"), yaml.safe_dump(config, sort_keys=False))
-    write(fs, posixpath.join(root, "README.md"), README.format(**config, model=model, runs_table=plan.runs_table(config)))
-    # the base instance (workers read it from here) and code version, from this machine
-    write(fs, posixpath.join(root, "base.zip"), provenance.zip_dir(config["base"]))
-    base_sha256, code = provenance.hash_dir(config["base"], "*.csv"), provenance.code_record()
+    record = start_dataset(fs, root, config, config_text, models_dir)
+    base_zip = provenance.zip_dir(Path(models_dir) / config["base"]["path"])
+    entries = build_entries(config)
+
+    def write_index():
+        index = build_index(fs, perturbations, entries)
+        write(fs, posixpath.join(root, "index.csv"), index.to_csv(index=False))
+        return index
 
     # Step 1 - generate every perturbation not already written
-    entries = build_entries(config)
-    done = ids_with(fs, perturbations, "inputs.zip")
-    todo = [e for e in entries if e["id"] not in done]
+    have = ids_with(fs, perturbations, "inputs.zip")
+    todo = [e for e in entries if e["id"] not in have]
     print(f"generating {len(todo)} of {len(entries)} perturbations", flush=True)
-    run_parallel(executor, generate_one, [(config, e, base_sha256, code, out_url) for e in todo])
+    sha, errors = run_parallel(executor, generate_one, [(config, e, base_zip, record["base_instance"]["url"], out_url) for e in todo],
+                               write_index)
+    for pid, error in errors.items():
+        print(f"  generating {pid} failed: {error}", flush=True)
 
-    # Step 2 - solve entries marked solve, once per distinct inputs
-    solved = ids_with(fs, perturbations, f"outputs/{model}.json")
-    to_solve = mark_duplicates(fs, perturbations, [e["id"] for e in entries if e["solve"] and e["id"] not in solved], model, code)
-    print(f"solving {len(to_solve)} with {model}", flush=True)
-    run_parallel(executor, solve_one, [(config, pid, code, out_url) for pid in to_solve])
+    # Step 2 - drop duplicates: a perturbation whose inputs equal an earlier one's. Only possible with noise 0
+    # (e.g. a scenario element with nothing to act on in this country), so only those are compared
+    have = ids_with(fs, perturbations, "inputs.zip")
+    first, duplicate_of = {}, {}
+    for e in entries:
+        if e["noise"] == 0 and e["id"] in have:
+            if e["id"] not in sha:  # written by an earlier run
+                sha[e["id"]] = provenance.tables_sha256(read_csvs(fs.cat(have[e["id"]])))
+            if sha[e["id"]] in first:
+                duplicate_of[e["id"]] = first[sha[e["id"]]]
+                fs.rm(posixpath.join(perturbations, e["id"]), recursive=True)
+            else:
+                first[sha[e["id"]]] = e["id"]
+    print(f"dropped {len(duplicate_of)} duplicates", flush=True)
 
-    # Step 3 - manifest of everything written
-    manifest = build_manifest(fs, perturbations, model)
-    write(fs, posixpath.join(root, "manifest.csv"), manifest.to_csv(index=False))
-    print(f"{len(manifest)} perturbations, solves: {manifest['solve_status'].value_counts().to_dict()} -> {out_url}")
-
-
-def mark_duplicates(fs, perturbations, ids, model, code):
-    """ids to solve: the first with each inputs_sha256; the rest get a run.json naming the one they duplicate."""
-    sha = {pid: r["inputs_sha256"] for pid, r in read_records(fs, perturbations, "perturbation.json").items()}
-    solved = read_records(fs, perturbations, f"outputs/{model}.json")
-    first = {}
-    for pid in sorted(p for p, r in solved.items() if r["status"] != "duplicate"):
-        first.setdefault(sha[pid], pid)
-    to_solve = []
-    for pid in ids:
-        if sha[pid] in first:
-            run = {"id": pid, "model": model, "status": "duplicate", "duplicate_of": first[sha[pid]], "code": code}
-            write(fs, posixpath.join(perturbations, pid, "outputs", f"{model}.json"), json.dumps(run, indent=2))
+    # Step 3 - solve entries marked solve (a dropped duplicate: its original), not already solved or failed
+    done = set(ids_with(fs, perturbations, "outputs.zip"))
+    failed = ids_with(fs, perturbations, "failed.json")
+    if retry_failed:
+        for path in failed.values():
+            fs.rm(path)
+    else:
+        done |= set(failed)
+    to_solve = list(dict.fromkeys(duplicate_of.get(e["id"], e["id"]) for e in entries if e["solve"]))
+    to_solve = [pid for pid in to_solve if pid not in done and pid in have]
+    print(f"solving {len(to_solve)} with {config['solve']['model']}", flush=True)
+    _, errors = run_parallel(executor, solve_one, [(config, pid, out_url) for pid in to_solve], write_index)
+    for pid, error in errors.items():  # the task itself failed (e.g. its worker died): record it as a failed solve
+        if error.startswith("BrokenProcessPool"):  # a local worker died, and the pool with it: not this solve's fault
+            print(f"  {pid}: local worker pool broke, not recorded; rerun to retry", flush=True)
         else:
-            first[sha[pid]] = pid
-            to_solve.append(pid)
-    return to_solve
+            write_failed(fs, perturbations, pid, error)
+
+    # Step 4 - final index
+    index = write_index()
+    print(f"{len(index)} perturbations, solves: {index['status'].value_counts().to_dict()} -> {out_url}")
 
 
-def build_manifest(fs, perturbations, model):
-    """One row per perturbation: its record's design, perturb arguments and code, and its solve."""
-    records = pd.json_normalize(list(read_records(fs, perturbations, "perturbation.json").values()), max_level=1)
-    runs = pd.DataFrame(list(read_records(fs, perturbations, f"outputs/{model}.json").values()),
-                        columns=["id", "status", "duplicate_of", "objective", "solve_seconds"])
-    manifest = records[["id", "design.run", "design.scenario_name", "perturb.scenario", "perturb.perturbation",
-                        "perturb.noise", "perturb.seed", "perturb.cost_dataset", "inputs_sha256", "code.git_commit",
-                        "code.git_dirty"]]
-    manifest = manifest.rename(columns=lambda c: c.split(".")[-1]).assign(
-        scenario=lambda m: m["scenario"].map(json.dumps), perturbation=lambda m: m["perturbation"].map(json.dumps))
-    manifest = manifest.merge(runs.rename(columns={"status": "solve_status"}), on="id", how="left")
-    return manifest.sort_values("id")
+def build_index(fs, perturbations, entries):
+    """index.csv, from the bucket: one row per perturbation written, status optimal / failed for solves."""
+    have, solved, failed = (ids_with(fs, perturbations, name) for name in ["inputs.zip", "outputs.zip", "failed.json"])
+    return pd.DataFrame([{
+        "id": e["id"], "run": e["run"], "scenario": json.dumps(e["scenario"]), "perturbation": json.dumps(e["perturbation"]),
+        "noise": e["noise"], "seed": e["seed"],
+        "status": "optimal" if e["id"] in solved else "failed" if e["id"] in failed else None,
+    } for e in entries if e["id"] in have], columns=["id", "run", "scenario", "perturbation", "noise", "seed", "status"])
 
 
 def main():
@@ -275,16 +320,20 @@ def main():
     parser.add_argument("--coiled", action="store_true", help="run tasks on a Coiled cluster")
     parser.add_argument("--cluster-name", default="seer-ccai-dataset", help="Coiled cluster name (with --coiled)")
     parser.add_argument("--region", default="us-west2", help="Coiled cluster region (with --coiled)")
-    parser.add_argument("--allow-dirty", action="store_true", help="run with uncommitted changes (recorded as git_dirty)")
+    parser.add_argument("--models-dir", type=Path, default=provenance.MODELS_DIR, help="local clone of seer-planning-models")
+    parser.add_argument("--test", action="store_true", help="a trial run: skip the committed-and-pushed checks")
+    parser.add_argument("--retry-failed", action="store_true", help="retry solves that failed in an earlier run")
     args = parser.parse_args()
 
-    config = load_config(args.config)
+    config_text = args.config.read_text()
+    config = load_config(config_text)
     if args.plan:
-        return plan.print_plan(config)
-    if provenance.code_record()["git_dirty"] and not args.allow_dirty:
-        parser.error("uncommitted changes: perturbations wouldn't be reproducible from the git commit (--allow-dirty to run anyway)")
+        return plan.print_plan(config, args.models_dir)
+    if not args.test:
+        provenance.check_repo(provenance.SEER_DIR)
+        provenance.check_repo(args.models_dir)
     with make_executor(args.workers, args.coiled, args.cluster_name, args.region) as executor:
-        run(config, args.out, executor)
+        run(config, config_text, args.out, executor, args.models_dir, args.retry_failed)
 
 
 if __name__ == "__main__":

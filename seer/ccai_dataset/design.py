@@ -11,7 +11,7 @@ Each run in a config:
           fuel: [base, low, high]
       perturbation: {all: 0.5}    # optional; perturb's perturbation scales, applied after the scenario
       iters: 1                    # perturbations per scenario, each with its own seed
-      noise: 0.02                 # optional; relative noise on scenario levels (default: the config's)
+      noise: 0.02                 # relative noise on every parameter, after scenario and perturbation (0: none)
       solve: true
 
 Every entry's seed derives from (config seed, run name, index), so adding, removing or reordering runs
@@ -54,8 +54,9 @@ def build_entries(config):
     entries, names = [], set()
     for run in config["runs"]:
         unknown = set(run) - RUN_KEYS
-        if unknown or "name" not in run:
-            raise ValueError(f"run {run.get('name')!r}: needs a name; unknown keys {sorted(unknown)} (allowed: {sorted(RUN_KEYS)})")
+        if unknown or "name" not in run or "noise" not in run:
+            raise ValueError(f"run {run.get('name')!r}: needs a name and a noise; unknown keys {sorted(unknown)} "
+                             f"(allowed: {sorted(RUN_KEYS)})")
         if run["name"] in names:
             raise ValueError(f"run name {run['name']!r} is used twice")
         names.add(run["name"])
@@ -64,7 +65,7 @@ def build_entries(config):
             for _ in range(run.get("iters", 1)):
                 entries.append({"id": f"{run['name']}_{index:05d}", "run": run["name"], "scenario_name": scenario_name(scenario),
                                 "scenario": scenario, "perturbation": run.get("perturbation", {}),
-                                "noise": run.get("noise", config["noise"]), "seed": entry_seed(config["seed"], run["name"], index),
+                                "noise": run["noise"], "seed": entry_seed(config["seed"], run["name"], index),
                                 "solve": bool(run.get("solve", False))})
                 index += 1
     return entries
