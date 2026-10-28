@@ -121,9 +121,12 @@ def generate_one(config, entry, base_zip, base_url, out_url):
 
 def solve_one(config, perturbation_id, out_url):
     """Solve perturbation_id's inputs.zip with config's model: write its output tables (summary with the solve
-    time) to outputs.zip, or the error to failed.json."""
+    time) to outputs.zip, or the error to failed.json. Returns {status, seconds, error}; prints when it starts
+    and ends (on Coiled: in the worker's log)."""
     fs, _, perturbations = open_out(out_url)
     solve, directory = config["solve"], posixpath.join(perturbations, perturbation_id)
+    start = time.perf_counter()
+    print(f"[{config['country']}] {perturbation_id}: solving", flush=True)
     with tempfile.TemporaryDirectory() as tmp:
         for name, text in read_csvs(fs.cat(posixpath.join(directory, "inputs.zip"))).items():
             Path(tmp, f"{name}.csv").write_text(text)
@@ -133,13 +136,17 @@ def solve_one(config, perturbation_id, out_url):
         try:
             tables, solve_time = SOLVERS[solve["model"]](tmp, solve["annualize_capex"], solve["time_limit"])
         except Exception as e:  # infeasible, non-optimal, time limit
-            write_failed(fs, perturbations, perturbation_id, f"{type(e).__name__}: {e}")
-            return
+            error = f"{type(e).__name__}: {e}"
+            write_failed(fs, perturbations, perturbation_id, error)
+            print(f"[{config['country']}] {perturbation_id}: failed after {time.perf_counter() - start:.0f}s: {error[:200]}", flush=True)
+            return {"status": "failed", "seconds": time.perf_counter() - start, "error": error}
     gc.collect()  # solved models are large and workers are long-lived
     tables["summary"] = pd.concat([tables["summary"], pd.DataFrame(
         [{"metric": "solve_seconds", "value": round(solve_time, 1), "unit": "s"}])], ignore_index=True)
     csvs = {name: round_floats(df, config["significant_figures"]).to_csv(index=False) for name, df in tables.items()}
     write(fs, posixpath.join(directory, "outputs.zip"), zip_csvs(csvs))
+    print(f"[{config['country']}] {perturbation_id}: optimal, solve {solve_time:.0f}s", flush=True)
+    return {"status": "optimal", "seconds": time.perf_counter() - start, "error": None}
 
 
 def write_failed(fs, perturbations, perturbation_id, error):
@@ -200,10 +207,11 @@ def make_executor(workers, coiled=False, cluster_name="seer-ccai-dataset", regio
         client.close()  # the cluster keeps running until its idle_timeout
 
 
-def run_parallel(executor, fn, arg_list, on_progress=None):
+def run_parallel(executor, fn, arg_list, on_progress=None, on_done=None):
     """fn(*args) for each args on executor. Returns ({args[1]: result}, {args[1]: error}) -- args[1] is the
-    perturbation (or its id); a task that raises (or whose worker dies) is recorded, not raised. Every 5% of
-    tasks: prints progress and calls on_progress()."""
+    perturbation (or its id); a task that raises (or whose worker dies) is recorded, not raised. Calls
+    on_done(done, total, key, result, error) as each task finishes; every 5% of tasks, prints progress and calls
+    on_progress()."""
     futures = {executor.submit(fn, *args): args[1] for args in arg_list}
     results, errors = {}, {}
     for done, future in enumerate(as_completed(futures), 1):
@@ -213,6 +221,8 @@ def run_parallel(executor, fn, arg_list, on_progress=None):
             results[key] = future.result()
         except Exception as e:
             errors[key] = f"{type(e).__name__}: {e}"
+        if on_done:
+            on_done(done, len(futures), key, results.get(key), errors.get(key))
         if done == len(futures) or done % max(1, len(futures) // 20) == 0:
             print(f"  {done}/{len(futures)}" + (f" ({len(errors)} errors)" if errors else ""), flush=True)
             if on_progress:
@@ -257,7 +267,7 @@ def run(config, config_text, out_root, executor, models_dir, retry_failed=False)
     # Step 1 - generate every perturbation not already written
     have = ids_with(fs, perturbations, "inputs.zip")
     todo = [e for e in entries if e["id"] not in have]
-    print(f"generating {len(todo)} of {len(entries)} perturbations", flush=True)
+    print(f"[{config['country']}] generating {len(todo)} of {len(entries)} perturbations", flush=True)
     sha, errors = run_parallel(executor, generate_one, [(config, e, base_zip, record["base_instance"]["url"], out_url) for e in todo],
                                write_index)
     for pid, error in errors.items():
@@ -276,7 +286,7 @@ def run(config, config_text, out_root, executor, models_dir, retry_failed=False)
                 fs.rm(posixpath.join(perturbations, e["id"]), recursive=True)
             else:
                 first[sha[e["id"]]] = e["id"]
-    print(f"dropped {len(duplicate_of)} duplicates", flush=True)
+    print(f"[{config['country']}] dropped {len(duplicate_of)} duplicates", flush=True)
 
     # Step 3 - solve entries marked solve (a dropped duplicate: its original), not already solved or failed
     done = set(ids_with(fs, perturbations, "outputs.zip"))
@@ -288,8 +298,15 @@ def run(config, config_text, out_root, executor, models_dir, retry_failed=False)
         done |= set(failed)
     to_solve = list(dict.fromkeys(duplicate_of.get(e["id"], e["id"]) for e in entries if e["solve"]))
     to_solve = [pid for pid in to_solve if pid not in done and pid in have]
-    print(f"solving {len(to_solve)} with {config['solve']['model']}", flush=True)
-    _, errors = run_parallel(executor, solve_one, [(config, pid, out_url) for pid in to_solve], write_index)
+    print(f"[{config['country']}] solving {len(to_solve)} with {config['solve']['model']}", flush=True)
+    started = time.perf_counter()
+
+    def report(done, total, pid, result, error):
+        status = error and f"task error: {error[:200]}" or f"{result['status']} in {result['seconds']:.0f}s"
+        print(f"[{config['country']}] solve {done}/{total} {pid}: {status} "
+              f"(elapsed {(time.perf_counter() - started) / 60:.1f} min)", flush=True)
+
+    _, errors = run_parallel(executor, solve_one, [(config, pid, out_url) for pid in to_solve], write_index, report)
     for pid, error in errors.items():  # the task itself failed (e.g. its worker died): record it as a failed solve
         if error.startswith("BrokenProcessPool"):  # a local worker died, and the pool with it: not this solve's fault
             print(f"  {pid}: local worker pool broke, not recorded; rerun to retry", flush=True)
@@ -298,7 +315,8 @@ def run(config, config_text, out_root, executor, models_dir, retry_failed=False)
 
     # Step 4 - final index
     index = write_index()
-    print(f"{len(index)} perturbations, solves: {index['status'].value_counts().to_dict()} -> {out_url}")
+    print(f"[{config['country']}] done: {len(index)} perturbations, solves: {index['status'].value_counts().to_dict()} "
+          f"-> {out_url}", flush=True)
 
 
 def build_index(fs, perturbations, entries):
