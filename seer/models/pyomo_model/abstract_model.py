@@ -69,6 +69,8 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     model.storage_tech = pyo.Param(model.storage, within=pyo.Any)
     # duration (energy/power ratio, hours) is fixed by technology; power capacity is derived from it, never expanded independently
     model.storage_duration_hours = pyo.Param(model.storage, within=pyo.PositiveReals)
+    # round-trip efficiency (0-1], applied once, on charging (as EPM does); 1 = lossless
+    model.storage_efficiency = pyo.Param(model.storage, within=pyo.PositiveReals, default=1.0)
 
     # existing storage has a fixed energy capacity, active from start_year for life years
     model.storage_capacity_mwh = pyo.Param(model.existing_storage, within=pyo.NonNegativeReals)
@@ -131,8 +133,10 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     # unserved demand; keeps the model feasible even when capacity/build limits can't otherwise meet demand
     model.lost_load = pyo.Var(model.zones, model.times, within=pyo.NonNegativeReals)
 
-    # storage: signed net change (positive = charging/drawing from the grid, negative = discharging/injecting to it)
-    model.storage_change = pyo.Var(model.storage, model.times, within=pyo.Reals)
+    # storage: power drawn from the grid (charge) and injected into it (discharge), both >= 0 --
+    # separate so efficiency can apply to charging only; storage_change below is their signed net
+    model.storage_charge = pyo.Var(model.storage, model.times, within=pyo.NonNegativeReals)
+    model.storage_discharge = pyo.Var(model.storage, model.times, within=pyo.NonNegativeReals)
     model.soc = pyo.Var(model.storage, model.times, within=pyo.NonNegativeReals)
     # energy capacity added in a given year (persists into all subsequent years); only new-build storage can add capacity
     model.storage_added_capacity = pyo.Var(model.new_storage, model.years, within=pyo.NonNegativeReals)
@@ -166,6 +170,12 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
         return model.storage_total_energy_capacity[s, year] / model.storage_duration_hours[s]
 
     model.storage_total_power_capacity = pyo.Expression(model.storage, model.years, rule=storage_power_capacity_rule)
+
+    # signed net grid exchange (positive = charging/drawing from the grid, negative = discharging/injecting to it)
+    model.storage_change = pyo.Expression(
+        model.storage, model.times,
+        rule=lambda model, s, year, hour: model.storage_charge[s, year, hour] - model.storage_discharge[s, year, hour]
+    )
 
     """Objective"""
     # total cost discounted to the first year: the sum of these named terms (reported in the summary table)
@@ -397,11 +407,9 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
         rule=storage_soc_limit_rule
     )
 
-    # 10. charge/discharge rate (MW) is bounded by the storage's total power capacity. Two one-sided
-    # constraints rather than a single ranged one, since the bound itself (power capacity) depends on a
-    # variable (energy capacity) and Pyomo's ranged/chained inequalities require constant bounds.
+    # 10. charge and discharge rates (MW) are each bounded by the storage's total power capacity
     def storage_charge_limit_rule(model, s, year, hour):
-        return model.storage_change[s, year, hour] <= model.storage_total_power_capacity[s, year]
+        return model.storage_charge[s, year, hour] <= model.storage_total_power_capacity[s, year]
 
     model.storage_charge_limit = pyo.Constraint(
         model.storage,
@@ -410,7 +418,7 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
     )
 
     def storage_discharge_limit_rule(model, s, year, hour):
-        return model.storage_change[s, year, hour] >= -model.storage_total_power_capacity[s, year]
+        return model.storage_discharge[s, year, hour] <= model.storage_total_power_capacity[s, year]
 
     model.storage_discharge_limit = pyo.Constraint(
         model.storage,
@@ -448,7 +456,12 @@ def seer_base_model(discrete_additions=False, battery_reset="daily"):
         if (year, hour) not in ring_previous:
             _ring_previous(model, year)
         previous = ring_previous[(year, hour)]
-        return model.soc[s, year, hour] == model.soc[s, previous[0], previous[1]] + model.storage_change[s, year, hour]
+        # round-trip losses taken on the way in: only efficiency x charge reaches the state of charge
+        return model.soc[s, year, hour] == (
+            model.soc[s, previous[0], previous[1]]
+            + model.storage_efficiency[s] * model.storage_charge[s, year, hour]
+            - model.storage_discharge[s, year, hour]
+        )
 
     model.soc_constraint = pyo.Constraint(
         model.storage,
