@@ -45,6 +45,19 @@ def check_repo(repo_dir):
         raise SystemExit(f"{repo_dir}'s HEAD isn't on origin: push it first (or --test)")
 
 
+# what decides a perturbation's inputs and outputs: a dataset may be extended at a newer commit only if these
+# are unchanged since its own (runner-only changes -- logging, options, Coiled settings -- don't matter)
+RESULT_PATHS = {"optimizer": ["seer/scenarios", "seer/models", "seer/schema", "seer/ccai_dataset/design.py"]}
+
+
+def unchanged_since(repo_dir, old_commit, paths=None):
+    """Whether repo_dir's paths (all of it, if None) are the same at HEAD as at old_commit."""
+    if commit(repo_dir) == old_commit:
+        return True
+    diff = subprocess.run(["git", "diff", "--quiet", old_commit, "HEAD", "--", *(paths or ["."])], cwd=repo_dir)
+    return diff.returncode == 0
+
+
 def provenance_record(config, models_dir):
     """The provenance block of a country's config.yaml: the commits of the base instance (in seer-planning-models)
     and of seer (optimizer.commit: also the perturbation code's), links to both, the solver, package versions."""

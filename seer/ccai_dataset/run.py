@@ -22,7 +22,7 @@ Writes <out>/<country>/ (out: a local directory or a gs:// URL):
 A perturbation is regenerated from config.yaml and its id (provenance.regenerate). One whose inputs equal an
 earlier one's (only possible with noise 0) is dropped.
 
-Resumable: the bucket is the only state. Rerunning the same command (at the same commits) skips every
+Resumable: the bucket is the only state. Rerunning (or extending: more iters, more runs) skips every
 inputs.zip / outputs.zip / failed.json already written (--retry-failed retries the failed solves); files appear
 only once complete; a failing task is recorded and the run carries on; index.csv is rewritten from the bucket
 as tasks finish.
@@ -33,6 +33,8 @@ import io
 import json
 import posixpath
 import re
+import resource
+import sys
 import tempfile
 import time
 import zipfile
@@ -145,12 +147,20 @@ def solve_one(config, perturbation_id, out_url):
             print(f"[{config['country']}] {perturbation_id}: failed after {time.perf_counter() - start:.0f}s: {error[:200]}", flush=True)
             return {"status": "failed", "seconds": time.perf_counter() - start, "error": error}
     gc.collect()  # solved models are large and workers are long-lived
-    tables["summary"] = pd.concat([tables["summary"], pd.DataFrame(
-        [{"metric": "solve_seconds", "value": round(solve_time, 1), "unit": "s"}])], ignore_index=True)
+    tables["summary"] = pd.concat([tables["summary"], pd.DataFrame([
+        {"metric": "solve_seconds", "value": round(solve_time, 1), "unit": "s"},
+        {"metric": "peak_memory", "value": round(peak_memory_gb(), 2), "unit": "GB (the worker process's peak so far)"},
+    ])], ignore_index=True)
     csvs = {name: round_floats(df, config["significant_figures"]).to_csv(index=False) for name, df in tables.items()}
     write(fs, posixpath.join(directory, "outputs.zip"), zip_csvs(csvs))
     print(f"[{config['country']}] {perturbation_id}: optimal, solve {solve_time:.0f}s", flush=True)
     return {"status": "optimal", "seconds": time.perf_counter() - start, "error": None}
+
+
+def peak_memory_gb():
+    """This process's peak resident memory so far (a worker runs one task at a time: its biggest solve yet)."""
+    peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return peak / 1e9 if sys.platform == "darwin" else peak / 1e6  # bytes on macOS, kilobytes on Linux
 
 
 def write_failed(fs, perturbations, perturbation_id, error):
@@ -189,9 +199,12 @@ def round_floats(df, significant_figures):
 
 
 @contextmanager
-def make_executor(workers, coiled=False, cluster_name=None, region="us-west2"):
+def make_executor(workers, coiled=False, cluster_name=None, region="us-west2", worker_cpu=2, worker_memory="8 GiB",
+                  processes_per_vm=1):
     """A concurrent.futures executor: local processes, or a Coiled cluster (as in ahana/benchmarking's
-    experiments/benchmarking.py, forwarding Google credentials so workers can use gs://)."""
+    experiments/benchmarking.py, forwarding Google credentials so workers can use gs://). On Coiled, workers is
+    the number of VMs, each worker_cpu / worker_memory, running processes_per_vm single-threaded worker processes
+    (one task each), plus a scheduler VM."""
     if not coiled:
         with ProcessPoolExecutor(workers) as pool:
             yield pool
@@ -200,8 +213,9 @@ def make_executor(workers, coiled=False, cluster_name=None, region="us-west2"):
     from coiled.credentials.google import send_application_default_credentials
     from dask.distributed import Client
 
-    cluster = coiled_.Cluster(name=cluster_name, n_workers=workers, worker_cpu=2, worker_memory="8 GiB",
-                              worker_options={"nthreads": 1}, idle_timeout="20 minutes", region=region)
+    cluster = coiled_.Cluster(name=cluster_name, n_workers=workers, worker_cpu=worker_cpu, worker_memory=worker_memory,
+                              worker_options={"nthreads": 1}, idle_timeout="20 minutes", region=region,
+                              _n_worker_specs_per_host=processes_per_vm if processes_per_vm > 1 else None)
     send_application_default_credentials(cluster)
     client = Client(cluster)
     print(f"Coiled dashboard: {cluster.dashboard_link}", flush=True)
@@ -233,20 +247,29 @@ def run_parallel(executor, tasks, on_progress=None, on_done=None):
 
 
 def start_dataset(fs, root, config, config_text, models_dir):
-    """Write config.yaml: the config as given, plus its provenance. Refuse to resume a dataset made at other
-    commits, or whose runs changed under the same name (their existing perturbations would no longer match)."""
+    """Write config.yaml: the config as given, plus its provenance. A dataset already there is only extended:
+    its provenance (the commits it was made at) is kept, and it's refused (SystemExit) if anything that decides
+    its results differs -- the base instance or seer's results code (provenance.RESULT_PATHS) since those
+    commits, the config's settings, or a run (a run may only gain iters; none may disappear)."""
     record = provenance.provenance_record(config, models_dir)
     path = posixpath.join(root, "config.yaml")
     if fs.exists(path):
         old = yaml.safe_load(fs.cat(path))
-        for repo in ["optimizer", "base_instance"]:
-            if old["provenance"][repo]["commit"] != record[repo]["commit"]:
-                raise SystemExit(f"{path} was made at {repo} commit {old['provenance'][repo]['commit']}, not "
-                                 f"{record[repo]['commit']}: use a new --out, or check out that commit")
-        old_runs = {r["name"]: r for r in old["runs"]}
-        changed = [r["name"] for r in config["runs"] if r["name"] in old_runs and old_runs[r["name"]] != r]
-        if changed:
-            raise SystemExit(f"runs {changed} differ from {path}'s: rename them, or use a new --out")
+        for repo, repo_dir in [("optimizer", provenance.SEER_DIR), ("base_instance", models_dir)]:
+            old_commit = old["provenance"][repo]["commit"]
+            paths = provenance.RESULT_PATHS.get(repo, [config["base"]["path"]])
+            if not provenance.unchanged_since(repo_dir, old_commit, paths):
+                raise SystemExit(f"{path}: {repo} code or data changed since its commit {old_commit[:7]} "
+                                 f"({', '.join(paths)}): use a new --out, or check out that commit")
+        settings = [k for k in old if k not in ("runs", "provenance") and old[k] != config.get(k)]
+        old_runs, new_runs = {r["name"]: r for r in old["runs"]}, {r["name"]: r for r in config["runs"]}
+        changed = [name for name, run in old_runs.items() if name not in new_runs
+                   or {**run, "iters": None} != {**new_runs[name], "iters": None}
+                   or new_runs[name].get("iters", 1) < run.get("iters", 1)]
+        if settings or changed:
+            raise SystemExit(f"{path}: settings {settings} or runs {changed} differ from the dataset's (runs may only "
+                             f"gain iters; none may disappear): use the dataset's config, or a new --out")
+        record = old["provenance"]
     write(fs, path, config_text.rstrip() + "\n\n# added by seer.ccai_dataset.run\n"
           + yaml.safe_dump({"provenance": record}, sort_keys=False))
     return record
@@ -255,13 +278,20 @@ def start_dataset(fs, root, config, config_text, models_dir):
 class Country:
     """One country's dataset in a run: its config, output location and perturbations."""
 
-    def __init__(self, config, config_text, out_root, models_dir):
+    def __init__(self, config, config_text, out_root, models_dir, runs=None, only=None):
+        """runs: names of the runs to work on (None: all); only: "solved" / "unsolved" to work on just the runs
+        marked solve / not (None: both). Either way, the index lists every perturbation written."""
         self.config, self.name = config, config["country"]
+        unknown = set(runs or []) - {r["name"] for r in config["runs"]}
+        if unknown:
+            raise SystemExit(f"[{self.name}] no runs named {sorted(unknown)}")
         self.out_url = f"{str(out_root).rstrip('/')}/{self.name}"
         self.fs, self.root, self.perturbations = open_out(self.out_url)
         self.record = start_dataset(self.fs, self.root, config, config_text, models_dir)
         self.base_zip = provenance.zip_dir(Path(models_dir) / config["base"]["path"])
         self.entries = build_entries(config)
+        self.work = [e for e in self.entries if (runs is None or e["run"] in runs)
+                     and (only is None or e["solve"] == (only == "solved"))]
 
     def ids_with(self, filename):
         return ids_with(self.fs, self.perturbations, filename)
@@ -286,8 +316,8 @@ def run(countries, executor, retry_failed=False):
     tasks = []
     for country in countries:
         have = country.ids_with("inputs.zip")
-        todo = [e for e in country.entries if e["id"] not in have]
-        country.log(f"generating {len(todo)} of {len(country.entries)} perturbations")
+        todo = [e for e in country.work if e["id"] not in have]
+        country.log(f"generating {len(todo)} of {len(country.work)} perturbations")
         tasks += [((country.name, e["id"]), generate_one,
                    (country.config, e, country.base_zip, country.record["base_instance"]["url"], country.out_url)) for e in todo]
     sha, errors = run_parallel(executor, tasks, write_indexes)
@@ -319,7 +349,7 @@ def run(countries, executor, retry_failed=False):
                 country.fs.rm(path)
         else:
             done |= set(failed)
-        to_solve = list(dict.fromkeys(duplicate_of.get(e["id"], e["id"]) for e in country.entries if e["solve"]))
+        to_solve = list(dict.fromkeys(duplicate_of.get(e["id"], e["id"]) for e in country.work if e["solve"]))
         to_solve = [pid for pid in to_solve if pid not in done and pid in have]
         country.log(f"solving {len(to_solve)} with {country.config['solve']['model']}")
         tasks += [((country.name, pid), solve_one, (country.config, pid, country.out_url)) for pid in to_solve]
@@ -371,6 +401,11 @@ def main():
     parser.add_argument("--models-dir", type=Path, default=provenance.MODELS_DIR, help="local clone of seer-planning-models")
     parser.add_argument("--test", action="store_true", help="a trial run: skip the committed-and-pushed checks")
     parser.add_argument("--retry-failed", action="store_true", help="retry solves that failed in an earlier run")
+    parser.add_argument("--runs", help="comma-separated run names to work on (default: all)")
+    parser.add_argument("--only", choices=["solved", "unsolved"], help="work only on runs marked solve / not marked solve")
+    parser.add_argument("--worker-cpu", type=int, default=2, help="vCPUs per Coiled VM (with --coiled)")
+    parser.add_argument("--worker-memory", default="8 GiB", help="memory per Coiled VM (with --coiled)")
+    parser.add_argument("--processes-per-vm", type=int, default=1, help="worker processes per Coiled VM (with --coiled)")
     args = parser.parse_args()
 
     texts = [path.read_text() for path in args.configs]
@@ -382,9 +417,11 @@ def main():
     if not args.test:
         provenance.check_repo(provenance.SEER_DIR)
         provenance.check_repo(args.models_dir)
-    countries = [Country(config, text, args.out, args.models_dir) for config, text in zip(configs, texts)]
+    runs = args.runs.split(",") if args.runs else None
+    countries = [Country(config, text, args.out, args.models_dir, runs, args.only) for config, text in zip(configs, texts)]
     name = args.cluster_name or cluster_name([c.name for c in countries])
-    with make_executor(args.workers, args.coiled, name, args.region) as executor:
+    with make_executor(args.workers, args.coiled, name, args.region, args.worker_cpu, args.worker_memory,
+                       args.processes_per_vm) as executor:
         run(countries, executor, args.retry_failed)
 
 
