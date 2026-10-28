@@ -114,25 +114,31 @@ BASES = {}  # base instance by url: read once per worker process
 
 
 def generate_one(config, entry, base_zip, base_url, out_url):
-    """entry's perturbation (see design.build_entries), written to perturbations/<id>/inputs.zip.
-    Returns the sha256 of its csvs."""
+    """entry's perturbation (see design.build_entries), written to perturbations/<id>/inputs.zip unless it's
+    already there (a task rerun, e.g. after a worker died). Returns the sha256 of its csvs."""
+    fs, _, perturbations = open_out(out_url)
+    path = posixpath.join(perturbations, entry["id"], "inputs.zip")
+    if fs.exists(path):
+        return provenance.tables_sha256(read_csvs(fs.cat(path)))
     if base_url not in BASES:
         BASES[base_url] = provenance.read_zipped(base_zip)
-    fs, _, perturbations = open_out(out_url)
     instance = perturb(BASES[base_url], entry["scenario"], entry["perturbation"], entry["seed"],
                        config["significant_figures"], config["cost_dataset"], entry["noise"])
     instance.validate()
     csvs = {name: df.to_csv(index=False) for name, df in instance.as_dict().items() if not (name == "network" and df.empty)}
-    write(fs, posixpath.join(perturbations, entry["id"], "inputs.zip"), zip_csvs(csvs))
+    write(fs, path, zip_csvs(csvs))
     return provenance.tables_sha256(csvs)
 
 
 def solve_one(config, perturbation_id, out_url):
     """Solve perturbation_id's inputs.zip with config's model: write its output tables (summary with the solve
-    time) to outputs.zip, or the error to failed.json. Returns {status, seconds, error}; prints when it starts
-    and ends (on Coiled: in the worker's log)."""
+    time) to outputs.zip, or the error to failed.json -- unless one's already there (a task rerun, e.g. after a
+    worker died). Returns {status, seconds, error}; prints when it starts and ends (on Coiled: in the worker's log)."""
     fs, _, perturbations = open_out(out_url)
     solve, directory = config["solve"], posixpath.join(perturbations, perturbation_id)
+    for name, status in [("outputs.zip", "optimal"), ("failed.json", "failed")]:
+        if fs.exists(posixpath.join(directory, name)):
+            return {"status": status, "seconds": 0.0, "error": None}
     start = time.perf_counter()
     print(f"[{config['country']}] {perturbation_id}: solving", flush=True)
     with tempfile.TemporaryDirectory() as tmp:
