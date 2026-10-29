@@ -77,7 +77,12 @@ def plot_demand_trajectory(demand_forecast, legend="best"):
 
 def plot_demand_profiles(demand_profile, times, legend=True):
     """Normalized hourly demand profile for every modeled timepoint, by zone. Zones with
-    identical profiles are drawn as one line labeled with all of them, so none look missing."""
+    identical profiles are drawn as one line labeled with all of them, so none look missing.
+    A per-year profile (demand_profile `year` column) is drawn for its first year."""
+    profile_year = None
+    if "year" in demand_profile.columns and demand_profile["year"].notna().any():
+        profile_year = int(demand_profile["year"].min())
+        demand_profile = demand_profile[demand_profile["year"] == profile_year]
     time_order = times["time"].tolist()
     position = {t: i for i, t in enumerate(time_order)}
     zones = sorted(demand_profile["zone"].unique())
@@ -97,7 +102,8 @@ def plot_demand_profiles(demand_profile, times, legend=True):
         label = group[0] if len(group) == 1 else f"{', '.join(group)} (identical)"
         ax.plot(x, wide[group[0]].values, linewidth=1, color=colors[group[0]], label=label)
     _time_axis(ax, times)
-    ax.set_title("Hourly demand profiles (modeled days)")
+    ax.set_title("Hourly demand profiles (modeled days)" if profile_year is None
+                 else f"Hourly demand profiles (modeled days, {profile_year}; the profile varies by year)")
     ax.set_ylabel("Demand (fraction of annual peak)")
     ax.set_ylim(bottom=0)
     if len(zones) > 1 and legend:

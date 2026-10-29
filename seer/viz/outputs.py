@@ -41,8 +41,13 @@ def annual_demand(data_path, years):
     peak = pd.read_csv(data_path / "demand_forecast.csv")
     peak = peak[peak["type"] == "peak"]
     profile = pd.read_csv(data_path / "demand_profile.csv").merge(pd.read_csv(data_path / "times.csv"), on="time")
-    zone_energy = (profile["value"] * profile["weight"]).groupby(profile["zone"]).sum()  # MWh per MW of peak
     peak = peak[peak["year"].isin(years)]
+    # MWh per MW of peak, per zone -- or per (zone, year) when the profile varies by year
+    if "year" in profile.columns and profile["year"].notna().any():
+        zone_energy = (profile["value"] * profile["weight"]).groupby([profile["zone"], profile["year"]]).sum()
+        energy = peak.set_index(["zone", "year"])["value"] * zone_energy.reindex(peak.set_index(["zone", "year"]).index)
+        return energy.groupby(level="year").sum().to_dict()
+    zone_energy = (profile["value"] * profile["weight"]).groupby(profile["zone"]).sum()
     return (peak["value"] * peak["zone"].map(zone_energy)).groupby(peak["year"]).sum().to_dict()
 
 
