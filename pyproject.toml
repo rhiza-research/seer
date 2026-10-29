@@ -19,7 +19,6 @@ dependencies = [
     "gridflow",
     "pyyaml>=6.0.3",
     "xarray<2026",
-    "pyarrow>=26.0.0",
 ]
 
 [build-system]
