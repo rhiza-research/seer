@@ -12,7 +12,8 @@ the scenario elements a country's base instance gives nothing to act on:
 A grid that loses an element is dropped. A named scenario drops the elements that don't apply, and is itself
 dropped if it loses one that defines it (NAMED_REQUIRES) or keeps only one element (then it's a one_at_a_time
 case). A run left with no scenarios is dropped. Dispatch-only countries (no build options) perturb only demand,
-renewables and fuel (marginal costs) in their random runs.
+renewables and fuel (marginal costs) in their random runs. Countries in SOLVE_YEARS solve their runs other than
+baseline over only their first that many years.
 
 Usage: python -m seer.ccai_dataset.make_configs [--models-dir ../seer-planning-models]
 """
@@ -59,6 +60,7 @@ TEMPLATE = {
     ],
 }
 DISPATCH_ONLY_PERTURBATION = ["demand", "renewables", "fuel"]
+SOLVE_YEARS = {"Ukraine": 10}  # country -> years its solved runs other than baseline solve (too slow at all years)
 NAMED_REQUIRES = {  # named scenario -> the elements that define it
     "cheap_renewables": [RENEWABLE_CAPEX],
     "fossil_lock_in": [RENEWABLE_CAPEX],
@@ -101,6 +103,8 @@ def country_config(country, instance):
         if dispatch_only and "perturbation" in run:
             scale = run["perturbation"]["all"]
             run["perturbation"] = {group: scale for group in DISPATCH_ONLY_PERTURBATION}
+        if country in SOLVE_YEARS and run["solve"] and run["name"] != "baseline":
+            run["solve"] = {"years": SOLVE_YEARS[country]}
         runs.append(run)
     return {"country": country, "base": {"repo": BASE_REPO, "path": f"{BASE_DIR}/{country}"},
             **{k: v for k, v in TEMPLATE.items() if k != "runs"}, "runs": runs}

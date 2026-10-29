@@ -18,7 +18,8 @@ Writes <out>/<country>/ (out: a local directory or a gs:// URL):
     LICENSE.md                       the base instance's license, plus how this dataset derives from it
     index.csv                        one row per perturbation: id, run, scenario, perturbation, noise, seed, status
     perturbations/<id>/inputs.zip    its seer-schema csvs
-    perturbations/<id>/outputs.zip   solved ones: the model's output tables
+    perturbations/<id>/outputs.zip   solved ones: the model's output tables (with the config's solve settings, or
+                                     those its run's solve overrides, e.g. solve: {years: 10})
     perturbations/<id>/failed.json   failed solves: the error (infeasible, time limit, worker lost ...)
 A perturbation is regenerated from config.yaml and its id (provenance.regenerate). One whose inputs equal an
 earlier one's (only possible with noise 0) is dropped.
@@ -61,10 +62,22 @@ DEFAULTS = {"seed": 0, "significant_figures": 6, "cost_dataset": "wb_epm", "runs
 def load_config(text):
     config = {**DEFAULTS, **yaml.safe_load(text)}
     config["solve"] = {**DEFAULTS["solve"], **config.get("solve", {})}
-    years = config["solve"]["years"]
-    if years != "all" and not (isinstance(years, int) and not isinstance(years, bool) and years > 0):
-        raise ValueError(f"solve: years must be all or a number of years, got {years!r}")
+    for run in [None] + [r["name"] for r in config["runs"] if isinstance(r.get("solve"), dict)]:
+        years = solve_settings(config, run)["years"]
+        if years != "all" and not (isinstance(years, int) and not isinstance(years, bool) and years > 0):
+            raise ValueError(f"{run or 'solve'}: years must be all or a number of years, got {years!r}")
     return config
+
+
+def solve_settings(config, run_name=None):
+    """The solve settings for run_name's solves: config's solve block, with what the run's own solve sets (a run's
+    solve may be true, or a dict overriding some of them, e.g. {years: 10})."""
+    run = next((r for r in config["runs"] if r["name"] == run_name), {})
+    override = run.get("solve") if isinstance(run.get("solve"), dict) else {}
+    unknown = set(override) - set(DEFAULTS["solve"])
+    if unknown:
+        raise ValueError(f"run {run_name!r}: unknown solve settings {sorted(unknown)}")
+    return {**config["solve"], **override}
 
 
 # ---------------------------------------------------------------- output files (local or gs://)
@@ -131,12 +144,13 @@ def generate_one(config, entry, base_zip, base_url, out_url):
     return provenance.tables_sha256(csvs)
 
 
-def solve_one(config, perturbation_id, out_url):
-    """Solve perturbation_id's inputs.zip with config's model: write its output tables (summary with the solve
-    time) to outputs.zip, or the error to failed.json -- unless one's already there (a task rerun, e.g. after a
-    worker died). Returns {status, seconds, error}; prints when it starts and ends (on Coiled: in the worker's log)."""
+def solve_one(config, perturbation_id, out_url, solve):
+    """Solve perturbation_id's inputs.zip with solve's settings (solve_settings): write its output tables (summary
+    with the solve time) to outputs.zip, or the error to failed.json -- unless one's already there (a task rerun,
+    e.g. after a worker died). Returns {status, seconds, error}; prints when it starts and ends (on Coiled: in the
+    worker's log)."""
     fs, _, perturbations = open_out(out_url)
-    solve, directory = config["solve"], posixpath.join(perturbations, perturbation_id)
+    directory = posixpath.join(perturbations, perturbation_id)
     for name, status in [("outputs.zip", "optimal"), ("failed.json", "failed")]:
         if fs.exists(posixpath.join(directory, name)):
             return {"status": status, "seconds": 0.0, "error": None}
@@ -403,7 +417,9 @@ def run(countries, executor, retry_failed=False):
         to_solve = list(dict.fromkeys(duplicate_of.get(e["id"], e["id"]) for e in country.work if e["solve"]))
         to_solve = [pid for pid in to_solve if pid not in done and pid in have]
         country.log(f"solving {len(to_solve)} with {country.config['solve']['model']}")
-        tasks += [((country.name, pid), solve_one, (country.config, pid, country.out_url)) for pid in to_solve]
+        run_of = {e["id"]: e["run"] for e in country.entries}
+        tasks += [((country.name, pid), solve_one, (country.config, pid, country.out_url,
+                                                    solve_settings(country.config, run_of[pid]))) for pid in to_solve]
     started = time.perf_counter()
 
     def report(done, total, key, result, error):
