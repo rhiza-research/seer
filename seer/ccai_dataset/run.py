@@ -15,6 +15,7 @@ recorded resolve on GitHub.
 
 Writes <out>/<country>/ (out: a local directory or a gs:// URL):
     config.yaml                      the config as given, plus a provenance block (commits and links)
+    LICENSE.md                       the base instance's license, plus how this dataset derives from it
     index.csv                        one row per perturbation: id, run, scenario, perturbation, noise, seed, status
     perturbations/<id>/inputs.zip    its seer-schema csvs
     perturbations/<id>/outputs.zip   solved ones: the model's output tables
@@ -335,6 +336,9 @@ class Country:
         self.out_url = f"{str(out_root).rstrip('/')}/{self.name}"
         self.fs, self.root, self.perturbations = open_out(self.out_url)
         self.record = start_dataset(self.fs, self.root, self.perturbations, config, config_text, models_dir)
+        license_path = posixpath.join(self.root, "LICENSE.md")
+        if not self.fs.exists(license_path):
+            write(self.fs, license_path, provenance.license_text(config, self.record, models_dir))
         self.base_zip = provenance.zip_dir(Path(models_dir) / config["base"]["path"])
         self.entries = build_entries(config)
         self.work = [e for e in self.entries if (runs is None or e["run"] in runs)
